@@ -1,0 +1,117 @@
+---
+title: "intermediate loop question 2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+### Generate a random vector and print the contents with messages:
+
+<br>
+ 
+- Create an integer variable, `n`, that holds the value `17`.
+- Write code to create a vector called `vec_1` of length `n`.  `vec_1` should contain [pseudo]randomly generated integers between 1 and 10.
+
+<div class="hintborder">
+- Hint:  Check out the help entry and consult Dr. Google on how to use the `sample()` R function.
+- Hint:  Take a look at the code I provided in an earlier question for an example of how to create a vector of random values.
+</div>
+
+Now use the code you used to create a loop the executes `n` times to print out each element of `vec_1`.  Each iteration through the loop should print the corresponding element of `vec_1`.
+
+<br>
+
+Your output should look something like this:
+
+<div class="outputborder">
+```{r, echo=FALSE}
+n = 6
+vec_1 = sample(10, n, replace = TRUE)
+for (i in 1:n)
+{
+  cat(sprintf(
+    "The element of %1$s at index %2$s is %3$s.\n",
+    "vec_1", i, vec_1[i]))
+}
+```
+</div>
+<div class="hintborder">
+Hint: Think of what code you'll need to include within the body of the loop to display:
+1. index number
+1. The value of `vec_1` at the index.
+</div>
+
+
+<br>
+
+<div class="questionborder">
+
+### Q1 4 pts
+
+- Paste the code you used to create the `n`, `vec_1`, and the loop in to the text entry box.
+</div>
+
+
+Solution
+========
+
+Students should produce something like:
+```{r, echo = TRUE}
+n = 6
+vec_1 = sample(10, n, replace = TRUE)
+
+
+# paste() version
+for (i in 1:n)
+{
+  print(paste0(
+    "The element of vec_1 at index ",
+    i, 
+    " is ",
+    vec_1[i]))
+}
+
+# sprintf version
+for (i in 1:n)
+{
+  cat(sprintf(
+    "The element of %1$s at index %2$s is %3$s.\n",
+    "vec_1", i, vec_1[i]))
+}
+
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: intermediate loop question 2
+extype: string
+exsolution: nil
+exname: lab 02
+exsection: lab 02
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 4
+

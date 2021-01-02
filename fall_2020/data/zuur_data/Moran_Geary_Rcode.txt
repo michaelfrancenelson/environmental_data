@@ -1,0 +1,136 @@
+library(spatstat)
+library(spdep)
+p<-read.table("SpatialBird.dat",header=TRUE, sep=",")
+w <- as.owin(list(xrange=c(min(p$Xcoord)-1000,max(p$Xcoord)+1000),yrange=c(min(p$Ycoord)-1000,max(p$Ycoord)+1000)))
+pp<-as.ppp(as.matrix(p[,2:3]),w)
+par(mar=c(2.5,2.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+
+plot(pp)
+axis(1,at=seq(min(p$Xcoord),max(p$Xcoord),500),cex.axis=0.75,mgp=c(3,0.3,0))
+axis(2,at=seq(min(p$Ycoord),max(p$Ycoord),500),cex.axis=0.75,mgp=c(3,0.7,0))
+
+#Moran I scatterplot
+
+sr<-c(0,1000,2000,3000,4000,5000,6000, 7000)
+nr<-length(sr)-1
+I<-matrix(ncol=5,nrow=nr)
+pos<-4 #number of Day1 column 
+for(i in 1:nr) {
+  nb<-dnearneigh(as.matrix(p[,2:3]), sr[i], sr[i+1])
+  W <- nb2listw(nb, style="B",zero.policy=TRUE)
+  M<-moran.test(p[,pos],W,alternative="two.sided",zero.policy=TRUE)
+  I[i,1]<-M$estimate[[1]]
+  I[i,2]<-0.5*(sr[i+1]+sr[i])
+  I[i,4]<-M$p.value
+  I[i,5]<-M$statistic
+  K<-M$K
+}
+plot(I[,2],I[,5],)
+lines(I[,2],I[,5])
+x1<-0; x2<-7000
+y1<- -1/(length(p[,1])-1) #expectation is very small number... it is cannot be viewed at the picture
+y2<-y1
+lines(c(x1,x2),c(y1,y2),lty=1,  xlab=NULL, ylab=NULL)
+y1<- +1.96 #so we draw a line at (-1.96;+1.96) levels - they are small numbers too, they don't change the outcomes, but can be viewed. Picture is more comprehensible. It was done just for illustration.
+y2<-y1
+lines(c(x1,x2),c(y1,y2),lty=2)
+y1<- -1.96
+y2<-y1
+lines(c(x1,x2),c(y1,y2),lty=2)
+
+#Geary C scatterplot
+
+sr<-c(0,1000,2000,3000,4000,5000,6000, 7000)
+WW<-0
+nn<-length(p[,1])
+nr<-length(sr)-1
+I<-matrix(ncol=2,nrow=nr)
+pos<-4
+for(i in 1:nn)
+  for(j in 1:nn)
+    if(i != j) WW<-WW+p[i,pos]*p[j,pos]
+for(i in 1:nr) {
+  nb<-dnearneigh(as.matrix(p[,2:3]), 0, sr[i])
+  nw<-0; nn<-length(nb); GetisOrd<-0; ww<-0
+  for(j in 1:nn) {
+    nbj<-nb[[j]]
+    if(nbj[1] != 0) {
+      nbjl<-length(nbj)
+      nw<-nw+nbjl
+      for(k in 1: nbjl) {
+        GetisOrd<-GetisOrd+p[j,pos]*p[nbj[k],pos]
+        ww<-ww+1
+      }
+    }
+  }
+  I[i,1]<-sr[i]
+  I[i,2]<-GetisOrd/WW-ww/(nn*(nn-1))
+}
+plot(I[,1],I[,2])
+lines(I[,1],I[,2])
+
+
+#################
+# Moran I and Geary C
+#################
+library(spatstat)
+library(spdep)
+
+p<-read.table("SpatialBird.dat",header=TRUE, sep=",")
+w <- as.owin(list(xrange=c(min(p$Xcoord)-1000,max(p$Xcoord)+1000),yrange=c(min(p$Ycoord)-1000,max(p$Ycoord)+1000)))
+pp<-as.ppp(as.matrix(p[,2:3]),w)
+pos<-4
+y<-p[,pos]
+nb<-tri2nb(as.matrix(p[,2:3]))
+W <- nb2listw(nb, style="W",zero.policy=TRUE)
+Wy<- lag.listw(W, y)
+z <-(y-mean(y))/sqrt(var(y))
+Wl <-nb2listw(nb, style="B")
+M<-moran.test(z,W,alternative="two.sided")
+M$estimate[[1]]
+M$p.value
+G<-geary.test(z,W,alternative="two.sided")
+G$estimate[[1]]
+G$p.value
+
+##############
+# models
+##############
+
+dataz<-data.frame(Day1=log(p[,4]),X<-(p[,2]-mean(p[,2])),Y<-(p[,3]-mean(p[,3])))
+
+#Linear model and Moran I test for residuals
+p1.LM <- lm(Day1~X+Y,data=dataz)
+summary(p1.LM)
+AIC(p1.LM)
+p1.LM.Moran<-lm.morantest(p1.LM,W,alternative="two.sided",resfun=weighted.residuals)
+p1.LM.Moran
+
+#GAM model and Moran I test for residuals
+bird.gam<-gam(Day1~s(X, bs="cr")+s(Y, bs="cr"), dataz, family=gaussian(link="identity"))
+AIC(bird.gam)
+pos<-4
+y<-residuals(bird.gam)
+nb<-tri2nb(as.matrix(p[,2:3]))
+W <- nb2listw(nb, style="W",zero.policy=TRUE)
+Wy<- lag.listw(W, y)
+z <-(y-mean(y))/sqrt(var(y))
+Wl <-nb2listw(nb, style="B")
+M<-moran.test(z,W,alternative="two.sided")
+M$estimate[[1]]
+M$p.value
+G<-geary.test(z,W,alternative="two.sided")
+G$estimate[[1]]
+G$p.value
+
+#SAR model
+nb<-tri2nb(as.matrix(p[,2:3]))
+W <- nb2listw(nb, style="W",zero.policy=TRUE)
+p1.SAR <- lagsarlm(Day1~X+Y,data=dataz,W,method="eigen",quiet=TRUE,tol.solve=1.0e-15, zero.policy=TRUE)
+summary(p1.SAR)
+
+#SMA model
+p1.SMA <- errorsarlm(Day1~X+Y,data=dataz,W,method="eigen",quiet=TRUE,tol.solve=1.0e-15, zero.policy=TRUE)
+summary(p1.SMA)
+

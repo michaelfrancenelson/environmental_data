@@ -1,0 +1,237 @@
+---
+title: "Banner Image Maker"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("rmd_tools", "find_file.R"))
+source(find_file("proportional_image_crop.R"))
+source(find_file("rwalk_1.R"))
+require(ggplot2)
+require(magick)
+require(cowplot)
+```
+
+
+# REsids plot
+```{r}
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+plot_resids = function(x, y, guess_x, guess_y, guess_slope)
+{
+  for (i in 1:length(x))
+  {
+    segments(
+      x0 = x[i], 
+      y0 = line_point_slope(
+        x = x[i], guess_x, guess_y, guess_slope), 
+      x1 = x[i],
+      y1 = y[i], 
+      col = "red", lwd = 2)
+  }
+}
+
+n_pts = 65
+x_min = 0.1
+x_max = 3
+
+x_sim = runif(n_pts, min = x_min, max = x_max)
+
+param_intercept = 2.3
+param_slope = 0.67
+y_pred = param_intercept + x_sim * param_slope
+plot(x_sim, y_pred)
+
+y_observed_3 = 
+  y_pred +
+  rexp(n_pts, rate = 1.2) - 1 / 1.2
+
+error_mean = 0
+error_sd = 0.3
+y_observed_2 = 
+  y_pred + 
+  rnorm(
+    n = n_pts, 
+    mean = error_mean, 
+    sd = error_sd * x_sim)
+
+plot(x_sim, y_observed_2)
+
+{
+  
+  y_obs = y_observed_2
+  png(here::here("sandbox", "resids_1.png"), height = 1000, width = 1000, res = 240, bg = "transparent")
+  par(mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0))
+  plot(x_sim, y_obs,ann = FALSE, frame = FALSE, axes = FALSE, cex = 0.1)
+  plot_resids(x_sim, y_obs, 0, 2.3, 0.67)
+  points(x_sim, y_obs, pch = 16, cex = 0.01)
+  
+  for(i in seq(0.2, 3.2, length.out = 100))
+    points(x_sim, y_obs, pch = 16, cex = i, col = rgb(0, 0, 0, 0.01))
+  points(x_sim, y_pred, pch = 16)
+  
+  dev.off()
+}
+
+
+
+
+```
+
+
+# Read Images
+```{r}
+
+aspect_env = image_read(find_file("envelope_simulation_aspect_square"))
+boxes = image_read(find_file("failures_boxplots_Page_1.png"))
+co_gwr = image_read(find_file("gwr_mean_coeffs_colorado_Page_01.png"))
+fail_l = image_read(find_file("fail_types_l_fun_crop.png"))
+pairs = image_read(find_file("variable_pair_plot_2.png"))
+resids_1 = image_read(find_file("resids_1.png"))
+rw_450 = image_read(find_file("rwalk_450.png"))
+rw_5000 = image_read(find_file("rwalk_5000.png"))
+
+
+clouds_2 = image_read(find_file("clouds_2_crop.jpg"))
+beech_2 = image_read(find_file("beech_roots.jpg"))
+eft = image_read(find_file("eft_1.jpg"))
+pan_spi = image_read(find_file("panama_spider_01.jpg"))
+star_flwr = image_read(find_file("starflower_1.jpg"))
+skull = image_crop(image_read(find_file("fish_skeleton.jpg")), "2160x2160+200+0")
+sky = image_crop(image_read(find_file("graylock_cloud.jpg")), "2160x2160+840+0")
+sori = image_read(find_file("panama_sori_01.jpg"))
+th_2 = image_read(find_file("thamnophis_2.jpg"))
+```
+
+# Banner
+```{r}
+{
+  png(here::here("sandbox", "banner1.png"), width = 3000, height = 1000, background="transparent")
+  print(plot_grid(
+    
+    ggdraw() + draw_image(aspect_env),
+    ggdraw() + draw_image(boxes),
+    ggdraw() + draw_image(fail_l),
+    ggdraw() + draw_image(resids_1),
+    ggdraw() + draw_image(rw_450),
+    ggdraw() + draw_image(rw_5000),
+    
+    ggdraw() + draw_image(pan_spi),
+    ggdraw() + draw_image(star_flwr),
+    ggdraw() + draw_image(skull),
+    ggdraw() + draw_image(sky),
+    ggdraw() + draw_image(sori),
+    ggdraw() + draw_image(th_2),
+    
+    nrow = 2
+  ))
+  dev.off()
+}
+{
+  png(here::here("sandbox", "banner5.png"), width = 4000, height = 1000, bg="transparent")
+  print(plot_grid(
+    
+    ggdraw() + draw_image(star_flwr),
+    ggdraw() + draw_image(co_gwr),
+    ggdraw() + draw_image(pan_spi),
+    ggdraw() + draw_image(fail_l),
+    ggdraw() + draw_image(beech_2),
+    ggdraw() + draw_image(pairs),
+    ggdraw() + draw_image(sori),
+    ggdraw() + draw_image(rw_450),
+    
+    ggdraw() + draw_image(rw_5000),
+    ggdraw() + draw_image(skull),
+    ggdraw() + draw_image(boxes),
+    ggdraw() + draw_image(eft),
+    ggdraw() + draw_image(resids_1),
+    ggdraw() + draw_image(th_2),
+    ggdraw() + draw_image(aspect_env),
+    ggdraw() + draw_image(sky),
+    
+    nrow = 2
+  ))
+  dev.off()
+}
+
+
+
+```
+
+
+
+# Random Walk Images
+```{r}
+
+n = 5000
+set.seed(12345)
+dat = rwalk_1(n)
+
+{
+  png(here::here("sandbox", "rwalk_5000.png"), width = 1200, height = 1200, res = 220, bg = "transparent")
+  par(mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0))
+  plot(
+    y ~ x, data = dat, 
+    type = "l", ann = FALSE, frame = FALSE, axes = FALSE, 
+    lwd = 1, col = gray(0, 0.1),
+    asp = 1)
+  
+  for (i in seq(1, 150, length.out = 100))
+  points(y ~ x, data = dat, type = "l", lwd = i, col = rgb(0.2, 0, 0, 0.003))
+  
+  for (i in seq(1, 25, length.out = 30))
+    points(y ~ x, data = dat, type = "l", lwd = i, col = rgb(0, 0.005, .1, 0.02))
+  
+  
+  points(
+    y ~ x, data = dat, 
+    type = "l", 
+    lwd = 1.4, col = rgb(0, 0, 0.1, 1),
+    asp = 1)
+  dev.off()
+}
+
+
+
+n = 450
+set.seed(12345)
+dat_2 = rwalk_1(n)
+{
+  png(here::here("sandbox", "rwalk_450.png"), width = 1200, height = 1200, res = 320, bg = "transparent")
+  par(mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0))
+  
+  
+  plot(
+    y ~ x, data = dat, 
+    type = "l", ann = FALSE, frame = FALSE, axes = FALSE, 
+    lwd = 10, col = gray(0, 0.1),
+    asp = 1)
+  
+  for (i in seq(1, 50, length.out = 10))
+  points(y ~ x, data = dat, type = "l", lwd = i, col = rgb(0, 0.2, 0, 0.003))
+  
+  for (i in seq(1, 25, length.out = 30))
+    points(y ~ x, data = dat, type = "l", lwd = i, col = rgb(0, 0.05, 0, 0.02))
+  
+  # points(    y ~ x, data = dat, type = "l", lwd = 1, col = rgb(0, 0, 0.7, 1))
+  dev.off()
+}
+
+```
+
+

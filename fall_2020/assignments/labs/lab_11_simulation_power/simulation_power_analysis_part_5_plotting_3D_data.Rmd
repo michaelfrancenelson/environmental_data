@@ -1,0 +1,126 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+```
+
+
+
+<!-- ```{r load_functions, child = find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_data, child = find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_models, child = find_file("model_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_simulations, child = find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_plots, child = find_file("plot_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+
+
+
+
+# Plotting 3-Dimensional Data
+
+<div class="notes">
+- NOTE: your plots may look rougher or more pixellated than the figures in the lab walkthrough.
+- To make the walkthrough plots, I ran simulations with many reps and small increments in parameter values.
+  - Some of my simulations took multiple hours to run.
+
+I suggest you set `n_sims` and `n_effect_sizes` to small values as you are experimenting with the code.  You can set them to higher values later when you are confident your code works.
+
+You'll want to make sure you save your simulation output to a file!
+
+- I've included some instructions below.
+</div>
+
+
+# Contour plotting
+
+Contour plots are similar to topographic maps.
+
+The [iso]lines show interpolated lines at which the value is the same.
+
+Let's plot the result using the `contour()` function:
+
+- `contour()` expects arguments for x, y, and z.
+- The x- and y- coordinates set up the axes.  In our case we can set the x-axis to be effect size and the y-axis to be sample size.
+- the z-coordinates are a matrix in which cells represent the values for which to create the contours.
+
+Use `contour()` to re-create the following figure:
+
+
+
+```{r contour_n_effect_size, ref.label = "contour_n_effect_size", echo=FALSE, fig.asp=1}
+```
+
+
+
+# 3D plotting
+
+
+There are several functions and packages for creating 3D plots in R.
+
+## Perspective Plots
+
+Perspective plots can plot a 3D surface.
+
+
+### Static Plot
+
+Let's try a static perspective plot using the persp() function, as follows:
+
+```{r persp_plot_static, ref.label = "persp_plot_static"}
+```
+
+### Interactive Plot
+
+The r package `rgl` allows you to create similar plots that are *interactive*.
+
+- Install `rgl` now so that you can use the `persp3d()` function.
+
+You can use the same syntax as for `persp()` to create a basic interactive plot.
+
+Try it out and see what you get!
+
+
+<!-- https://michaelfrancenelson.github.io/eco_602_634_2020/webGL/effect_sample_size_power_sim_plot.html -->
+
+<a href="/eco_602_634_2020/webGL/n_effect_size_power_sim_plot.html" target="_blank">Click here for an example</a>
+
+
+### Saving an Interactive Plot
+
+`rgl` also has a function for saving an interactive 3D plot to a html file.
+
+For example, I used the following code to save the linked 3D plot above:
+
+```{r writeWebGL, eval = FALSE}
+rgl::writeWebGL(
+  dir = here::here("docs", "webGL"), 
+  filename = here::here(
+    "docs", "webGL",
+    "n_effect_size_power_sim_plot.html"),
+  width = 1200, height = 1200
+)
+```
+
+

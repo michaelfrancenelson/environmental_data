@@ -1,0 +1,72 @@
+---
+title: "Two-tailed hypotheses"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+> Recall the Oregon birds dataset we've used in class.
+
+Let's choose the Gray Jay and Brown Creeper as two example bird species.
+
+Choose one of the terrain variables: elevation, slope, or aspect.
+
+### NULL hypothesis: there is no difference in the habitat preferences of the Gray Jay and the Brown Creeper.
+
+<div class="questionborder">
+
+### Q1 2 pts
+
+- Propose a two-tailed alternative hypothesis about the habitat preferences of the two bird species.
+
+NOTE: you don't need to look up information about the two birds, I only care about how you phrase your hypothesis, not whether it is biologically/ecologically relevant!
+
+</div>
+
+
+
+Solution
+========
+
+Acceptable answers can be in the form of:
+
+The habitat preference of Gray Jays and Brown Creepers are different.
+
+
+
+
+
+Meta-information
+================
+extitle: Two-tailed hypotheses
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 2
+

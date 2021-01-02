@@ -1,0 +1,38 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 10: ANOVA (by hand)"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+source(find_file("build_lab.R"))
+build_lab(10, moodle_xml = FALSE, answer_key = FALSE)
+build_lab(10, moodle_xml = TRUE, answer_key = TRUE)
+```
+
+
+
+```{r setup, include=FALSE}
+require(here)
+require(knitr)
+options(knitr.duplicate.label = 'allow')
+knitr::opts_chunk$set(echo = TRUE)
+
+anova_source_rmd = rmd.utils::find_file("anova_by_hand_rope_cut.Rmd")
+```
+
+
+```{r child = anova_source_rmd}
+
+```

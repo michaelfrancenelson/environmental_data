@@ -1,0 +1,190 @@
+---
+title: "ECO 602: Analysis of Environmental Data"
+subtitle: "Computing for Scientists"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Objectives
+
+\vfill
+
+- Understand filesystems and paths.
+- Understand differences among command-line, menu-driven, and script-based analyses.
+- Understand file concepts: binary and text encoding, extensions, and archive files.
+
+
+
+## Overview of Concepts
+
+- File systems: files and folders
+- Paths: absolute and relative
+- Graphical and text interfaces
+- File formats and extensions
+
+
+
+## Key Terms
+
+- File system: files and directories
+- Path, absolute path, relative path
+- Home directory
+- Working directory
+- File types and extensions
+- Graphical user interface
+- Command line
+- Operating system
+
+
+
+
+## Content Note
+
+Some or all of the material in this lecture deck may be review for you.
+
+However, in my teaching I've found that an incomplete mastery of these foundational concepts at the beginning of the course results in lots of headaches, frustration, and wasted time (yours and mine) down the road.
+
+
+
+
+## Content Note
+
+I expect that many of you will know some or all of these concepts, and that many of you won't be familiar with any of them!  
+
+If the material in this deck is unfamiliar, don't panic!  There's an internal logic - we'll learn it in a systematic way.
+
+If the material in this deck is easy for you, don't worry.  Things will get more challenging soon!
+
+
+
+
+## Filesystems: Why do we need to know about them?
+
+- How are files stored on your computer?
+- Where is my user directgory?
+- Where can I find a file I downloaded from my browser?
+- What is wrong with **New Folder (3)**?
+- Why shouldn't I submit **Untitled document (27).docx**?
+
+
+
+
+## What is a filesystem?
+
+- A file system is a kind of like **map** that your computer uses to organize **files** and **directories** on a data storage device.
+
+- What is a directory?
+ - Directories, also known as folders, are like containers that can hold files or other directories.
+
+- What is a file?
+ - A file is a collection of information that is stored as a single, discrete unit on your computer.
+
+- Both files and directories are identified by **names**.
+
+
+
+
+
+## Filesystems are often hidden from the user.
+
+You use a Graphical User Interface (GUI) to control the vast majority of modern computing devices such as computers, phones, tablets, gaming consoles, etc.
+
+This is a huge advantage because you can quickly and easily perform complex tasks via touch screens and pointing devices!
+
+GUIs are very convenient and powerful.  They save us from hours of repetitive and tedious tasks that we would otherwise perform manually, perhaps using a **command prompt**.
+
+
+
+
+
+## Why do we have to know about filesystems?
+
+- GUIs are very powerful, but they hide everything that happens behind the scenes.
+- To become proficient at working with data for storing and analyzing data, you have to become proficient at , you need to know a bit more about how your computer works.
+
+
+
+
+
+## Paths: Where are all of my files?
+
+
+### Directory structures
+
+- Your computer's file system is organized similarly to a tree:
+ - There is a **root directory** on your storage medium that contains all of the other files and directories.
+
+
+
+## Absolute and relative paths
+
+An *absolute* path gives your computer the map to find a file starting from the *root directory* of your storage medium.
+
+A *relative* path provides a map starting at the current *working directory*.  
+  
+- A working directory is just the directory that a program is currently pointing to.
+
+- An *absolute path* is never ambiguous.
+
+
+
+
+
+## Types of files
+
+
+### Text files
+- Text files contain characters (such as letters) that are human-readable.
+  - Text files encode the data in agreed-upon formats that many programs can read and interpret.
+- Text files are more universal in the sense that any program that can open a text file can read a text file created in any other program.
+
+### Binary files
+- Binary files are not human-readable.
+- Binary file formats can be platform-specific, such as `.exe` files which are runnable on Windows.
+- May be proprietary, or standardized (like image file formats)
+
+
+
+
+## File extensions and associations
+
+Filenames usually consist of two or more blocks of letters separated by periods:
+
+- `file_01.txt`
+
+### The extension is meant to communicate the *file type* or *file format*.
+
+- Think of image files that have extensions like  `.png` or `.jpg`.
+- A changing a file extension does not change the contents of the file, but it can change the *association*.
+
+### Your operating uses the *file extension* to guess the file type and which program it should open with!
+
+
+
+
+
+
+## Archive files
+
+- Archive files can contain copies of a directory structure, which itself can contain files and other directories.
+- The most familiar archive format is `.zip`.
+- Archive files are typically *compressed*
+  - They are usually in a *binary* format.
+- Archive files are a convenient way to share multiple files and directories as a single unit.
+

@@ -1,0 +1,88 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Regression Overview"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \usepackage{animate}
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+options(knitr.duplicate.label = "allow")
+
+# devtools::install_github("michaelfrancenelson/rmd.utils", force = TRUE)
+
+```
+
+
+```{r build_slides, echo=FALSE, eval=FALSE}
+require(here)
+require(rmd.utils)
+source_dir  = here::here("course_docs", "lectures", "602", "week_09")
+out_dir     = here::here("docs", "lecture_notes")
+source_file = find_file("week_09_1", search_path = source_dir, extension = ".Rmd")
+
+dir.exists(source_dir)
+dir.exists(out_dir)
+file.exists(source_file)
+
+rmarkdown::render(source_file, output_dir = out_dir)
+```
+
+
+
+## Key Concepts
+
+- What is a regression model?
+- What are the key assumptions?
+- What is the constellation of methods?
+
+
+```{r reg_overview_slides, child = find_file("regression_overview_1.Rmd")}
+```
+
+
+
+## There are Many Types of Models: The Constellation
+
+```{r constellation_of_methods, echo = FALSE, fig.cap="Bolker: Ecological Models and Data in R, Figure 9.2"}
+knitr::include_graphics(rmd.utils::find_file("Bolker_figure_09_2_constellation.PNG"))
+```
+
+
+
+## There are Many Types of Models: The Constellation
+
+- Many of the models beyond Group 1 were developed to handle violations of one or more of the Group 1 required assumptions.
+
+
+- We'll spend most of our time on Group 1 models:
+  - Easiest to understand, many principles transfer to other models.
+  - Easiest to implement and interpret
+
+
+
+## Key Concepts
+
+- What is a regression model?
+- What are the key assumptions?
+- What is the constellation of methods?
+

@@ -1,0 +1,47 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Loading an RProject"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+```
+
+# Background
+
+You've created a great directory structure for your coding project, and you had RStudio create an RProject file to keep it all organized!
+
+But to take advantage of the benefits of using the RProejct paradigm (like using package `here`) you have to tell RSTudio to load the project!
+
+
+
+
+# Load an RProject when you open RStudio
+
+The best practice is to load your RProject as soon as you open up RStudio.
+
+The easiest way to accomplish this is to open RStudio by double-clicking on the `*.RProj` file in your RProject directory:
+
+
+```{r, echo = FALSE, results='asis'}
+expandable_html_image("open_rproject_from_file_browser.PNG")
+```
+
+
+
+
+
+

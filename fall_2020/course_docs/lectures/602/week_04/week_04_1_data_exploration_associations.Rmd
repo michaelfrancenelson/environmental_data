@@ -1,0 +1,291 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Associations and Data Exploration"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(psych)
+require(here)
+require(mfn.teaching.utils)
+require(rmd.utils)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+# source(here::here("formatting", "functions", "rmd_tools.R"))
+# source(here::here("rmd_tools", "find_file.R"))
+source(find_file("proportional_image_crop.R"))
+```
+
+
+```{r, echo = FALSE}
+require(magick)
+
+
+```
+
+
+
+
+
+```{r graphics_setup,include=FALSE}
+require(palmerpenguins)
+require(ggplot2)
+data("anscombe")
+
+
+dat_bird = read.csv(here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+names(dat_all)
+coplot(flipper_length_mm ~ body_mass_g | species, 
+       data = penguins,
+       xlab = "body mass (g)",
+       ylab = "flipper length (mm)",
+       rows = 1)
+
+names(penguins)
+
+
+n = 38
+dat1 = data.frame(
+  x1 <- seq(0.1, 10, length.out = n),
+  y1 <- 4 + 0.34 * x1,
+  y2 <- 0 + log(50 * x1),
+  y3 <- rnorm(n, mean = y1, sd = 0.4),
+  y4 <- rnorm(n, mean = y2, sd = 0.1 * x1)
+)
+
+t1 = theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())
+ggplot(dat1, aes(x = x1, y = y1)) + geom_line()
+ggplot(dat1, aes(x = x1, y = y2)) + geom_line()
+
+
+cor(x1,y4,method = "spear")
+cor(x1,y3,method = "pear")
+
+g_corr_pear_spear_points = 
+  cowplot::plot_grid(
+    ggplot(dat1, aes(x = x1, y = y3)) + 
+      geom_point() + t1 +
+      ggtitle(paste0("Pearson Correlation: ", round(cor(x1, y3,method = "pear"), 3))),
+    ggplot(dat1, aes(x = x1, y = y4)) + 
+      geom_point() + t1 + 
+      ggtitle(paste0("Spearman Correlation: ", round(cor(x1, y4,method = "spear"), 3))),
+    nrow = 1)
+
+ggplot(dat1, aes(x = x1, y = y4)) + geom_point()
+
+```
+
+
+
+## Key concepts
+
+- Associations
+- Data dimensionality and plots
+
+
+
+
+
+## Associations
+
+### *Association* is a value neutral term. 
+
+- It is useful when you don’t want to imply causality, or any specific form of a relationship.
+
+### How can we *describe* an association?
+
+- Qualitative and quantitative
+- Numerically and graphically
+
+
+
+## Associations: graphical exploration
+
+### Scatterplots are useful
+
+```{r, echo=FALSE, fig.align='center', fig.height=6}
+penguins$year = factor(penguins$year, levels = unique(penguins$year))
+psych::pairs.panels(
+  penguins[, c(3:6, 8)],
+  labels = c("bill length", "bill depth", "flipper length", "mass", "year"),
+  main = "Palmer Penguins Data")
+```
+
+\vfill
+\vfill
+
+
+## Association: Numerical exploration
+
+### Quantifying association
+
+- Pearson's correlation: *linear* relationships
+- Spearman correlation: *monotonic* relationships
+
+```{r, echo = FALSE, fig.align='center', fig.asp=0.5, out.width='10cm'}
+g_corr_pear_spear_points
+```
+
+
+
+
+
+## More complicated associations
+
+How would you describe these associations?
+
+\vfill
+
+![](`r find_file("Correlation_examples2.svg.png")`)
+
+
+\begin{small}
+* Pearson correlation are coefficients shown above each panel
+
+\begin{center}
+Image source: Wikimedia (correlation\_examples2.svg)
+
+\end{center}
+\end{small}
+
+
+
+
+## Data Dimensionality: How many variables do I have?
+
+### Visualizing data:
+
+- 1D: boxplots, histograms
+- 2D: conditional boxplots, scatterplots
+- 3D: coplots, 3D plots, 'slices'
+- 4D and beyond is difficult or impossible
+
+
+
+## Visualizing 3D Data: Coplots
+
+### Visualize 3-Dimensional data with 2D slices
+- Individual data points are plotted on x-y plane
+- The z-axis is divided into bins
+- Straightforward for categories
+- Binning algorithm needed for continuous
+- Each z-bin is flattened and plotted as 2D
+
+
+
+## Visualizing 3D Data: Coplots
+
+### Coplot with a categorical variable:
+
+```{r, echo = FALSE}
+coplot(flipper_length_mm ~ body_mass_g | species, 
+       data = penguins,
+       xlab = "body mass (g)",
+       ylab = "flipper length (mm)",
+       rows = 1)
+```
+
+
+
+## Visualizing 3D Data: Coplots
+
+### Coplot with a numeric variable:
+
+```{r, echo = FALSE}
+coplot(flipper_length_mm ~ bill_depth_mm  | body_mass_g, 
+       data = penguins,
+       xlab = "bill depth (mm)",
+       # xlab = "body mass (g)",
+       ylab = "flipper length (mm)",
+       rows = 1)
+```
+
+
+## 4D Slice Plots: Point Color and Shape
+
+### Coplot with a numeric conditioning variable and 4th dimension as pont shape
+
+```{r, echo = FALSE, message = FALSE, results = 'hide'}
+par(xpd = TRUE)
+coplot(
+  flipper_length_mm ~ bill_depth_mm  | body_mass_g, 
+       data = penguins,
+       xlab = "bill depth (mm)",
+       # xlab = "body mass (g)",
+       ylab = "flipper length (mm)",
+       rows = 1, 
+       pch = as.numeric(factor(penguins$sex)),
+       )
+legend(
+  # x = "topleft" ,
+  # x = "left",
+  # x = "top",
+  x = 2700,
+  y = 6.3,
+  pch = 1:2,
+  # las = 2,
+  # horiz = TRUE,
+  horiz = FALSE,
+  bty = "n",
+  legend = c("Male", "Female"))
+```
+
+
+
+## 4D example: Modeling Mountain Pine Beetle epidemics
+
+### 4-dimensional data
+
+Three model parameters:
+
+1. Beetle fertility
+1. Tree vigor
+1. Tree density
+
+Two response types:
+
+1. Long term epidemic behavior - categorical: erratic or regular epidemics
+1. Epidemic proportion - continuous: long-term average percent of epidemic area
+
+
+## 4D Slice Plots: Categorical Response as Color
+
+```{r, echo=FALSE, out.width='11.5cm', fig.align='center'}
+proportional_image_crop("EcoCpx_Fig_07.jpg", 0.64, 1.0, 0, 0)
+
+```
+
+## 4D Slice Plots: Continuous Response as Color
+
+```{r, echo=FALSE, out.width='11.5cm', fig.align='center'}
+proportional_image_crop("EcoCpx_Fig_09.jpg", 0.64, 1.0, 0, 0)
+
+```
+
+## Recap
+
+- Associations
+- Tools to describe associations
+  - Spearman and Pearson correlation
+  - Graphical exploration
+- Data dimensionality and plotting
+
+
+

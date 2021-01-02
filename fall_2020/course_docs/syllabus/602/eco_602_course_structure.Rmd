@@ -1,0 +1,99 @@
+---
+title: "Course Structure"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+# Course Structure
+
+The online delivery mode for this course will present challenges for those of us accustomed to in-person meetings, but also presents an opportunity to deliver content, collaborate, and learn in new ways.  In that spirit, the basic weekly structure of the course will consist of the following elements:
+
+**Weekly Course Events**
+
+- Required readings 
+- Pre-recorded mini lectures 
+- Reading and lecture questions
+- Zoom *live* meetings in real-time
+- Individual and small group assignments 
+
+In addition, we will have a learning outcomes assessment at the beginning of the course and a final, take-home learning outcomes assessment and exam at the end.
+
+Check out the <a href="#grading">Grading</a> section to see how each course component contributes to your individual grade.
+
+
+# Course Component Descriptions {.tabset}
+
+
+## Readings and mini-recorded Lectures 
+
+Course readings and video mini-lectures will provide the content and background information needed to actively participate in the live Zoom sessions.
+
+The video mini-lectures will reinforce, complement, and supplement the concepts from the readings.
+
+You can watch the videos at your own pace, however to maximize the value of the the concurrent sessions, I’ll expect you to complete the readings, videos, and associated assignments prior to the live sessions.
+
+I'll post lecture notes to accompany each mini-lecture.
+
+There will be short question sets on Moodle covering the material in the readings and videos (see **Readings and mini-lecture questions** below for details).
+
+You may also be asked to submit questions or topics for discussion (via Moodle) based on the readings/videos prior to the live meetings.
+
+ 
+
+
+## Reading and mini-lecture questions
+
+These are brief multiple choice or short answer question sets that reinforce topics in the readings and/or mini lectures.  You must complete these before the corresponding live session.  If you have completed the question sets prior to the live session, you may revise incorrect answers after the live session.  You may receive a maximum of 25% credit for question sets submitted after the corresponding live sessions.
+
+
+
+
+## Zoom *live* meetings
+
+Our live meetings are a chance for you to discuss the materials and ask questions of me and your peers.  The structure of each live meeting will be tailored to the week’s topics and the questions you submit.  The live sessions will consist of meetings of the entire class and smaller-group breakout sessions. 
+
+
+
+
+## Individual Assignments
+
+The individual assignments provide an opportunity to engage more deeply with selected, important course concepts than the reading and lecture questions.
+
+Every student will submit original answers, but you are **strongly** encouraged to work together with your classmates on the individual assignments.
+
+
+
+
+## In-Class Small Group Activities
+
+We will have small group activities in zoom breakout rooms during many of our live meetings.  These are meant to be completed and submitted by the group during our live session.  It will be essential to be up-to-date on the readings and mini-lectures so that you can be a positive contributor to the in-class activities!
+
+
+
+
+## Final Take Home Exam
+
+The final exam covers a range of the most important take-home ideas from the course.  
+
+The exam and objectives assessment is meant to be a tool to help you reinforce the key concepts from the course that you can use in your future careers.
+
+It helps both you and me to assess your success achieving the **learning outcomes**, as described in the <a href="#learning_objectives">**learning objectives**</a> section of the syllabus.
+
+As students, When we work our way through a course it's easy to underestimate how much we have learned.  My aim is for the final and outcomes assessment to remind you of how hard you worked throughout the semester and to be aware of your intellectual growth and the suite of tools you have learned. 
+
+The exam will emphasize concepts in the framework of the **course themes**.
+
+Specific information on the final exam will be communicated in the final weeks of the course.
+
+
+
+
+## Attendance
+
+You are **required** to attend all real-time sessions, i.e. the Tuesday and Thursday zoom sessions from 8:30 to 9:45.  If you cannot attend due to illness, conference attendance, or other extenuating circumstances, you will need to contact me **before** the session so that we can make arrangements to make up any missed materials.
+
+You must watch all of the **required** pre-recorded mini-lectures **prior** to the associated real-time sessions.  After the first week, the mini-lectures will be made available at least one week before the associated live session.  Since these are asynchronous, you can watch them any time that fits your own schedule. 
+
+If you must miss a live session please contact me before the meeting time, preferably with at least 1 day's notice.

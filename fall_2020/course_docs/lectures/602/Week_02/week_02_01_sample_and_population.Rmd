@@ -1,0 +1,280 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Model Thinking: Sample and Population"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+
+source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+source(find_file("ggplot_confints.R"))
+
+require(ggplot2)
+require(cowplot)
+
+```
+
+
+
+```{r plot_setup, include=FALSE}
+
+n = 60
+
+dat = data.frame(
+  x <- sort(rnorm(n)),
+y0 = rnorm(n),
+y1 = rnorm(n, mean = x, sd = 1))
+
+
+# cowplot::plot_grid(
+# ggplot(data = dat, aes(x = x, y = y0)) + 
+#   geom_point() + (t1 <<-theme(axis.text = element_blank(), axis.title = element_blank()))+
+#   geom_smooth(method = "lm"),
+# ggplot(data = dat, aes(x = x, y = y1)) + 
+#   geom_point() + t1 +
+#   geom_smooth(method = "lm")
+
+
+```
+
+
+## Concepts and Learning Objectives
+
+
+- Key differences between population and sample
+- Parameters and statistics
+- Description and inference
+- Statistical and ecological populations
+- Sampling units
+
+
+## Populations and samples
+
+### Populations are large
+- We [typically] **cannot observe all** individuals in a population
+  - This is a cornerstone of Frequentist thinking
+- We have to make informed guesses about the population from *samples*
+
+### Samples are a subset of a population
+- We **can observe all** sampling units in a sample
+- We can completely characterize the properties of a sample
+
+### We use the sample to make informed guesses about the population
+
+
+
+
+## Populations, samples, parameters, and statistics
+
+### Population/sample and parameter/statistic are *parallel* concepts
+
+- **Populations** have ***parameters***, intrinsic characteristics of the entire population.
+  - We can't calculate population parameters directly.
+- We can calculate ***statistics*** from **samples**.
+
+### We use **statistics** to infer information about population **parameters**
+
+- This is the basis for *inferential statistics*.
+
+
+
+
+## Samples, Sampling Units, and Variables
+
+- A sample is a **group of observations** taken from a larger *population*.
+- A sampling unit (SU) is the unit/entity/thing of interest for the research question.
+- A variable is an attribute of the SU
+
+
+
+
+## Populations, Samples, Sampling Units, and Variables
+
+### All of these concepts form a *nested* structure:
+
+- A statistical population is [usually] a subset of an ecological population
+- A sample is a subset of a statistical population
+- One sampling unit is a subset of a sample
+- A Variable is a quantity measured on a single sampling unit
+
+
+
+
+## Statistical and ecological populations
+
+### We'll use Bullheads to illustrate the differences.
+
+```{r, echo=FALSE, fig.align='center', out.width="75%", fig.cap="Brown Bullhead illustration by Duane Raver (USFWS)"}
+knitr::include_graphics(find_file("brown_bullhead.jpg"))
+```
+
+
+
+## What is an ecological, or biological, population?
+
+### The collection of all possible sampling units.
+- The scale of the research question may or may not encompass the entire ecological population.
+- A *statistical population* is usually a subset of the *ecological population*.
+- A ecological population does not generally vary based on the scope of a research question.
+
+### Bullhead ecological population: entire species range
+
+
+
+
+## What is a statistical population?
+
+### The statistical population depends on the scope of the *research question*
+
+- Suppose we were studying bullhead in a single lake:
+  - ecological population: entire species range
+  - statistical population: the lake
+  
+- What about bullhead in Massachusetts?
+  - ecological population: entire species range
+  - statistical population: all bullhead within MA
+
+- Note that the ecological population did not change.
+
+
+
+
+## Bullhead sampling units and variables
+
+### Which bullhead attributes might we want to measure or observe?
+
+```{r, echo=FALSE, fig.align='center', out.width="75%", fig.cap="https://www.koaw.org/measuring-fishes"}
+knitr::include_graphics(find_file("Measuring_Bony_Fishes_tfs.png"))
+```
+
+
+
+## Bullhead sampling units and variables
+
+### Both the sampling unit and variables are context-dependent
+
+- Suppose we were studying bullhead in a single lake:
+  - sampling unit could be individual fishes
+  - variable might be total length
+
+- Suppose we wanted to compare average bullhead size in multiple lakes
+  - The sampling unit might be *individual fishes* or *individual lakes*
+  - The choice of SU would depend on our question
+
+
+
+
+## Sampling units are context dependent: McGarigal testimonies
+
+### Some interrelated questions to ask yourself for each testimony:
+
+- What are the spatial and temporal scales?
+- What is the statistical population?
+- What are the sampling units?
+
+
+
+
+
+<!-- ## Testimony 1 -->
+
+
+<!-- What is the *ecological population*? -->
+
+<!-- What is the *statistical population*? -->
+
+<!-- What is the *sampling unit*? -->
+
+<!-- What are the *variables*? -->
+
+<!-- What are the *temporal* and *spatial scales*? -->
+
+
+
+## Testimony 1: Spatio-temporal scales
+
+- Temporal scale:
+  - Observations were taken yearly for 10 years.
+- Geographic scale: 
+  - A single mountaintop in the White Mountains National Forest
+
+
+
+## Testimony 1: Variables
+
+### Which quantities were measured?
+1. year
+1. 'upper elevational distribution'
+  - This is vague in the text... 
+    - Is it the elevation of the highest observed nest?
+    - Is it an average elevation of all nests of a set of high elevation species?
+
+
+
+## Testimony 1: Populations and sampling units
+
+### Populations
+- Statistical: Collection of nesting sites on one peak
+- Ecological: All possible nesting sites of the bird species considered.
+
+### Sampling units
+- The SU appears to be individual nesting sites.
+  - But recall the ambiguity from the previous slide
+  
+
+
+
+## Testimony 3: Scales
+
+- Temporal scale:
+  - Observations were taken yearly for 10 years.
+- Geographic scale: 
+  - Entire White Mountains National Forest
+- Same variables as before: year, 'upper elevational distribution'
+
+
+
+## Testimony 3: Populations and sampling units
+  
+### Populations
+
+- Statistical population: Collection of nesting sites on all peaks in the White Mountains
+- Ecological population: All possible nesting sites of the bird species considered.
+
+### Sampling units
+- Appears to be individual nesting sites.
+  - But recall the ambiguity from testimony 1
+  
+- The SU could also be individual mountain tops within the White Mountains in this testimony
+
+
+
+
+## Recap
+
+- Key differences between population and sample
+- Parameters and statistics
+- Description and inference
+- Statistical and ecological populations
+- Sampling units
+
+
+

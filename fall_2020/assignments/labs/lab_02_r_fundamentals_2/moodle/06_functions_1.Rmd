@@ -1,0 +1,152 @@
+---
+title: "custom function 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+## Objective
+
+<div class="redborder">
+Write a function `create_and_print_vec()`.
+</div>
+
+- You've created a loop that can print a message with the value of each element of a vector of arbitrary length.
+- Now you'll wrap it all into a custom function.
+- Review the lab materials about writing custom functions in the lab walkthrough.
+
+
+
+### Function Arguments
+
+<div class="blackborder">
+Your function should take three integer arguments, `n`, `min`, and `max`.
+
+- `n` has no default value.
+- `min` has a default value of 1.
+- `max` has a default value of 10.
+</div>
+
+### Function Output
+
+<div class="blackborder">
+Your function needs to do the following:
+
+- Create a vector of `n` random integers between the values of `min` and `max`.
+- Loop through the elements of the vector and print a message with the index of the element and its value.
+</div>
+
+<div class="outputborder">
+Here's a skeleton:
+
+```{r eval=FALSE}
+create_and_print_vec = function(n, min = , max =)
+{
+  # Function body goes here
+}
+```
+</div>
+
+<div class="hintborder">
+- Hint: You've already written code that accomplishes *almost* all of these tasks.
+- Hint: You've used a single number as the first argument to `sample()`.  Look up the R help entry to see what other kinds of values the `x` argument of `sample()` can accept.
+</div>
+
+<br>
+
+Your function should create output like this with default values for `min` and `max`:
+
+<div class="outputborder">
+```{r, echo=FALSE}
+create_and_print_vec = function(n, min = 1, max = 10)
+{
+  vec_1 = sample(min:max, n, replace = TRUE)
+  for (i in 1:n)
+  {
+    print(paste0(
+      "The element at index ",
+      i, 
+      " is ",
+      vec_1[i]))
+  }
+}
+create_and_print_vec(10)
+```
+</div>
+<br>
+
+When you use `min = 100` and `max = 2000` your output should resemble:
+
+<div class="outputborder">
+```{r}
+create_and_print_vec(10, min = 100, max = 2000)
+```
+</div>
+<br>
+
+<div class="questionborder">
+
+### Q1 10 pts
+
+- Paste the code you used to build your function.
+  - To receive full credit your code must run without error on a new R session and produce output similar to the examples given in the instructions.
+
+</div>
+
+Solution
+========
+
+Students should produce something like:
+
+```{r, echo = TRUE}
+
+create_and_print_vec = function(n, min = 1, max = 10)
+{
+  vec_1 = sample(min:max, n, replace = TRUE)
+  for (i in 1:n)
+  {
+    print(paste0(
+      "The element at index ",
+      i, 
+      " is ",
+      vec_1[i]))
+  }
+}
+
+create_and_print_vec(10)
+create_and_print_vec(10, min = 100, max = 2000)
+```
+
+
+
+
+
+Meta-information
+================
+extitle: custom function 1
+extype: string
+exsolution: nil
+exname: lab 02
+exsection: lab 02
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 10
+

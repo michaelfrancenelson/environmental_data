@@ -1,0 +1,372 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Hypothesis Testing 2"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+require(ggplot2)
+require(data.table)
+require(palmerpenguins)
+
+
+p2 = data.table(droplevels(subset(penguins, species != "Chinstrap")))
+p3 = data.table(droplevels(subset(penguins, species != "Chinstrap")))
+p3[, species]
+p3[, species:=factor(species, labels = c("Gentoo", "Adélie"))]
+
+fill_tail = rgb(1, .1, 0, .55)
+fill_middle = rgb(0, .7, .3, .45)
+
+set.seed(12345)
+
+g_penguin_boxplot_null =
+  ggplot(p2, aes(x = species, y = sample(bill_length_mm))) +
+  geom_boxplot() +
+  geom_jitter(shape=16, position=position_jitter(0.07), alpha = 0.2) +
+  ylab("bill length (mm)")
+
+g_penguin_boxplot_alt =
+  ggplot(p2, aes(x = species, y = bill_length_mm)) +
+  geom_boxplot() +
+  geom_jitter(shape=16, position=position_jitter(0.07), alpha = 0.2) +
+  ylab("bill length (mm)")
+
+
+g_penguin_boxplot_alt2 =
+  ggplot(p3, aes(x = species, y = bill_length_mm)) +
+  geom_boxplot() +
+  geom_jitter(shape=16, position=position_jitter(0.07), alpha = 0.2) +
+  ylab("bill length (mm)")
+
+g_penguin_2_tail = cowplot::plot_grid(g_penguin_boxplot_alt, g_penguin_boxplot_alt2, nrow = 1)
+
+
+
+g_penguin_t_test_tails = 
+  cowplot::plot_grid(
+    
+    plot_norm_tails(
+      lower_tail = NULL, upper_tail = 0.95, 
+      xmax =  50,
+      pop_mean = 38.79, fill_upper = fill_tail, 
+      fill_lower = fill_tail, fill_middle = fill_middle,
+      pop_sd = 2.9) +
+      xlab("bill length (mm)") +
+      ylab("") +
+      geom_vline(xintercept = 38.79) +
+      geom_vline(xintercept = 47.5) + ggtitle("One tailed test"),
+    
+    plot_norm_tails(
+      lower_tail = 0.025, upper_tail = 0.975, 
+      xmax =  50,
+      pop_mean = 38.79, fill_upper = fill_tail, 
+      fill_lower = fill_tail, fill_middle = fill_middle,
+      pop_sd = 2.9) +
+      xlab("bill length (mm)") +
+      ylab("") +
+      geom_vline(xintercept = 38.79) +
+      geom_vline(xintercept = 47.5) + ggtitle("Two tailed test")
+  )
+
+g_one_two_tails_hypotheses = 
+  cowplot::plot_grid(
+  plot_norm_tails(0.025, 0.975, fill_upper = fill_tail, fill_lower = fill_tail, fill_middle = fill_middle, xmin = -3.5, xmax = 3.5) + ggplot2::ggtitle("Two-tailed alterhative hypothesis"),
+  plot_norm_tails(0.05, NULL, fill_upper = fill_tail, fill_lower = fill_tail, fill_middle = fill_middle, xmin = -3.5, xmax = 3.5) + ggplot2::ggtitle("One-tailed alterhative hypothesis"))
+
+```
+<!-- ## Key Concepts and Terms -->
+
+<!-- - Null Hypotheses -->
+<!-- - Alternative Hypotheses -->
+<!-- - Decision Criterion -->
+<!-- - 1- and 2-tailed hypotheses -->
+## Hypotheses
+
+### What is hypothesis testing?
+
+- A way to quantify the strength of evidence against a null hypothesis.
+- We propose a *null hypothesis* that captures what we expect to see if associations are random.
+- Perhaps a *straw man hypothesis* as Bolker mentions.
+- We propose an *alternative hypothesis* stating what we think is *actually* happening.
+- We propose a decision criterion, often a p-value, by which we can reject or fail to reject the null hypothesis in favor of the alternative.
+
+
+
+
+## Null Hypotheses: Model Thinking Perspective
+
+### A null hypothesis is...
+
+- When we build a model, we like to consider *associations* among model components.
+- We usually have some idea about the nature of the association:
+- More water is associated with greater plant biomass, etc...
+
+### If the association were random...
+
+- In a null hypothesis, we usually that associations are totally random, i.e. quantities do not vary in a coordinated way.
+
+
+
+## Alternative Hypotheses
+
+Two commonly used alternative hypotheses are:
+
+- 2-tailed, or non-directional
+- 1-tailed, or directional
+
+### 2-tailed hypotheses
+
+General: We don't propose a particular direction of the association.
+
+- Increased light might be associated with *greater* or *lower* biomass in an invasive plant. 
+- We have no prior knowledge of its light response
+- We think that there will be *some* difference, but we don't' know the direction
+
+
+
+## One-tailed alternative hypotheses
+
+### Directional hypotheses: prior knowledge helps us refine our guess
+
+More specific than a 2-tailed hypothesis
+
+- We have some previous knowledge that allows us to propose a *direction* to the association.
+- From our experience in the field and previous research we think that the plant will have *more* biomass in *higher* light.
+- We propose a *positive* association.
+
+### Why *tails*?
+
+It refers to the "tails of the distribution".  
+
+
+
+
+## Tails and rejection regions
+
+- The tails define the *rejection region*, the region in which we say we have strong evidence to *reject the null hypothesis*.
+
+```{r, echo = FALSE, fig.width=7, fig.asp=0.32}
+g_one_two_tails_hypotheses
+```
+
+- The area in red is $\alpha$ our Type I error rate, in this case 0.05.
+- 1-tailed hypotheses can give us better *statistical power*.
+
+
+## A procedure for hypothesis testing
+
+### We'll walk through a simple example using the Palmer Penguin data
+
+1. Propose a null hypothesis
+1. Propose an alternative hypothesis
+1. Select a decision criterion
+1. Analyze data
+1. Evaluate model structure, assumptions, etc.
+1. Reject or fail to reject the null hypothesis
+- Iterate the last three steps until satisfied
+
+
+
+
+## Null Hypotheses: 2-Level Categorical Variable, 2 Tails
+
+### A simple scenario: Adélie and Gentoo Penguins' bill lengths
+
+- A simple null hypothesis: the bill length does not vary between the two penguin species.
+
+```{r bill_length_null, echo=FALSE, fig.align='center', fig.width=4, fig.asp=.6}
+print(g_penguin_boxplot_null)
+```
+
+
+
+
+## Alternative Hypotheses: 2 tails
+
+### A simple scenario: Adélie and Gentoo Penguins' bill lengths
+
+- A simple alternative hypothesis: the bill lengths *are* different, but we don't know know which one should be larger.
+
+```{r bill_length_alt_2_tail, echo=FALSE, fig.align='center', fig.width=4, fig.asp=.6}
+print(g_penguin_2_tail)
+```
+
+
+
+
+## Alternative Hypotheses: 1 tail
+
+### A simple scenario: Adélie and Gentoo Penguins' bill lengths
+
+- A *directional* hypothesis: we think Gentoo penguins have larger bills.
+
+```{r bill_length_alt_1_tail, echo=FALSE, fig.align='center', fig.width=4, fig.asp=.6}
+print(g_penguin_boxplot_alt)
+```
+
+
+
+
+## Decision criterion
+
+We've already done the following:
+
+1. Propose a null hypothesis
+1. Propose an alternative hypothesis
+
+### How should we choose a decision criterion?
+
+- We would like to quantify how likely any patterns data could have occurred *by chance alone*.
+- Parametric distributions are very powerful tools, if we can approximately meet the required assumptions.
+- We need to decide upon a criterion *before* we carry out the experiment!
+
+
+
+
+## Decision criterion: false positive rate
+
+In Frequentist inference, we often use the Type I Error Rate \footnote{Artwork by Allison Horst https://github.com/allisonhorst/stats-illustrations} as a decision criterion.
+
+![](`r find_file("horst_type_1_errors.png")`)
+
+
+
+## Type I errors
+
+I like to to think of Type I errors as *false positives*.  
+
+They happen when we falsely conclude something interesting is happening.
+
+- This can happen from *sampling error*: when our random sampling efforts happen to collect a very non-representative sample.
+- We decide ahead of time what level of *false positives* we are willing to accept.
+- This is our *significance level*, also known as the Type I error rate.
+
+
+
+
+## Decision criterion: alpha
+
+In a Frequentist analysis, we usually decide on an false positive rate, $\alpha$ we can live with.  Often 5%.
+
+### Test statistic
+
+- When we perform our analysis, we will calculate the value a *test statistic* that we use to compare against our chosen parametric distribution.
+- The test statistic reflects how likely our data were to have occurred by chance alone.
+- If the test statistic resides in a *tail* of the distribution, we have strong evidence to reject the null hypothesis.
+- We can calculate a p-value from the test statistic and the distribution.
+
+### Let's go with a 5% significance level.
+
+
+
+
+
+## Penguin T-test
+
+Recall our penguins:
+
+```{r echo=FALSE, fig.align='center', fig.width=4, fig.asp=.6}
+cowplot::plot_grid(g_penguin_boxplot_null + xlab("null"), g_penguin_boxplot_alt + xlab("alternative"))
+```
+
+
+
+
+## Penguin T-test
+
+The alternative boxplot shows the real data.
+
+Let's calculate the means:
+
+```{r, echo=FALSE, comment=""}
+p2[,  .(`mean bill length` = mean(bill_length_mm, na.rm = TRUE)), by = species]
+```
+
+- It looks like a difference of about 8 mm.
+- Based on the boxplots and our mean calculations, do you think there's a difference in bill length?
+
+
+
+
+## Penguins: Analyze data
+
+### A 2-sample t-test is a good match for our question.
+
+- It's easy to conduct the test in R
+
+```{r, echo=TRUE, eval = TRUE}
+t_test_penguins =
+  t.test(
+    bill_length_mm ~ species,
+    data = subset(penguins, species != "Chinstrap"), 
+    alternative = "less")
+```
+
+
+
+## R's t-test output
+
+
+```{r, echo=FALSE, eval = TRUE}
+pander::pander(t_test_penguins)
+```
+
+
+
+## R's t-test output
+
+### T-test output key poitns
+
+- The value of the t-statistic: -24.73
+- Degrees of freedom: 242.6 - This is related to sample size and model complexity
+- We'll talk *lots* more about degrees of freedom in the next few weeks!
+- P-value is less than our chose $\alpha$
+
+
+
+## T-tests and tails
+
+- Vertical lines: mean bill length for the 2 penguin species
+- Red fill: rejection region
+
+
+```{r echo = FALSE, fig.width=6, fig.asp = 0.35, fig.align='center'}
+g_penguin_t_test_tails
+```
+
+- We could have rejected the null with either the 1- and 2-tailed alternatives
+
+
+
+## Penguins: Reject or fail to reject?
+
+
+### Assess evidence against the null
+
+- Based on our graphical, numerical, and statistical evidence, do you think Gentoo penguin have larger bills than Adélie penguins?
+
+
+
+
+

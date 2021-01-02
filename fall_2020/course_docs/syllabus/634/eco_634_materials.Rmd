@@ -1,0 +1,58 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Course Materials"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+# Course Materials {.tabset}
+
+All materials needed for this course are available for free online and through the course Moodle.
+
+
+
+## DataCamp
+
+<a href="https://datacamp.com">
+![](`r list.files(path = here::here(), pattern = "DataCamp-Horizontal-RGB.png", recursive = TRUE, full.names = TRUE)[1]`)
+</a>
+
+We'll be using <a href="https://datacamp.com">DataCamp</a> for some of our training in R.  See the course Moodle page for the invite link to gain free access to the DataCamp materials we'll use.
+
+
+## Software
+
+Downloading and installation of the course software will be covered during the first week of class.
+
+
+
+### R and RStudio
+
+We'll use the free and open-source R programming language.  You can download an appropriate version of R here: https://cran.r-project.org/
+
+We'll use the RStudio Integrated Development Environment (IDE) to edit and run our R code.  Download RStudio here: https://rstudio.com/
+
+
+
+### Other Software
+
+In addition, you'll need word processing software, as well as software that can easily display comman separated values (CSV) files.  
+
+All UMass students are eligible for a free license of Microsoft Office 365, a suite of programs inclulding Word, Excel, and PowerPoint.  Visit the Information Technology page for more info: https://www.umass.edu/it/software/microsoft-office-365-education
+
+You may also use browser-based software such as Google Docs.  Your UMass Box account gives you access to browser-based versions of Word, Excel, and PowerPoint.
+
+
+## Other materials
+
+Additional readings, online resources, and other materials will be introduced as needed.

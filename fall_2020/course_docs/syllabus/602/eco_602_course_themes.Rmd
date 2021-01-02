@@ -1,0 +1,99 @@
+---
+title: "ECo 602 Course Themes"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Course Themes {.tabset}
+
+These themes form a useful framework of how to think about modeling and working with data.  We will emphasize them throughout the course. 
+These themes form a useful framework of how to think about modeling, working with data, and science in general.  We will emphasize them throughout the course. 
+
+- Model Thinking 
+- The Dual Model Paradigm 
+- Uncertainty 
+- Working with Mathematical and Statistical Models 
+
+
+The sections below describe each theme in greater detail.
+
+
+
+## Model Thinking
+
+>  "All models are wrong, but some are useful" - George Box
+
+
+### What is a model? {.unlisted .unnumbered}
+
+- In this course, we'll think of a model as a **simplified** representation of **reality**.
+- We use models all of the time, even though we may not be conscious of it!
+
+
+
+### What is model thinking? {.unlisted .unnumbered}
+
+- Model thinking is a paradigm in which we learn to intentionally see the world through the lens of models.
+- When a model thinker encounters a new situation, they implicitly identify key components, hypothesize relationships, and start thinking about how they could simplify the **system** to to understand how it works!
+
+Modeling is a broad concept.  For most of this course we'll focus on **mathematical and statistical models**.
+
+> “Everything should be made as simple as possible, but no simpler.” - Albert Einstein
+
+
+
+## The Dual Model Paradigm
+
+In any of the systems we are interested in modeling, we can imagine there exist:
+
+- An expected typical or average behavior.
+- A range of natural variation that we expect to see around the average behavior.
+
+The **Dual Model Paradigm** is a way to think about modeling natural systems in which we specify two models:
+
+
+
+### Determinsitic Models {.unlisted .unnumbered}
+
+A **deterministic** model describes expected, or average behavior.
+
+- The deterministic model describes a relationship between a response and one or more predictors.
+- It is often known as a **model of the means**.
+- We commonly use a deterministic model to address our primary questions, such as:
+  - How does % forest cover correspond with salamander populations?
+  - How do predator populations and winter temperatures correlate with prey populations?
+
+
+
+### Stochastic Models {.unlisted .unnumbered}
+
+A **stochastic** model describes variability.
+
+- Stochastic models can help understand the possible range of behaviors in our model.
+- We use the stochastic model to assess the **significance** of our **statistical inferences**. 
+
+
+
+
+## Uncertainty
+
+Uncertainty is a mysterious concept, but it is everywhere!
+
+We'll develop an intuitive understanding of what uncertainty means in the context of environmental data.  To accomplish this we'll think about ways to identify sources of and ways to quantify uncertainty.
+
+We'll also learn to embrace uncertainty, not as something to be feared or eliminated, but as something we can understand and learn from!
+
+
+
+
+## Mathematical and Statistical Modeling
+
+Mathematical and statistical models are powerful scientific tools we can use to propose, and test, hypotheses about how a natural system behaves.
+
+We use mathematical objects, such as functions and probability distributions, to build these models.  Symbolic representations can seem overly complicated, opaque, and hard to understand.  We'll develop tools to recognize and understand the important components of these mathematical objects. 
+
+To learn to apply appropriate mathematical and statistical models, we'll focus on intuition-building to help us choose and fit an appropriate model to our data.

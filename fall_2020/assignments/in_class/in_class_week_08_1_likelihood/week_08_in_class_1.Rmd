@@ -1,0 +1,332 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Week 08: Likelihoods"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  # epuRate::epurate:
+  #   toc: TRUE
+  #   number_sections: FALSE
+  # code_folding: "hide"
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+```
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r build_assignment_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+
+assn_base_name = "week_08_in_class_1"
+assn_source_file = find_file("week_08_in_class_1.Rmd", extension = ".Rmd")
+assn_source_dir = dirname(assn_source_file)
+assn_base_name = "week_08_in_class_1"
+
+question_source_files = find_file(
+  "", search_path = file.path(assn_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+assn_dir_out    = here::here("docs", "assignments", "eco_602", "in_class")
+assn_file_out = file.path(assn_dir_out, assn_base_name)
+
+file.exists(assn_source_file)
+file.exists(assn_source_dir)
+file.exists(assn_dir_out)
+file.exists(assn_file_out)
+
+key_file_out = here::here(
+  "docs", "answer_keys",
+  sprintf("in_class_answer_key_%s", assn_base_name))
+
+build_assignment_doc(
+  assn_source_file,
+  question_source_files,
+  # assignment_render_file = NULL,
+  assignment_render_file = assn_file_out,
+  key_render_file = key_file_out)
+
+# exams::exams2moodle(
+#   file = question_source_files,
+#   verbose = TRUE,
+#   # dir = lab_dir,
+#   dir = here::here("docs", "moodle_quiz_questions"),
+#   name = sprintf("reading_questions_$s", assn_base_name)
+# )
+
+```
+
+
+
+# Learning Objectives
+
+- Calculating likelihoods
+- Estimating distribution parameters using maximum likelihood
+
+
+
+
+# Data Files
+
+If you haven't done so already, you need to save the data files to a subdirectory of your main course RProject called `data`.
+
+```{r bird.sta.csv, child = find_file("bird.sta.csv.Rmd")}
+```
+
+```{r hab.sta.csv, child = find_file("hab.sta.csv.Rmd")}
+```
+
+
+
+# What is likelihood?
+
+Likelihood is a measure of the *relative* probability of observing a set of one or more observations given a proposed model and parameter values.
+
+- We'll be calculating likelihoods using probability distributions and their parameter values in this activity.
+
+> Likelihood of a single observation is proportional to the value of the probabiltiy density/mass function.
+
+
+> Likelihood of multiple independent observations is proportional the product of individual likelihoods.
+
+
+
+# What is maximum likelihood?
+
+Maximum likelihood (ML) is a *criterion* for selecting a model.
+
+- The likelihood of a collection of observations is measured as the sum of log-likelihoods of individual observations in a dataset.
+
+- ML selection procedures select the model parameter values that *maximize* the sum of log-likelihoods.
+
+We've already met another selection, *least squares*.
+
+- Recall that in contrast to ML, in which we *maximize* our criterion, we *mimize* our criterion when we use least squares.
+
+
+
+
+# Calculating Likelihood
+
+> Likelihood is calculated from the probabiltiy density/mass functions.
+
+- Remember the `d___()` functions in R?
+
+
+# Likelinood of Two Observations
+
+Let's practice calculating likelihoods:
+
+- How can we calculate the likelihood for 2 observations?
+- Recall the general procedure for calculating likelihoods:
+
+1. Propose a model or distribution.
+2. Propose a set of model or distribution parameter values.
+3. Calculate the likelihood for each observation.
+4. Multiply the individual likelihoods to get the joint likelihood.
+  - In reality, you calculate the sum of the log-likelihoods.
+  
+  
+Here's an example in R:
+
+- Let's say I've been conducting counts of Wilson's Warblers at study sites in Oregon.
+- I've been to 2 sites where I counted 2, and 6 birds.
+
+```{r}
+x_observed = c(2, 6)
+print(x_observed)
+```
+
+I think I can model the population of birds at the study sites with a Poisson distribution.
+
+- I know that the Poisson distribution has a single parameter: $\lambda$.
+- I also know that the mean and standard deviation of a Poisson distribution are equal to $\lambda$
+
+
+Choosing a model:
+
+- I think the count of 2 is unusually low, so I decide to propose a Poisson distribution with $\lambda = 4.5$ as a model of the counts of Wilson's Warblers on my study sites.
+
+- I can use `dpois()` to calculate the probability mass for the two counts given a Poisson distribution with $\lambda = 4.5$
+
+```{r two_obs_poisson_1}
+dpois(x = 2, lambda = 4.5)
+dpois(x = 6, lambda = 4.5)
+```
+
+I know the likelihood of observing those *particular* counts together is the product of the individual likelihoods:
+
+```{r two_obs_poisson_2}
+dpois(x = 2, lambda = 4.5) * dpois(x = 6, lambda = 4.5)
+```
+
+I can take advantage of *vectorization* in R by storing the counts in a single vector:
+
+```{r}
+wiwa_counts = c(2, 6)
+dpois(x = wiwa_counts, lambda = 4.5)
+```
+
+
+
+## Product of Likelihoods
+
+I can more easily calculate the product now:
+
+```{r}
+prod(dpois(x = wiwa_counts, lambda = 4.5))
+```
+
+
+## Sum of Log-Likelihoods
+
+And the sum of log-likelihoods like:
+
+```{r}
+sum(log(dpois(x = wiwa_counts, lambda = 4.5)))
+```
+
+
+- How would you modify the code to calculate the likelihood using $lambda = 4.2$?
+
+
+# Likelihood of Many Observations
+
+Now let's say I want to find the value of \lambda that maximizes the likelihood for the counts of Wilson's Warblers.
+
+I first need to load the bird data:
+
+```{r}
+dat_bird = read.csv(here::here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here::here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+```
+
+
+
+## Numerical Data Exploration
+
+Next I need to do some numerical and graphical data exploration.
+
+I'll start with a 5-number summary, and then plot a histogram.
+
+The summary:
+
+```{r}
+summary(dat_all$WIWA)
+```
+
+
+## Graphical Exploration: Histograms
+
+
+### Default histogram
+
+Next, we'll plot a histogram of census counts.
+
+Here's the histogram that R produces with default settings:
+
+```{r wiwr_histogram}
+hist(dat_all$WIWA)
+```
+
+It's not a pretty histogram.
+
+
+
+
+### Histogram with custom breaks
+
+Let's try setting the `breaks` argument to 7.  This will *suggest* to R that it should create 7 bins (corresponding to observations between 0 and 7 wrens):
+
+```{r}
+hist(dat_all$WIWA, breaks = 7)
+```
+
+<div class="warn">
+NOTE: if you look closely, this histogram includes both the observations of zero and one in the first bin.  We requested 7 bins, but it only plotted 6!
+
+When you use a single number for the `breaks` argument, R interprets it as a *suggestion*, but it's binning algorithm may decide to use a different number!
+</div>
+
+
+
+
+### Histogram with custom breaks attempt 2
+
+One more try: we need to un-group the zero and one counts so that we see them as distinct bars in the histogram.  We used a single number for the `breaks` argument to tell to try to automatically figure out how to divide the counts into 7 bins.
+
+You can use a vector for the `breaks` argument.  R attempts to estimate bin breakpoints when `breaks` is a single number, but it will honor your input if you provide a vector of breakpoints:
+
+```{r}
+hist(dat_all$WIWA, breaks = 0:7)
+```
+
+Still not exactly what we want. It turns out that for the first bin, R includes both endpoints in its count.  In this case it's counting all of the 0- and 1-observations together.  
+
+
+
+### Histogram with custom breaks attempt 3: success!
+
+We can trick R into only counting the lower endpoint if we cleverly manipulate the sequence that we give to bins.
+
+
+```{r}
+0:7 - 0.5
+```
+
+If we write code that subtracts a single value (a scalar in linear algebra lingo) from a vector, R will subtract the number from each element in the vector and return the output.
+
+
+```{r}
+hist(dat_all$WIWA, breaks = 0:7 - .5)
+```
+
+This works because the data were discrete counts.  It also looks nicer because the bars are now centered over the census counts.
+
+
+
+### Histograms with (discrete) count data
+
+If we wanted to use code like this with data for which we didn't know the maximum value ahead of time we could write:
+
+```{r}
+par(mfrow = c(1, 2))
+dat = dat_all$WIWA
+hist(dat, breaks = 0:(max(dat) + 1) - 0.5, main = "Histogram of Wilson's Warbler counts")
+
+dat = dat_all$GRJA
+hist(dat, breaks = 0:(max(dat) + 1) - 0.5, main = "Histogram of Gray Jay counts")
+```
+
+
+## Wilson's Warbler Sum of Log-Likelihoods
+
+I'll try a Poisson distribution with lambda = 1.0:
+
+```{r}
+sum(log(dpois(x = dat_all$WIWA, lambda = 1.0)))
+```
+
+
+
+
+# Questions
+

@@ -1,0 +1,91 @@
+---
+title: "parametric and non parametric"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+
+
+Question
+========
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Refer back to sections 6.1 and 7.2 for McGarigal's descriptions of the form of the linear statistical model for the non parametric OLS and parametric likelihood-based inference techniques.
+
+Recall that he used the same data to illustrate both paradigms: Brown creeper abundance (response) and proportion of late successional forest (predictor).
+
+<div class="hintborder">
+Note: McGarigal specifies the parametric model using this notation:
+
+$Y \sim Normal(a + bx, \sigma)$
+
+However, both the parametric and non parametric model can be expressed in the more familiar regression model format:
+
+$y_i = \beta_0 + \beta_1 x_i + e_i$
+
+</div>
+
+
+
+<div class="questionborder">
+
+
+### Q1 3 pts
+
+Describe the key difference between the non parametric model (Ch. 6.1) and the parametric model (Ch. 7.1)
+
+</div>
+
+
+
+
+
+
+
+Solution
+========
+
+
+
+Meta-information
+================
+
+extitle: parametric and non parametric models
+
+extype: string
+
+exsolution: nil
+
+exname: week_07_reading_questions
+
+exsection: week_07_reading_questions
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 3
+

@@ -1,0 +1,77 @@
+---
+title: "Two-Way ANOVA: Build the Model"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+<div class="instructions">
+
+### Instructions
+
+- Fit a [factorial] linear model of penguin body mass predicted by penguin sex and penguin species.
+  - Be sure to include the sex predictor before the species predictor.
+- Save the output of `lm()` to a variable called `fit_both`.
+
+</div>
+<div class="warnings">
+Warning: in this case we need to fit a 2-way ANOVA model *with interactions*.  You have to use the star symbol instead of the plus symbol to make sure that R includes all of the factor combinations.
+</div>
+
+<div class="questions">
+
+### Q 1 pt (R code)
+
+- Paste the R-code you used to build `fit_both`.
+
+<div class="hints"> NOTE: your code should be only one line </div>
+
+
+</div>
+
+
+
+
+Solution
+========
+
+The key is that they need to build a *factorial* model using the star and not the plus symbols.
+
+```{r q3_model_fit}
+fit_both = lm(body_mass_g ~ sex * species, data = palmerpenguins::penguins)
+summary(fit_both)
+```
+
+
+
+Meta-information
+================
+
+extitle: Two-Way ANOVA: Build the Model
+extype: string
+exsolution: nil
+
+expoints: 1
+
+exname: individual_week_10
+exsection: individual_week_10
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

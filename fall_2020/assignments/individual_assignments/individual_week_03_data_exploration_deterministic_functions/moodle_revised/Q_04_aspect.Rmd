@@ -1,0 +1,65 @@
+---
+title: "Histograms of sampling site terrain"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+Consider the distribution of aspect at the bird census sample sites.
+
+
+<div class="questionborder">
+
+### Q1 1 pts 
+
+- What is aspect, and how is it measured?
+
+
+### Q3 2 pts 
+
+- Interpret the histogram in non-technical language that a non-scientist audience would understand.  Some points to consider:
+  - Do the sampling sites tend to be on north-facing slopes? 
+  - South-facing?
+  - Evenly distributed?
+
+
+</div>
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Histogram of aspect
+extype: string
+exsolution: nil
+exname: data exploration det. funs
+exsection: data exploration det. funs
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 6

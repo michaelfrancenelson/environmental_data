@@ -1,0 +1,505 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Bootstrapping 1: Bootstrap Confidence INtervals"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(boot)
+require(ggplot2)
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+moths_data_url = 
+  "https://michaelfrancenelson.github.io/eco_602_634_2020/data/moths.csv"
+
+# This clears the current R session's environment
+
+# Re-read my data:
+moths = read.csv(here("data", "moths.csv"))
+moth_dat = moths[,-1]
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of 
+    # sites in the input data (n_input_rows)
+    for(j in 1:n_input_rows)
+    {
+      # sample the input data row indices, with replacement
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+      
+      t1 = input_dat[rows_j, ]
+      t2 = apply(t1, 2, sum)
+      
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+
+rarefact2 = as.matrix(read.csv(here("assignments", "modules", "bootstrap", "rarefact.csv")))
+rarefact = as.matrix(read.csv(here("assignments", "modules", "bootstrap", "rarefact.csv")))
+
+# head(rarefact2)
+# head(rarefact)
+# class(rarefact)
+# class(rarefact2)
+# rarefact = rarefaction_sampler(moth_dat, 100)
+# head(rarefact)
+
+```
+
+
+
+
+
+
+# Rarefaction Curve
+
+
+The principle behind rarefaction is that the number of species detected is
+related to sampling intensity:
+
+- The greater the sampling intensity (e.g., number of sample plots or sampling
+area) the greater the species richness.
+
+This is another way to think of the the well-known species-area relationship in
+which area is replaced by sampling effort.
+
+When the sampling intensity varies among sampling units, rarefaction can
+be used to adjust the species richness estimates so that they are comparable.
+
+A rarefaction curve shows the species richness as a function of sampling
+intensity.
+
+For example, a rarefaction curve for detecting all 10 rare species as a function
+of number of sampling sites might look like:
+
+
+```{r echo=FALSE}
+knitr::include_graphics(find_file("bootstrap_rarefaction_curve.png"))
+```
+
+
+We can use the bootstrap curve to calculate not only the expected number of
+species (species richness), but also a confidence interval:
+
+
+```{r echo=FALSE}
+knitr::include_graphics(find_file("bootstrap_rarefaction_curve_quantiles_gg.png"))
+```
+
+
+
+
+## Setting up the bootstrap
+
+Let’s begin with our moth data set by first removing the first column which
+represents an arbitrary site id and is not useful here.
+
+Next, let’s create some objects to hold some quantities and a data matrix to
+make the subsequent script more compact:
+
+```{r}
+moth_dat = moths[,-1]
+head(moth_dat)
+
+n = nrow(moth_dat) #number of rows or sample observations
+m = 100 #number of bootstrap iterations
+moth_result = matrix(
+  nrow = m,
+  ncol = n)
+```
+
+
+We can organize our output as follows:
+
+- Each iteration of the bootstrap produces one row of output
+- The output columns correspond to the
+
+
+In this case, we will need a row for each bootstrap iteration and a column for each sampling intensity – which can range from a single observation to the full data set (n):
+
+Next, we need to use a few tricks.
+
+First, we need to draw a bootstrap sample from the data set of a specified size.
+
+We can do this using indexing and sample() for the row index of our data frame:
+
+```{r eval = FALSE}
+data[sample(...), ]
+```
+
+This says to select the rows from data corresponding to the result of the `sample()` function.
+
+Inside `sample()` we need to specify a vector containing a list of numbers ranging from 1 to n, the size of the bootstrap sample (i.e., number of row observations to take), and the replace=TRUE to ensure sampling with replacement.
+
+Once we have drawn a bootstrap sample, we compute the species richness of the sample.
+
+We can do this using `apply()` function to sum by column (species) and then count how many species have sums > 0 (indicating presence).
+
+We need to store the result in the appropriate location in the result matrix we created above.
+
+Finally, we need to put this whole set of operations into a double loop.
+
+The inside loop will create bootstrap samples of size 1 to n; the outside loop will iterate through 10,000 bootstrap iterations.
+
+
+## Running the bootstrap simulation
+
+This is what it looks like all together:
+
+```{r rarefaction_loop_1}
+
+n = nrow(moth_dat) #number of rows or sample observations
+
+m = 100 #number of bootstrap iterations
+
+moth_result = matrix(
+  nrow = m,
+  ncol = n)
+
+
+# The outer loop: runs once for each bootstrap iteration.  index variable is i
+for(i in 1:m)
+{
+  # The inner loop: simulates increasing sampling intensity
+  # Sampling intensity ranges from 1 site to the complete count of sites (24)
+  # index variable is j
+  for(j in 1:n)
+  {
+    # sample the input data row indices, with replacement
+    rows_j = sample(n, size = j, replace=TRUE)
+
+    # Creates a new data matrix
+    t1 = moth_dat[rows_j, ]
+
+    # Calculates the column sums
+    t2 = apply(t1, 2, sum)
+
+    # Counts the number of columns in which any moths were observed
+    moth_result[i, j] = sum(t2 > 0)
+  }
+}
+
+head(moth_result)
+```
+
+
+# Packaging your code into a function
+
+Whenever you find yourself writing complex loops or other blocks of code, you should
+consider whether you might want to re-use it elsewhere.
+
+Wrapping up code into a function is a great way to facilitate re-use and tinkering.
+
+We took some care to build the loop, so let's take just a few more minutes to make a
+portable version.  I should ask myself:
+
+<br>
+
+What do I want my function to do?
+
+1. Execute the double loop.
+1. Return the results in a `matrix`.
+
+What input does my function need to know about?
+
+1. The data to resample: a `data.frame`.
+1. The number of bootstrap iterations
+
+
+## First Draft
+
+In my first draft, I'll just copy all of the code inside the function and propose
+argument names based on the function inputs I identified above:
+
+```{r first_draft}
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  n = nrow(moth_dat) #number of rows or sample observations
+  m = 100 #number of bootstrap iterations
+
+  moth_result = matrix(
+    nrow = m,
+    ncol = n)
+
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:m)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of sites (24)
+    # index variable is j
+    for(j in 1:n)
+    {
+
+      # sample the input data row indices, with replacement
+      rows_j = sample(n, size = j, replace=TRUE)
+
+      # Creates a new data matrix
+      t1 = moth_dat[rows_j, ]
+
+      # Calculates the column sums
+      t2 = apply(t1, 2, sum)
+
+      # Counts the number of columns in which any moths were observed
+      moth_result[i, j] = sum(t2 > 0)
+    }
+  }
+
+  return(moth_result)
+}
+
+rarefact = rarefaction_sampler(moth_dat, 100)
+head(rarefact)
+
+```
+
+
+## Second Draft
+
+That runs, but I know I'm not done because I haven't changed any code in the function body.
+
+In the second draft, I'll check that the body of my function does not make reference
+to any variables that are not defined either by the arguments or within the function body.
+
+- I know that `m` was defined already outside of the function, so I want to replace it with `n_iterations`.
+- I know that `n` was defined as the number of rows in `moth_dat`.
+- I want my function to work for any input dataframe, so I'll replace it with a new variable, `n_input_rows`, that I define within the function body.
+- I'll get rid of moth_result, and instead create a new output matrix called `results_out`
+
+
+
+```{r second_draft}
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  n_input_rows = nrow(input_dat)
+
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of
+    # sites in the input data (n)
+    # index variable is j
+    for(j in 1:n)
+    {
+      # sample the input data row indices, with replacement
+      rows_j = sample(n, size = j, replace=TRUE)
+
+      # Creates a new data matrix
+      t1 = input_dat[rows_j, ]
+
+      # Calculates the column sums
+      t2 = apply(t1, 2, sum)
+
+      # Counts the number of columns in which any moths were observed
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+rarefact = rarefaction_sampler(moth_dat, 100)
+head(rarefact)
+
+```
+
+It runs!
+
+But just to be sure, I'm going to run my new function in a fresh R environment:
+
+
+
+## Check in a fresh environment
+
+
+```{r save_env, include=FALSE, eval=FALSE}
+tmp = tempfile()
+save.image(tmp)
+```
+
+```{r third_draft, error=TRUE}
+
+# This clears the current R session's environment
+rm(list = ls())
+
+# Re-read my data:
+moths = read.csv(here("data", "moths.csv"))
+moth_dat = moths[,-1]
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  n_input_rows = nrow(input_dat)
+
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of
+    # sites in the input data (n)
+    for(j in 1:n)
+    {
+      # sample the input data row indices, with replacement
+      rows_j = sample(n, size = j, replace=TRUE)
+
+      # Creates a new data matrix
+      t1 = input_dat[rows_j, ]
+
+      # Calculates the column sums
+      t2 = apply(t1, 2, sum)
+
+      # Counts the number of columns in which any moths were observed
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+# rarefact = rarefaction_sampler(moth_dat, 100)
+head(rarefact)
+
+```
+
+```{r restore_env, echo=FALSE, include=FALSE, eval=FALSE}
+load(tmp)
+# file.remove(tmp)
+```
+
+
+
+What happened?
+
+- I got the error message: "Error in rarefaction_sampler(moth_dat, 100) : object 'n' not found"
+- How should I proceed?
+
+I'll let you find the error and fix it for the first lab exercise question!
+
+
+
+## Debugging template
+
+You can test your corrected function using the following template:
+
+
+```{r echo=TRUE, eval = FALSE}
+
+# This clears the current R session's environment
+rm(list = ls())
+
+# Re-read my data:
+moths = read.csv(here("data", "moths.csv"))
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  ... paste your corrected code here ...
+}
+
+rarefact = rarefaction_sampler(moths[,-1], 100)
+head(rarefact)
+
+```
+
+
+
+# Building the Rarefaction Curve
+
+You are now ready to continue with the rarefaction.
+
+Run the simulator with 10000 iterations:
+
+
+```{r, eval=FALSE}
+# Re-read my data:
+moths = read.csv(here("data", "moths.csv"))
+rarefact = rarefaction_sampler(moths[,-1], 10000)
+```
+
+```{r echo=FALSE}
+rarefact = read.csv(here("assignments", "modules", "bootstrap", "rarefact.csv"))
+head(rarefact)
+```
+
+
+It make take several minutes to run with 10 thousand iterations, so be patient.
+
+When it is finished, the object `rarefact` now contains 10,000 rows and 24 columns, where each row is a separate bootstrap iteration and each column represents the size of the bootstrap sample.
+
+In this case the column number represents the number of sample observations or sampling intensity ranging from 1 to 24.
+
+We can calculate the mean and 2.5% and 97.5% quantiles of the bootstrapped species richness for each sampling intensity using `apply()` function, as follows:
+
+For convenience, let’s bind the objects together and transpose the data frame so that the columns represent the mean, 2.5% and 97.5% quantiles, and the rows represent sampling intensity ranging
+from 1 to 24.
+
+```{r}
+rare_mean = apply(rarefact, 2, mean)
+rare_quant = apply(rarefact, 2, quantile, probs=c(0.025, 0.975))
+rare = t(rbind(rare_mean, rare_quant))
+```
+
+
+## Plotting the curve
+
+We can plot the rarefaction curve and the 95% confidence interval using the matplot() function, which is useful for simultaneous plotting of several columns of a data frame or matrix.
+
+We can also add a legend to make the plot complete, as follows:
+
+```{r}
+matplot(
+  rare,
+  type='l',
+  xlab='Number of sampling plots',
+  ylab='Species richness',
+  main='Rarefaction Curve')
+
+legend(
+  'bottomright',
+  legend=c('mean','2.5%','97.5%'),
+  lty=c(1,2,3),col=c(1,2,3), inset=c(.1,.1))
+
+```
+
+
+What does the rarefaction curve indicate about the species-sampling intensity relationship?
+
+Do you think 5 sample plots are sufficient to get a reliable estimate of then number of species present in the study area?
+
+What about 10 or 15? If you sampled 10 plots, what is your estimate of the number of species present and what is your confidence in that estimate?
+
+

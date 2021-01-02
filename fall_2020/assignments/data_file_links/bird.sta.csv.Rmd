@@ -1,0 +1,8 @@
+---
+title: "bird.sta.csv"
+output: html_document
+---
+
+Use the following link to download the Oregon bird census data file:
+
+- [bird.sta.csv](/eco_602_634_2020/data/bird.sta.csv)

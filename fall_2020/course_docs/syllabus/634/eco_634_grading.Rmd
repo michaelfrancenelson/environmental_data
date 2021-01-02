@@ -1,0 +1,27 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Grading"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  pdf_document:
+    toc: true
+    number_sections: TRUE
+  # html_document:
+  #   theme: readable
+  #   css: !expr here::here("formatting", "css", "eco_602_2020.css")
+  #   toc: TRUE
+  #   toc_float: TRUE
+---
+
+
+# Grading
+
+Your grade for the course is composed of the following elements:
+
+| Item | Weight |
+| -----|--------|
+| Weekly Assignments | 80 % |
+| Learning Objectives Assessment | 5 % |
+| Learning Outcomes Assessment | 15 %|
+

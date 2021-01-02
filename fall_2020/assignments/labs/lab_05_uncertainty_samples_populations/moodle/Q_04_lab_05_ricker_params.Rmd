@@ -1,0 +1,96 @@
+---
+title: "Ricker params"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. To gain visual intuition, try using `curve()` to plot the Ricker function.
+  - Try out different values of the two parameters as well as plotting over different ranges of x-values.
+  - Try plotting two or more curves with slightly different parameter values on the same plot
+  - You may need to try out different ranges of x-values in your plot windows to make sure you are focusing on the interesting parts of the curves.
+  - Try different line colors, widths, and textures.
+
+An example exploratory plotting exercise:
+
+![](`r find_file("lab_05_q4.png")`)
+
+
+
+
+
+<div class="questionborder">
+### Q1 2 pts.
+
+- Qualitatively describe how the `a` parameter influences the curve shape.
+
+### Q2 2 pts.
+
+- Qualitatively describe how the `b` parameter influences the curve shape.
+
+</div>
+
+<div class="hintborder"> NOTE: make sure you choose an appropriate range of x-values in your plot.</div>
+
+
+
+Solution
+========
+
+Students should note:
+
+- that the a parameter influences the initial slope
+- that the b parameter controls the x-coordinate of the curve's maximum
+- That both parameters affect the y-coordinate of the curve's maximum
+
+
+```{r}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+
+curve(ricker_fun(x, 25, 0.1), add = FALSE, from = 0, to = 50, ylab = "f(x)")
+curve(ricker_fun(x, 20, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 10, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 75, 0.3), add = TRUE, col = 2, lty = 1)
+curve(ricker_fun(x, 50, 0.3), add = TRUE, col = 2, lty = 2)
+curve(ricker_fun(x, 40, 0.3), add = TRUE, col = 2, lty = 2)
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Ricker params
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4

@@ -1,0 +1,111 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Final Project"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+```
+
+
+
+
+# Learning Objectives
+
+- Create a set of R examples for your personal reference beyond this course.
+- Use the concepts you have learned in the course to perform a complete data analysis.
+
+
+
+# Introduction: R Reference
+
+It's very easy to forget R programming concepts if you don't use the often.
+
+A great way to retain the skills that will be important for you going forward is to create a set of examples using the functions you want to remember.
+
+You'll create an R Markdown document containing examples of how to use the basic R components that you need to know.
+
+
+
+
+# Introduction: Data Analysis
+
+For this portion of the final project, you'll perform a data analysis on data collected or two species of small mammals in the Atlantic Forest of Brazil.
+
+You'll find the data file, delomys.csv, in the data tab of the course GitHub page.
+
+It includes data extracted from a larger data set:
+
+- <a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecy.1893" target="_blank">Atlantic small‐mammal: a dataset of communities of rodents and marsupials of the Atlantic forests of South America</a>
+
+
+
+# GitHub Pages
+
+## Set up your repository for GitHub Pages:
+
+
+### In RStudio:
+
+1. Open RStudio and make sure that your course RProject is open.
+1. Create a 'docs' folder in your base project.
+1. Create a new RMarkdown document, save it as `index.Rmd` in your `docs` folder.
+1. Add your name and a title to the header section of the document.
+1. Click the Knit button.
+1. Commit your changes and push to GitHub.
+
+
+### On GitHub:
+
+1. Navigate to your repository on GitHub.
+1. Go to 'Settings'
+1. Scroll down to the *GitHub Pages* section.
+1. You'll see a blurb called **Source** with a dropdown menu.
+1. The **None** option will be initially selected.
+1. Click the dropdown menu and choose *main*.
+1. Another dropdown will appear: select the **/docs** option.
+1. Click *save*.
+
+
+# index.Rmd and index.html
+
+In order to be published on GitHub Pages, your project needs to have a file called `index.html` in your `docs` folder.
+
+- `index.Rmd` will be the R Markdown document in which you'll create your final project's content.
+
+
+# Final Project Template
+
+Download the file `index_template.Rmd` from the course GitHub page.
+
+
+# R Markdown Documents
+
+You can create a new markdown document via the File menu in RStudio.
+
+- RMarkdown documents have an '.Rmd' extension.
+
+RMarkdown documents consist of a few basic elements, including:
+
+- Document text.
+  - This is the text that will appear in your rendered document (usually html or pdf).
+  - Document text may contain links, images, and formatting information.
+
+- Code chunks.
+  - These are where you can write your R code.
+  - The code will be executed, and the results displayed in the document.
+    - You can specify options in the code chunk header.  `echo` and `eval` are two useful options.
+

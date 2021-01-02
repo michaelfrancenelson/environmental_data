@@ -1,0 +1,87 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Course Structure"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+# Course Structure {.tabset}
+
+The online delivery mode for this course will present challenges for those of us accustomed to in-person meetings, but also presents an opportunity to learn to deliver content in new ways.  In that spirit, the basic structure of the course will consist of the following elements:
+
+- Live lab meetings 
+- Lab exercises
+- Learning objectives and outcomes assessments
+
+Descriptions of each course component are below:
+
+
+
+## Live lab meetings
+
+The lab sessions are an opportunity for everyone to work together 'live' on the lab exercises.  It's an opportunity for questions about concepts or coding, demos, clarification, and collaboration with your peers.
+
+In my previous experience, I have found that learning to code in a group setting is both more efficient, and less frustrating that working alone.  Working in pairs or small groups allows you to be both a coding mentor and mentee.  Although we won't be physically together in a classroom, we'll learn to take advantage of the zoom main and breakout room features.
+
+Students may use zoom breakout rooms to work together on group-based assignments.
+
+
+
+
+ 
+## Weekly Lab Assignments 
+
+There will be 13 weekly lab assignments.  The Wednesday lab sessions are our time to collaborate on the lab assignments.
+
+Each assignment is worth 100 points.
+
+Weekly lab materials will be made available no later than Monday before the Wednesday lab session.
+
+Assignments will be due the Friday of the following week.
+
+Your lowest lab assignment grade will be excluded from the final grade calculation.
+
+
+
+
+
+## Learning Outcomes Take-Home Final
+
+This assessment consists of short-answer and multiple-choice questions.
+
+It is meant to gauge:
+
+- Your knowledge of general computing
+- Your knowledge of programming in general
+- Your knowledge of R
+- What you hope to gain from the course
+
+<div class="info"> 
+
+NOTE: The grade for this assessment is based on participation, not your specific answers!.  
+
+It is meant as a reference point in time to help both you and I gain a snapshot of your knowledge and experience.
+</div>
+
+Specific information on the final exam will be communicated in the final weeks of the course.
+
+
+
+
+## Attendance
+
+You are **required** to attend all real-time sessions (Wednesdays at 12:20 - 3:45 PM).  If you cannot attend a session due to illness, conference attendance, or other extenuating circumstances please contact me **before** lab.  
+
+<!-- You must watch all of the **required** pre-recorded mini-lectures **prior** to the associated real-time labs. -->
+<!-- The required mini-lectures will be made available at least one week before the associated live session.  Since these are asynchronous, you can watch them any time that fits your own schedule.  -->
+
+<!-- If you have attendance questions please contact me as soon as possible. -->

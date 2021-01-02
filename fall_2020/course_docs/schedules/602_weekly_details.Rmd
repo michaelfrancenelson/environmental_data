@@ -1,0 +1,583 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Detailed Course Schedule"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  pdf_document:
+    toc: true
+    number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+tue_start = as.Date("2020-08-25")
+thu_start = tue_start + 2
+dat_fmt = "%b %d"
+
+dat_str = function()
+return(paste0(format(tue_start, dat_fmt), ", ",
+       format(thu_start, dat_fmt)))
+
+dat_str()
+
+```
+
+
+
+
+## Week 1: `r dat_str()` {.tabset}
+```{r increment_date, include = FALSE}
+tue_start = tue_start + 7; thu_start = tue_start + 2
+```
+<a name="week01"></a>
+**Introductions, Why Model? **
+
+
+### Key Concepts
+
+- Introduction to course 
+- Course themes 
+- Model thinking 
+- Computing for scientists 
+
+
+### Readings 
+
+- Epstein: Why Model? 
+- McGarigal ch. 1 
+- Bolker Chapter 1: sections 1.1, 1.2, 1.3 
+
+
+### Lectures 
+
+- Navigating Course Moodle 
+- Model Thinking 1: What is a Model? [Note: this will be covered in the first course meeting on Tuesday Sep. 25]
+- Computing for Scientists 
+- R and RStudio 
+
+
+### Individual Assignments
+
+- Learning objectives assessment: Due Friday Aug 28 by midnight
+  - Grade is based on completion, not correct answers.
+- Software setup: Due Monday Aug 31st
+- DataCamp: Intro to R - Due Friday Sep. 4th
+
+
+### Zoom Meetings
+
+#### Tuesday: Course introduction, structure, and overview 
+
+- Course structure and format 
+- Course themes 
+- My expectations 
+- Learning objectives
+- What is a Model?
+
+
+#### Thursday: Discussion 
+
+- Your expectations  
+- Model Thinking and Course Themes
+- Model thinking in-class activity
+
+
+ 
+
+
+##  Week 2: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week02"></a>
+**Environmental Data and Model Thinking**
+
+### Key Concepts
+
+- Data scales 
+- The row-format paradigm 
+- Data recording, cleaning, and metadata 
+- Model thinking: scientific and cultural contexts 
+
+
+### Lectures
+
+- Data Scales
+- Model Thinking: population and sample
+- Model Thinking: a frequentist perspective
+
+
+### Readings 
+
+- Bang, Megan, Ananda, Marin, and Medin
+- McGarigal Chapter 2
+
+
+### Individual Assignments
+
+- Course GitHub Repositlry Setup
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+## Week 3: `r dat_str()`{.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week03"></a>
+**Data Exploration and Deterministic Functions **
+
+### Key Concepts
+
+- Numerical data exploration
+- Graphical data exploration 
+- Functions 
+
+
+### Readings 
+
+- Zuur Chapter 4.1.  Focus on the sections below.  We’ll cover some of the other plot types later. 
+  - Boxplots and conditional boxplots 
+  - Histograms 
+  - Scatterplots 
+  - Pair plots 
+- McGarigal Chapter 3: Data Exploration, Screening & Adjustments
+  - sections 1 – 5.  This covers much of the same material as the Zuur reading, but the writing style is perhaps more approachable.
+- McGarigal Chapter 4: Deterministic Functions
+  - Sections 1-3, 5
+  - section 4: 
+    - Glance through this section.  Try not to get caught up in the mathematical details.
+    - Focus on the figures and the shapes of the functions.
+    - We’ll cover the details of selected functions in lecture and discussion. 
+
+
+### Lectures 
+
+- Functions: function types and graphical intuition 
+- Functions: understanding formulae
+- Describing data with deterministic functions
+
+
+### Individual Assignments
+
+- Deterministic Functions
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+
+
+
+
+## Week 4: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+<a name="week04"></a>
+**The Dual-Model Paradigm, Uncertainty and Probability**
+
+### Key Concepts
+
+- Essentials of probability theory
+- Uncertainty
+- Stochastic processes 
+
+
+
+### Readings
+
+- Bolker ch. 1 section 1.6
+- McGarigal 5a
+
+
+
+### Lectures 
+
+- Probably distributions 1: general concepts
+- Discrete distributions
+- Continuous distributions
+
+
+
+### Individual Assignments 
+
+- Dual Models
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+## Week 5: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week05"></a>
+**The Frequentist Paradigm**
+
+
+### Key Concepts
+
+- Sample and population
+- Statistics and parameters
+- Repeated sampling
+
+
+
+### Readings 
+
+Bolker ch 1, section 1.4
+McGarigal Ch 5b, 5c, 5d
+Jorge Luis Borges: The Library of Babel
+
+
+
+### Lectures 
+
+- The frequentist perspective
+- Stochastic processes and repeated sampling
+
+
+
+### Individual Assignments 
+
+- Continue Dual Models assignment.
+
+
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+## Week 6: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week06"></a>
+**The Sampling Distribution and Confidence Intervals**
+
+
+### Key Concepts
+
+- Describing a sample vs. describing the sampling process 
+- Frequentist interpretation of confidence intervals 
+
+
+### Readings 
+
+- McGarigal Ch 5d
+
+
+
+### Lectures 
+
+- Sample statistics and the sampling distribution
+- The Frequentist confidence interval: definitions, uses, and abuses
+
+
+### Individual Assignments 
+
+- Frequentist Concepts
+
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+## Week 7: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week07"></a>
+**Least Squares: Modeling Categorical and Continuous Data**
+
+
+### Key Concepts
+
+- Model fitting 
+- Null and alternative hypotheses
+- Overview of simple inferential models
+  - T-tests
+  - ANOVA
+  - Simple linear models 
+
+
+### Readings 
+
+McGarigal Ch 6
+McGarigal Ch. 7
+Lecture Videos
+How do we measure 'error'?
+Optimizing
+
+### Lectures 
+
+### Individual Assignments 
+
+- Using Models I
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+## Week 8: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week08"></a>
+**Linear Models 1: Key Concepts**
+
+
+
+### Key Concepts
+
+- Modeling categorical data: ANOVA
+- Modeling continuous data: linear regression
+
+
+
+
+### Readings 
+
+- Bolker Ch. 9, sections 9.1 - 9.2
+- Zuur Ch. 5.1 - 5.2
+
+
+
+
+### Lectures 
+
+- Functions: continuity and local linearity
+- Data Transformations
+- 
+
+
+
+### Individual Assignments 
+
+- continue Using Models I assignment
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+## Week 9: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week09"></a>
+**Linear Models 2: Assumptions, Diagnostics, and Selection **
+
+
+### Key Concepts
+
+- Fitting models to real, messy data
+- Testing assumptions
+
+
+
+### Readings 
+
+- Zuur Ch. 5.1 - 5.2
+
+
+
+### Lectures 
+
+- When assumptions aren't met
+- When assumptions aren't reasonable
+
+
+
+### Individual Assignments 
+
+- Using Models II
+
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+
+## Week 10: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week10"></a>
+**Linear Models 3: Extending the Linear Model **
+
+### Key Concepts
+
+- Survey of extended linear techniques: 
+  - generalized linear models 
+  - mixed models 
+  - generalized least squares 
+  - other extensions of the general linear model 
+
+
+### Readings 
+
+- Bolker 9.3, 9.4, 9.5
+- Zuur 6, 7.1 - 7.4
+
+
+
+### Lectures 
+
+- Extending the general linear model 1: discrete data
+- Extending the general linear model 2: abnormal errors
+- Extending the general linear model 3: nonlinearity
+
+
+
+### Individual Assignments 
+
+- continue Using Models II assignment
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+## Week 11: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week11"></a>
+**Frameworks: Frequentist, Bayesian, and Maximum Likelihood **
+
+### Key Concepts
+
+- Contrasts between the frameworks
+
+
+
+### Readings 
+
+- McGarigal Ch 6 - 8
+
+
+
+### Lectures 
+
+- Bayesian and Frequentist paradigms
+- Likelihood: concepts and intuition
+- Analytical solutions, numerical methods, and simulation
+
+
+
+### Individual Assignments 
+
+- Using Models III
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+
+
+## Week 12: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week12"></a>
+**Course Key Concepts Revisited**
+
+### Key Concepts
+
+### Readings 
+
+### Lectures 
+
+### Individual Assignments 
+
+- continue Using Models III assignment
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday
+
+
+
+
+## Week 13: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+<a name="week13"></a>
+**Where to go from here?**
+
+### Key Concepts
+
+- Spatial Analysis 
+- Multivariate statistics 
+- Simulation 
+- Machine learning techniques 
+
+
+
+### Readings 
+
+### Lectures 
+
+### Individual Assignments 
+
+- continue Using Models III assignment
+
+
+### Zoom Meetings
+
+#### Tuesday
+
+#### Thursday

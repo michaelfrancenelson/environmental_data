@@ -1,0 +1,168 @@
+---
+title: "Weekly Topic Overview"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r, include=FALSE}
+
+
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+  } else if (knitr::is_html_output()) {
+    cat(sprintf("<span style='color: %s;'>%s</span>", color, x))
+  }
+}
+```
+
+
+# Weekly Concepts Overview
+
+This is a brief overview of the topics covered each week.
+
+Please see the detailed weekly schedule for more specific information on readings, assignments, mini-lectures, etc.
+
+
+```{r, results = 'asis', echo = FALSE}
+if (knitr::is_html_output())
+{
+colorize('Click on  week to expand or hide.\n', "blue")
+  # colorize("abc", "blue")
+}
+```
+
+
+<!-- # Weekly Concepts Overview {.tabset} -->
+
+
+<details>
+<summary> 
+Week 1: August 24, 28 – Introductions, Why Model? 
+</summary>
+
+- Introduction to course 
+- Course themes 
+- Model thinking 
+- Computing for scientists
+
+</details>
+
+
+<details>
+<summary> 
+Week 2: August 31, Sep 4 – Environmental Data and Model Thinking  
+</summary>
+
+- Data scales 
+- The row-format paradigm 
+- Data recording, cleaning, and metadata 
+- Model thinking: scientific and cultural contexts 
+
+</details>
+
+
+<details>
+<summary>
+Week 3: Sep 7, 11 – Data Exploration and Deterministic Functions  
+</summary>
+
+- Numerical and graphical data exploration 
+- Functions 
+
+</details>
+
+
+<details>
+<summary>
+Week 4: Sep 14, 18 – The Dual-Model Paradigm, Uncertainty and Probability  
+</summary>
+
+- Essential probability theory basics 
+- Uncertainty and stochastic processes 
+
+</details>
+
+
+<details>
+<summary> Week 5: Sep 21, 25 – Frequentist Statistics </summary>
+
+- Conceptual framework of the frequentist paradigm 
+- Sample and population 
+- Description and inference 
+
+</details>
+
+<details>
+<summary> Week 6: Sep 28, Oct 2 – The Sampling Distribution and Confidence Intervals  </summary>
+
+- Describing a sample vs. describing the sampling process 
+- Frequentist interpretation of confidence intervals 
+
+</details>
+
+<details>
+<summary> Week 7: Oct 5, 9 – Least Squares: Modeling Categorical and Continuous Data  </summary>
+
+- Model fitting 
+- Intro to t-tests, ANOVA, and simple linear models 
+
+</details>
+
+
+<details>
+<summary> Week 8: Oct 12, 16 – Linear Models 1: Concepts  </summary>
+
+- ANOVA
+- simple and multiple linear regression. 
+
+</details>
+
+
+<details>
+<summary> Week 9: Oct 19, 23 – Linear Models 2: Assumptions, Diagnostics, and Selection  </summary>
+
+- Using models with real-life, messy data 
+
+</details>
+
+
+
+
+<details>
+<summary>Week 10: Oct 26, 30 – Linear Models 3: Extending the Linear Model </summary>
+
+- Survey of extended linear techniques: 
+- generalized linear models
+- mixed models
+- generalized least squares
+- other extensions of the linear model
+
+</details>
+
+
+
+<details>
+<summary>Week 11: Nov 2, 6 – Frameworks: Frequentist, Bayesian, and Maximum Likelihood </summary>
+
+- Contrasts among inferential paradigms
+
+</details>
+
+<details>
+<summary> Week 12: Nov 9, 13 – Course Concepts Revisited</summary>
+
+- Review of course concepts in the context of the course themes
+
+</details>
+
+
+<details>
+<summary> Week 13: Nov 16, 20 – Where to go from here? </summary>
+
+- Spatial Analysis
+- Multivariate statistics
+- Simulation
+- Machine learning techniques
+
+</details>

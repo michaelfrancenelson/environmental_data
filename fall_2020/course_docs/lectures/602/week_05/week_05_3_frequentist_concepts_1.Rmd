@@ -1,0 +1,36 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Frequentist Framework Concepts"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+# source(here::here("rmd_tools", "find_file.R"))
+```
+
+
+
+```{r child= find_file("frequentist_1.Rmd")}
+
+```
+
+
+
+

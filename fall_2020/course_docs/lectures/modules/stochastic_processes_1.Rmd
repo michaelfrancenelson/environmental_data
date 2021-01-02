@@ -1,0 +1,105 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Stochastic Processes"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(cowplot)
+require(animation)
+source(here::here("rmd_tools", "find_file.R"))
+source(find_file("rwalk_1.R"))
+```
+
+
+
+## Stochastic Process
+
+\begin{blueborder}{0.9\textwidth}{What is a stochastic process?}\begin{itemize}\item A procedure whose outcome is uncertain, or random.
+\item When we carry out a realization of a stochastic process, we produce an outcome, e.g. a sampling \textit{event}.
+\item The range of possible outcomes of a stochastic process is the \textit{sample space}.
+\end{itemize}
+\end{blueborder}
+
+Probability theory studies stochastic processes
+
+- It's nice when we can associate elements in the sample space with probabilities.
+
+
+
+
+
+
+## Some Stochastic Process Examples
+
+### stochastic processes
+
+- Flipping a coin, drawing a hand of cards, lottery draw
+- A random walk, Brownian motion
+
+
+### stochastic process realizations 
+
+- A book in the Library of Babel: Oh tiempo, tus piráides
+- A count of Brown Creepers in a forest patch in Oregon
+
+
+
+
+## Random Walks: 50 steps
+
+```{r random_walk_50, echo = FALSE}
+n = 50
+par(mfrow = c(2, 3), mar = c(0, 0, 0, 0))
+for (i in 1:6)
+{
+  dat = rwalk_1(n)
+plot(
+  y ~ x, data = dat, 
+  type = "l", ann = FALSE, frame = TRUE, axes = FALSE, 
+  lwd = 10, col = gray(0, 0.1),
+  asp = 1)
+points(
+  y ~ x, data = dat, 
+  type = "l", 
+  lwd = 1, col = rgb(0, 0, 0.7, 1),
+  asp = 1)
+}
+```
+
+## Random Walks: 5000 steps
+
+```{r random_walk_5000, echo = FALSE}
+n = 5000
+par(mfrow = c(2, 3), mar = c(0, 0, 0, 0))
+for (i in 1:6)
+{
+  dat = rwalk_1(n)
+plot(
+  y ~ x, data = dat, 
+  type = "l", ann = FALSE, frame = TRUE, axes = FALSE, 
+  lwd = 10, col = gray(0, 0.1),
+  asp = 1)
+points(
+  y ~ x, data = dat, 
+  type = "l", 
+  lwd = 1, col = rgb(0, 0, 0.7, 1),
+  asp = 1)
+}
+```

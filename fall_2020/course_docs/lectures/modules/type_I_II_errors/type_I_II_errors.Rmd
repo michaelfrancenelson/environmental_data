@@ -1,0 +1,206 @@
+--- 
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Type I and Type II Errors"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header- includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+--- 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+img_path = file.path(dirname(find_file("type_I_II_errors.Rmd")), "images")
+```
+
+```{r scratch, echo = FALSE, eval = FALSE}
+require(mfn.teaching.utils)
+require(ggplot2)
+
+xmin = - 2; xmax = 5; len = 400
+alpha = 0.05
+effect = 2
+
+alpha_fill = adjustcolor("red", alpha = 0.1)
+
+alt_col = rgb(0, 0, 0.7, 1)
+null_dist = mfn.teaching.utils::build_dnorm_dat(xmin, xmax, len, pop_mean = 0, pop_sd = 1)
+alt_dist = mfn.teaching.utils::build_dnorm_dat(xmin, xmax, len, pop_mean = effect, pop_sd = 1)
+
+null_dist$dist = "null dist"
+alt_dist$dist = "alt dist"
+
+dat = rbind(null_dist, alt_dist)
+head(dat)
+
+dat_x = data.frame(x = c(0, effect), dist = c("null dist", "alt dist"))
+
+
+pdf_lines = geom_line(data = dat, mapping = aes(x = x, y = y1, colour = dist))
+ggplot() +
+  pdf_lines +
+  geom_vline(data = dat_x, mapping = aes(xintercept = x, colour = dist)) +
+  # geom_vline(xintercept = effect, colour = alt_col) + 
+  alpha_ribbon
+
+
+null_line = geom_line(data = null_dist, mapping = aes(x = x, y = y1))
+alt_line  = geom_line(data =  alt_dist, mapping = aes(x = x, y = y1), colour = alt_col)
+
+
+alpha_ribbon = geom_ribbon(
+  data = subset(null_dist, x > qnorm(1 - alpha)),
+  mapping = aes(x = x, ymin = y0, ymax = y1),
+  col = 0, fill = alpha_fill)
+
+
+ggplot() + null_line + alt_line + 
+  geom_vline(xintercept = 0) +
+  geom_vline(xintercept = effect, colour = alt_col) + alpha_ribbon
+  
+geom_line(data = null_dist, mapping = aes(x = x, y = y1)) 
+  geom_ribbon(data = null_dist, mapping = aes(x = x, ymin = y0, ymax = y1))
+  geom_ribbon(data = null_dist, mapping = aes(x = x, ymin = y0, ymax = y1))
+
+
+head(null_dist)
+
+```
+
+
+## Terminology
+
+- Alpha: significance level, specified in advance
+- Beta: false negative rate, estimated after data collection
+- Critical value: test statistic must be more extreme than this value to reject null.
+
+
+
+
+## Hypothesis Testing
+
+```{r hypothesis_testing_slide, echo=FALSE}
+knitr::include_graphics(file.path(img_path, "hypothesis_testing.png"))
+```
+
+
+
+## False Positives: alpha
+
+- alpha is the likelihood that we falsely reject a true null hypothesis.
+- this is our p-value cutoff that we specify ahead of time.
+
+
+
+## False Negatives: beta
+
+- Beta is the type II error rate: failing to reject a false null hypothesis.
+- We select a p-value cutoff ahead of time: alpha
+- The false negative rate depends on our choice of alpha and the data.
+- We cannot know beta until after we have collected data :(
+
+We can think of a false negative as when an observation *belongs* to the alternative hypothesis distribution, but falls outside of the *rejection region*.
+
+- It belongs to the alternative distribution because the null hypothesis is false.
+- But... it looks like it should belong to the null hypothesis because it is outside of the rejection region.
+
+
+
+
+## Alpha and Beta
+
+```{r alpha_and_beta, echo=FALSE}
+knitr::include_graphics(file.path(img_path, "alpha_and_beta.png"))
+```
+
+
+
+## Power Analysis
+
+- Statistical Power: the probability that we correctly reject a false null hypothesis.
+- Statistical power is 1 – beta
+- We can’t know our statistical power until after we collect data.
+
+
+
+## Factors that influence statistical power
+
+- Sampling error, sample size
+- Population variability
+- Effect size
+- Our choice of alpha
+- You cannot simultaneously decrease the false positive rate and increase statistical power!
+
+
+
+
+## Effect of Alpha
+
+The choice of alpha affects our statistical power:
+
+- Small alpha makes the *rejection region* smaller:
+  - We have to observe a more extreme value to be in the *rejection region*.
+  - Less overlap between the rejection region and the alternative distribution.
+  - More overlap between the alternative distribution and the fail-to-reject region
+
+- Large alpha moves the *rejection region* closer to the center of the null distribution.
+  - We're more likely to observe a value within the rejection region by chance.
+  - More overlap between the rejection region and the alternative distribution.
+  - Less overlap between the alternative distribution and the fail-to-reject region
+
+
+
+
+## Effect of Alpha
+
+```{r effect_of_alpha, echo=FALSE}
+knitr::include_graphics(file.path(img_path, "effect_of_alpha.png"))
+```
+
+
+
+## Effect of Population Standard Deviation
+
+Smaller population standard deviation makes the sampling distribution narrower.
+
+- Smaller overlap between null and alternative distributions.
+
+
+
+## Effect of Population Standard Deviation
+
+```{r effect_of_sd, echo=FALSE}
+knitr::include_graphics(file.path(img_path, "effect_of_sd.png"))
+```
+
+
+
+## Effect of Effect Size
+
+If the effect is larger, the null and alternative distributions are more separated.
+
+
+
+## Effect of Effect Size
+
+```{r efect_of_effect, echo=FALSE}
+knitr::include_graphics(file.path(img_path, "effect_of_effect_size.png"))
+```
+
+
+
+
+

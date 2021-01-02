@@ -1,0 +1,73 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis: Lab Code"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_effect_size_simulation, echo = FALSE}
+load(here::here("data", "sim_output_effect_size.RData"))
+effect_sizes = effect_size_sim$effect_sizes
+effect_power = effect_size_sim$effect_power
+```
+
+```{r load_sample_size_sim, echo = FALSE}
+load(here::here("data", "sim_output_sample_size.RData"))
+sim_output_1 = sample_size_sim$sample_powers
+sample_sizes = sample_size_sim$sample_sizes
+```
+
+```{r load_sim_data_1, echo = FALSE}
+load(
+  file = here::here(
+    "data", 
+    "sim_output_sample_size_effect_size.RData"))
+
+load(here::here("data", "sim_output_sample_size_effect_size.RData"))
+
+effect_sizes = sim_output_sample_size_effect_size$effect_sizes 
+y = sim_output_sample_size_effect_size$sample_sizes
+z = sim_output_sample_size_effect_size$data
+```
+
+```{r echo = FALSE}
+load(
+  file = here::here(
+    "data", 
+    "sim_output_sample_size_effect_size.RData"))
+sim_output_2 = sim_output_sample_size_effect_size$data
+effect_sizes = sim_output_sample_size_effect_size$effect_sizes
+sample_sizes = sim_output_sample_size_effect_size$sample_sizes
+```
+
+```{r save_rdata, eval=FALSE}
+save(
+  sim_output_2, 
+  file = here::here("data", "sample_size_effect_size_power_sim.Rdata"))
+```
+
+```{r load_rdata, eval=FALSE}
+load(file = here::here("data", "sample_size_effect_size_power_sim.Rdata"))
+```
+

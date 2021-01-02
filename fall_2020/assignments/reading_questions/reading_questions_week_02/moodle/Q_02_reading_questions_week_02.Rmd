@@ -1,0 +1,81 @@
+---
+title: "Week 02 reading Q2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="blackborder">
+This question draws mostly upon materials from the McGarigal chapter 1 slides.  
+Concepts in the Bang et al. paper may also provide insight.
+</div>
+
+<br>
+
+<div class="redborder">
+Note: The terms *assumption* and *bias* tend to be value-laden, but keep in mind that we all have biases that we are unaware of and we make assumptions every day.
+
+Just like uncertainty, we can improve our ability to detect hidden assumptions and biases.  Also like uncertainty we can learn from them.
+
+I'm attempting to use *bias* and *assumption* in this question in a non-judgmental way.
+</div>
+
+
+
+
+- McGarigal states in chapter 1:
+
+> "Western science and our society requires that challenges to the status quo be empirically and rigorously demonstrated (analogy: "innocent until proven guilty")"
+
+> "... This is because we live in a world where challenges to the status quo are given little credence without solid evidence for the alternative (analogy: innocent until proven guilty)."
+
+> "Whether we are presenting our findings to a scientific audience (e.g., in a scientific journal) or to managers, policy-makers, or the general public, we are increasingly asked to defend our conclusions on the basis of statistical evidence."
+
+<br>
+
+These seem like great ideals to strive for, right?
+
+Part of being a good modeler is identifying biases: implicit, cultural, scientific, etc.
+
+Often these biases come from implicit assumptions that we frequently don't realize we make!
+
+
+
+- Questions
+  - What are some potential assumptions and/or biases in these two quotes, keeping in mind the four testimonies in McGarigal's slides.
+  - Can you think of any practical ways in which these biases and/or assumptions could impact scientific communication and the effectiveness of management efforts?
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading Q2
+extype: string
+exsolution: nil
+exname: Week 2 reading questions
+exsection: Week 2 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 10
+

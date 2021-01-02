@@ -1,0 +1,140 @@
+---
+title: "salamander linear model residuals"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Recall the function we have used to visually estimate linear model parameters:
+
+```{r}
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Instructions:
+
+1. Using the parameters you chose for your linear fit, calculate the residuals and store them in a vector `resids_linear`.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (3 pts.) Paste the code you used to create `resids_linear`.
+- Q1 (1 pts.) Upload an image file with a histogram of the residuals of your linear model.
+
+</div>
+
+
+
+
+Solution
+========
+
+```{r}
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+For example:
+
+```{r}
+param_x1 = 1400
+param_y1 = 0.1
+param_slope = -0.0001
+
+plot(
+  dat_dispersal$dist.class,
+  dat_dispersal$disp.rate.ftb,
+  xlab = "distance class", 
+  ylab = "standardized dispersal rate", 
+  main = "Marbled Salamander - first time breeders")
+
+curve(line_point_slope(x, param_x1, param_y1, param_slope), add = TRUE)
+
+resids_linear = 
+  line_point_slope(
+    dat_dispersal$dist.class, 
+    param_x1, param_y1,
+    param_slope) - 
+  dat_dispersal$disp.rate.ftb
+
+hist(resids_linear, main = "residuals: linear model")
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: salamander linear model residuals
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4

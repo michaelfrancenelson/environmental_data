@@ -1,0 +1,179 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "DataCamp: Intro to R"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  # html_document:
+  #   theme: cayman
+  #   highlight: github
+  #   css: !expr here::here("formatting", "css", "eco_602_2020.css")
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+
+```
+
+
+
+# Learning Objectives
+
+- Learn basic R syntax and data structures
+- Learn how R stores different data types
+
+
+
+# Introduction
+
+In previous years, the lecture portion of the course did not include any training in R.  Many students, especially students in programs other than ECo do not enroll in the lab and therefore do not learn any R.
+
+After considering feedback from students, faculty, and the general need to learn R for academic and professional careers I have decided to include some basic R in the lecture.
+
+I feel that students who only enroll in the lecture are not served well by learning about data analysis without learning to perform any of the techniques in R.
+
+Students in the lab course will gain much more experience and learn more advanced techniques, but the lecture will now include template R code so everyone can have some hands-on experience.
+
+
+
+# A note about assignment operators: `<-` and `=`
+
+You can assign values to variables using two different operators:
+
+`<-`
+
+`=`
+
+You are likely to encounter both.  They assign values to variables in slightly different ways, but the difference is only relevant in advanced R programming.  THe difference won't matter in this course.
+
+You'll find people who are passionate about using one or the other.  I personally prefer to use the equals symbol, `=` because it is more consistent with syntax in other languages that I work in such as Java and C.  I also like to reserve the `<-` symbol for occasions when it truly is needed instead of `=`
+
+It's really a matter of style, and I don't think it's worth fighting over!
+
+Be prepared to see both symbols.  You may use either symbol in your coding work.
+
+
+
+# Instructions
+
+- If you haven't already done so, follow the DataCamp course invite link (see course Moodle) and create an account.
+- Complete the first DataCamp assignment, the course "Introduction to R", in DataCamp.
+- Answer the assignment questions on Moodle.
+
+
+# List if important functions and operators you need to know:
+
+- create a vector: `c(1, 2, 3)`
+- show the object type: `str(my_vec)`
+- Assignment operators: `<-` and/or `=`
+- set or retrieve the names of elements: `names(my_vec)`
+- calculate the sum of all elements in a vector: `sum(my_vec)`
+- logical comparisons: `>`, `>`, `>=`, `<=`, `==`, `!=`
+- subsetting single elements with single brackets: `my_vec[3]`
+- subsetting multiple elements with single brackets: `my_vec[c(1, 2, 4)]`
+- sequences with the colon syntax: `2:5`
+- subsetting with square brackets and characters: `my_vec["element_1"]`
+- calculate arethmitkc average, or mean: `mean(my_vec)`
+- create a vector of Boolean values using a comparator
+- subsetting with square brackets and a vector of Boolean values
+- `matrix()`
+- `cbind()` and `rbind()`
+- `rowSums()` and `colSums()`
+- subsetting 2D data (matrices and data.frames)
+- `summary()` - summary performs different things on different types of objects
+- `head()` and `tail()`
+- `data.frame()`
+- subsetting by ranges
+- subsetting with `$`
+- conditional subsetting with `subset()`)
+- `order()`
+- `sort()`
+- subsetting lists: double brackets and dollar sign
+
+
+# Functions for building multi-element structures
+
+- `c()`
+- `matrix()`
+- `data.frame()`
+- `list()`
+- `array()` - Note: we probably won't use this function in the course, but you should know that it exists.
+
+
+
+# Key concepts from the DataCamp course:
+
+- Arithmetic operators
+- Variable assignment
+  - retrieving values using print()
+  - arithmetic with variables
+  - incompatible data types
+- Data types
+  - numeric, integer
+  - Boolean
+  - strings and characters
+- checking the data type, class of objects
+- variable names
+- use of variables vs 'hard-coding'
+- vector arithmetic is element-wise
+- element names: names()
+- matrix and data.frame arithmetic is element-wise
+
+
+
+
+
+# Questions
+
+```{r results = 'hide', echo = FALSE, include=FALSE}
+tmp = build_moodle_web_questions(
+  assignment_filename = "data_camp_intro_to_r.Rmd",
+  search_path = here::here("assignments", "eco_602"),
+  include_header = FALSE,
+  write_html = FALSE,
+  cat_results = FALSE,
+  write_tmp = TRUE)
+```
+
+```{r child=tmp, echo=FALSE}
+```
+
+```{r echo=FALSE, results = 'hide'}
+file.remove(tmp)
+```
+
+
+
+
+
+
+<!-- ## Vectors -->
+<!-- ## Matrices -->
+
+<!-- - subsetting n-dimensional arrays -->
+<!-- - matrix and data.frame arithmetic is element-wise -->
+
+<!-- # Question ideas -->
+
+<!-- - difference between numeric and integer -->
+<!-- - coercing types -->
+<!--   - integer, numeric, Boolean -->
+<!-- - Comments -->
+
+<!-- - single-value and multi-element data structures -->
+
+<!-- # Factors -->
+<!-- - ordinal and nominal -->
+<!--  - setting levels using `levels = c(...)` in `factor()` -->
+<!--  - setting level order using `ordered = TRUE` -->
+<!--  - comparing factor levels -->
+<!--   - unordered and ordered levels -->

@@ -1,0 +1,93 @@
+---
+title: "model types"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructions">
+
+Recall the constellation of methods and the types of response variables that each can accommodate.
+
+</div>
+
+<div class="questions">
+
+### Q 1 pt (multiple choice)
+
+- Which of the following model types could use for a study that aims to **predict** bird **abundance** by shrub diversity?
+
+
+<div class="hints">
+Hint: Consider all the possible ways in which you could measure bird abundance.
+</div>
+
+Select all correct answers:
+
+Answerlist
+----------
+* Simple linear regression
+* Poisson regression
+* Logistic regression
+* Binomial regression
+* 1-way Analysis of Variance
+
+</div>
+
+
+Solution
+========
+
+### Grading guide
+
+* right - Simple linear regression: if abundance were measured as a continuous quantity, SLR would work
+* right - Poisson regression: Poisson is great for census counts!
+* wrong - Logistic regression: LR only makes sense for binary outcomes.
+* right - Binomial regression: This can work for abundance, but Poisson is usually better.
+* wrong - 1-way Analysis of Variance: ANOVA doesn't do prediction.
+
+
+
+Answerlist
+----------
+
+* right - Simple linear regression: if abundance were measured as a continuous quantity, SLR would work
+* right - Poisson regression: Poisson is great for census counts!
+* wrong - Logistic regression: LR only makes sense for binary outcomes.
+* right - Binomial regression: This can work for abundance, but Poisson is usually better.
+* wrong - 1-way Analysis of Variance: ANOVA doesn't do prediction.
+ay Analysis of Variance: ANOVA doesn't do prediction.
+
+
+Meta-information
+================
+
+extitle: model types
+
+exname: week_10_reading_questions
+exsection: week_10_reading_questions
+
+extype: mchoice
+exsolution: 11010
+exshuffle: 5
+
+expoints: 1

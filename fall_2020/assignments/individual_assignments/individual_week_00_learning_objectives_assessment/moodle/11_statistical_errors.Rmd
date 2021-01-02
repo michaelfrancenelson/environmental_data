@@ -1,0 +1,53 @@
+---
+title: "Type I and II Errors"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Describe statistical type I and type II errors, also known as false positives and false negatives.
+
+Describe when in the experimental design and data analysis process you can specify or calculate the type I and type II error rates.
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Type I and II Errors
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

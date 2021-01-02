@@ -1,0 +1,85 @@
+---
+title: "model types"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructions">
+
+Recall the constellation of methods and the types of response variables that each can accommodate.
+
+</div>
+
+<div class="questions">
+
+### Q 1 pt (multiple choice)
+
+- Which of the following model types could use for a study that aims to **predict** bird **presence/absence** by percentage of old growth forest?
+
+Select all correct answers:
+
+Answerlist
+----------
+* Simple linear regression
+* Poisson regression
+* Logistic regression
+* 1-way Analysis of Variance
+
+</div>
+
+
+Solution
+========
+
+### Grading guide
+
+* wrong - Simple linear regression: Doesn't make sense for binary outcomes.
+* wrong - Poisson regression: Doesn't make sense for binary outcomes.
+* right - Logistic regression: LR works for binary outcomes, like presence/absence
+* wrong - 1-way Analysis of Variance: ANOVA doesn't do prediction.
+
+
+
+
+Answerlist
+----------
+* wrong - Simple linear regression: Doesn't make sense for binary outcomes.
+* wrong - Poisson regression: Doesn't make sense for binary outcomes.
+* right - Logistic regression: LR works for binary outcomes, like presence/absence
+* wrong - 1-way Analysis of Variance: ANOVA doesn't do prediction.
+
+
+
+Meta-information
+================
+
+extitle: model types
+
+exname: week_10_reading_questions
+exsection: week_10_reading_questions
+
+extype: mchoice
+exsolution: 0010
+exshuffle: 5
+
+expoints: 1

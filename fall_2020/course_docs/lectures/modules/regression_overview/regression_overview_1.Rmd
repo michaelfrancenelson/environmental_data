@@ -1,0 +1,325 @@
+---
+title: "Regression Overview I"
+subtitle: ""
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+require(ggplot2)
+# require(sjPlot)
+# require(stargazer)
+require(palmerpenguins)
+require(cowplot)
+
+```
+
+
+
+```{r graphics_setup, include=FALSE}
+require(data.table)
+set.seed(123)
+
+slope = 7.6
+intercept = 3
+n_pts = 95
+
+
+dat = data.table(x = seq(2.4, 8.5, length.out = n_pts))
+dat[, y1 := rnorm(n = n_pts, mean = intercept + slope * x, sd = 3.9)]
+dat[, y2 := rnorm(n = n_pts, mean = intercept + slope * x, sd = 0.0 + 0.2 * max(0, (2 * x)))]
+dat[, y2 := rnorm(n = n_pts, mean = intercept + slope * x, sd = 0.3 + 1.9 * (x - 2))]
+
+dat[, plot(x, y2)]
+dat[, plot(x, y1)]
+
+fit_1 = lm(y1 ~ x, data = dat)
+fit_2 = lm(y2 ~ x, data = dat)
+
+dat[, pred_1 := predict(fit_1, newdata =  dat)]
+dat[, pred_2 := predict(fit_2, newdata = dat)]
+dat[, resid_1 := y1 - pred_1]
+dat[, resid_2 := y2 - pred_2]
+
+
+xlm = c(2, 24)
+ylm = c(0, 30)
+
+ylm_res_1 = c(-20, 20)
+ylm_res_2 = c(-20, 20)
+
+cf_1 = coord_fixed(xlim = xlm, ylim = ylm)
+cf_res_1 = coord_fixed(xlim = xlm, ylim = ylm_res_1)
+cf_res_2 = coord_fixed(xlim = xlm, ylim = ylm_res_2)
+
+cf_1 = coord_cartesian(xlim = xlm, ylim = ylm)
+cf_res_1 = coord_cartesian(xlim = xlm, ylim = ylm_res_1)
+cf_res_2 = coord_cartesian(xlim = xlm, ylim = ylm_res_2)
+
+line_lwd = 2
+line_col = "steelblue"
+
+reg_line = 
+  geom_smooth(method = "lm", se = FALSE, colour = line_col, lwd = line_lwd)
+
+resid_line = geom_hline(yintercept = 0, lwd = line_lwd, colour = line_col)
+
+t_1 = theme(axis.title = element_blank(), axis.ticks = element_blank(), axis.text = element_blank())
+t_1 = theme(axis.title = element_blank(), axis.ticks = element_blank(), axis.text = element_blank())
+
+g_1 = ggplot(dat, aes(x, y1)) + geom_point() + reg_line + t_1 #+ cf_1 + t_1
+g_2 = ggplot(dat, aes(x, y2)) + geom_point() + reg_line + t_1 #cf_1 + t_1
+
+g_r_1 = ggplot(dat, aes(x, resid_1)) + geom_point() + resid_line + t_1 # cf_res_1 + t_1
+g_r_2 = ggplot(dat, aes(x, resid_2)) + geom_point() + resid_line + t_1 #cf_res_2 + t_1
+
+
+hist_1 = ggplot(data = dat) + geom_histogram(aes(x = y1), bins = 10, colour = gray(0.0), fill = gray(0.9))
+hist_r_1 = ggplot(data = dat) + geom_histogram(aes(x = resid_1), bins = 10, colour = gray(0.0), fill = gray(0.9))
+hist_r_2 = ggplot(data = dat) + geom_histogram(aes(x = resid_2), bins = 10, colour = gray(0.0), fill = gray(0.9))
+
+shap_1 = round(shapiro.test(dat$y1)$p.value, digits = 3)
+shap_r_1 = round(shapiro.test(dat$resid_1)$p.value, digits = 3)
+
+
+```
+
+
+
+
+
+## What is a Regression?
+
+Regression is a modeling paradigm in which we specify a mathematical relationship between independent and dependent variables.
+
+### Regressions embody the dual-model concept:
+
+- A regression includes a *deterministic model* to specify the average behavior.
+- It specifies a *stochastic model* to describe the variability around the average behavior.
+
+
+
+
+## Regression Acronyms: The constellation
+
+There are many types of regression models including:
+
+- LM, GLS, GLM, GLMM, GLS, GAM, ..., ..., ...
+
+```{r constellation_of_methods, echo = FALSE, fig.cap="Bolker: Ecological Models and Data in R, Figure 9.2", out.width=200}
+knitr::include_graphics(rmd.utils::find_file("Bolker_figure_09_2_constellation.PNG"))
+```
+
+
+
+
+
+
+## Group 1 Models
+
+The simplest model we can fit is always a linear model!
+
+General Linear Models form the core group of regression models.
+
+- Other regression model paradigms are extensions of General Linear Models.
+
+We'll spend a lot of time on this class of models, which I'll call *Group 1* models.
+
+
+
+
+## Group 1 Models
+
+
+- Independent observations
+- Constant variance a.k.a homoskedasticity, a.k.a. homogeneity
+- Fixed x: no measurement error in our predictor variables
+- Normality: normality refers to the model residuals
+
+In addition, Group I requires that our models be *linear in the parameters* and have a response on a **continuous scale**.
+
+The extended models can deal with different violations of these assumptions and requirements.
+
+
+## [Residual] Normality Assumption
+
+- Under repeated sampling, data would be normally distributed *at each x*.
+- Normally distributed around each *predicted value* in the *deterministic model*.
+- This assumption is often misunderstood to mean that the values for each variable in a data set must be normally-distributed by themselves.
+
+
+
+
+## [Residual] Normality Assumption
+
+The following data look relatively well-behaved, however the histogram of the y-values suggests the distribution of values is pretty flat.  
+
+- A Shapiro test provides evidence of non-normality with p = `r shap_1`.
+
+```{r normality_assumption_1, fig.asp=1/2, echo=FALSE, fig.align='center', out.width='80%'}
+cowplot::plot_grid(g_1, hist_1)
+```
+
+
+## [Residual] Normality Assumption
+
+We really care about the normality of the *residuals* from a model.
+
+- A Shapiro test on the residuals suggests normality with p = `r shap_r_1`.
+
+```{r normality_assumption_2, echo=FALSE, fig.asp = 1/2, fig.align='center', out.width='80%'}
+cowplot::plot_grid(g_r_1, hist_r_1)
+```
+
+
+
+
+
+## Homogeneity Assumption
+
+- The stochastic model is a Normal distribution.
+- The spread parameter, $\sigma$ is constant.
+
+
+```{r homogeneity_plot, fig.align='center', fig.asp = 1 / 2, out.width = '95%', out.height= '50%', echo=FALSE, warning=FALSE, message=FALSE}
+cowplot::plot_grid(g_1, g_2, g_r_1, g_r_2, nrow = 2)
+```
+
+
+
+
+
+## Independent Observations Assumption
+
+- Sampling is randomized.
+- Knowing something about observation $x_1$ gives us no information about observation $x_2$
+
+Remember independent events from probability theory?
+
+- The joint probability of independent events is the product of individual probabilities.
+- This is the basis for likelihood methods.
+
+
+
+
+## Independent Observations Assumption
+
+Zuur, 2007:
+
+- "The independence assumption means that if an observed value is larger than the fitted value (positive residual) at a particular X value, then this should be independent of the Y value for neighboring X values."
+
+### Non-independence is one of the more challenging violations to deal with.
+
+Non-independence can result from:
+
+- Proximity in space or time
+- Hierarchical structure
+
+
+
+
+## Fixed X Assumption
+
+- Perfect accuracy in measurements of explanatory variables.
+
+- This assumption is frequently violated
+- It's OK-ish if the *noise* in the predictor variables' measurement is small relative to the noise in the response.
+
+
+
+
+## Regression Equation
+
+- The basic regression equation can be expressed in several ways:
+
+$y_i = \alpha + \beta_1 x_1 + \epsilon_1$
+
+$y_i = \beta_0 + \beta_1 x_1 + \epsilon_1$
+
+$Y \sim Normal(\alpha + \beta X, \sigma)$
+
+
+
+
+## Parameter Interpretation
+
+- Intercept: "The value of the response when the predictor is zero"
+  - The intercept often occurs outside the range of our data: it is an exptrapolation.
+
+- Slope parameters: "For each 1-unit change in $x$, we expect a $\beta_1$ change in the value of $y$ (on average)."
+
+A regression of penguin flipper length and body mass:
+```{r lm_param_table, echo=FALSE, results='asis', message=FALSE}
+
+fit_1 = lm(penguins$flipper_length_mm ~ penguins$body_mass_g)
+ccc = coef(summary(fit_1))
+rownames(ccc) = c("intercept", "body mass (g)")
+# tab_model()
+# ccc = (stargazer(fit_1))[-c(1:5)]
+knitr::kable(ccc, digits = 3)
+```
+
+
+
+
+
+
+## Overall Model Standard Deviation
+
+Recall the basic regression equation:
+
+$y_i = \alpha + \beta_1 x_1 + \epsilon_1$
+
+We might ask: what is the overall model standard deviation?
+
+- By that, we mean: what is the standard deviation of the residuals:
+
+$sd_{model}=\sqrt{\frac{1}{n-2}\sum_{i=1}^n e_i^2}$
+
+### Why n-2?
+
+- We lose one degree of freedom for each parameter we estimate.
+- We estimated two model parameters: $\alpha$ and $\beta_1$.
+
+
+
+
+## A Tale of Two Tables
+
+Two questions we might ask of a regression model:
+
+1. What is the *magnitude* of the relationship between predictor $x_1$ and response $y$?
+1. How much of the variability in the model does predictor $x_1$ explain?
+
+- The model coefficient table tells us the direction and magnitude of the association between predictor and response.
+- The Analysis of Variance (ANOVA) table tells us the relative importance of the various predictors to the overall model.
+
+
+
+
+## Model Diagnostics, Validation, and Selection
+
+- How do we know that we have chosen the *best* model?
+- Did we include the right predictors?
+- Did our algorithm find the best parameter values?
+- How well does our model fit the observed data?
+- How well does our model predict new data?
+
+- Does our data/model meet assumptions?
+- Are the assumption violations *acceptably* small?
+
+

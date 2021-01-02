@@ -1,0 +1,57 @@
+---
+title: "Formulas and equations"
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "moodle_template_funs.R"))
+```
+
+
+<!-- Fill in the following code to include an image file: -->
+```{r, echo = FALSE, results = "hide", eval=FALSE} 
+include_supplement(
+  "image_file.png",
+  dir = here::here(),
+  recursive = TRUE)
+```
+
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+writeLines(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Describe what **uncertainty** means to you in the context of analysis of environmental data.
+
+Some things you may want to consider:
+
+- Sources of uncertainty
+- Quantifying uncertainty
+- Uncertainty and statistical significance
+- Uncertainty in a frequentist perspective
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: uncertainty
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

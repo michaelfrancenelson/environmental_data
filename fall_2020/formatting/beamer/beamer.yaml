@@ -1,0 +1,13 @@
+---
+highlight: tango
+#theme: "Darmstadt"
+# theme: "Rochester"
+theme: "default"
+colortheme: "seahorse"
+# colortheme: "spruce"
+fonttheme: "serif"
+slide_level: 2
+incremental: false
+classoption: t
+# https://hartwork.org/beamer-theme-matrix/
+---

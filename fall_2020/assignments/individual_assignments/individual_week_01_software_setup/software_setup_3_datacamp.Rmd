@@ -1,0 +1,49 @@
+---
+title: "ECo 602/634 - Analysis of Environmental Data"
+subtitle: "Setting up DataCamp"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    # toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+```
+
+![](`r find_img("DataCamp-Horizontal-RGB.png")`)
+
+
+# Objectives
+
+- Create a DataCamp account.
+- Join the ECO602/634 DataCamp course.
+
+
+# Introduction
+
+One of the resources we'll use to learn R is <a href="https://datacamp.com">DataCamp</a>.
+
+DataCamp has lots of good resources for learning about R.  We'll complement original course material with their R training.
+
+
+# Instructions
+
+This assignment is pretty simple!
+
+1. Navigate to <a href="https://DataCamp.com">DataCamp</a>.
+2. Create a free account.
+3. Follow the DataCamp course invite link (in the course Moodle).
+
+
+# About DataCamp
+
+This class is supported by DataCamp, the most intuitive learning platform for data science and analytics. Learn any time, anywhere and become an expert in R, Python, SQL, and more. DataCamp’s learn-by-doing methodology combines short expert videos and hands-on-the-keyboard exercises to help learners retain knowledge. DataCamp offers 325+ courses by expert instructors on topics such as importing data, data visualization, and machine learning. They’re constantly expanding their curriculum to keep up with the latest technology trends and to provide the best learning experience for all skill levels. Join over 5 million learners around the world and close your skills gap.

@@ -1,0 +1,81 @@
+---
+title: "dual-model: regression equation"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="questionborder">
+
+We often present the equation for a simple linear regression model as:
+
+$y_i = \alpha + \beta_1 x_i + \epsilon$
+
+### Q1: 1 pt. (short answer)
+
+- Identify the *deterministic* components(s) of the regression equation.
+
+### Q2: 1 pt. (short answer)
+
+- Identify the *stochastic* component(s) of the regression equation.
+
+</div>
+
+
+
+
+Solution
+========
+
+Determinsitic: 
+
+- $\alpha$
+- $\beta$
+
+Stochastic:
+
+- $\epsilon$
+
+
+Meta-information
+================
+
+extitle: dual-model: regression equation
+
+extype: string
+
+exsolution: nil
+
+
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 2
+

@@ -1,0 +1,250 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitie: "Week 01 - Welcome to ECo 602"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Today's Meeting
+
+Welcome to Analysis of Environmental Data at UMass!
+
+In our first meeting, I'll cover some basics about the course:
+
+- Introductions
+- Teaching 'online' during Covid19
+- Expectations and learning objectives
+
+We'll do the first mini-lecture live today:
+
+- What is a Model?
+
+
+
+
+## About me
+
+- Training and research:
+  - Plant biology
+  - Invasion ecology and population genetics
+  - Spatial analysis
+  - Simulation modeling
+  
+- Began teaching at UMass in fall 2019
+  - This course
+  - Quantitative Ecology for undergrads
+  - Spatial Analysis using R
+  - Intro to Geographic Information Systems (GIS)
+
+
+
+
+
+## About Amanda
+
+Amanda is the Graduate Teaching Assistant for this course.
+
+- Please welcome Amanda Suzzi!
+  - Ph.D student in Environmental Conservation.
+  - Completed the Master's GIST program at UMass.
+  - Amanda took this course with Kevin McGarigal, before my time at UMass.
+  
+- Amanda is very adept at R programming, and mentoring students in R!
+
+
+
+
+## This course under Covid19
+
+- I am adapting previous materials from 2019 course:
+  - Content via asynchronous individual readings and lectures
+  - In-person sessions focus on discussions, Q&A, and in-class small-group projects
+
+- This is a new way of teaching and learning.
+  - It is a challenge....and an opportunity.
+  
+- I appreciate your feedback:
+  - Navigating Moodle and course materials
+  - What areas of online teaching and learning are working and what could be improved?
+
+
+
+
+## My expectations
+
+- You will complete asynchronous materials in a timely manner so that you can best contribute to the live meetings.
+- You will work to see the world through a *model thinking* paradigm.
+- You will work with your classmates on the individual assignments.
+  - Your submissions must be your own work, but working on this material together will help you learn more thoroughly.
+- You will have fun: this course is not easy, but the material is exciting!
+- Please feel free to roll your eyes and groan at my cheezy jokes.
+
+
+
+## About the course
+
+\vfill
+
+- Fully *remote*
+
+\vfill
+
+- Moodle is a portal to course materials
+  - Most content materials are hosted on the course GitHub page.
+  - Assignment submission via Moodle
+
+\vfill
+
+- Focus on course themes
+
+\vfill
+
+
+
+## About the course: Materials
+
+- The Syllabus
+  - The syllabus has a lot of content, but I've tried to organize it in an accessible way.
+  - Please familiarize yourself with the key components:
+    - Course Materials
+    - Grading
+
+
+### You'll find a listing of all the course readings and and other materials on the syllabus.
+
+
+- We'll discuss course software on Thursday
+
+
+## About the course: My office hours
+
+### Tuesday and Thursday at 1:00 PM
+
+- We'll use the same Zoom link.
+- I encourage you to take advantage of office hours even if you think your questions are minor!
+
+
+
+
+
+## About the course: Moodle
+
+[Quick demo of Moodle basics - in Student View]
+
+- If you are unfamiliar with Moodle, please check out the detailed course Moodle walkthrough video, to be posted soon.
+
+
+
+
+## About the course: Structure
+
+The main components of the course are:
+
+- Live meetings
+- Asynchronous lecture videos
+- Course readings
+- Learning objectives assessment
+- Take home final and learning outcomes assessment
+
+
+
+
+
+## About the course: Learning objectives and outcomes assessments
+
+If you haven't already done so, please complete the learning objectives assessment!
+
+These assessments help you and I to set priorities and assess growth.
+
+
+
+
+
+## About the course: Live Meetings
+
+- Small-group activities
+- Questions
+- Check-in
+- Discussions
+
+\vfill
+
+I want to focus on **interaction** so there will be minimal *lecture* time.
+
+
+
+
+## About the course: Individual Assignments
+
+I'm using the *Moodle quiz* format for assignment submissions:
+
+- Quiz format:
+  - Uses individual question submissions
+  - Much easier to grade than Moodle's **Assignment** format.
+
+- Question types:
+  - Short-answer
+  - File upload
+  - Multiple choice
+  - Numeric
+
+- I appreciate your input on how the Quiz format is working for you.
+
+
+
+
+## About the course: Course Themes
+
+I've arranged the course concepts in the context of 4 course themes:
+
+1. Model Thinking
+2. The Dual Model Paradigm
+3. Uncertainty
+4. Mathematical and Statistical Modeling
+
+**Model Thinking** is an overarching principle that guides how we think about the other 3.
+
+
+
+
+## What is a model?
+
+Let's take a quick 5-minute pause and jump in to the first model thinking lecture!
+
+
+[lecture slides for **What is a model?**]
+
+
+
+## For Thursday:
+
+- Complete the learning objectives assessment.
+- Begin course software and DataCamp assignments.
+
+- McGarigal Chapter 1: Focus on the flow of the 4 testimonies
+  - Don't get caught up in the analytical details!  I don't expect you to be familiar with the analyses and interpreting the output.
+  - Focus on the **iterative** nature of the testimonies.
+  
+- Epstein: Why Model?
+  - It's a quick read.
+- Read the Bolker selections by next Tuesday.
+
+

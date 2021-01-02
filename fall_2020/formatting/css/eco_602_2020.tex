@@ -1,0 +1,24 @@
+\usepackage{color}
+\usepackage{framed}
+\newcommand{\logoSoutheast}[1]{
+  \vfill
+  \begin{tikzpicture}[remember picture,overlay]
+     \node[xshift=-2cm,yshift=1cm] at (current page.south east)%
+     {
+       \includegraphics[height=0.25in]{#1}
+     };
+   \end{tikzpicture}
+}
+
+\newenvironment{warn}{
+  \definecolor{shadecolor}{HTML}{F5A796}  
+  \color{black}
+  \begin{shaded}}
+ {\end{shaded}}
+ 
+\newenvironment{info}{
+  \definecolor{shadecolor}{HTML}{E6F0FF}
+  \color{black}
+  \begin{shaded}}
+ {\end{shaded}}
+

@@ -1,0 +1,36 @@
+---
+title: "file paths"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+---
+
+
+
+
+
+Question
+========
+
+
+What is a file path and why is it important for you to know about them?
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: file path
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 8

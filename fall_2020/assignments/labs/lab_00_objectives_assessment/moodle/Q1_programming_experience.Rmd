@@ -1,0 +1,46 @@
+---
+title: "Learning Objectives Assessment Q1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Please describe your previous experience with programming using R (or another language).
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Learning Objectives Assessment Q1
+extype: string
+exsolution: nil
+exname: ECo 634 Learning Objectives
+exsection: ECo 634 Learning Objectives
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

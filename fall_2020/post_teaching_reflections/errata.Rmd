@@ -1,0 +1,53 @@
+---
+title: "ECo 602/634 - Analysis of Environmental Data Lecture and Lab"
+subtitle: "Course Errata"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Final Project {.tabset .tabset-pills}
+
+## Simple Linear Regression
+
+Delomys body mass and length linear model.
+
+I had ambiguous/inconsistent language for the `fit1` simple linear regression model:
+  
+- In the model building instructions I suggested the formula `body_length ~ body_mass`.
+- In the Model Interpretation section, the corresponding question read: "What is the magnitude of the mass/length relationship?"
+
+A couple of students were confused by this inconsistency and therefore decided to model body mass in terms of body length.
+
+
+
+# Reading Questions
+
+
+# Individual Assignments
+
+
+
+

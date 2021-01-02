@@ -1,0 +1,218 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Distribution"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+source(here::here("rmd_tools", "find_file.R"))
+
+require(ggplot2)
+require(cowplot)
+require(palmerpenguins)
+
+source(here::here("rmd_tools", "find_file.R"))
+source(find_file("proportional_image_crop.R"))
+source(find_file("norm_density_plot.R"))
+source(find_file("norm_quantile_plot.R"))
+source(find_file("norm_cdf_plot.R"))
+
+n_fit_fmt = "x = %1$s: f(x) = %2$s: Pr(X < x) = %3$s"
+cdf_fmt = "x = %1$s\nquantil = %2$s"
+q_fmt = "quantile = %1$s\nlength = %2$s"
+
+t1 = theme_minimal()
+
+len = 1000
+x = seq(-10, 10, length.out = len)
+
+dat_norm_1 = data.frame(
+  x = rep(x, 3), 
+  y = c(
+    dnorm(x, mean = 0, sd = 1),
+    # dnorm(x, mean = 1, sd = 1),
+    dnorm(x, mean = 0, sd = 2),
+    dnorm(x, mean = 0, sd = 3)),
+  sd = factor(rep(c(1, 2, 3), each = len)),
+  mean = factor(rep(c(0, 0, 0), each = len))
+)
+dat_norm_2 = data.frame(
+  x = rep(x, 2),
+  y = c(
+    dnorm(x, mean = -2, sd = 1.5),
+    dnorm(x, mean = 3, sd = 1.5)),
+  sd = factor(rep(c(1, 1), each = len)),
+  mean = factor(rep(c(-2, 3), each = len))
+)
+
+len = 1000
+x = seq(-5.2, 5.2, length.out = len)
+
+dat_t = data.frame(
+  x = rep(x, 5), 
+  y = c(
+    dt(x, df = 1),
+    dt(x, df = 2),
+    dt(x, df = 12),
+    dt(x, df = 30),
+    dt(x, df = 50)),
+  df = factor(rep(c(1, 2, 12, 30, 50), each = len))
+)
+
+
+x = seq(0, 7, length.out = len)
+
+dat_exp = data.frame(
+  x = rep(x, 3),
+  y = c(
+    dexp(x, rate = 1.2),
+    dexp(x, rate = .8),
+    dexp(x, rate = .5)
+  ),
+  rate = factor(rep(c(1.2, 0.8, 0.5), each = len))
+)
+
+```
+
+
+
+
+## Key concepts
+
+- Continuous sample spaces
+- Normal distribution
+- Exponential distribution
+- T distributions
+
+
+## Distribution Functions Revisited
+
+
+<!-- ```{r child = find_file("probability_density_functions.R")} -->
+<!-- ``` -->
+
+```{r, echo=FALSE}
+
+
+x1 = -0.5
+x2 = 0.3
+# n_fit_fmt = "x = %1$s: f(x) = %2$s: Pr(X < x) = %3$s"
+n_fit_fmt = "x = %1$s: f(x) = %2$s"
+cdf_fmt = "x = %1$s: quantile = %2$s"
+cdf_fmt = "x = %1$s: Pr(X < x) =  %2$s"
+q_fmt = "Pr(X < x) =  %1$s: x = %2$s"
+
+plot_grid(
+  norm_density_plot(x1, title_fmt = n_fit_fmt),
+  norm_cdf_plot(x1, title_fmt = cdf_fmt, y_lab = "Pr(X < x)"),
+  norm_quantile_plot(pnorm(x1), title_fmt = q_fmt, x_lab = "Pr(X < x)"),
+  norm_density_plot(x2, title_fmt = n_fit_fmt),
+  norm_cdf_plot(x2, title_fmt = cdf_fmt, y_lab = "Pr(X < x)"),
+  norm_quantile_plot(pnorm(x2), title_fmt = q_fmt, x_lab = "Pr(X < x)"),
+  nrow = 2
+)
+```
+
+
+## Continuous Sample Space
+
+### Continuous distributions' sample space: the *real* numbers
+
+- All continuous distributions have *infinite* sample spaces.
+- Continuous distributions may have *bounded* or *unbounded* sample spaces.
+
+### PDFs are *continuous functions*.
+
+
+
+
+
+
+
+## Normal Distribution
+
+### The normal distribution has 2 parameters: $\mu$ and $\sigma$
+
+- The Standard Normal distribution has $\mu = 0$ and $\sigma = 1$
+- The mean, $\mu$ moves the curve left or right.
+- The standard deviation $\sigma$ controls the width.
+
+```{r echo=FALSE, fig.asp=0.45}
+plot_grid(
+ggplot(dat_norm_1, aes(x, y, colour = sd)) +
+  geom_line() + theme_minimal(),
+
+ggplot(dat_norm_2, aes(x, y, colour = mean)) +
+  geom_line() + theme_minimal()
+)
+```
+
+
+
+## Exponential Distribution
+
+### Exponential distribution models exponential decay. 
+- Small observations are common, large observations are rare.
+
+```{r echo = FALSE, fig.height=5.5}
+ggplot(dat_exp, aes(x, y, colour = rate)) + geom_line() + t1
+
+```
+
+
+## The T Distribution
+
+### The t-distributions are like a sample-size adjusted version of the standard Normal
+- The adjustment is via the *degrees of freedom* parameter
+- As $df \rightarrow \infty$ the t-distribution approaches the Normal
+
+```{r, echo = FALSE, fig.height=5}
+ggplot(dat_t, aes(x, y, colour = df)) +
+  geom_line() + theme_minimal()
+
+```
+
+
+## Skew and Kurtosis
+
+### Skew and Kurtotis are *higher-order* moments of distributions
+- Mean is the 1st moment, variance is the 2nd moment
+- Skew is a measure of asymmetry
+- kurtosis is a measure of *pointiness*
+  - Platykurtotic: flat with short tails, extreme events are less common.
+  - Leptokurtotic: pointy with long tails, extreme events are more common.
+- Skew and kurtotis are measured in reference to a normal distribution
+
+
+## Kurtotis
+
+### Platykurtotic = too flat, leptokurtotic = too pointy
+
+```{r echo = FALSE, fig.height=4, fig.align='center'}
+knitr::include_graphics(find_file("cats_kurtosis.jpg"))
+```
+
+
+
+## Key concepts
+
+- Continuous sample spaces
+- Normal distribution
+- Exponential distribution
+- T distributions
+

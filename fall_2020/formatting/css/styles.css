@@ -1,0 +1,148 @@
+<style type="text/css" rel="stylesheet">
+
+@charset "utf-8";
+
+.btn {
+    border-width: 0 0 0 0;
+    font-weight: normal;
+    text-transform: none;
+}
+
+.btn-default {
+    color: #2ecc71;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.navigation_rss_icon {
+	position: absolute;
+	left: 940px;
+	bottom: 0px;
+}
+
+
+.questionbox {
+  border-radius: 0.2cm; 
+  padding: 0.3cm;
+}
+
+.warn { 
+  color: rgb(0,0,0);
+  color: rgba(0,0,0,1);
+  background-color:#F5A796; 
+  border-radius: 0.2cm; 
+  padding: 0.3cm;
+}
+
+.info { 
+  background-color:#E6F0FF; 
+  color: rgb(0,0,0); 
+  color: rgba(0,0,0,1); 
+  border-radius: 0.2cm; 
+  padding: 0.3cm;}
+
+
+
+.red  { 
+  color: rgb(0,0,0); 
+  color: rgba(0,0,0,1); 
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.blue { background-color:#E6F0FF; color: rgba(0,0,0,1); }
+.gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }
+
+
+.blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }
+.redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); }
+.grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); }
+.blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }
+
+
+.instructionsborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }
+.questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }
+.hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); }
+.outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }
+
+.instructions { 
+  border-radius: 0.2cm;
+  padding: 0.3cm;
+  border: 0.1cm solid #000000;
+  background-color: rgb(235, 241, 255);
+  color: rgb(0,0,0);
+}
+
+.questions { 
+  border-radius: 0.2cm;
+  padding: 0.3cm;
+  border: 0.1cm solid #000000;
+  background-color: rgb(237, 237, 237);
+  color: rgb(0,0,0);
+}
+
+.hints  {
+  border-radius: 0.2cm;
+  padding: 0.3cm; 
+  border: 0.1cm solid #ECE8E7;
+  background-color: rgb(248, 255, 245); 
+  color: rgb(0,0,0);
+}
+
+.notes  {
+  border-radius: 0.2cm;
+  padding: 0.3cm; 
+  border: 0.1cm solid #ECE8E7;
+  background-color: rgb(248, 255, 245); 
+  color: rgb(0,0,0);
+}
+
+.warnings  {
+  border-radius: 0.2cm;
+  padding: 0.3cm; 
+  border: 0.1cm solid rgb(237, 7, 7);
+  background-color: rgb(248, 255, 245); 
+  color: rgb(0,0,0);
+}
+
+.outputs {
+  border-radius: 0.01cm;
+  padding: 0.3cm;
+  border: 0.1cm solid #E6F0FF;
+  background-color:#E6F0FF; 
+  color: rgb(0,0,0);
+}
+
+
+
+
+.showopt {
+  background-color: #004c93;
+  color: #FFFFFF; 
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+  font-family: sans-serif;
+  border-radius: 8px;
+}
+
+.showopt:hover {
+    background-color: #dfe4f2;
+    color: #004c93;
+}
+
+.plot {
+  background-color: white;
+}
+
+.toggle {
+  width: 100%;
+  padding: 1px 0;
+  background-color: transparent;
+  margin-top: 12px;
+  display: none;
+}
+
+
+</style>

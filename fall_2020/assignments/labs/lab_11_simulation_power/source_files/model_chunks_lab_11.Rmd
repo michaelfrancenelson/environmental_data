@@ -1,0 +1,54 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis - Custom Functions"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+birds = read.csv(here::here("data", "bird.sub.csv"), header = TRUE)
+hab = read.csv(here::here("data", "hab.sub.csv"), header = TRUE)
+birdhab = merge(hab, birds, by = c('basin', 'sub'))
+
+```
+
+
+```{r fit_model_1, echo = FALSE, eval = TRUE}
+fit_1 = lm(BRCR~ls, data = birdhab)
+```
+
+```{r get_coefficients_sigma, echo = FALSE, eval = TRUE}
+fit_1_summary = summary(fit_1)
+fit_1_summary$sigma
+```
+
+```{r get_coefficients_1, eval = TRUE}
+fit_1_coefs = coefficients(fit_1)
+str(fit_1_coefs)
+```
+
+```{r model_parameters, echo = FALSE}
+fit_1_summary = summary(fit_1)
+fit_1_coefs = coefficients(fit_1)
+str(fit_1_coefs)
+
+sd_obs = fit_1_summary$sigma
+int_obs = fit_1_coefs[1]
+slope_obs = fit_1_coefs[2]
+```
+

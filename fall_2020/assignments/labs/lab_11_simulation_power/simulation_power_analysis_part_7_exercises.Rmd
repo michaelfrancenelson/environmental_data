@@ -1,0 +1,115 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+```
+
+<!-- ```{r load_simulations, child = find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+
+
+
+
+
+# Conclusions and Exercises
+
+What does the power surface reveal about the relationship between slope and sample size?
+
+If you wanted say a power of >0.8 to detect a slope of b = .002, how large would your sample size need to be?
+
+As you can see, stochastic simulation is an extremely powerful tool for examining power, even in this simple linear regression example where canned approaches exist.
+
+For more complex models, the coding is more complex, but the process is the same. The same basic tools learned in this example can be extended to more complex situations.
+
+
+
+
+## Lab Assignment
+
+We varied the sample and effect sizes to examine statistical power, however we didn't try varying the *dispersion* in the data.
+
+After you complete the lab walkthrough, you will carry out additional power analysis on the data dispersion, i.e. the population standard deviation.
+
+<div class="warnings">
+
+- NOTE: You'll need to work through the lab walkthrough and build the walkthrough simulations to complete the following exercises.
+- NOTE: You'll be conducting a related (but different) set of simulations from those in the walkthrough.  You'll only need to make slight modifications to your walkthrough code to complete the exercises.
+</div>
+
+
+### Population Dispersion Analysis
+
+Review the effect size simulation above.  You will carry out a similar simulation on the population standard deviation instead.
+
+To do the simulation you'll need to:
+
+- Decide the range of population standard deviations to test.
+- What was the standard deviation of the residuals from our model?
+- I suggest starting with a range of values starting at the observed standard deviation up to 3 times the observed standard deviation.  You will want to experiment with different ranges in order to capture the full picture.
+
+Here's a template:
+
+```{r dispersion_sim_template, ref.label = "dispersion_sim_template", eval=FALSE, error=TRUE, echo = TRUE}
+```
+
+
+
+
+### Population Dispersion and Sample Size Analysis
+
+It looks like statistical power drops off pretty quickly as the population variability increases.
+
+- Could we improve our statistical power with larger sample sizes?
+
+
+You'll now modify your simulation of population standard deviation to include sample size.
+
+Review the simulation of both sample size and effect size above.
+
+Here's a template for the dispersion and sample size simulation:
+
+
+
+
+```{r dispersion_n_template, ref.label = "dispersion_n_template", eval=FALSE, error=TRUE, echo = TRUE}
+```
+
+### Plots
+
+You should try out some of the plots from the walkthrough.  
+
+<a href="/eco_602_634_2020/webGL/pop_sd_size_power_sim_plot.html" target="_blank">
+Here's an example of an interactive 3D perspective plot I created from my simulation data.
+</a>
+
+For the lab questions you'll have to create plots using your dispersion simulation results.
+
+
+<!-- 1.  A line plot of dispersion (x-axis) and statistical power (y-axis) with a dotted vertical red line at the observed population standard deviation value. -->
+
+<!-- 2.  A contour plot of the ***sample size and population dispersion*** power simulation. -->
+
+<!-- 3.  An interactive 3D perspective plot, using `persp3d` in package `rgl`, of the ***sample size and population dispersion*** power simulation.  You need to save this to an html file using `writeWebGL()` in the package `rgl`. Experiment with different values for the `width` and `height` arguments to customize the display size of the 3D plot. -->
+<!--   - Your surface must be a different color than <a href="/eco_602_634_2020/webGL/pop_sd_size_power_sim_plot.html" target="_blank"> my example here.</a> -->
+
+
+
+

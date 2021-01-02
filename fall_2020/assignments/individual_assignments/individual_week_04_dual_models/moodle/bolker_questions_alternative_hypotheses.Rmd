@@ -1,0 +1,91 @@
+---
+title: "Bolker 1.4: Null Hypothesis"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> The two species (actually the smallest- and largest-seeded species of a set of eight species) are Polyscias fulva (pol: seed mass < 0.01 g) and Pseudospondias microcarpa (psd: seed mass ≈ 50 g).
+
+
+In Frequentist statistics, a null hypothesis often describes what we expect to see if the variables we care about have no *assiciation*.  It's what we would observe if the values in our data were due to *chance*.
+
+In Frequentist statistics, we formulate an alternative hypothesis to capture what we actually think is important.  We analyze our data to assess whether we have *good evience* that we can reject the *null hypothesis* in favor of our *alternative hypothesis*.  Note that we never say we *accept* the alternative hypothesis!.
+
+
+### Seed Predation
+
+From the Bolker reading, we don't know much about the two species other than that their seeds have very different masses.
+
+The description of the experiment in the reading did not describe any factor that might be *associated* with seed predation.  Simply asking whether seed predation rates are different without any context to the environment in which the plants live is not a very interesting.
+
+<div class="questionborder">
+
+Propose a factor that could contribute to differential seed predation, and formulate null and alternative hypotheses
+
+
+
+
+
+### Question
+
+- Think of a reason why seeds may have 
+Bolker used a seed predation experiment to illustrate the statistical frameworks.
+
+
+The primary question in his examples is: *Do seed predation rates vary among* species?
+
+A ***null hypothesis*** is used in the Frequentist paradigm as a baseline against which to compare data.
+
+
+<div class="questionborder">
+
+### Question:
+
+Describe a possible null hypothesis about the seed predation rates.
+
+Paste your answer into the text entry box below.
+
+</div>
+
+
+
+
+Solution
+========
+
+The most obvious null is: "There is no difference in seed predation rates among species."
+
+
+Meta-information
+================
+extitle: null hypotheses
+extype: string
+exsolution: nil
+exname: exam name
+exsection: section name
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 2

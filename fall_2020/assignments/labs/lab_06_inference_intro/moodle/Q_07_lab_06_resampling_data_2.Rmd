@@ -1,0 +1,91 @@
+---
+title: "Resampling"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(palmerpenguins)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+
+<div class="deemphasize">
+- Choose another variable of penguin data from `dat_pen`.
+- Create a boxplot of the data from your chosen column in `dat_pen`, grouped by species. 
+  - See the walkthrough for info.
+</div>
+
+<div class="emphasis">
+- Use `aggregate()` to calculate the group means and the difference in means.
+  - Write the difference in means into a variable called `diff_crit`
+- Conduct a t-test and observe the p-value.
+</div>
+
+<div class="deemphasize">
+- Conduct a resampling test with 1000 repetitions using your `two_group_resample()` function.
+</div>
+
+</div>
+
+<div class="questionborder">
+
+### Q1: 4 pts
+
+- Interpret the p-value from the t-test output in plain, non-technical English that
+a non-statistician would understand.
+
+
+</div>
+
+
+
+Solution
+========
+
+Answers will vary...
+
+
+
+Meta-information
+================
+
+extitle: resampling
+
+expoints: 4
+
+extype: string
+
+exsolution: nil
+
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+
+

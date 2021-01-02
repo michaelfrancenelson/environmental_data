@@ -1,0 +1,191 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Ordinary Least Squares"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+```
+
+
+
+
+## Least Squares
+
+### The idea:
+
+- Minimize the squared differences between observed and expected values.
+- Minimize the squared residuals, a.k.a. errors
+
+### Optimization criterion: mimimize the sum of squared errors
+
+
+
+## Simple Optimization: the Mean
+
+The mean is a statistic that describes the *center* of data.
+
+What properties would we like a measure of center to have?
+
+- Lie between the minimum and maximum?
+- Have equal counts of values above and below?
+- Mimimize the sum of residuals?
+
+
+
+
+## Simple Optimization: the Mean
+
+### The mean optimizes 2 criteria:
+
+- The sum of residuals is zero
+- The sum of squared residuals is mimimized
+
+### Prove it to yourself with some test data:
+
+\tiny
+
+```{r}
+dat = rbeta(100, 0.3, 0.5)
+mean_dat = mean(dat)
+resids = dat - mean_dat
+resids_2 = dat - (mean_dat + 0.01)
+resids_3 = dat - (mean_dat - 0.01)
+```
+
+\begin{center}
+```{r, echo=FALSE}
+dat = cbind(
+  `sum of resids` = c(
+    sum(resids),
+    sum(resids_2),
+    sum(resids_3)),
+  `sum of squared resids` =
+    c(sum(resids^2),
+      sum(resids_2^2),
+      sum(resids_3^2)))
+
+rownames(dat) = c("mean", "mean + 0.01", "mean - 0.01")
+knitr::kable(dat, format = "latex")
+```
+\end{center}
+
+
+
+<!-- ## Simple Optimization: the Mean -->
+
+<!-- ### The mean optimizes 2 criteria: -->
+
+<!-- - The sum of residuals is zero -->
+<!-- - The sum of squared residuals is mimimized -->
+
+<!-- \begin{center} -->
+
+<!-- ```{r, echo=FALSE} -->
+<!-- dat = cbind( -->
+<!--   `sum of resids` = c( -->
+<!--     sum(resids), -->
+<!--     sum(resids_2), -->
+<!--     sum(resids_3)), -->
+<!--   `sum of squared resids` = -->
+<!--     c(sum(resids^2), -->
+<!--       sum(resids_2^2), -->
+<!--       sum(resids_3^2))) -->
+
+<!-- rownames(dat) = c("mean", "mean + 0.01", "mean - 0.01") -->
+<!-- knitr::kable(dat, format = "latex") -->
+<!-- ``` -->
+
+<!-- \end{center} -->
+
+<!-- ### At its heart, Least Squares is an optimization paradigm, with lots of power applications -->
+
+
+
+
+## OLS: Optimizing Regression Parameters
+
+Ordinary Least Squares is a great way to find *optimal* parameters for the simple linear regression models:
+
+$y_1 = \beta_0 + \beta_1x_1 + \epsilon_i$
+
+- The *parameters* are $\beta_0$ and $\beta_1$.
+- $x_i$ is a predictor variable
+- $y_i$ is the response variable
+- $e_i$ is the error term
+
+NOTE: McGarigal separates OLS and Likelihood
+
+- They are not *always* equivalent, but if you are willign to assume the errors 
+$\epsilon_i$ are *normally distributed*, then OLS and Maximum Likelihood are equivalent for linear regressions.
+
+
+
+
+## OLS: Optimizing Regression Parameters
+
+### The optimization procedure:
+
+1. Specify a model
+1. Find model parameter values that minimize the sum of squared residuals via:
+  - Numerical optimization
+  - Analytical methods
+
+
+
+## Numerical Estimation
+
+```{r, echo=FALSE}
+knitr::include_graphics(find_file("numerical_ols_mcGarigal.PNG"))
+```
+
+
+
+
+## Numerical Estimation
+
+### Numerical Methods: [educated] trial-and-error
+
+- Specify starting values for parameters
+- Search parameter space for optima
+  - Algorithms, e.g. Newton's method
+  - Simulation/resampling techniques, e.g. MCMC, gradient descent, machine learning techniques
+
+
+
+
+## Analytical Solutions
+
+### If we are lucky, a closed-form, analytical solution exists!
+
+Exact solutions exist for OLS optimization for many regression techniques.
+
+- Solutions are based on techniques from Linear Algebra:
+  - Matrix multiplication, inversion, transpose, etc.
+
+
+
+
+
+
+

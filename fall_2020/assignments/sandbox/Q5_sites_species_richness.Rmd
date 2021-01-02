@@ -1,0 +1,61 @@
+---
+title: "Essay with file upload"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Using the `dat_all` data frame, calculate the **total number of sampling sites** in which Gray Jays were observed.
+
+Hint: What happens when you use the `sum()` function on a vector of Boolean values?
+
+Q1 (1pt): Past the R code you used for the calculation into the text entry window.
+
+
+
+
+
+Solution
+========
+
+
+```{r}
+sum(dat_all$GRJA > 1)
+```
+
+
+Meta-information
+================
+extitle: Count of presences
+extype: string
+exsolution: nil
+exname: exam name
+exsection: section name
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 1

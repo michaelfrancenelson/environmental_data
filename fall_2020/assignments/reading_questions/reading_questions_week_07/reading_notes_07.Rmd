@@ -1,0 +1,124 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 07 Mike's Reading Notes and Question Ideas"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    # toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+```
+
+
+# Readings
+
+- McGarigal Ch 6
+- McGarigal Ch 7
+
+
+
+
+# McGarigal 6
+
+
+
+## 1: Non parametric Inference
+ 
+- Doesn't assume any particular distribution in the population
+- All inferences based on the sample itself
+  - 'noninference'
+  - McGarigal: inference with only weak inferential power
+  
+## 2 Non parametric statistical model
+
+$y_0 = \beta_0 + \beta_1 x_1 + e_1$
+
+- Parameters beta0 and beta 1
+- Error: present but form not specified
+
+## 3 Parameter estimation: OLS
+
+
+### Non parametric modeling steps
+
+- Optimization criterion: minimizes squared residuals: OLS
+
+1. specify deterministic model
+2. find params that minimize the SS of resids
+
+### Numerical approach: try lots of values, choose the best guess
+
+### Analytical approach: for simple and multiple linear models we have a formula!
+
+
+
+
+## Confidence intervals
+
+### Non parametric confidence intervals: bootstrapping:
+
+- Empirically generate a sampling distribution
+
+- Creates a *empirical sampling distribution*
+
+### Bootstrap procedure
+
+1. Resample many times (with replacement)
+1. Calculate sample statistic
+1. Calculate quantiles from the bootstrapped [means]
+1. Use upper and lower 2.5% [for example] as the upper and lower CI limits
+
+
+### Parametric: standard error of sample - "It turns out that if we are willing to assume a normal error distribution for the stochastic part of the model, we can usually compute a confidence interval analytically."
+
+
+
+
+## 5 non-parametric hypothesis testing
+
+### Confusing terminology: McGarigal says OLS is non parametric
+
+- Adding an assumption of Normally-dist. errors makes OLS parametric
+
+
+# Question Ideas
+
+## 1. Squared deviation: Propose another candidate deviation measure
+
+## 2. Bootstrap vs. randomization
+
+### Bootstrap: shuffle data, keep rows intact
+
+- generate distribution of sampling distribution of test statistic under alternative hypothesis.
+- Confidence interval estimation
+
+
+### Randomization: shuffle data, shuffle each column separately to break row structure
+
+- sampling distribution under the null hypothesis
+
+
+## 6 Model Comparison
+
+
+# McGarigal 7
+
+
+
+## 1: Frequentist parametric inference; ML
+
+- We can "go beyond the OLS 
+
+
+
+## 2 Parametric statistical model

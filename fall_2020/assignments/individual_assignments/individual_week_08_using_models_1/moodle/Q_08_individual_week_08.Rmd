@@ -1,0 +1,74 @@
+---
+title: "one-sample tests comparison"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="instructionsborder">
+
+### Instructions
+
+Consider the one-sample t-test and Wilcoxon rank sum tests that you performed on the catastrophic rate data.
+
+</div>
+
+<div class="questionborder">
+
+### Q1 1 pt (short answer/essay)
+
+- Considering the numerical and graphical data exploration, which test do you think was more appropriate for these data?
+
+### Q2 2 pt (short answer/essay)
+
+- Compare the overall conclusions you could draw from the results of the two tests.
+
+</div>
+
+
+
+
+Solution
+========
+
+Q1: Strong evidence of non-normality and heterogeneity favors the nonparametric test.
+
+Q2: Both tests support rejecting the null hypothesis (but the Wilcox test is more appropriate.
+
+
+
+
+Meta-information
+================
+extitle: one-sample tests interpretation
+
+extype: string
+
+exsolution: nil
+
+expoints: 3
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+

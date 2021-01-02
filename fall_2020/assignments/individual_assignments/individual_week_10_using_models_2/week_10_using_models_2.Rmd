@@ -1,0 +1,513 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Using Models 2"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+require(here)
+require(palmerpenguins)
+
+
+require(palmerpenguins)
+
+
+fit_species = lm(body_mass_g ~ species, data = penguins)
+fit_both = lm(body_mass_g ~ sex * species, data = penguins)
+
+species_coefs = coef(summary(fit_species))
+fit_species_kab  = knitr::kable(species_coefs, digits = 3)
+
+both_coefs = coef(summary(fit_both))
+fit_both_kab  = knitr::kable(both_coefs, digits = 3)
+
+mean_masses = data.frame(
+  aggregate(
+    penguins$body_mass_g,
+    by = list(penguins$species),
+    mean, na.rm = TRUE))
+
+mean_masses = cbind(mean_masses, species_coefs[, 1])
+
+names(mean_masses) = c("species", "mean body mass (g)", "model coefficient")
+rownames(mean_masses) = NULL
+species_mass_kab = knitr::kable(mean_masses, digits = 2)
+anova_species_kab = gsub("NA", "", knitr::kable(anova(fit_species)))
+
+
+```
+
+
+
+
+```{r build_graphics, eval = FALSE, echo = FALSE}
+require(rmd.utils)
+require(here)
+
+assn_base_name = "week_10_using_models_2"
+assn_source_file = find_file("week_10_using_models_2", extension = ".Rmd")
+assn_source_dir = dirname(assn_source_file)
+
+
+png(
+  file = file.path(assn_source_dir, "using_models_2_penuin_species_mass_boxplot.png"),
+  width = 1000, height = 600)
+boxplot(
+  body_mass_g ~ species, 
+  data = penguins, 
+  ylab = "Body Mass (g)")
+dev.off()
+
+png(
+  file = file.path(assn_source_dir, "using_models_2_penuin_sex_species_mass_boxplot.png"),
+  width = 1000, height = 600)
+boxplot(
+  body_mass_g ~ sex + species, 
+  data = penguins, 
+  ylab = "Body Mass (g)")
+
+dev.off()
+
+
+```
+
+```{r build_assignment_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+require(here)
+
+assn_base_name = "week_10_using_models_2"
+assn_source_file = find_file("week_10_using_models_2", extension = ".Rmd")
+assn_source_dir = dirname(assn_source_file)
+
+question_source_files = find_file(
+  "", search_path = file.path(assn_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+assn_dir_out    = here::here("docs", "assignments", "eco_602", "individual")
+assn_file_out = file.path(assn_dir_out, assn_base_name)
+
+file.exists(assn_source_file)
+file.exists(assn_source_dir)
+file.exists(assn_dir_out)
+file.exists(assn_file_out)
+
+key_file_out = here::here(
+  "docs", "answer_keys",
+  sprintf("individual_assignment_answer_key_%s", assn_base_name))
+
+build_assignment_doc(
+  assn_source_file,
+  question_source_files,
+  doc_target_file = assn_file_out,
+  key_target_file = key_file_out)
+  # key_target_file = NULL)
+
+if (FALSE)
+{
+  build_moodle_xml_questions(
+    question_source_files = question_source_files,
+    assignment_name = assn_base_name,
+    xml_output_path = here::here("docs", "moodle_quiz_questions"))
+}
+
+
+```
+
+
+
+
+
+# Learning Objectives
+
+- Review 1- and 2-sample t-tests
+- Perform a 1-way Analysis of Variance (ANOVA)
+- Perform a simple- and multiple- linear regressions
+- Interpret model coefficient tables
+- Interpret ANOVA tables
+
+
+
+
+
+# Recap of t-tests
+
+
+Recall the simple 1- and 2-sample t-tests.
+
+T-tests are univariate tests that we can use to determine whether we have good evidence that:
+
+- The mean of one sample is different from a fixed value.
+- The means of two samples are different from each other.
+
+In R, the t-test syntax is simple.
+
+
+## 1-sample t-test
+
+Try running a 1-sample t-test on the Gentoo penguin flipper lengths:
+
+```{r}
+t.test(subset(penguins, species == "Gentoo")$flipper_length_mm)
+```
+
+- What was the null hypothesis?  Is it a sensible null hypothesis?
+
+
+
+Instead of comparing Gentoo penguin flipper lengths to zero, let's test whether they are **equal to** 218 mm:
+
+```{r}
+t.test(
+  x = subset(penguins, species == "Gentoo")$flipper_length_mm,
+  mu = 218
+)
+```
+
+- What was the null hypothesis this time?
+- Did you find strong evidence to reject the null?
+
+
+Let's try a one-tailed alternative hypothesis: Gentoo penguin flippers are **smaller than** 218 mm:
+
+```{r}
+t.test(
+  x = subset(penguins, species == "Gentoo")$flipper_length_mm,
+  mu = 218,
+  alternative = "less"
+)
+```
+
+- Did you find stronger evidence against the null this time?
+- What was the 95% confidence interval?
+
+
+
+
+## 2-sample t-test
+
+Instead of comparing the flipper length of Gentoo penguins to a fixed value, I could compare the flipper lengths of two species:
+
+
+```{r}
+t.test(flipper_length_mm ~ species, data = subset(penguins, species != "Chinstrap"))
+```
+
+
+Referring back to the directional alternative hypothesis with a 1-sample t-test above, how could I modify the code to test the alternative hypothesis that Adelie penguins have shorter than Gentoo penguins?
+
+
+
+
+# 1 - Analysis of Variance (ANOVA)
+
+
+To gain some experience with 1-way Analysis of Variance, you'll be working with the penguin data.
+
+## Model 1: Body mass explained by species
+
+- Response variable: body mass
+- continuous variable
+- ratio scale
+
+- Predictor variable: species
+- categorical variable
+- nominal scale
+
+
+# 1-Way Analysis of Variance: Procedure
+
+To perform an ANOVA in R, you can use this procedure:
+
+1. Perform graphical and numerical data exploration
+1. Fit a linear model using `lm()`
+1. Examine the model coefficient table using `summary()`
+1. Conduct the Analysis of Variance using `anova()`
+
+I'll walk through an example using penguin body mass and species.
+
+<div class="hints">
+You can review the slide deck for *Interpreting model coefficient and ANOVA tables* for further examples and a guide to interpreting model coefficients.
+</div>
+
+
+
+
+## Data exploration
+
+
+### Graphical
+
+
+We can explore normality using histograms and density plots:
+
+```{r hist_density, fig.asp=1/2}
+par(mfrow = c(1, 2))
+hist(penguins$body_mass_g, breaks = 80, main = "histogram of body mass", xlab = "body mass (g)")
+plot(density(penguins$body_mass_g, na.rm = TRUE), main = "density plot of body mass")
+```
+
+What do you notice?
+
+<br>
+
+Conditional boxplots are great for categorical variables:
+
+```{r}
+require(palmerpenguins)
+boxplot(body_mass_g ~ species, data = penguins)
+
+```
+
+```{r include = FALSE, eval = FALSE}
+
+sp = "Gentoo"
+
+
+with(
+  
+)
+
+shapiro.test(subset(penguins, species == "Gentoo")$body_mass_g)
+
+hist(subset(penguins, species == "Gentoo")$body_mass_g)
+abline(v = mean(subset(penguins, species == "Gentoo")$body_mass_g))
+
+```
+
+
+
+What do you notice?
+
+
+### Numerical
+
+Remember the assumption of normality?  Let's test whether within-group data are normally-distributed.  We need to do some data massaging:
+
+- Extract the measurements for each species.
+- Calculate the mean body mass for each species.
+- Conduct Shapiro tests on each species' body mass.
+
+```{r}
+dat_chinstrap = subset(penguins, species == "Chinstrap")
+mean(dat_chinstrap$body_mass_g, na.rm = TRUE)
+shapiro.test(dat_chinstrap$body_mass_g)
+```
+
+> Shapiro test null hypothesis: "The data are drawn from a normally-distributed population."
+
+If we fail to reject the null, can we consider the data sufficiently normal to proceed?
+
+
+Here's a cool shortcut for calculating the species mean body masses using `aggregate()` and the formula notation:
+
+```{r}
+aggregate(body_mass_g ~ species, data = penguins, FUN = mean)
+```
+
+You should try it out with the `shapiro.test()`!
+
+
+## Fit a linear model
+
+The syntax is easy if you use the formula notation:
+
+```{r}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+```
+
+Then we can look at the model coefficients:
+
+```{r}
+summary(fit_species)
+```
+
+
+## Conduct the ANOVA
+
+R makes it easy to conduct an ANOVA:
+
+```{r}
+anova(fit_species)
+```
+
+
+# One-Way Anova Complete Walkthrough
+
+A simple Analysis of Variance belongs to the Group 1 analyses.  It is a simple linear model!
+
+The syntax to build the mode in R is easy.  Use the lm() function to store the model in a variable:
+
+```{r}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+```
+
+Note the use of the R formula notation.
+
+Then we can look at the model coefficients:
+
+```{r}
+summary(fit_species)
+```
+
+## Conduct the ANOVA
+
+R makes it easy to conduct an ANOVA:
+
+```{r}
+anova(fit_species)
+```
+
+
+## Two Tables: model coefficients and ANOVA
+
+Now remember the two model summary tables we have discussed:  Model coefficient tables and ANOVA tables.
+
+### Model Coefficients table
+
+Remember the interpretation for linear model coefficients for a categorical variable:
+
+- The base case is the intercept, while the 'slope' coefficients are the adjustments you need to make to the base case to arrive at the means for the other levels of the factor.
+
+For the penguin body mass and species model, what is the base case?
+
+
+#### Model Coefficient Table: factor-level p-values
+
+- Next, let's interpret the p-values for each species.
+- First, note that the p-value in each row of the table is a significance test for whether the coefficient in that row is different from zero.
+- Note that these p-values do not tell us whether any of the coefficients are significantly different from each other!
+
+```{r echo = FALSE}
+fit_species_kab
+```
+
+- What can you conclude about each of the model coefficients from the p-values?
+
+
+
+## ANOVA table: Predictor variable p-values
+
+We've interpreted the regression coefficients for our model of penguin body masses as predicted by species.  
+
+Now we'll take a look at the other common way model results are displayed, the ANOVA table.
+
+- To show the Analysis of Variance results for a linear model, simply use the anova() function:
+
+
+```{r anova_tab_2, echo=FALSE}
+anova_species_kab
+```
+
+
+- There is a lot of information in an ANOVA table:
+- Degrees of freedom
+- Sum of squares
+- mean squares
+- F statistic
+- p-value
+
+
+## Degrees of Freedom
+
+- We won't go in to detail about the degrees of freedom here, but you can think of them as representing the number of levels within in a categorical variable.
+
+
+## Sum of Squares
+
+- The sum of squares columns tell us about how much of the total data variability is explained by each of the predictor variables.
+- In our case we have only 1, the species.
+
+- The residuals sum of squares contains information about the variation that our model couldn't explain.
+- R doesn't print a line with total sum of squares, but it is equal to the sum of all the numbers in the Sum sq. column.
+
+- The total sum of squares is a measure of the total variability in the data.
+
+
+## Mean Squares
+
+The Sum Sq column tells us about the variability explained by each factor, but the Mean sq column allows us to compare the relative amount of information that each factor explains. 
+
+- The Mean Sq column is the Sum Sq adjusted by the degrees of freedom associated with each predictor variable.
+
+## F-statistic, p-value
+
+- You can think of the F-statistics as a measure of how much a adding a variable to the model improves the model fit.  There will be an F-statistic for each predictor variable.
+- A technical-sounding null hypothesis is: "The within-group variance is equal to the between-group variance".
+- A less technical null hypothesis could be: "Adding predictor $x$ to the model does not improve the model fit."
+
+Differences between ANOVA and model coefficient tables:
+
+- Notice that the model coefficient table showed three species coefficients, 1 for each species, but the ANOVA table output combines all the species into a single row.
+- Categorical variables are handled slightly differently in the model coefficient and ANOVA table model outputs.
+
+
+
+## Interpretation summary
+
+To summarize the interpretation of this model's ANOVA table:
+
+
+- the Sum Sq and Mean Sq columns give us information about how much variability the predictor variable is able to explain.
+- When you have more than one predictor variable, you can think of the Mean Sq column as an estimate of the relative importance of each predictor (this will make more sense later).
+- The Pr(>F) column gives us a rough idea of whether the predictor significantly improves the model's prediction or not.
+- A low p-value here (approximately) means that adding the predictor creates a significantly better model than leaving it out.
+- Take a few minutes to look back and forth between the model coefficient and ANOVA tables for our iris_fit_1 model, making sure you understand the differences in what each is showing.
+
+
+
+
+
+# Two-way factorial ANOVA
+
+Now's your chance to try out a two-way ANOVA.
+
+- A factorial design means that all combinations of categorical variables appear in the data. We'll use two of the penguin factor variables:
+  - sex
+  - species
+  
+  
+
+Here's a conditional boxplot for penguin body mass conditioned on both species and sex:
+
+```{r}
+boxplot(body_mass_g ~ sex * species, data = penguins)
+```
+
+Notice the formula notation with two predictor variables.  You can use the same notation to build your linear model!
+
+<div class="warnings">
+- Make sure you tell R to fit a *factorial* model by using the * symbol and not the + symbol.
+</div>
+
+Now you should build a linear model using both sex and species.  Make sure you add sex to the model before species.  Take a look at how I set up the `boxplot()` call above for a hint.
+
+Save your model to a variable called `fit_both`.
+
+When you have the model specified correctly, your model coefficient table should look like:
+
+```{r echo = FALSE}
+fit_both_kab
+
+```
+
+
+- Now you can conduct an ANOVA on your fitted model of sex and species!
+- We'll compare the ANOVA table, model coefficient table, and interactions in Using Models 3.
+
+
+# Questions

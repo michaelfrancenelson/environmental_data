@@ -1,0 +1,70 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+```
+
+
+
+# Saving R Data Objects
+
+You may have noticed that some of the simulations take a long time to run!
+
+When you do a simulation study, it is often convenient to save your simulation results so that you don't have to re-run your simulation every time.
+
+You can save R objects to files using `save()`.
+
+<div class = "notes">
+
+You can save any R object to a .Rdata file.  These are ***binary*** files that can only be read by R.
+
+If you have data stored in a `data.frame` or `matrix`, you can write to a text file.  Comma-separated value (CSV) files are commonly used.
+
+An advantage of text files is that you can open them in other applications.
+</div>
+
+- Here's how I saved the results of my effect size and sample size simulation to a file:
+
+```{r save_rdata, eval=FALSE}
+save(
+  sim_n_effect_size,
+  file = here::here("data", "lab_11_n_effect_sizes.Rdata"))
+```
+
+R saved it to a binary file with the extension ".Rdata".
+
+When I want to load the data again I can use:
+
+```{r load_rdata, eval=FALSE}
+load(file = here::here("data", "lab_11_n_effect_sizes.Rdata")))
+```
+
+<div class="notes">
+For the lab exercises, you should save your simulation results to RData files so that you can use them again later without having to re-run the simulations.
+
+- Note: In the walkthrough examples and code templates I used relatively small numbers of simulations (the `n_sim` variable).  I suggest you use small values as you build your code.
+
+When your simulations are working as expected, you should increase the number of simulations to something large, 1000 or greater.
+
+You can stage your simulations to run and save the results when you plan to be away from your computer for a while.  Simulation results using lager numbers of iterations will make much smoother curves.
+
+</div>
+

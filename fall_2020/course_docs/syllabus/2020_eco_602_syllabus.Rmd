@@ -1,0 +1,143 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+author: "Michael France Nelson"
+subtitle: "Course Syllabus"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+    # number_sections: TRUE
+  # prettydoc::html_pretty:
+  #   theme: cayman
+  #   highlight: github
+  #   css: !expr here::here("formatting", "css", "eco_602_2020.css")
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+header-includes:
+  \input{`r here::here("formatting", "css", "eco_602_2020.tex")`}
+---
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+shortcuts_text =
+'
+<span>
+Here are some shortcuts to selected sections:
+
+<ul>
+<li><a href="#grading">Grading</a></li>
+
+<li><a href="#course_materials">Course Materials</a></li>
+</ul>
+</span>
+
+'
+```
+
+`r html_output_only(shortcuts_text)`
+
+
+
+#  Course Information {.tabset}
+
+
+## Instructor
+Dr Michael F. Nelson
+
+Email: michaelnelso@umass.edu
+
+Phone: 651-308-5430
+
+Direct physical mail to the Environmental Conservation Department office:
+
+> University of Massachusetts
+> 160 Holdsworth Way
+> Amherst, MA 01003-9285
+> 1 (413) 545-2665
+
+
+
+## Teaching Assistant
+
+Amanda Suzzi (Ph.D student in ECo)
+
+Email: asuzzi@umass.edu
+
+## Course Meetings
+
+Live course meetings: Tuesdays and Thursdays 8:30 to 9:45 AM
+
+Office Hours: Tuesdays and Thursdays 1:00 - 2:00 PM and by appointment
+
+Course Zoom URL: https://umass-amherst.zoom.us/j/94612508944?pwd=SW5hMmtZWnRYbGtXbW0rd0dwazdqUT09
+
+Zoom Password: Please find the password in the course Moodle.
+
+<!-- Course Zoom Password: **DataIsCool** -->
+
+<div class="info"> NOTE: This course is fully remote, there will be no in-person meetings.  All course meetings, breakout groups, and office hours will be via Zoom. </div>
+
+
+## UMass Syllabus Guidelines
+
+
+The following sections are to be included in course syllabi per the UMass faculty senate guidelines.
+
+This syllabus includes information on each of topics in the, indicated syllabus sections, as well as additional sections specific to this course in the body of this syllabus document.
+
+
+
+
+- **Course objecives** are in the **Learning Objectives** and **Course Themes** sections.
+
+- **Expectations and requirements** such as papers, lab reports or exams are in the **Course Structure** and sections.
+
+- **Attendance policies** in the **Course Structure** section.
+
+- **Grading criteria** and the approximate weight of each course requirement in the final grade are in the **Grading** section.
+
+- **Examination schedule** and any **make up or rescheduling policies**. Information on these topics is found in the **Grading**, **Final Take-home Exam**, and **Course Structure** sections.
+
+- Policies on **academic honesty**. Please see the the **Accommodation and Academic Honesty** section.
+
+- **Office, phone and, mailbox numbers** of instructor (instructors should include preferred online contact information (i.e. instructor or course email or use of Blackboard/Moodle communication tools) are in the **Course Information** section.
+
+
+
+```{r child = '602/eco_602_course_description.Rmd'}
+```
+
+<a name="learning_objectives"></a>
+```{r child = '602/eco_602_learning_objectives.Rmd'}
+```
+
+<a name="course_materials"></a>
+```{r child = '602/eco_602_materials.Rmd'}
+```
+
+```{r child = '602/eco_602_course_themes.Rmd'}
+```
+
+```{r child = '602/eco_602_course_structure.Rmd'}
+```
+
+<a name="grading"></a>
+```{r child = '602/eco_602_grading.Rmd'}
+```
+
+```{r child = '602/eco_602_weekly_overview.Rmd'}
+```
+
+<!-- ```{r child = '602/eco_602_teaching_philosophy.Rmd'} -->
+<!-- ``` -->
+
+```{r child = 'accommodation_academic_honesty.Rmd'}
+```

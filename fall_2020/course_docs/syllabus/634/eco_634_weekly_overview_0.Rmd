@@ -1,0 +1,104 @@
+--- 
+title: "Weekly Topic Overview"
+output: html_document
+editor_options:
+  chunk_output_type: inline
+--- 
+
+```{r, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE)
+
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+  } else if (knitr::is_html_output()) {
+    cat(sprintf("<span style='color: %s;'>%s</span>", color, x))
+  }
+}
+wed_start = as.Date("2020- 08- 26")
+dat_fmt = "%b %d"
+dat_str = function() return(paste0(format(wed_start, dat_fmt)))
+```
+
+```{r increment_date, include = FALSE, eval=FALSE}
+wed_start = wed_start + 7
+```
+
+
+
+# Weekly Lab Schedule
+
+
+
+ 
+## Week 1: `r dat_str()` - Course Software
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+Assignments:
+
+- Learning Objectives Assessment
+- Lab 1: Course software, 
+
+
+
+## Week 2: `r dat_str()` - How to R Like a Programmer
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+ 
+- Week 3: `r dat_str()` - Data Exploration and Deterministic Functions 1
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+ 
+- Week 4: `r dat_str()` - Data Exploration and Deterministic Functions 2
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+ 
+- Week 5: `r dat_str()` - Random Numbers and Distributions
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+ 
+- Week 6: `r dat_str()` - Dispersion, Noise, and Uncertainty
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+ 
+- Week 7: `r dat_str()` - Quantifying Error
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+ 
+- Week 8: `r dat_str()` - Linear Models 1
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+ 
+- Week 9: `r dat_str()` - Linear Models 2
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+ 
+- Week 10: `r dat_str()` - Linear Models 3
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+ 
+- Week 11: `r dat_str()` - Simulation
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+- Week 12: `r dat_str()` - Multivariate
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+ 
+- Week 13: `r dat_str()` - Wrap Up
+

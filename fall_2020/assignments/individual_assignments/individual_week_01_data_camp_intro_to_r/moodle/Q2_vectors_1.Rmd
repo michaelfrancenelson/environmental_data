@@ -1,0 +1,88 @@
+---
+title: "Vectors 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Create a vector called `v1` that contains a sequence of integers from -2 to 2.
+
+When you print the contents of `v1`, it should look like this:
+
+
+```{r, echo = FALSE}
+v1 = -2:2
+print(v1)
+```
+
+Now, use `v1` to create a new vector called `v2` whose elements are the elements of `v1` multiplied by `3`.  It should look like this:
+
+```{r echo = FALSE}
+v2 = 3 * v1
+print(v2)
+```
+
+Finally, calculate the sum of all the elements in `v2`.
+
+
+Paste the following lines of code into the text input window below:
+
+- Q1 (1pt): The R code you used to create `v1`.
+- Q2 (1pt): The R code you used to create `v2`.
+- Q3 (1pt): The R code you used to calculate the sum of elements in `v2`.
+
+
+Solution
+========
+
+
+Possible answers
+
+```{r eval = FALSE}
+v1 = -2:2
+print(v1)
+
+v2 = 3 * v1
+print(v2)
+
+print(sum(v2))
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Vectors 1
+extype: string
+exsolution: nil
+expoints: 3
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

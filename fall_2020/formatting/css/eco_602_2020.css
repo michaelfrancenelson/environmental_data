@@ -1,0 +1,55 @@
+<style type="text/css" rel="stylesheet">
+
+.btn {
+    border-width: 0 0px 0px 0px;
+    font-weight: normal;
+    text-transform: ;
+}
+
+.btn-default {
+    color: #2ecc71;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.warn { background-color:#F5A796; border-radius: 0.2cm; padding: 0.3cm;}
+.info { background-color:#E6F0FF; border-radius: 0.2cm; padding: 0.3cm;}
+
+.red { background-color: rgba(255, 0, 0, 0.3); border-radius: 0.2cm; padding: 0.3cm;}
+.blue { background-color:#E6F0FF; border-radius: 0.2cm; padding: 0.3cm;}
+.gray { background-color:#ECE8E7; border-radius: 0.2cm; padding: 0.3cm;}
+
+.blueborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; }
+.redborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #8B0000; }
+.grayborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; }
+.blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; }
+
+.gray_shadowbox {
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px 18px #888888;
+}
+
+
+.showopt {
+  background-color: #004c93;
+  color: #FFFFFF; 
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  vertical-align: middle !important;
+  float: right;
+  font-family: sans-serif;
+  border-radius: 8px;
+}
+
+.showopt:hover {
+    background-color: #dfe4f2;
+    color: #004c93;
+}
+
+pre.plot {
+  background-color: white !important;
+}
+
+</style>

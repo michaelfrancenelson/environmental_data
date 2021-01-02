@@ -1,0 +1,183 @@
+---
+title: "Two-sample resampling function"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+  
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+> Your `two_group_resample()` function should accept three arguments:
+
+1. `x`: A numeric vector
+1. `n_1`: The number of values (with replacement) to take from `x` for the first group.
+1. `n_2`: The number of values (with replacement) to take from `x` for the second group.
+
+
+Your function should return:
+
+- A single numeric value: the difference in means between the two groups
+
+```{r echo = TRUE, eval = FALSE, results='asis'}
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  
+  # ... your code here ...
+  
+  return(difference_in_means)
+}
+
+```
+</div>
+
+
+
+
+
+<div class="questionborder">
+
+### Q1 4 pts
+
+Paste the code you used to define your `two_group_resample()` function into the text input.
+
+</div>
+
+
+
+Solution
+========
+
+Some possible implementations:
+
+```{r}
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  dat_1 = sample(x, n_1, replace = TRUE)
+  dat_2 = sample(x, n_2, replace = TRUE)
+  return(mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE))
+}
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  m_1 = mean(sample(x, n_1, replace = TRUE), na.rm = TRUE)
+  m_2 = mean(sample(x, n_2, replace = TRUE), na.rm = TRUE)
+  return(m_1 - m_2)
+}
+
+
+```
+
+
+
+
+
+
+### Grading Guide
+
+A common mistake students made was to keep code that overwrites the values of the inputs:
+
+```{r common_wrong_answer, eval = FALSE}
+two_group_resample = function(x, n_1, n_2)
+{
+  x = dat_pen$flipper_length_mm
+  n_1 = 52
+  n_2 = 108
+# ...
+} 
+```
+
+- They should receive 2 out of 4 points if the rest of the code is correct.  I've used the following response:
+
+
+<div = class="hintborder">
+Your code is almost correct.
+<br>
+
+Notice that within the function body, you overwrite the values of x, n_1, and n_2:
+
+<ul>
+<li> x = dat_pen$flipper_length_mm </li>
+<li>  n_1 = 52 </li>
+<li>  n_2 = 108 </li>
+</ul>
+
+This means that no matter what arguments you try to use when you call the function, your function will always overwrite them to these values.
+</div>
+
+
+Grading test case.  Should return approximately -0.56 if students called `sample()` in approximately the same way as the reference.
+
+- Returning a different value doesn't automatically mean their implementation is wrong!
+
+
+```{r}
+require(palmerpenguins)
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+
+two_group_resample = function(x, n_1, n_2)
+{
+  dat_1 = sample(x, n_1, replace = TRUE)
+  dat_2 = sample(x, n_2, replace = TRUE)
+  return(mean(dat_1, na.rm = TRUE)-mean(dat_2, na.rm = TRUE))
+}
+
+
+ 
+
+
+require(palmerpenguins)
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+set.seed(12345)
+two_group_resample(dat_pen$flipper_length_mm, 68, 152)
+```
+
+
+Some possible w
+
+
+
+
+Meta-information
+================
+extitle: Two-sample resampling function
+
+extype: string
+
+exsolution: nil
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 4
+
+

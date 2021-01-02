@@ -1,0 +1,104 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "***** document title here ****"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    # css: !expr here::here("formatting", "css", "lightbox.css")
+---
+
+```{r setup, include=FALSE}
+source(here::here("formatting", "functions", "moodle_template_funs.R"))
+# knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = FALSE, results='asis', warning=FALSE}
+cat(readLines(here::here("formatting", "css", "lightbox.css")))
+```
+
+```{r, echo = FALSE, include=FALSE}
+list.files(path = here::here(), pattern = "github_desktop_sign_in.PNG", recursive = TRUE)
+
+exams::include_supplement(
+  c("github_desktop_sign_in.PNG","github_desktop_signed_in.PNG", "GitHub-Mark-120px-plus.png"),
+  dir = here::here(), recursive = TRUE)
+```
+
+# abc
+
+```{r echo = FALSE, results='asis'}
+# expandable_html_image("github_desktop_sign_in.PNG")
+expandable_html_image("github_desktop_sign_in.PNG", thumb_width = "100px")
+expandable_html_image("github_desktop_sign_in.PNG", thumb_width = "100px", lb_width = "30vw")
+```
+
+#bvd
+
+```{r echo = FALSE, results='asis'}
+expandable_html_image("github_desktop_sign_in.PNG", lb_width = "30vw")
+```
+
+<!-- <a class="thumb" href="#img8715496"> -->
+<!--   [Click to expand image]<br> -->
+<!--   <img style="width: 100px;" src="C:/git/eco_602_634_2020/images/screenshots/github_desktop_sign_in.PNG"/> -->
+<!-- </a> -->
+<!-- <div class="lb" id="img8715496"> -->
+<!--   <img src="C:/git/eco_602_634_2020/images/screenshots/github_desktop_sign_in.PNG"/> -->
+<!--   <a class="lb-close" href="#"></a> -->
+<!-- </div> -->
+
+<!-- <a class="thumb" href="#img4304750"> -->
+<!-- [Click to expand image]<br> -->
+
+<!-- ![](github_desktop_sign_in.PNG){width=830px} -->
+
+<!-- </a> -->
+<!-- <div class="lb" id="img4304750"> -->
+
+<!-- ![](github_desktop_sign_in.PNG) -->
+
+<!-- <a class="lb-close" href="#"></a> -->
+<!-- </div> -->
+
+
+
+
+<!-- <a class="thumb" href="#dog"> -->
+<!-- ![](github_desktop_sign_in.PNG) -->
+<!-- </a> -->
+<!-- <div class="lb" id="dog"> -->
+<!-- ![](github_desktop_sign_in.PNG) -->
+<!-- <a class="lb-close" href="#"></a> -->
+<!-- </div> -->
+
+
+<!-- <a class="thumb" href="#img8538743"> -->
+<!-- ![](github_desktop_sign_in.PNG) -->
+<!-- </a> -->
+<!-- <div class="lb" id="img8538743"> -->
+<!-- ![](github_desktop_sign_in.PNG) -->
+<!-- <a class="lb-close" href="#"></a> -->
+<!-- </div> -->
+
+
+<!-- [Click to expand image] -->
+<!-- <br> -->
+<!--                 <a class="thumb" href="#img8538743"> -->
+<!--                 ![](github_desktop_sign_in.PNG) -->
+<!--                 </a>  -->
+<!--                 <div class="lb" id="img8538743"> -->
+<!--                 ![](github_desktop_sign_in.PNG) -->
+<!--                 <a class="lb-close" href="#"></a> -->
+<!--                 </div> -->
+
+
+<!-- <a class="thumb" href="#dog"> -->
+<!--    <img src="http://i.huffpost.com/gen/749263/original.jpg"/> -->
+<!-- </a>  -->
+<!-- <div class="lb" id="dog"> -->
+<!--    <img src="http://i.huffpost.com/gen/749263/original.jpg"/> -->
+<!--    <a class="lb-close" href="#"></a> -->
+<!-- </div> -->
+
+<!-- <br> -->

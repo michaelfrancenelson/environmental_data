@@ -1,0 +1,47 @@
+---
+title: "Week 02 reading question 4"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="blackborder">
+*Conditional plot*, *conditioning variable*, and related terms occurred throughout the Zuur and McGarigal readings.
+</div>
+
+<br>
+
+- Q1 (2 pts): Explain what a *conditional variable* means in the context of graphical data exploration.
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading question 4
+extype: string
+exsolution: nil
+exname: Week 3 reading questions
+exsection: Week 3 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 2

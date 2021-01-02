@@ -1,0 +1,64 @@
+---
+title: "Bolker 1.4: Null Hypothesis"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> The Bolker reading was difficult....
+
+Bolker used a seed predation experiment to illustrate the statistical frameworks.
+
+The primary question in his examples is: *Do seed predation rates vary among* species?
+
+
+A ***null hypothesis*** is used in the Frequentist paradigm as a baseline against which to compare data.
+
+
+<div class="questionborder">
+
+### Q1 2 pts
+
+- Describe a possible null hypothesis about the seed predation rates. Paste your answer into the text entry box below.
+
+</div>
+
+
+
+
+Solution
+========
+
+The most obvious null is: "There is no difference in seed predation rates among species."
+
+
+Meta-information
+================
+extitle: null hypotheses
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 2

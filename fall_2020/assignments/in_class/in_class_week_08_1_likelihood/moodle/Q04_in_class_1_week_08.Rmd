@@ -1,0 +1,91 @@
+---
+title: "Selecting the Best Model"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+<div class="instructionsborder">
+
+You explored the use of two discrete *parametric* distributions to model the Winter Wren census counts.
+
+- Which one was better?
+
+</div>
+
+
+<div class="questionborder">
+### 2 pts: 
+
+- Considering a Maximum Likelihood criterion, which model better fit the data?
+- Considering what you know about the Binomial and Poisson distributions, which model is more appropriate for census count data?
+
+</div>
+
+
+
+
+
+Solution
+========
+
+This is the code they should have used:
+
+```{r}
+hist(dat_all$WIWR, breaks = 6)
+
+
+wiwa_counts = c(2, 6)
+
+dpois(x = wiwa_counts, lambda = 4.5)
+```
+
+They may have tried some of the following:
+```{r}
+dbinom(x = 1, size = 4, p = 0.75)
+dbinom(x = 2, size = 4, p = 0.75)
+dbinom(x = 3, size = 4, p = 0.75)
+dbinom(x = 4, size = 4, p = 0.75)
+```
+
+
+
+
+
+Meta-information
+================
+
+extitle: Selecting the Best Model
+
+extype: string
+
+exsolution: nil
+
+exname: in_class_week_08_1
+
+exsection: in_class_week_08_1
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 1
+

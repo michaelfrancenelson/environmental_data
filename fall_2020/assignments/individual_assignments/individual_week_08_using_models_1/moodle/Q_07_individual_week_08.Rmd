@@ -1,0 +1,85 @@
+---
+title: "one-sample rank sum test interpretation"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="instructionsborder">
+
+### Instructions
+
+Interpret the results of your one-sample Wilcoxon rank sum test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.  
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 1 pt (numeric)
+
+- What is the p-value from your test?
+
+### Q2 2 pt (short answer/essay)
+
+- Considering the results from your rank sum test, did you conclude that there was strong evidence to reject the null hypothesis?
+  - Make sure you justify your answer using the output of the test.
+
+</div>
+
+
+
+
+Solution
+========
+
+Q1: p-value = 0.006275
+
+Q2: yes, test has p < 0.05
+
+
+```{r}
+catrate = read.csv(here::here("data", "catrate.csv"))
+wilcox.test(catrate$cat.rate, mu = 2/7)
+boxplot(catrate$cat.rate)
+```
+
+
+
+
+
+Meta-information
+================
+extitle: one-sample rank test interpretation
+
+extype: string
+
+exsolution: nil
+
+expoints: 3
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+

@@ -1,0 +1,103 @@
+---
+title: "flipper histograms"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    # includes:
+      # after_body: !expr here::here("formatting", "js", "rmd.js")
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r load_data, echo = FALSE, results='hide'}
+require(palmerpenguins)
+dat_adelie    = subset(penguins, species == "Adelie")
+dat_chinstrap = subset(penguins, species == "Chinstrap")
+```
+
+```{r plot, eval = FALSE, echo = FALSE}
+par(mfrow = c(1, 2))
+hist(dat_adelie$flipper_length_mm)
+hist(dat_chinstrap$flipper_length_mm)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructionsborder">
+
+### Instructions
+
+Create a single figure consisting of histograms of flipper lengths of Adelie and Chinstrap penguins.
+
+Your figure should have two histograms arranged in one row.
+
+Save your figure to a .png file.  Your image file needs to have appropriate dimensions such that the two histograms are not vertically stretched.
+
+- Hint: Check out the `width` and `height` arguments to `png()`.
+- Hint: Remember the `par()` function?  Which argument did we use to include multiple plots in the same figure?
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 2 pt (file upload)
+
+- Upload your image file.
+
+</div>
+
+
+
+
+Solution
+========
+
+
+
+```{r plot, ref.label = "answer_plot", fig.asp = 1/1.5, echo = FALSE}
+```
+
+<div class="toggle"><button>Click to show/hide plot code</button>
+<br>
+```{r ref.label="answer_plot", eval = FALSE, echo = TRUE}
+```
+</div>
+
+
+<script>
+  $(".toggle").click(function() {
+    $(this).toggleClass("open");
+  });
+</script>
+
+Meta-information
+================
+extitle: flipper histograms
+
+extype: string
+
+exsolution: nil
+
+expoints: 2
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 1
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+

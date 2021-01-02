@@ -1,0 +1,368 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+author: "Michael France Nelson"
+subtitle: "Mini-Lecture Schedule"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+tue_start = as.Date("2020-08-25")
+thu_start = tue_start + 2
+dat_fmt = "%b %d"
+
+dat_str = function()
+return(paste0(format(tue_start, dat_fmt), ", ",
+       format(thu_start, dat_fmt)))
+
+dat_str()
+
+```
+
+
+#  Week 1 – Introductions, Why Model?: `r dat_str()` {.tabset}
+```{r increment_date, include = FALSE}
+tue_start = tue_start + 7; thu_start = tue_start + 2
+```
+- Navigating Course Moodle
+  - Where to find syllabus
+  - GitHub Pages
+  - Weekly section organization
+    - Mini-lectures and lecture notes
+    - Assignments
+      - Moodle Quiz questions
+        
+        
+- Model Thinking: What is a Model?
+  - Dog screen door video
+  - Multiple models
+  
+  
+- Computing for Scientists
+  - Common issues: where is my file?
+  - GUI and text-based interfaces
+  - Paths
+    - more of this in reading and individual assignment
+
+
+- R and RStudio
+  - Why R (or scripting) instead of menu-driven analyses
+    - Reproducibility
+  - Demo of simple tasks
+  - Demo of an analysis
+  - Demo of simple and complex graphics
+
+
+
+
+#  Week 2 - Environmental Data and Model Thinking: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+- Model Thinking: Communicating Science
+  - McGarigal's Bird examples
+
+- Data Scales
+  - Examples for each
+    - continuous and discrete
+    - ratio and interval
+    - ordinal and categorical
+    - converting among data scales
+
+- Data Conventions
+  - Recording and quality control
+  - Metadata
+  - Row-data paradigm
+
+
+
+
+# Week 3 - Data Exploration and Deterministic Functions: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+- Why Data Exploration?
+  - Numerical exploration
+    - Why should we do it?
+    - Statistics and Parameters
+    - Measures of center and spread
+  - Graphical exploration
+    - Why should we do it?
+    - What aspect(s) of the data do we want to explore?>
+
+- Important Plot Types
+  - What do we want to learn?
+  - Plots that display summaries
+  - Plots that show raw data
+  
+- Functions
+  - What is a function?
+  - Formulas and equations
+  - Important classes of functions
+    - Linear
+    - Polynomial and rational
+    - Exponential and logarithmic
+    - Periodic
+    - Combination
+  
+  
+- Deterministic Functions
+  - Always start with a line!
+  - Important types for environmental data:
+    - Give a mechanistic and/or phenomenological example of:
+      - linear
+      - periodic
+      - Combination functions, e.g. Ricker-type
+
+
+
+
+
+# Week 4: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE, echo =FALSE}
+```
+
+
+
+
+## Live Sessions
+
+
+### Tuesday
+
+### Thursday
+
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 5: Sep 22, 24  {.tabset} -->
+# Week 5: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+
+## Live Sessions
+
+
+### Tuesday
+
+### Thursday
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+<!-- # Week 6: Sep 29, Oct 1  {.tabset} -->
+# Week 6: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 7: Oct 6, 8  {.tabset} -->
+# Week 7: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 8: Oct 13, 15  {.tabset} -->
+# Week 8: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 9: Oct 20, 22  {.tabset} -->
+# Week 9: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 10: Oct 27, 29  {.tabset} -->
+# Week 10: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 11: Nov 3, 5  {.tabset} -->
+# Week 11: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+
+## Live Sessions
+
+
+### Tuesday
+
+### Thursday
+
+
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 12: Nov 10, 12  {.tabset} -->
+# Week 12: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+
+
+<!-- # Week 13: Nov 17, 19  {.tabset} -->
+# Week 13: `r dat_str()` {.tabset}
+```{r ref.label = "increment_date", include = FALSE}
+```
+
+
+## Live Sessions
+
+
+
+### Tuesday
+
+### Thursday
+
+
+
+## Recorded Mini Lectures 
+
+## Readings 
+
+## Assignments 
+
+
+

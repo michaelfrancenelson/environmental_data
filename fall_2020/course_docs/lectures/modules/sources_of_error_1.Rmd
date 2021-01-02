@@ -1,0 +1,177 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Sources of Error"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+smp_error_pois = function(
+  n1, lambda, seed = NULL,
+  bins = 10,
+  mn = NULL, xl = NULL, yl = NULL, 
+  mar = c(2, 2.2, 3, 0))
+{
+  if (!is.null(seed)) set.seed(seed)
+  par(mfrow = c(2, 2), mar = mar)
+  
+  for (i in 1:4)
+  {
+    x1 = rpois(n1, lambda)
+    d1 = density(x1)
+    hist(x1, freq = FALSE, main = mn, xlab = xl, ylab = yl, breaks = bins); 
+    points(d1$x - 0.5, d1$y, type = "l")
+  }
+}
+
+
+```
+
+
+
+
+## Sources of Error
+
+McGarigal describes 3 sources:
+
+- Mesurement
+- Process
+- Model
+
+I'd like to add a fourth, underappreciated, source of error: **sampling error.**
+
+
+
+
+## Measurement Error
+
+### We cannot measure with perfect precision or accuracy.
+
+How can we commit measurement errors?
+
+- Flawed instruments
+- User error
+- Failing to observe individuals or species that are actually present
+- Over- or under-counting
+
+
+
+
+## Process Error
+
+### There is randomness inherent in any natural system
+
+- Demographic stochasticity
+- Environmental stochasticity
+
+
+
+
+
+## Model Error
+
+\begin{blueborder}{0.9\textwidth}{What if my model is wrong?}
+Your model \textit{is} wrong!  
+\end{blueborder}
+
+
+### A mis-specified model can arise from:
+
+- omission of important predictors
+- inclsuion of unimportant predictors
+- complicated dependencies in predictor variables: multicollinearity.
+- mis-specified relationships: linear, exponential, lograthmic
+- wrong deterministic model
+- incorrect error structure: wrong stochastic model
+
+
+
+
+## Sampling Error
+
+### Sampling error is due to *nonrepresentative* sampling
+
+Sampling is, or should be, a realization of a ***stochastic process***.
+
+- Different realizations produce different samples.
+- Some samples are not representative!
+- What if you get 10 heads in a row?
+- You can reduce, but never eliminate, sampling error by increasing sample size
+
+### Genetic drift is a form of sampling error
+
+
+
+
+## Sampling Error: Graphical Intuition n = 20
+
+```{r echo=FALSE}
+n1 = 20
+lambda = 6.4
+seed = 12345
+smp_error_pois(n1, lambda, seed = seed)
+```
+
+
+
+
+## Sampling Error: Graphical Intuition n = 40
+
+```{r echo=FALSE}
+n1 = 40
+lambda = 6.4
+seed = 12345
+smp_error_pois(n1, lambda, seed = seed)
+```
+
+
+
+
+## Sampling Error: Graphical Intuition n = 80
+
+```{r echo=FALSE}
+n1 = 80
+lambda = 6.4
+seed = 12345
+smp_error_pois(n1, lambda, seed = seed)
+```
+
+
+
+
+## Sampling Error: Graphical Intuition n = 200
+
+```{r echo=FALSE}
+n1 = 200
+lambda = 6.4
+seed = 12345
+smp_error_pois(n1, lambda, seed = seed)
+```
+
+
+
+
+## Sampling Error: Graphical Intuition n = 1000
+
+```{r echo=FALSE}
+n1 = 1000
+lambda = 6.4
+seed = 12345
+smp_error_pois(n1, lambda, seed = seed)
+```
+

@@ -1,0 +1,345 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Seed Predataion Simulation"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer",
+   "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+# devtools::install_github("michaelfrancenelson/mfn.teaching.utils")
+# devtools::install_github("michaelfrancenelson/rmd.utils", force = TRUE)
+
+seed_dat =
+
+  
+  
+    data.frame(
+    species    = c("pol", "psd"),
+    n_pilfered = c(   26,    25),
+    n_intact   = c(  184,    706),
+    n_total      = c(210, 731),
+    pilfer_rate = c(26 / 210, 25 / 731))
+row.names(seed_dat) = NULL
+print(seed_dat, digits = 2)
+
+
+
+
+```
+
+## Seed Predation Example:
+
+### Bolker 2008, Chapter 1 seciton 1.4
+
+### The question (as originally posed in the reading): Are there different predation rates on different plants' seeds?
+
+
+Two example species (the largest and smallest from a set of 8) used in the example:
+
+\vfill
+
+- *Polyscias fulva* (pol: seed mass < 0.01 g)
+- *Pseudospondias microcarpa* (psd: seed mass $\approx$ 50 g).
+
+### A simple null hypothesis:
+
+- Seed predation rates are equal among species.
+  - More technical wording: "seed predation for all species are drawn from the same population"
+
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### Why is this a good null hypothesis?
+
+- It is intuitive: if we find good *evidence* that the predation rates are different, it's reasonable to conclude there is a  *true difference*.
+- It's simple
+- It's easy to test!
+
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### Where are the opportunities for *improvement*?
+
+- It is naive: we probably know something about the seeds before we designed the experiment.
+- Is it reasonable to expect that predation rates should ever be equal?
+- If we find good evidence that rates are different, what does that tell us?
+
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### If the null hypotheses were true
+
+What would we expect to observe?
+
+### How much variability in rates could we expect to observe by chance alone?
+
+- What evidence would help us conclude that the predation rates *are not the same*?
+  - Notice how I phrased this in terms of rejecting a null hypothesis.
+
+
+
+
+## Seed Predation: Experiment
+
+### The experiment (as described in the Bolker text) consists of:
+
+- Seed observation stations
+- Seed predation observations:
+- If one or more seeds were missing, data are recorded as: **any taken**.
+- If no seeds missing, data are recorded as: **none taken**.
+
+### This sounds a lot like a binomial distribution problem!
+
+
+
+
+## Seed Predation: Analysis
+
+### The analysis: The following quantities were calculated:
+
+- Species-specific seed predation rate
+- Overall seed predation rate
+- Ratio of species seed predation rates
+- *Odds ratios*
+  - Odds ratios are different than rates.  We'll talk more about odds later.
+
+
+
+
+## Simulation experiment
+
+Let's do some simulations to see what we might expect to observe *by chance alone*.
+
+### Seed pilfering.
+
+- Since we're only noting whether seeds were taken from stations (not how manmy seeds) we can't calculate a true *predation rate*.  For that we'd need to know the counts of seeds taken/not taken at each station.
+- I'll use the term **seed pilfering rate** to mean the proportion of stations that had missing seeds.
+
+
+
+
+## Simulating seed predation
+
+### Simulation outline
+
+- Choose number of stations to simulate for each species
+- Choose the pilfering rates for each species
+- Sample pilfered/unpilfered station counts from Binomial distributions
+- Analyze data
+
+
+
+
+
+## Simulation 1: Parameters from the data
+
+### The data from the text
+
+```{r, echo=FALSE, comment = ""}
+print(seed_dat, digits = 2)
+
+```
+
+```{r, echo = FALSE, comment="", warning=FALSE}
+n_stations = c(pol = 210, psd = 731)
+pilfer_rates = c(26/210, 25/706)
+species_names = c("pol", "psd")
+dat_1 = seed_pilfer_simulator(2, n_stations, pilfer_rates, species_names)
+```
+
+## Two simulations:
+
+```{r, echo = FALSE, comment=""}
+row.names(dat_1) = NULL
+print(dat_1[, c(1:4, 6)], digits = 2)
+```
+
+
+
+```{r}
+with(seed_dat, pilfer_rate[1] / pilfer_rate[2])
+with(dat_1, pilfer_rate[1] / pilfer_rate[2])
+with(dat_1, pilfer_rate[3] / pilfer_rate[4])
+
+
+
+  fisher.test(n_pilfered, n_total)
+
+with(
+  seed_dat,
+  fisher.test(n_pilfered, n_total))
+
+
+fisher.test(seed_dat[1:2, c(2, 4)])
+fisher.test(dat_1[1:2, c("n_pilfered", "n_total")])
+
+i = 1
+
+fisher.test(dat_1[(2 * (i - 1) + 1):(2 * (i - 1) + 2), c("n_pilfered", "n_total")])
+
+require(data.table)
+dat_1 = seed_pilfer_simulator(20000, n_stations, pilfer_rates, species_names)
+dat_dt = data.table(dat_1)
+hist(dat_dt[species == "pol", pilfer_rate] / dat_dt[species == "psd", pilfer_rate])
+
+seed_dat
+
+cbind(c(109, 91), c(105, 95))
+
+seed_dat
+
+fisher.test(cbind(c(26, 210), c(25, 706)))
+fisher.test(cbind(c(109, 91), c(105, 95)))
+
+
+
+```
+
+
+
+
+
+For the simulations, let's use the following parameters
+
+- 200 observation stations
+- Predation rates for the two species are equal: 50%
+- For each station there is a binary outcome: taken or not taken
+
+
+
+
+
+
+
+
+
+
+
+<!-- ```{r, eval=FALSE} -->
+
+<!-- sim_i = 4 -->
+<!-- ft_i = fisher.test( -->
+<!--   rbind( -->
+<!--     sim_data[sim_i, ], -->
+<!--     n_stations - sim_data[sim_i, ])) -->
+
+<!-- ft_i$p.value -->
+<!-- ft_i$conf.int -->
+<!-- ft_i$estimate -->
+
+
+<!-- fisher.test(cbind(c(109, 91), c(105, 95))) -->
+<!-- fisher.test(rbind(c(109, 91), c(105, 95))) -->
+<!-- fisher.test(rbind(c(109, 105), c(91, 95))) -->
+<!-- ``` -->
+
+
+<!-- ```{r, eval=FALSE} -->
+
+
+
+
+
+<!-- sim_data$pol_not_taken = n_stations - sim_data$pol_taken -->
+<!-- sim_data$psd_not_taken = n_stations - sim_data$psd_taken -->
+<!-- sim_data$pol_rate = sim_data$pol_taken / n_stations -->
+<!-- sim_data$psd_rate = sim_data$psd_taken / n_stations -->
+
+<!-- sim_i = 1 -->
+
+<!-- fisher.test(matrix(sim_data[i, ])) -->
+
+<!-- sim_data_i =  -->
+<!--   matrix( -->
+<!--     sim_data[sim_i, 1:4], -->
+<!--     nrow = 2, -->
+<!--     byrow = TRUE, -->
+<!--     dimnames = list( -->
+<!--       pol = c("taken", "not_taken"), -->
+<!--       psd = c("taken", "not_taken")) -->
+<!--   ) -->
+
+<!-- TeaTasting <- -->
+<!--   matrix(c(3, 1, 1, 3), -->
+<!--          nrow = 2, -->
+<!--          dimnames = list(Guess = c("Milk", "Tea"), -->
+<!--                          Truth = c("Milk", "Tea"))) -->
+
+<!-- TeaTasting -->
+<!-- sim_data_i -->
+
+
+<!-- fisher.test( -->
+<!--   x = factor(rbinom(n_stations, 1, pred_rate), labels = c("taken", "not_taken")), -->
+<!--   factor(rbinom(n_stations, 1, pred_rate), labels = c("taken", "not_taken"))) -->
+
+<!-- fisher.test(TeaTasting) -->
+<!-- fisher.test(sim_data_i) -->
+<!-- fisher.test( -->
+<!--   matrix(sim_data[sim_i, 1:4], nrow = 2, byrow = TRUE) -->
+<!-- ) -->
+<!-- head(sim_data) -->
+
+<!-- ``` -->
+
+
+
+
+<!-- - It is intuitive: if we find good *evidence* that the predation rates are different, it's reasonable to conclude there is a  *true difference*. -->
+<!-- - It's simple -->
+<!-- - It's easy to test! -->
+
+
+
+
+<!-- ### The setup: seeds -->
+
+
+
+<!-- The exp -->
+
+
+
+
+
+
+<!-- ```{r} -->
+<!-- seed_dat =  -->
+<!--   data.frame( -->
+<!--     species   = c("POL", "PSD"), -->
+<!--     predation = c(   26,    25), -->
+<!--     no_pred   = c(  184,    76) -->
+<!--   ) -->
+<!-- # fisher.test() -->
+
+
+
+
+<!-- ``` -->
+

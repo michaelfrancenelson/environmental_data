@@ -1,0 +1,133 @@
+---
+title: "Bolker 1.4: Seed Predation Rates"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> The Bolker reading was difficult....
+
+I have found that working through some of the calculations in a difficult reading helps me to understand what the author meant.
+
+In that spirit, you'll be using the data presented in Bolker Table 1.2 (on the top of page 11) to complete the template code and calculate the seed predation rates.
+
+
+### Code Template:
+
+```{r template_code, echo=TRUE, eval=FALSE}
+
+# Clear your R environment to make sure there are no stray variables.
+rm(list = ls())
+
+
+pol_n_predation = 26
+pol_n_no_predation = 184
+pol_n_total = ????
+pol_predation_rate = ????
+
+psd_n_predation = ????
+psd_n_no_predation = ????
+psd_n_total = ????
+psd_predation_rate = ????
+```
+
+### Self-test
+
+Run the following code after you have made your calculations.  Your rates should match the *observed proportions* in the Bolker text on page 11.
+
+
+```{r print_proportions, echo = TRUE, eval=FALSE}
+print(
+  paste0(
+    "The seed predation rate for Polyscias fulva is: ",
+    round(pol_predation_rate, digits = 3))) 
+
+print(
+  paste0(
+    "The seed predation rate for Pseudospondias microcarpa is: ",
+    round(psd_predation_rate, digits = 3)))
+```
+
+<div class="hintborder">
+
+### Hint
+
+To make sure that your code is written correctly, you need to run it in a empty R environment.
+
+The call `rm(list = ls())` on the first line of the code template removes all variables from the environment. Make sure you include it in your code!
+</div>
+
+<div class="questionborder">
+
+### Q1 5 pts.
+
+- Paste your completion of the code in the code template above into the text entry field below.
+
+</div>
+
+
+Solution
+========
+
+
+
+
+```{r answer_key, results='hold'}
+rm(list = ls())
+
+pol_n_predation = 26
+pol_n_no_predation = 184
+pol_n_total = pol_n_predation + pol_n_no_predation
+pol_predation_rate = pol_n_predation / pol_n_total
+
+psd_n_predation = 25
+psd_n_no_predation = 706
+psd_n_total = psd_n_predation + psd_n_no_predation
+psd_predation_rate = psd_n_predation / psd_n_total
+
+print(
+  paste0(
+    "The seed predation rate for Polyscias fulva is: ",
+    round(pol_predation_rate, digits = 3))) 
+
+print(
+  paste0(
+    "The seed predation rate for Pseudospondias microcarpa is: ",
+    round(psd_predation_rate, digits = 3)))
+
+```
+
+
+
+
+Meta-information
+================
+extitle: Bolker 1.4: Seed Predation Rates
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 5

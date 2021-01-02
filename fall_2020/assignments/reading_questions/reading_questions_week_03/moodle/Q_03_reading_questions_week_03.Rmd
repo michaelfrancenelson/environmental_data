@@ -1,0 +1,62 @@
+---
+title: "Week 02 reading question 3"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="grayborder">
+McGarigal presented a simulated example of density-dependent predator-prey interactions in which he fit several different models to the data.
+</div>
+
+<br>
+Consider only the Ricker and quadratic models.
+<br>
+
+- Q1 (3 pts): What were the pros and cons of each of the two models?
+
+
+<div class="hintborder">
+Some things to consider in your answer:
+
+- mechanistic vs. phenomenological
+- goodness-of-fit
+- previous knowledge of predator-prey interactions
+</div>
+
+Solution
+========
+
+Some things students might mention:
+
+- quadratic fit the data better, but only described a pattern
+- Ricker fit was not as good, but provided a mechanistic explanation
+- If you didn't know anything about predator-prey systems, the quadratic might better a better choice in the absence of an a priori mechanistic hypothesis.
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading question 3
+extype: string
+exsolution: nil
+exname: Week 3 reading questions
+exsection: Week 3 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 3

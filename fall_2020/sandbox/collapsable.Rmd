@@ -1,0 +1,38 @@
+---
+title: "test"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<style>
+
+label.toggle { cursor: pointer; color: #068 }
+input.toggle { display: none; width: 0px;}
+input.toggle:checked+div { display: none; width: 0px; }
+
+</style>
+
+
+
+<label for="mytoggle" class="toggle">Toggle Div visibility...</label>
+<input id="mytoggle" type="checkbox" class="toggle" />
+<div>
+  
+ 
+```{r echo = TRUE, eval = FALSE}
+c(1:5)
+```
+
+```{r}
+require(palmerpenguins)
+penguins$flipper_length_mm
+plot(body_mass_g ~ flipper_length_mm, data = palmerpenguins::penguins)
+```
+
+</div>
+

@@ -1,0 +1,120 @@
+---
+title: "Simpson's diversity null distribution"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+#### Instructions
+
+- Use your loop to create a MC resampled vector of 10000 model slope parameters.
+- Plot a histogram of the MC simulated slope parameters.
+- Use `quantile` to find the 5% quantile of slopes in the null distribution.  This is the critical value.
+
+- Use `abline()` along with the argument `v = ` to add a vertical line showing where the observed slope occurred.
+  - This line should be be blue, solid, and have a width of 2.0.
+- Use `abline()` along with the argument `v = ` to add a vertical line showing the critical value.
+  - This line should be be red, dotted, and have a width of 2.0.
+
+</div>
+
+<div class="hints">
+
+- Hint: Check out the lab walkthrough for some suggestions.
+
+</div>
+
+<div class="questions">
+
+### Q1 2 pt. (file upload)
+
+- Upload an image file of your histogram with vertical lines showing the observed slope and the critical value from the resampled MC slopes.
+
+</div>
+
+
+
+Solution
+========
+
+
+### Grading Guide
+
+The histogram should look like: 
+
+```{r q_09_answer_key, fig.width=6, fig.height=4, warn=FALSE, message=FALSE}
+
+dat_bird = read.csv(here::here("data", "bird.sub.csv"))
+dat_habitat = read.csv(here::here("data", "hab.sub.csv"))
+
+dat_all = merge(
+  dat_bird, 
+  dat_habitat,
+  by = c("basin", "sub"))
+
+m = 1000
+result = numeric(m) 
+
+for(i in 1:m)
+{
+  index_1 = sample(nrow(dat_all), replace = TRUE)
+  index_2 = sample(nrow(dat_all), replace = TRUE)
+  
+  dat_resampled_i = 
+    data.frame(
+      b.sidi = dat_all$b.sidi[index_1],
+      s.sidi = dat_all$s.sidi[index_2]
+    )
+  
+  fit_resampled_i = lm(b.sidi ~ s.sidi, data = dat_resampled_i)
+  result[i] = coef(fit_resampled_i)[2]
+} 
+
+fit_1 = lm(b.sidi ~ s.sidi, data = dat_all)
+
+hist(result)
+abline(v = coef(fit_1)[2], col = "blue", lwd = 2)
+abline(v = quantile(result, 0.05), col = "red", lwd = 2, lty = 3)
+```
+
+Meta-information
+================
+extitle: Simpson's diversity null distribution
+
+extype: string
+
+exsolution: nil
+
+exname: lab_08
+exsection: lab_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 1
+
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+
+expoints: 2
+
+
+

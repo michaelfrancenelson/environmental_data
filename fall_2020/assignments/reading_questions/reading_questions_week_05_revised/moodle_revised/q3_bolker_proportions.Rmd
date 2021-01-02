@@ -1,0 +1,80 @@
+---
+title: "Bolker 1.4: Ratio of predation proportions"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> The Bolker reading was difficult....
+
+<div class="questionborder">
+
+### Q1 3 pts.
+
+- Use the seed predation proportions you calculated to determine the ratios of seed proportions.
+
+Note: Use the predation rate for *Pseudospondias microcarpa* in the denominator.  Also note that predation proportions (predation rates) are different than odds ratios.
+
+</div>
+
+
+
+Solution
+========
+
+
+
+
+```{r answer_key, results='hold'}
+rm(list = ls())
+
+pol_n_predation = 26
+pol_n_no_predation = 184
+pol_n_total = pol_n_predation + pol_n_no_predation
+pol_predation_rate = pol_n_predation / pol_n_total
+
+psd_n_predation = 25
+psd_n_no_predation = 706
+psd_n_total = psd_n_predation + psd_n_no_predation
+psd_predation_rate = psd_n_predation / psd_n_total
+
+
+psd_predation_rate / pol_predation_rate
+pol_predation_rate / psd_predation_rate
+```
+
+
+
+
+Meta-information
+================
+extitle: Ratio of predation proportions
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 3
+

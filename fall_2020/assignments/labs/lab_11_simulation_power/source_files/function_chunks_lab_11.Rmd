@@ -1,0 +1,40 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis - Custom Functions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r linear_function, echo = TRUE, eval=TRUE}
+linear = function(x, y_int, slope) { return (y_int + x * slope)}
+```
+
+```{r linear_simulator_function, echo = FALSE, eval = TRUE}
+linear_simulator = function(x, y_int, slope, st_dev)
+{
+  linear = function(x, y_int, slope) { return (y_int + x * slope)}
+  return(rnorm(n = length(x), mean = linear(x, y_int, slope), sd = st_dev))
+}
+```
+
+```{r linear_sim_fit_function, eval = FALSE, echo = TRUE}
+f
+```

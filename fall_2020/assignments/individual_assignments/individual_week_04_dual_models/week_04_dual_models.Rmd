@@ -1,0 +1,82 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Dual Models"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    # toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(cowplot)
+```
+
+```{r graphics setup, include=FALSE}
+
+```
+
+
+# Learning Objectives
+
+
+
+# Key Concepts
+
+- Sample spaces
+- Common distributions
+- Fitting deterministic and stochastic models
+
+
+
+# Meet our representative distributions!
+
+- There are hundreds of named *parametric* distributions.  We'll work with two of the most common, and useful, in this assignment:
+  - The Normal distribution
+  - The Binomial distribution
+- These two distributions have many complementary properties that will help you learn how to apply the concepts to other distributions.
+
+
+
+
+
+## The Normal distribution
+
+
+
+
+
+
+## The Binomial distribution
+
+
+
+# Model fitting
+
+
+## Choosing a determinsitic model
+
+
+## Choosing a stochastic model
+
+
+## Assessing model fit
+
+
+
+
+# Instructions
+
+
+
+
+# Lab Questions
+

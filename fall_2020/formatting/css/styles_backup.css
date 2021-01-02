@@ -1,0 +1,96 @@
+
+@charset "utf-8";
+
+<style type="text/css" rel="stylesheet">
+
+
+.btn {
+    border-width: 0 0 0 0;
+    font-weight: normal;
+    text-transform: none;
+}
+
+.btn-default {
+    color: #2ecc71;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.navigation_rss_icon {
+	position: absolute;
+	left: 940px;
+	bottom: 0px;
+}
+
+
+.questionbox {
+  border-radius: 0.2cm; 
+  padding: 0.3cm;
+}
+
+.warn { 
+  color: rgb(0,0,0);
+  color: rgba(0,0,0,1);
+  background-color:#F5A796; 
+  border-radius: 0.2cm; 
+  padding: 0.3cm;
+}
+
+.info { 
+  background-color:#E6F0FF; 
+  color: rgb(0,0,0); 
+  color: rgba(0,0,0,1); 
+  border-radius: 0.2cm; 
+  padding: 0.3cm;}
+
+
+
+.red  { 
+  color: rgb(0,0,0); 
+  color: rgba(0,0,0,1); 
+  background-color: rgba(255, 0, 0, 0.1);
+  
+}
+.blue { background-color:#E6F0FF; color: rgba(0,0,0,1); }
+.gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }
+
+.ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}
+.ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}
+.agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}
+
+.blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }
+.redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); }
+.grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); }
+.blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }
+
+.instructionsborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }
+.questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }
+.hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); }
+.outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }
+
+
+
+
+.showopt {
+  background-color: #004c93;
+  color: #FFFFFF; 
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  vertical-align: middle !important;
+  float: right;
+  font-family: sans-serif;
+  border-radius: 8px;
+}
+
+.showopt:hover {
+    background-color: #dfe4f2;
+    color: #004c93;
+}
+
+pre.plot {
+  background-color: white !important;
+}
+
+
+</style>

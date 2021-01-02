@@ -1,0 +1,9 @@
+---
+title: "ECo 602 Description"
+output: html_document
+---
+
+# Course Description
+
+This course provides students with an introduction to basic concepts critical to the proper use and understanding of statistics in environmental conservation and prepares students for subsequent ECo courses in statistical modeling. 
+

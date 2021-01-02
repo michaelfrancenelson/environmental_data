@@ -1,0 +1,314 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 2 - all questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Question 1
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+n = 12345
+```
+
+
+You've used logical subsetting to select elements of a matrix on a vector.  With small data sets it's possible to look at all of the elements at once and visually detect the indices of the elements you want.  This is not possible with larger data sets.
+
+Run the following code to create a large vector containing randomly generated integers between 1 and 12:
+
+<br>
+
+```{r eval=FALSE}
+n = 12345
+vec_1 = sample(12, n, replace = TRUE)
+head(vec_1)
+```
+
+<br>
+
+Use a logical test operator to create a Boolean vector (called `vec_2`) whose entries are `TRUE` if the corresponding entry in `vec_1` is 3 and `FALSE` otherwise.
+
+<br>
+
+```{r, echo=FALSE, results='hide'}
+vec_1 = sample(12, n, replace = TRUE)
+vec_2 = vec_1 == 3
+```
+
+<br>
+
+Self test: you can use `vec_2` to retrieve all of the `3` elements of `vec_1` using the following:
+
+<br>
+
+```{r, echo = TRUE, eval = FALSE}
+vec_1[vec_2]
+```
+<br><br>
+
+When you run that code, you should see a vector whose elements are all `3`.
+
+<br>
+
+
+- Q1 (2 pts): Paste the R code you used to create `vec_2` into the text input box below.
+- Q2 (2 pts): Why shouldn't you select the indices in `vec_1` with value `3` by visual inspection of the contents of `vec_1`?
+
+
+
+# Question 2
+
+
+Run the following code to create a large vector containing randomly generated integers between 1 and 12:
+
+<br>
+```{r eval=FALSE}
+n = 12345
+vec_1 = sample(12, n, replace = TRUE)
+head(vec_1)
+```
+<br><br>
+
+
+Use the function `length()` to determine how many elements are in `vec_1`.
+ 
+<br>
+
+Now, run the following line to check how many entries have the value `3`:
+
+```{r eval=FALSE}
+sum(vec_1 == 3)
+```
+
+<br><br>
+
+Finally, run the following code several times taking note of how many `3` entries appear each time you run it.
+
+<br><br>
+
+```{r, eval=FALSE}
+n = 10
+vec_1 = sample(12, n, replace = TRUE)
+paste0("Sum of elements with value 3: ", sum(vec_1 == 3))
+```
+<!-- print(vec_1) -->
+
+<br><br>
+
+Did you get different counts of `3` entries each time?
+
+
+<br><br><br>
+
+Q1 (3 pts): (Considering the different vectors generated each time, explain why using a logical test is a safe way to select entries with a value of `3`. 
+
+Q2 (5 pts): Explain why manually choosing the indices by visual inspection, is problematic.  You may want consider re-usability of code, workign with different sized data sets, and sharing code with collaborators.
+
+
+# Question 3
+
+
+
+Recall the simple <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/lab_assignments/week_02_lab_02_r_fundamentals_2.html#forloop">**for loop** example</a> in the lab assignment background reading.
+
+<br>
+
+```{r, eval=FALSE}
+for (i in 1:10)
+{
+  print(i)
+}
+```
+
+<br>
+
+Modify the code in the body of the loop to print out a message like "This is loop iteration: 1" for each run through the loop. 
+
+<br>
+
+- Hint:  use the `print()` and [`paste()` or `paste0()`] functions.
+- Hint: review the idea of <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/lab_assignments/week_02_lab_02_r_fundamentals_2.html#chainingfunctions">*chaining functions* example</a> in the lab description.
+
+<br>
+
+Q1 (3 pts): Paste your loop code into the text input field.
+
+
+
+# Question 4
+
+
+
+Recall the simple <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/lab_assignments/week_02_lab_02_r_fundamentals_2.html#forloop">**for loop** example</a> in the lab assignment background reading.
+
+<br>
+
+```{r, eval=FALSE}
+for (i in 1:10)
+{
+  print(i)
+}
+```
+
+Note that the loop runs through exactly 10 iterations...
+
+What if you wanted the loop to execute an arbitrary number of times?
+
+<br>
+
+- Create a variable, `n`, that contains an integer value.
+- Modify the code for the loop so that it runs `n` times.
+
+<br>
+
+Q1 (2 pts): Paste the code for the modified loop that executes `n` times into the text window below.
+
+
+
+
+# Question 5
+
+
+### Generate a random vector and print the contents with messages:
+
+<br>
+ 
+- Create an integer variable, `n`, that holds the value `17`.
+- Write code to create a vector called `vec_1` of length `n`.  `vec_1` should contain [pseudo]randomly generated integers between 1 and 10.
+
+<div class="hintborder">
+- Hint:  Check out the help entry and consult Dr. Google on how to use the `sample()` R function.
+- Hint:  Take a look at the code I provided in an earlier question for an example of how to create a vector of random values.
+</div>
+
+Now use the code you used to create a loop the executes `n` times to print out each element of `vec_1`.  Each iteration through the loop should print the corresponding element of `vec_1`.
+
+<br>
+
+Your output should look something like this:
+
+<div class="outputborder">
+```{r, echo=FALSE}
+n = 6
+vec_1 = sample(10, n, replace = TRUE)
+for (i in 1:n)
+{
+  cat(sprintf(
+    "The element of %1$s at index %2$s is %3$s.\n",
+    "vec_1", i, vec_1[i]))
+}
+```
+</div>
+<div class="hintborder">
+Hint: Think of what code you'll need to include within the body of the loop to display:
+1. index number
+1. The value of `vec_1` at the index.
+</div>
+
+
+<br>
+
+Q1 (4 pts): Paste the code you used to create the `n`, `vec_1`, and the loop in to the text entry box.
+
+
+
+
+# Question 6
+
+## Objective
+
+<div class="redborder">
+Write a function `create_and_print_vec()`.
+</div>
+
+- You've created a loop that can print a message with the value of each element of a vector of arbitrary length.
+- Now you'll wrap it all into a custom function.
+- Review the lab materials about writing custom functions<a href="https://michaelfrancenelson.github.io/eco_602_634_2020/lab_assignments/week_02_lab_02_r_fundamentals_2.html#customfunction"> here </a>.
+
+
+
+### Function Arguments
+
+<div class="blackborder">
+Your function should take three integer arguments, `n`, `min`, and `max`.
+
+- `n` has no default value.
+- `min` has a default value of 1.
+- `max` has a default value of 10.
+</div>
+
+### Function Output
+
+<div class="blackborder">
+Your function needs to do the following:
+
+- Create a vector of `n` random integers between the values of `min` and `max`.
+- Loop through the elements of the vector and print a message with the index of the element and its value.
+</div>
+
+<div class="outputborder">
+Here's a skeleton:
+
+```{r eval=FALSE}
+create_and_print_vec = function(n, min = , max =)
+{
+  # Function body goes here
+}
+```
+</div>
+
+<div class="hintborder">
+- Hint: You've already written code that accomplishes *almost* all of these tasks.
+- Hint: You've used a single number as the first argument to `sample()`.  Look up the R help entry to see what other kinds of values the `x` argument of `sample()` can accept.
+</div>
+
+<br>
+
+Your function should create output like this with default values for `min` and `max`:
+
+<div class="outputborder">
+```{r, echo=FALSE}
+create_and_print_vec = function(n, min = 1, max = 10)
+{
+  vec_1 = sample(min:max, n, replace = TRUE)
+  for (i in 1:n)
+  {
+    print(paste0(
+      "The element at index ",
+      i, 
+      " is ",
+      vec_1[i]))
+  }
+}
+create_and_print_vec(10)
+```
+</div>
+<br>
+
+When you use `min = 100` and `max = 2000` your output should resemble:
+
+<div class="outputborder">
+```{r}
+create_and_print_vec(10, min = 100, max = 2000)
+```
+</div>
+<br>
+- Q1 (10 pts): paste the code you used to build your function.  To receive full credit your code must run without error on a new R session and produce ontput similar to the examples given in the instructions.
+

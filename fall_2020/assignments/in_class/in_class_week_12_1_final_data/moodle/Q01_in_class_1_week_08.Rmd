@@ -1,0 +1,94 @@
+---
+title: "Likelihood of Two Observations"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+<div class="instructionsborder">
+
+Consider the likelihood calculation example for 2 observations of Wilson's Warblers using a Poisson distribution model.
+
+- Recall the R-code I used in the walkthrough to find the log-likelihood of using $\lambda = 4.5$:
+
+```{r}
+wiwa_counts = c(2, 6)
+dpois(x = wiwa_counts, lambda = 4.5)
+```
+
+- As a group, experiment with different values of $\lambda$ to find a value that maximizes the sum of log-likelihoods of the hypothetical observations.
+  - Hint: you only need to consider 3 decimal digits!
+
+
+</div>
+
+<div class="questionborder">
+### 1 pts: 
+
+- What value for $\lambda$ did you select?
+
+</div>
+
+
+
+
+
+Solution
+========
+
+This is the code they should have used:
+
+```{r}
+wiwa_counts = c(2, 6)
+dpois(x = wiwa_counts, lambda = 4.5)
+```
+
+They may have tried some of the following:
+```{r}
+dbinom(x = 1, size = 4, p = 0.75)
+dbinom(x = 2, size = 4, p = 0.75)
+dbinom(x = 3, size = 4, p = 0.75)
+dbinom(x = 4, size = 4, p = 0.75)
+```
+
+
+
+
+
+Meta-information
+================
+
+extitle: Likelihood of Two Observations
+
+extype: string
+
+exsolution: nil
+
+exname: in_class_week_08_1
+
+exsection: in_class_week_08_1
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 1
+

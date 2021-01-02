@@ -1,0 +1,111 @@
+---
+title: "in-class tuesday Oct 20"
+author: "Mike Nelson"
+date: "10/20/2020"
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Here is a demonstration of how to use R Markdown!
+
+
+
+
+## Making a new code chunk
+
+The shortcut key (on windows) is Ctrl-Alt-i
+
+On Mac: Command-Option-i
+
+If I press this key combo, RStudio will insert a new code chunk!
+
+
+If I want, I can give the chunk a name and it will appear in the navigation pane.
+
+```{r how to make a new chunk}
+
+
+```
+
+
+
+
+
+## Reading a csv file
+
+I'm going to read some data from a csv (comma-separated-values) file.
+
+I can use read.csv() along with the path to the file to read the data into a data.frame.
+
+Here's an example:
+
+
+
+```{r read_data}
+
+require(here)
+
+dat_birds = read.csv(here("data", "hab.sta.csv"))
+dat_birds <- read.csv(here("data", "hab.sta.csv"))
+
+# Here's a comment
+
+
+```
+
+
+
+## Previewing the contents of a data.frame
+
+I can use the head() function to print the first few lines of a data.frame.
+Here's an example with the birds data
+
+
+```{r head_function_demo}
+head(dat_birds)
+
+```
+
+
+## Demo plot
+
+
+I can use hist() to create a histogram:
+
+
+When I plot aspect, the last column is weird...
+
+```{r simple plot}
+
+hist(dat_birds$aspect)
+
+```
+
+
+## How to customize a histogram
+
+
+I can title using the argument main = 
+
+
+
+
+```{r custom histogram 1}
+
+hist(
+  dat_birds$aspect, 
+  main = "Histogram of study site aspect",
+  breaks = 36)
+
+
+
+```
+
+

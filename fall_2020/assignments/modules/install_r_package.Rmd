@@ -1,0 +1,102 @@
+---
+title: "Analysis of Environmental Data"
+subtitle: "Installing R Packages"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+# Installing R packages
+
+R is very extensible.  That is one of its greatest strengths!  There are hundreds of *R packages* that contain functions for performing analyses and creating graphics beyond what is included in the base R.
+
+I'll walk through the process of installing and loading an R package in the following sections.
+
+I'm going to use the `here` packages as an example.
+
+> The `here` package is designed to make file import/export easier.  It works in conjunction with an RProject.
+
+
+
+## The `install.packages()` function
+
+Most R packages can be installed with the `install.packages()` function.
+
+The syntax for basic usage is simple: just type in the name of the package you want to install (in quotes).  By default `install.packages()` searches the CRAN repositories for a matching package.
+
+To install `here` you can just type:
+
+`install.packages("here")`
+
+<div class="grayborder"> Advanced package installation
+
+- There are a lot of options for installing packages.  You should check out the help entry for `install.packages()` to learn about the arguments.
+
+- You can also install packages from other repositories, including bio conductor, and GitHub.
+
+- Some packages come as pre-complied *binaries* while some others must be *compiled from source code*.  If you aren't sure what these terms mean, don't worry.  R will let you know if you have to install a package from source, and you'll be prompted to install the necessary packages and other tools.
+</div>
+
+
+
+## Installing a package
+
+The syntax to install `here` is simple:
+
+`install.packages("here")`
+
+Depending on which operating system you are using, R and RStudio versions you have, and the packages you already have installed, you may get a a message about installing dependencies.  You should click 'ok' to install any of the additional packages that `here` might need.
+
+You may also get a popup asking you to choose a repository.  You can select the *cloud* option.
+
+If R is able to install the package successfully, you'll see a message in the console that looks something like this:
+
+<div class="blackborder">
+`package ‘here’ successfully unpacked and MD5 sums checked`
+<br>
+`The downloaded binary packages are in`
+` 	C:\Users\michaelnelso\AppData\Local\Temp\RtmpMdEoaN\downloaded_packages`
+</div>
+
+
+
+## Loading a package
+
+When R first starts, it loads functions and data from the *base* packages.  These objects are always available.
+
+R does not load the extra packages you may have installed by default, so you need to tell it you want to use them!
+
+There are two functions to accomplish this:
+
+1. `library()`
+1. `require()`
+
+Both of these functions will load a package into memory, making it directly available to you.
+
+The difference is if a package is already loaded, `library()` will re-load it, while `reaquire()` will check first.  If the package is already loaded, `require()` will not re-load it.
+
+This difference isn't usually important and it's up to you to choose which method you want to use.
+
+<div class="blueborder">
+I prefer to use `require()` because some packages take a long time to load.  If you plan to run a script file many times, it can save a lot of time if you only load packages once.
+
+On the other hand, if you have updated a package while you are using R and you need to load the updated version, then `library()` is the way to go.
+</div>
+
+

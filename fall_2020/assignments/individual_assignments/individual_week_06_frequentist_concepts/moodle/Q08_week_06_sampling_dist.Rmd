@@ -1,0 +1,94 @@
+---
+title: "Sampling Distribution"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(mfn.teaching.utils)
+require(ggplot2)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r, echo = FALSE, fig.asp=0.5}
+```
+
+### Central Limit Theorem
+
+Navigate to the <a href="https://seeing-theory.brown.edu/probability-distributions/index.html">probability theory</a> page on Seeing Theory.
+
+Follow the link to the **Central Limit Theorem** section.
+
+
+### Sampling Distribution
+
+1. Choose a set of $\alpha$ and $\beta$ parameters that result in a skewed beta distribution.
+1. Set the **sample size** to 2 and the **draws** to 50.
+1. Hit the sample button several times and observe the evolution of the histogram.
+
+
+
+<div class="questionborder">
+### Q1: 2 pts.
+
+- Describe how the shape of the histogram changes as you continue to press the *sample* button.
+
+
+</div>
+
+
+
+
+
+
+
+Solution
+========
+
+
+```{r}
+
+```
+
+
+
+
+
+
+Meta-information
+================
+
+extitle: Sampling Distribution
+
+extype: string
+
+exsolution: nil
+
+exname: Frequentist concepts
+
+exsection: Frequentist concepts
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 2
+

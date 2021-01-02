@@ -1,0 +1,42 @@
+---
+title: "Oregon Bird Census Data"
+output: html_document
+---
+
+Use the following links to download the Oregon bird census data files.
+
+The census metadata:
+
+- [birdhab_metadata.pdf](/eco_602_634_2020/data/birdhab_metadata.pdf)
+
+
+Bird census data:
+
+- [bird.sta.csv](/eco_602_634_2020/data/bird.sta.csv)
+
+
+Census location habitat data:
+
+- [hab.sta.csv](/eco_602_634_2020/data/hab.sta.csv)
+
+Merge The data
+
+1. Read the bird census data file into a `data.frame` called `dat_bird` using `read.csv()`
+1. Read the census locations habitat data file into a `data.frame` called `dat_sta` using `read.csv()`
+
+The datasets have the following columns in common:
+
+- `basin`
+- `sub`
+- `sta`
+
+Use `merge()` to combine them into a single data frame using the common columns.
+
+- The `by` argument specifies which columns to match in the two original dataframes.
+
+```{r, eval = FALSE}
+dat_all = merge(
+  dat_bird, 
+  dat_habitat,
+  by = c("basin", "sub", "sta"))
+```

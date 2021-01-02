@@ -1,0 +1,26 @@
+---
+title: "ECo 602 Learning Objectives"
+output: 
+  # html_notebook
+  pdf_document:
+    toc: true
+    number_sections: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+# Learning Objectives
+
+
+The overall goal of this course is to provide students with a gentle introduction and overview of the range of statistical techniques widely used in ecology and conservation.  The specific objectives are for students to: 
+
+- Gain a broad understanding of the role of statistics in ecology and conservation. 
+
+- Recognize and critically assess study designs commonly used in ecology and conservation. 
+
+- Assess which types of analyses are appropriate for different study designs and data types. 
+
+- Build a broad conceptual and applied understanding of the range of frequently used analyses. 
+
+- Refine written and oral communication skills. 

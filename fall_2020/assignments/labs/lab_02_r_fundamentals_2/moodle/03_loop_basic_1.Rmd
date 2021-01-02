@@ -1,0 +1,84 @@
+---
+title: "basic loop question 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+You may want to review the *for-loop* example in the lab walkthrough.
+
+
+```{r, eval=FALSE}
+for (i in 1:10)
+{
+  print(i)
+}
+```
+
+<br>
+
+Modify the code in the body of the loop to print out a message like "This is loop iteration: 1" for each run through the loop. 
+
+<br>
+
+- Hint:  use the `print()` and [`paste()` or `paste0()`] functions.
+- Hint: review the *nesting functions* example in the lab walkthrough.
+
+<br>
+
+<div class="questionborder">
+### Q1 (3 pts)
+
+- Paste your loop code into the text input field.
+
+</div>
+
+Solution
+========
+
+Students should produce something like:
+```{r, echo = TRUE}
+for (i in 1:10)
+{
+  print(paste0("This is iteration ", i, "."))
+}
+```
+
+If they want to be fancy they can use `sprintf()`:
+```{r}
+for (i in 1:10)
+{
+  print(sprintf("This is iteration %s.", i))
+}
+```
+
+
+
+
+Meta-information
+================
+extitle: basic loop question 1
+extype: string
+exsolution: nil
+exname: lab 02
+exsection: lab 02
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 3
+

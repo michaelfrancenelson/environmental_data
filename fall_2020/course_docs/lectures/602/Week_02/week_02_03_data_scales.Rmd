@@ -1,0 +1,201 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Data Scales"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+
+source(here::here("rmd_tools", "find_file.r"))
+source(find_file("proportional_image_crop.R"))
+
+source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+# source(find_file("ggplot_confints.R"))
+
+# require(ggplot2)
+# require(cowplot)
+
+```
+
+
+
+## Key Concepts
+
+- What do we mean by *scale*?
+- Measurement scale terms:
+  - Discrete, continuous
+  - Numeric, categorical
+  - Ratio, interval
+
+
+
+  
+  
+  
+## Scale
+
+The word *scale* has a lot of meanings... In our context *measurement scale* or *data scale* refers to:
+
+- A measurement scheme that answers questions like
+  - Is it numerical?
+    - Can it have negative numbers?
+    - Can can it contain fractions?
+    - Is there a *true zero*?
+  - Is it categorical?
+    - Is there a meaningful ordering of the categories?
+
+
+
+## Scale
+
+A measurement scale is what we use to *quantify* a variable, i.e. an *attribute* of a sampling unit.
+
+### The choice of scale may be context-dependent:
+
+- Does it reflect an intrinsic property of a variable?
+- Does it reflect an intrinsic property of how we choose to measure it?
+
+For example: age measured in years vs. age measured in age class.
+
+
+
+## Numeric or Categorical
+
+### Is our variable *quantitative* or *qualitative*?
+
+Numeric measurement scales: our variable is measured as a numeric quantity.
+
+Qualitative: our variable can be classified into a *category*.
+
+### Does our *qualitative* variable have a sensible *order*?
+
+- Categories that have a meaningful order are called *ordinal*
+  - There may be an order, but the inter-category intervals cannot be directly compared.
+- If there is not an intrinsic order they are *nominal*.
+
+
+
+
+## Numeric Scales: Discrete and Continuous
+
+### Discrete cannot take on intermediate values
+- Counts, presence/absence, etc
+
+### Continuous variables can *in principle* take on any intermediate value:
+- They are *real* or *rational* numbers.
+- Our ability to measure may not capture intermediate values, but they are still continuous.
+
+
+
+
+## Interval and Ratio scales
+
+### Is there a *true zero*?
+
+- Degrees in Kelvin: *absolute zero* is the absence of movement of particles.  
+  - You can't go lower than *absolute zero*.
+- Degrees in Celsius: zero is centered around the freezing point of water.
+  - Negative values are possible.
+  
+### Interval scales can have negative numbers
+### Ratio scales are non negative
+
+
+
+## Circular Scales
+
+### Circular scales wrap a maximum value back to zero
+
+- Circular scales are not as common, but they occur when thinking about angles.
+
+- Examples include wind direction and aspect
+  - Both are measured in degrees (or radians).
+
+### Modulo operator
+- The wrapping behavior of circular scales is just like addition in *modular algebra*.
+
+
+
+## Circular Scale: Aspect
+
+An example of circular data in practice: the aspect of ungulate herd location observations in mountainous terrain:
+
+```{r, echo=FALSE, out.width='7.7cm', fig.align='center'}
+proportional_image_crop("envelope_simulation_aspect.png", height_pct = 0.95, width_pct = 0.87, height_offset = 0.05, width_offset = 0.01)
+```
+
+
+
+
+
+
+
+
+
+## Converting Among Scales
+
+### Sometimes it's convenient, or necessary, to convert a variable to a different scale.
+
+For example:  consider count data that consist of mostly 0 and 1, with only a few values greater than 1.  
+
+- It might be useful to convert this to binary data, i.e. presence/absence.
+
+### Aggregating into categories
+
+- Age, size, weight classes
+- These convert numeric into ordinal scales.
+
+
+
+## Converting Among Scales
+
+### Some conversions are *destructive*: you lose information in the conversion process.
+
+- Aggregating numeric scales into categories.
+  - e.g. converting absolute ages into age classes:
+    - If you know the age, you can assign to an age class.  
+    - If you know only the age class, you can't make the reverse transformation.
+
+
+
+
+## Data Scales and Statistical Models
+
+### Most of the time we build models using numbers, on either discrete (integers) or continuous scales.
+
+### Theoretical (parametric) distributions as models
+
+- Remember that we fit models to data, not the other way around.
+- Sometimes theoretical distributions are only *approximately* good models for our data.
+  - For example: the Normal distribution often fits data, such as weights, very well, but its sample space includes negative numbers.
+  - Some discrete distributions that are useful for count data allow for unrealistically large observations.
+
+
+
+
+## Recap
+
+- What do we mean by *scale*?
+- Measurement scale terms:
+  - Discrete, continuous
+  - Numeric, categorical
+  - ratio, interval
+

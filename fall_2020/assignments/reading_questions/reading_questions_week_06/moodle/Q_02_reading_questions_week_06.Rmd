@@ -1,0 +1,59 @@
+---
+title: "Sampling and confidence intervals"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> The width of confidence intervals is influenced by properties of both the population and the sampling process.
+
+
+
+<div class="questionborder">
+
+### Question
+
+- (3 pts) Describe how the sampling process affects the width of confidence intervals.
+
+</div>
+
+
+Solution
+========
+
+
+
+Students should realize that larger sample sizes result in narrower confidence intervals.
+
+
+
+
+Meta-information
+================
+extitle: Sampling and confidence intervals
+extype: string
+exsolution: nil
+exname: week_06_reading_questions
+exsection: week_06_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 3

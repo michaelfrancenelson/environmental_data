@@ -1,0 +1,102 @@
+---
+title: "Logistic model 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Consider the first bird species you chose to examine.
+
+<div class="questionborder">
+
+### Q1 1 pt.
+
+- Upload an image file of the logistic function plot.
+
+### Q2 3 pts.
+
+- What was the bird species? Describe its presence/absence patterns in terms of basal area.  Did it seem to prefer areas with high or low tree cover?
+
+</div>
+
+Solution
+========
+
+- Student answers will vary.
+- A logistic model with a single predictor probably doesn't seem like a great fit for many of these birds.
+
+```{r}
+require(here)
+dat_bird = read.csv(here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+
+# Function to calculate the logistic parameter a given the slope and midpoint
+get_logistic_param_a = function(slope, midpoint)
+{
+  b = slope / 4
+  return (-midpoint * (slope / 4))
+}
+
+# Function to calculate the logistic parameter b given the slope
+get_logistic_param_b = function(slope)
+{
+  return (slope / 4)
+}
+
+
+# Calculate the value of the logistic function at x, given the parameters a and b.
+logistic = function(x, a, b)
+{
+  val = exp(a + b * x)
+  return(val / (1 + val))
+}
+
+# Calculate the value of the logistic function at x, given a slope and midpoint.
+logistic_midpoint_slope = function(x, midpoint, slope)
+{
+  b = get_logistic_param_b(slope)
+  a = get_logistic_param_a(slope, midpoint)
+  return(logistic(x, a, b))
+}
+
+
+WREN_boolean = dat_bird[, "WREN"] >= 1
+
+WREN_present_absent = as.numeric(WREN_boolean)
+
+plot(x = dat_habitat$ba.tot, y = WREN_present_absent, main = "Total Basal Area versus WREN observations", xlab = "Total Basal Area", ylab = "Presence/Absence of WREN")
+
+curve(logistic_midpoint_slope(x, midpoint = 30, slope = -0.4), add = TRUE)
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Logistic function 1
+extype: string
+exsolution: nil
+exname: lab_03
+exsection: lab_03
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4

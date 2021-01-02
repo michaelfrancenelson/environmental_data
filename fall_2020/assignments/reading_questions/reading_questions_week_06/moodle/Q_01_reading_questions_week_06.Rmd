@@ -1,0 +1,59 @@
+---
+title: "Populations and confidence intervals"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> The width of confidence intervals is influenced by properties of both the population and the samplinng process.
+
+
+
+<div class="questionborder">
+
+### Question
+
+- (3 pts) Describe how the properties of the population, e.g. mean, standard deviation, population size, affect the width of confidence intervals and explain why.
+
+</div>
+
+
+Solution
+========
+
+
+
+Students should realize that more dispersed populations result in wider confidence intervals, all other factors equal.
+
+
+
+
+Meta-information
+================
+extitle: Populations and confidence intervals
+extype: string
+exsolution: nil
+exname: week_06_reading_questions
+exsection: week_06_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 3

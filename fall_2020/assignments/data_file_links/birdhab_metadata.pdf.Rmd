@@ -1,0 +1,8 @@
+---
+title: "birdhab_metadata.pdf"
+output: html_document
+---
+
+Use the following links to download the Oregon bird metadata:
+
+- [birdhab_metadata.pdf](/eco_602_634_2020/data/birdhab_metadata.pdf)

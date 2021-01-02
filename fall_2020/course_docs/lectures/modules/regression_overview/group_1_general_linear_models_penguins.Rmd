@@ -1,0 +1,480 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Group 1: General Linear Models"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+emphasis_color = "red"
+require(ggplot2)
+require(cowplot)
+require(palmerpenguins)
+```
+
+
+
+
+
+
+
+## Group 1: [General] Linear Models
+
+Four key assumptions:
+
+- Normality: normality refers to the model residuals
+- Constant variance a.k.a homoskedasticity, a.k.a. homogeneity
+- Independent observations
+- Fixed x: no measurement error in our predictor variables
+
+
+
+
+
+## Group 1: terms and coefficients
+
+Group 1 requirements:
+
+- Group 1 models are linear in the parameters
+- Group 1 models have a single continuous response variable
+
+
+Terminology
+
+- Response: Y 
+- Predictor(s): X
+- Intercept: alpha 
+- Slope(s): beta
+
+
+
+
+
+## Group 1: Types of models
+
+Group 1 methods are essentially variations on linear regression.
+
+- T-Test Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Group 1: general equation format
+
+- Element-by-element form:
+
+$y_i = \alpha + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta _n x_{ni} + \epsilon_i$
+
+- Vector form:
+
+$\textbf{Y} = \alpha + \beta_1 \textbf X_1 + \beta_2 \textbf X_2 + ... + \beta _n \textbf X_n + \epsilon$
+
+
+
+
+
+## Linear in the Parameters
+
+Linearity in parameters means that in the deterministic functions, the model coefficients can only have *multiplicative* relationships to the predictor variables.
+
+- It will help to dissect some regression equations to identify variables, coefficients/parameters, and constants.
+
+The classic simple linear regression equation: $y = \alpha + \beta x + \epsilon$
+
+
+
+
+## Linear in the Parameters
+
+This model is linear in the parameters: $y = \alpha + \beta x + \epsilon$
+
+Things to note:
+
+- x and y correspond to our *observations*.  They are not estimated.
+- $\alpha$ and $\beta$ are the model coefficients.  They are the quantities we want to estimate.
+- $\beta$ *multiplies* the predictor variable x.
+- $\epsilon$ is the residuals, i.e. the stochastic model.  For Group 1 this is the Normal distribution.
+
+
+
+
+
+## Linear in the Parameters
+
+This model is also linear in the parameters:
+
+$y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2 + \epsilon$
+
+Things to note:
+
+- x and y correspond to our *observations*.  They are not estimated.
+- $\beta_1$, $\beta_2$, and $\beta_3$ multiply the variables $x_1$ and $x_2$
+- We used the product of the two predictors, $x_1$ and $x_2$ as a *third* predictor.
+
+
+
+
+
+## Linear in the Parameters
+
+This model is *not* linear in the parameters:
+
+$y = \alpha + \beta_1 x_1^2 + ax_2^{\beta_2} + \epsilon$, Why not?
+
+- The $\beta_1 x_1^2$ is ok.  We've just used the square of the first predictor.  It's like a modification of a predictor.  Imagine that we could create another predictor column called 'sq' in our data that contained the squares of $x_1$.
+  - Even though $x^2$ is not a linear function, the coefficient $\beta_1$ multiplies the term.
+
+- The term $ax_2^{\beta_2}$ is *not linear in the parameters*.  Why?
+  - The model coefficient $\beta_2$ does not *multiply* the predictor $x_2$, but rather it is an exponent.
+  - The **constant** $a$ multiplies $x$, but it is not a model coefficient estimated that is estimated from the data.
+
+
+
+
+## Linear in the Parameters
+
+It seems weird that we can say $\beta_1 x_1^2$ is *linear* and $ax_2^{\beta_2}$ is not.
+
+- Both are nonlinear expressions.
+- However, in the first term we are raising $x_1$ to a constant.
+  - The *constant*, 2, is not estimated from the data therefore it is not a model *coefficient*.
+- In the second term, we have specified a *model coefficient* as an exponent.
+  - Since the coefficient does not *multiply* but rather *exponentiates* the predictor it is not *linear in the predictors*.
+
+
+
+
+## Palmer Penguin Data
+
+We'll use the Palmer Penguin dataset to illustrate group 1 methods
+
+- Dr. Kristen Gorman and the Palmer Station Long Term Ecological Research (LTER) Program.
+- 3 Penguin species in the Palmer Archipelago
+  - size measurements: 4 continuous variables
+  - species, island, and sex: categorical - nominal scale
+- R package `palmerpenguins`
+
+https://education.rstudio.com/blog/2020/07/palmerpenguins-cran/
+
+
+
+## Palmer Penguins
+
+```{r, penguins_scatterplots_1, echo = FALSE, warning = FALSE}
+
+plot_grid(
+  ggplot(penguins) +
+    geom_point(aes(y = bill_length_mm, x = body_mass_g, colour = species, shape = sex)),
+  ggplot(penguins) +
+    geom_point(aes(y = flipper_length_mm, x = body_mass_g, colour = species, shape = sex))
+)
+
+```
+
+## Palmer Penguins
+
+```{r bill_length_sp_boxplot, echo = FALSE}
+boxplot(bill_length_mm ~ species, data = penguins)
+```
+
+
+
+## Palmer Penguins
+
+```{r bill_length_sp_sex_boxplot, echo = FALSE}
+boxplot(bill_length_mm ~ sex *species, data = penguins)
+```
+
+
+
+## Palmer Penguins
+
+```{r}
+boxplot(bill_length_mm ~ island, data = penguins)
+```
+
+
+
+## Group 1
+
+- **t-test**
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## t-test
+
+- One categorical predictor with 1 or 2 levels
+- One continuous response
+
+
+
+
+## t-test
+
+- Analyzes the following questions:
+
+1. Is the mean of one group different from a fixed value? 
+2. Are the means of two groups different from each other ?
+
+- t-test elaboration
+
+1. 1-way ANOVA extends t-test to 3 or more groups.
+
+
+
+
+## What could a t-test tell us about the penguins?
+
+- Hint: What are the categorical predictors?
+
+
+
+
+## Group 1
+
+- t-test
+- **Simple Linear Regression**
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Simple Linear Regression
+
+- One continuous response
+- One continuous predictor
+- What questions could we address in the penguin data?
+
+
+
+
+
+## Simple Linear Regression elaborations
+
+1. Multiple linear regression: More than one continuous predictors
+2. ANOVA: One categorical predictor (instead of continuous)
+3. ANCOVA: Mixture of categorical and continuous predictors
+
+
+
+
+
+## Group 1
+
+- t-test
+- Simple Linear Regression
+- **1-Way ANOVA**
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Analysis of Variance
+
+ANOVA: Categorical predictor, 3 or more levels
+
+- Continuous response 
+
+Analyzes the following questions:
+
+1. Are the group means different from one another?
+- Note: ANOVA does not specify which pairs of groups are different from one another.
+
+
+
+## What could a 1-way ANOVA tell us about the penguins?
+
+What were the categorical variables?
+
+- Sex
+- Species
+- Island
+
+
+
+
+## ANOVA elaborations
+
+Two or more categorical predictors: multi-way ANOVA
+Categorical and continuous predictors: Analysis of Covariance (ANCOVA)
+
+Post ANOVA analysis: which groups are different from one another?
+
+- Tukey Honest Significant Difference (HSD) test
+  - Pairwise tests between all factor levels.
+    - number of pairs gets large very quickly!
+  - Correction for multiple testing: Bonferroni, etc.
+
+
+
+
+## Group 1
+
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- **Multiple Linear Regression**
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+
+## Multiple Linear Regression
+
+A multiple linear regression model has:
+
+- One continuous response
+- Two or more continuous predictors
+
+The model attempts to quantify the pairwise relationships between each predictor and the response
+- combined effect of 2 or more predictors on the response
+
+
+Multiple regression can fail with highly correlated predictors: collinearity and multicollinearity.
+
+
+
+
+## Multiple Linear Regression elaborations
+
+Mixture of categorical and continuous predictors:
+
+- Interaction terms: synergistic effects of two or more predictors.
+- Analysis of Covariance (ANCOVA)
+
+
+
+
+## Multiple Linear Regression: what could we learn from the penguins?
+
+What were the continuous predictors?
+
+- flipper length, bill measurements, body mass.
+
+Could we use these three continuous variables to predict the species?
+
+- Hint: no!  Group 1 methods require a continuous response!
+
+
+
+
+## Group 1
+
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression**
+- **n-Way ANOVA**
+- ANCOVA
+
+
+
+
+## Multi- way ANOVA
+
+Categorical analogue of multiple regression 
+
+- Main effects
+- Interactions
+
+What could we ask with the penguin data?
+
+- Categorical variables: island, sex
+
+Elaboration: Mix of categorical and continuous variables Analysis of Covariance (ANCOVA)
+
+
+
+## Group 1
+
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression**
+- n-Way ANOVA
+- **ANCOVA**
+
+
+
+
+
+## Analysis of Covariance ANCOVA
+
+
+ANCOVA combines categorical and continuous data:
+
+- A mix of categorical and continuous predictors
+- Continuous response
+
+
+What could we ask with the penguin data?
+
+- Categorical variables: island, sex
+- Continuous variables: flipper length, bill dimensions, body mass
+
+
+
+
+
+## When do group 1 methods start to fail?
+
+Four key assumptions:
+
+- Independent observations
+- Constant variance a.k.a homoskedasticity, a.k.a. homogeneity
+- Fixed x: no measurement error in our predictor variables
+- Normality: normality refers to the model residuals
+
+
+
+
+## When do group 1 methods start to fail?
+
+[Multi]Collinearity
+
+- If two predictors are correlated they contain redundant information.
+  - How does a model know which predictor should get the credit?
+- Detecting collinearity between two variables is easy: just calculate the correlation coefficients
+- Multi-collinearity: complex correlational structures can exist among 3 or more variables.
+  - Pearson/Spearman correlation coefficient is only for 2 variables.
+  - Multicollinearity is hard to detect.
+  - It causes 'unstable' coefficients: coefficients can change drastically when one observation is removed.
+

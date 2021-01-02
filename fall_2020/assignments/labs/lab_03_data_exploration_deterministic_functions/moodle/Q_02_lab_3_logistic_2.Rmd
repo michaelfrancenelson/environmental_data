@@ -1,0 +1,61 @@
+---
+title: "Logistic model 2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Consider the second bird species you chose to examine.
+
+<div class="questionborder">
+
+### Q1 1pt. 
+
+- Upload an image file of the logistic function plot.
+
+### Q2 3 pts. 
+
+- What was the bird species? Describe its presence/absence patterns in terms of basal area.  Did it seem to prefer areas with high or low tree cover?
+
+</div>
+Solution
+========
+
+- Student answers will vary.
+- A logistic model with a single predictor probably doesn't seem like a great fit for many of these birds.
+
+
+
+
+
+
+Meta-information
+================
+extitle: Logistic function 2
+extype: string
+exsolution: nil
+exname: lab_03
+exsection: lab_03
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4

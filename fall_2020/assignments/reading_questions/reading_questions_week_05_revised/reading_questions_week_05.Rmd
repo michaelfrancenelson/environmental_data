@@ -1,0 +1,117 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 05 Reading Questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+```
+
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+wk = 5
+sprintf("week_%0.2d", wk)
+
+assn_source_dir = here::here("assignments", "reading_questions", sprintf("week_%0.2d", wk))
+assn_source_file = find_file(sprintf("week_%0.2d_read", wk), search_path = assn_source_dir, extension = ".Rmd")
+assn_out_dir    = here::here("docs", "assignments", "eco_602", "reading_questions")
+assn_file_out = file.path(
+  assn_out_dir, sprintf("602_week_%0.2d_reading_questions", wk))
+
+question_source_files = find_file(
+  "", search_path = file.path(assn_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+file.exists(assn_source_file)
+file.exists(assn_source_dir)
+file.exists(assn_out_dir)
+file.exists(assn_file_out)
+
+key_file_out = here::here(
+  "docs", "answer_keys",
+  sprintf("reading_questions_week_%0.2d_answer_key", wk))
+
+build_assignment_doc(
+  assn_source_file,
+  question_source_files,
+  assignment_render_file = assn_file_out, 
+  key_render_file = key_file_out)
+
+exams::exams2moodle(
+  file = question_source_files,
+  verbose = TRUE,
+  # dir = lab_dir,
+  dir = here::here("docs", "moodle_quiz_questions"),
+  name = sprintf("reading_questions_week_%0.2d", wk)
+)
+
+```
+
+
+# Readings
+
+The reading questions this week are drawn from material in the readings:
+
+- Bolker ch 1, section 1.4: focus on 1.4.1
+- McGarigal Ch 5b, 5c, 5d
+- Jorge Luis Borges: The Library of Babel
+
+
+# Questions
+
+
+<!-- ```{r results = 'hide', echo = FALSE, include=FALSE} -->
+<!-- # tmp = build_moodle_web_questions( -->
+<!-- #   assignment_filename = "week_05_reading_questions.Rmd", -->
+<!-- #   search_path = here::here("assignments", "reading_questions"), -->
+<!-- #   include_header = FALSE, -->
+<!-- #   write_html = FALSE, -->
+<!-- #   cat_results = FALSE, -->
+<!-- #   write_tmp = TRUE) -->
+
+
+
+<!-- question_source_files = find_file( -->
+<!--   ".Rmd", -->
+<!--   search_path = here::here( -->
+<!--     "assignments", "reading_questions", "week_05", "moodle"),  -->
+<!--   return_all = TRUE) -->
+<!-- tmp = add_moodle_quiz_questions( -->
+<!--   question_source_files,  -->
+<!--   include_solution = FALSE,  -->
+<!--   include_metadata = FALSE) -->
+
+<!-- ``` -->
+
+<!-- ```{r child=tmp, echo=FALSE} -->
+<!-- ``` -->
+
+<!-- ```{r echo=FALSE, results = 'hide'} -->
+<!-- file.remove(tmp) -->
+<!-- ``` -->
+
+
+
+
+
+
+
+

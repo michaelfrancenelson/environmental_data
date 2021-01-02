@@ -1,0 +1,144 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Probability Theory: Essentials"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(cowplot)
+require(animation)
+source(here::here("rmd_tools", "find_file.R"))
+source(find_file("norm_density_plot.R"))
+```
+
+
+
+
+## Key Probability Theory Terms and Concepts
+
+- Law of total probability
+- Events
+- Sample Spaces
+- Independent events
+
+
+
+
+
+## Probability and Distributions: Probability Theory
+
+### Probability theory concerns the likelihood of events
+
+Distributions are tools for describing the likelihood of observing specific events from the set of all possible events.
+ 
+- They map *events* to *likelihoods*
+
+There are many named *parametric* distributions with well-understood, useful, and sometimes surprising properties.
+
+
+### Probability theory gets complicated and difficult *very* quickly!
+- I'll attempt to help you develop intuition about the most essential parts!
+
+
+
+
+## Probability Theory Essentials
+
+### Probabilities are non-negative
+- A probability can be any value between zero and 1.0, inclusive.
+
+### Law of total probability: The sum of the probabilities of all possible events is 1.0
+
+- The probability of a specific event is usually less than 1.0
+
+
+
+
+## Probability Theory Essentials
+
+### The sample space: the set of all possible events
+- But what is an event?
+
+### Events: a possible outcome of a stochastic process
+- The definition of *event* is context specific:
+  - "What is the probability of catching a fish that weighs 405 grams?"
+  - "What is the probability of catching a fish that weighs between 399 and 411 grams?"
+  - "What is the probability of catching a fish that weighs less than 200 grams?"
+
+
+
+
+## Independent events
+
+Events are independent if knowing the value of one observation gives us no information about the value of another observation:
+
+- I measure the temperature in Neuquén, Argentina on November 23, 1823
+- I measure the temperature in Amherst on July 4, 2020.
+
+The Neuquén temperature in 1823 probably doesn't tell me much about Amherst in 2020
+
+
+
+
+## Independent events
+
+Compare the previous temperature example to:
+
+- I measure the temperature in Amherst on July 4, 2020 at 4:05PM (it is 20C)
+- I measure the temperature in Amherst on July 4, 2020 at 4:11PM (it is 21C)
+
+The temperature at 4:05 gives me a lot of information about what the temperature will be in the same location six minutes later.
+
+
+
+
+## Independent events
+
+Suppose:
+
+- $Pr(temp = 19C) = 0.05$
+- $Pr(temp = 20C) = 0.05$
+- $Pr(temp = 21C) = 0.05$
+
+Independent events: joint probability is product of individual probabilities
+
+- $Pr(20) * Pr(21) = 0.05 * 0.05 = 0.0025$ or about $0.25\%$
+- Do you think observing a temperature of 20, followed by a temperature of 21 in the same location 6 minutes later is only $0.25\%$
+- It's probably closer to $5\%$, i.e. the probability of observing 20C.
+  
+  
+  
+  
+## Independent events
+  
+### If events are independent, the probability of observing a *specific* set of events (the joint probability) is the same as the product of the events of the individual events.
+
+- I pick up an acorn in each hand simultaneously, from a *very large* collection of acorns.
+- Does knowing that the acorn in my left hand is from a Bur Oak tell me anything about the acorn in my right hand?
+
+### Independents and Maximum Likelihood
+
+- This may not seem important now, but it is *crucial* to the likelihood concepts we'll examine later.
+- It's also key to understanding Bayes' Rule.
+
+## Probability essentials
+
+1. Probabilities are non-negative
+1. Probabilities of all events in sample space sum to 1.0
+
+1. Independent events: joint probability is product of individual probabilities

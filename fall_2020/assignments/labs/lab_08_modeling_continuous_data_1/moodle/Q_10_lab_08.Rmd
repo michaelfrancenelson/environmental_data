@@ -1,0 +1,126 @@
+---
+title: "Simpson's diversity critical value"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+- Use `quantile` to find the 5% quantile of slopes in the null distribution.  This is the critical value.
+
+
+</div>
+
+<div class="hintborder">
+
+
+</div>
+
+<div class="questionborder">
+
+### Q1 1 pt. (numeric, short answer)
+
+- What was your critical value?
+- Was the observed slope less than the critical value?
+
+### Q2 1 pt. (short answer)
+
+- What is your conclusion regarding the evidence of a negative relationship between vegetation cover diversity and bird diversity?
+
+</div>
+
+
+Solution
+========
+
+### Grading Guide
+
+Q1: 
+
+- Critical value should be around -0.012
+- Observed value: -0.02437 
+
+Q2: Students should notice that the observed value is much lower than the critical value, providing strong evidence for a negative relationship.
+
+
+
+
+My implementation:
+
+```{r}
+
+dat_bird = read.csv(here::here("data", "bird.sub.csv"))
+dat_habitat = read.csv(here::here("data", "hab.sub.csv"))
+
+dat_all = merge(
+  dat_bird, 
+  dat_habitat,
+  by = c("basin", "sub"))
+
+lm(b.sidi ~ s.sidi, data = dat_all)
+
+m = 1000
+result = numeric(m) 
+
+for(i in 1:m)
+{
+  index_1 = sample(nrow(dat_all), replace = TRUE)
+  index_2 = sample(nrow(dat_all), replace = TRUE)
+  
+  dat_resampled_i = 
+    data.frame(
+      b.sidi = dat_all$b.sidi[index_1],
+      s.sidi = dat_all$s.sidi[index_2]
+    )
+  
+  fit_resampled_i = lm(b.sidi ~ s.sidi, data = dat_resampled_i)
+  result[i] = coef(fit_resampled_i)[2]
+} 
+
+quantile(result, 0.05)
+
+ecdf_birds = ecdf(result)
+ecdf_birds(-0.024)
+```
+
+
+
+Meta-information
+================
+extitle: Simpson's diversity critical value
+
+extype: string
+
+exsolution: nil
+
+exname: lab_08
+exsection: lab_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 2
+
+
+

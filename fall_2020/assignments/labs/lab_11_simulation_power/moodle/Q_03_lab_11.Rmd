@@ -1,0 +1,128 @@
+---
+title: "dispersion n interactive plot"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    includes:
+      after_body: !expr here::here("formatting", "js", "rmd.js")
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, include = FALSE}
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+```
+
+```{r fun_code, child=find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include=FALSE}
+```
+```{r data_code, child=find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include=FALSE}
+```
+```{r sim_code, child=find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include=FALSE}
+```
+
+
+```{r solution_code, echo=FALSE}
+load(
+  file = here::here(
+    "data", "lab_11",
+    "sim_output_dispersion_n_1000.RData"))
+```
+```{r solution_plot, eval=FALSE, echo=FALSE}
+rgl::persp3d(
+  x = sim_3_dat$pop_sd,
+  y = sim_3_dat$sample_size, 
+  z = sim_3_dat$power,
+  xlab = "pop. sd",
+  ylab = "n",
+  zlab = "power",
+  col = 'lightblue',
+  alpha = 0.7,
+  theta = 30, phi = 30, expand = .75,
+  ticktype = 'detailed')
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+### Instructions
+
+Create an interactive 3D perspective plot, using `persp3d` in package `rgl`, of the ***sample size and population dispersion*** power simulation.
+
+You need to save this to an html file using `writeWebGL()` in the package `rgl`.
+
+Experiment with different values for the `width` and `height` arguments to customize the display size of the 3D plot.
+
+  - Your surface must be a different color than <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/webGL/pop_sd_size_power_sim_plot.html" target="_blank"> my example here.</a>contour plot of the ***sample size and population dispersion*** power simulation.
+
+</div>
+
+
+<div class="questions">
+
+### Q 2 pt (image upload)
+
+Upload your plot as an ***interactive html*** file that you created with writeWebGL().
+
+</div>
+
+
+
+Solution
+========
+
+```{r answer_plot, ref.label = "solution_plot", fig.asp=1/1.8, echo = FALSE, eval = FALSE}
+```
+
+<div class="toggle"><button>Click to show/hide plot code</button>
+<br>
+
+```{r answer_code, ref.label = "solution_code", results='hide', eval = FALSE}
+```
+```{r answer_plot, ref.label = "solution_plot", eval = FALSE}
+```
+</div>
+<div class="toggle"><button>Click to show/hide simulation code</button>
+<br>
+
+```{r answer_code, ref.label = "dispersion_n_sim", results='hide', eval=FALSE}
+```
+</div>
+
+
+Meta-information
+================
+extitle: dispersion n interactive plot
+
+extype: string
+
+exsolution: nil
+
+exname: lab_11
+exsection: lab_11
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 1
+
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 2
+
+

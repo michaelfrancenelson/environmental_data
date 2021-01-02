@@ -1,0 +1,76 @@
+---
+title: "Lab 1 Q4: matrices 2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+You will use `my_vec` from the previous question again.
+
+Instructions:
+
+1. Create a matrix `mat_2` that has two rows and three columns using `my_vec`.  Do not use the `c()` or `rep()` functions.
+
+2. Create a matrix `mat_3` that has three rows and two columns using `my_vec`.  Do not use the `c()` or `rep()` functions.
+
+
+
+- Q1 (1pt.): Paste the code you used to create `mat_2`.
+- Q2 (1pt.): Paste the code you used to create `mat_3`.
+- Q3 (1pt.): Did R use **rows** or **columns** to recycle the values in `my_vec`?
+- Q4 (1pt.): Create a matrix, `mat_4`, with a number of elements that is not a multiple of 3 and paste the code into the editor.
+- Q5 (1pt.): How did R handle the recycling of values of `my_vec` in `mat_4`?
+
+
+
+Solution
+========
+
+```{r eval = FALSE, echo = TRUE}
+mat_2 = matrix(data = my_vec, nrow = 2, ncol = 3)
+mat_3 = matrix(data = my_vec, nrow = 3, ncol = 2)
+
+mat_4 = matrix(data = my_vec, nrow = 2, ncol = 5)
+
+print(mat_2)
+print(mat_3)
+print(mat_4)
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Lab 1 Q4: matrices 2
+extype: string
+exsolution: nil
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expts: 5

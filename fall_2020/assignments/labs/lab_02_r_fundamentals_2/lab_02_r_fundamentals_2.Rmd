@@ -1,0 +1,481 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Lab 02: R fundamentals II"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+
+lab_source_dir = find_file("lab_02_", directory = TRUE)
+lab_out_dir    = here::here("docs", "assignments", "eco_634")
+lab_source_file = find_file("lab_02_", search_path = lab_source_dir, extension = ".Rmd")
+
+question_source_files = find_file(
+  "", search_path = file.path(lab_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+lab_file_out = file.path(lab_out_dir, "lab_02")
+
+build_assignment_doc(
+  lab_source_file,
+  question_source_files,assignment_render_file = lab_file_out, key_render_file = here::here("docs", "answer_keys", "lab_02_answer_key")
+)
+
+exams::exams2moodle(
+  file = question_source_files,
+  verbose = TRUE,
+  # dir = lab_dir,
+  dir = here::here("docs", "moodle_quiz_questions"),
+  name = "lab_02_moodle_questions"
+)
+
+```
+
+
+# Learning objectives, technical sills and concepts:
+
+- High and low level programming
+- data types: type casting and coercion
+- advanced subsetting
+- loops
+- custom functions
+<!-- - environments and scope -->
+
+# Introduction to Lab 2
+
+The reading for this lab is long and winding, but it covers some important concepts you'll need to know to be a wise R coder.
+
+
+
+# Data Types in R: preview
+
+## Quick review of logical tests:
+
+You'll need to become **very** familiar with logical tests and operators in R - a field also known as *Boolean algebra*.
+
+The symbols for the most common logical tests we use in R are:
+
+- Test for equality: `==`
+- Test for strict inequality: `>` and `<`
+- Test for equal or greater/less than: `>=` and `<=`
+- Test for non-equality `!=`
+
+Some important logical operators are:
+
+- The NOT operator: `!`
+- You can think of this as flipping the polarity of a `TRUE` to a `FALSE` and vice versa.
+
+- The AND operator: `&`
+- This one returns a value of `TRUE` only if both elements are `TRUE`.
+
+- The OR operator: `|`
+- This one returns a value of `TRUE` if at least one of the elements is `TRUE`.
+- It will only return a `FALSE` when both of the test elements are `FALSE`.
+
+I encourage you to play with these operators and tests to get an intuitive feel for what they do.
+
+
+<div class="warn">
+
+<details><summary> Optional info about additional operators (click to expand)</summary>
+
+There are two related operators: `&&` and `||`.
+These evaluate only the first element of the objects they are comparing - they are not 'vectorized'.
+
+To avoid confusion and unexpected results we will avoid using `&&` and `||` in this course.
+
+To illustrate the difference, we can compare elements in some vectors.
+
+```{r}
+a = c(T, F, F)
+b = c(T, T, F)
+c = c(T, T, F, T)
+```
+
+```{r}
+a & b
+```
+
+This produces an error since a and c are of different lengths.
+
+```{r}
+a & c
+```
+
+```{r}
+a && b
+```
+
+This is valid R code since `&&` only compares the first elements.
+
+```{r}
+a && c
+```
+</div>
+
+
+</details>
+
+
+
+
+
+
+## Some odd questions:
+
+- What kind of a number is `4`?
+- What about `4.0`?
+- Is `1.0` equivalent to `TRUE`?
+- Is `3.0000000000000001` the same as `3.0`?
+
+
+Let's ask R:
+
+```{r eval=TRUE, echo=TRUE}
+class(4)
+```
+```{r eval=TRUE, echo=TRUE}
+class(4.0)
+```
+```{r eval=TRUE, echo=TRUE}
+1.0 == TRUE
+```
+```{r eval=TRUE, echo=TRUE}
+3.0000000000000001 == 3.0
+```
+
+Were those the answers you expected?
+
+
+
+## More oddities
+
+Let's see if these make any more sense:
+
+- Does arithmetic addition have a truth value?
+```{r}
+(0 + 1) == TRUE
+```
+
+- What about subtraction?
+```{r}
+(0 - 1) == TRUE
+```
+Can I multiply or divide by TRUE or FALSE?
+```{r}
+3.0 * TRUE
+```
+```{r}
+4 / FALSE
+```
+```{r}
+FALSE / FALSE
+```
+
+```{r}
+3.0 * (TRUE + FALSE)
+3.0 * (TRUE - FALSE)
+3.0 * (FALSE - FALSE)
+```
+
+My head hurts a little bit after writing all of those!
+
+How might we make sense of those results?
+
+Why am I even asking you to know about such nonsensical things?
+
+
+
+
+
+# Programming language hierarchy, abstraction, and data types
+
+All of the above weirdness is related to how R implements the concepts of data typing, coercion, and type casting.
+
+Which brings us back to the idea of high- and low- level programming languages.
+
+The classification of a programming language as low- or high-level is related to the level of **abstraction** between what the programmer writes and the computer executes.
+
+In other words, if a computer language does a lot of translating into information that a computer can understand, it is a **high-level** language.
+
+
+
+
+## A task in high-level and moderately-high level languages
+
+In a high-level language (such as R), you might be able to calculate the sum of the elements of a matrix with a single command:
+
+```{r}
+my_matrix = matrix(data = 1:9, nrow = 3, ncol = 3)
+sum(my_matrix)
+```
+
+Behind the scenes, R knows that it has to look the elements of `my_matrix` and keep a running total as it adds all of the values together.  In this case, there is a high level of **abstraction** between what you type: `sum(my_matrix)` and what the computer actually does.
+
+In contrast, if you wanted to do the same task in Java, which is a "moderately high-level" language you might have to write something like this (please don't worry about trying to understand all of the code):
+
+```java
+
+public class MatrixSumDemo
+{
+public static int matrix_sum(int[][] input_matrix)
+{
+int running_total = 0;
+for (int i = 0; i < input_matrix[0].length; i++)
+for (int j = 0; j < input_matrix.length; j++)
+{
+running_total += input_matrix[i][j];
+}
+return running_total;
+}
+
+public static void main(String[] args) 
+{
+int[][] my_matrix = new int[3][3];
+
+my_matrix[0] = new int[] {1, 2, 3};
+my_matrix[1] = new int[] {4, 5, 6};
+my_matrix[2] = new int[] {7, 8, 9};
+
+System.out.println(matrix_sum(my_matrix));
+}		
+}
+
+```
+
+```{r echo = FALSE}
+45
+```
+
+You might notice that I didn't call Java a low-level language!  This means that even though you have to spell out more of the steps in Java (compared to R), there are still many layers of abstraction between the Java code and the instructions your computer processor can understand.  Imagine if you had to write a program in binary that you could submit directly to your computer's processor to evaluate...
+
+
+
+## We like to use high-level languages, but...
+
+There are some serious trade offs we should be aware when we use high level languages.  
+
+In the R/Java example you might have noticed that the text `int` occurred a lot in the Java code.  That's because Java requires us to specify exactly what kind of number we want a variable to hold (`int` specifies that a number is an *integer*).  R tries to *guess* what kind of number we are using so we didn't have to tell it that we wanted our matrix to be filled with integer values.
+
+Usually that's ok, but what happens when we try to multiply `TRUE` by `3`?
+
+Java wouldn't even let create a program in which such an operation were possible!  That's a safeguard against having unpredictable or undefined behavior.
+
+In R, however, `TRUE * 3` is perfectly legal, even if it's not clear what it means or why we would want to do such a thing.
+
+If a friend asked you what you get when you divide `TRUE` by 5, how would you respond?
+
+
+
+## A logic to the weirdness
+
+Believe it or not, statements like `TRUE * 3` have extremely useful applications.
+
+We'll come across examples later in the course.  You'll get a chance to explore data type coercion and casting in this lab.
+
+
+<a name="nestingfunctions"></a>
+
+# Nesting functions
+
+We've mostly encountered r calls that use a single function.
+
+For more complicated or sophisticated tasks, we often have to combine numerous functions.
+
+Suppose I wanted to print the value of a randomly-generated integer.
+
+I could:
+
+1. Create a variable to store the randomly-generated number.
+1. Create text of a sentence that stated the value of the number.
+2. Print the sentence
+
+
+
+
+```{r}
+int_rnd = sample(100, 1)
+int_rnd_sentence = paste0("The value of the randomly-generated number is: ", int_rnd)
+print(int_rnd_sentence)
+```
+Or I could *nest* all of those tasks within a single function without creating the intermediate variables:
+
+```{r}
+print(
+  paste0(
+    "The value of the randomly-generated number is: ", 
+    sample(100, 1)))
+```
+Note that `sample()` was called within `paste0()` which was called within `print()`.
+
+
+
+
+
+
+# Intro to loops
+
+<a name="forloop"></a>
+
+## What is a loop?
+
+- It's just a programming structure that allows you to repeat a bit of code many times.  You might want to repeat the code a specified number of times, or you might want to repeat the code until a certain logical condition is met.
+
+Here is a simple *for-loop* in R:
+
+```{r}
+for (i in 1:10)
+{
+  print(i)
+}
+```
+
+Key items to note:
+
+- The `for (...` syntax lets R know that it will execute a **for-loop**.
+- Within the `for` syntax, the `i in 1:10` tells R to execute the loop 10 times, using an **index variable** called `i`.
+- Note the sequence notation: `1:10`.  What does this expression do on its own?
+- Also note the special keyword `in`.
+- The code to execute is all contained in a set of curly braces `{}`
+- You can use the *index variable* within the loop.  In this case I used `print()` to print the value during each pass through the loop.
+- The *index variable* changes its value with each pass through the loop (as shown by the output of `print(i)`).
+
+We'll look at other kinds of loops later.  For now I encourage you to play with this loop skeleton to make sure you understand the syntax.
+
+
+
+## Using for-loops in R is controversial!
+
+R also has a family of functions, the `apply` functions that can accomplish the same tasks as a loop.
+
+Some folks prefer to only use the `apply` approach, while others prefer to only use the loop approach.
+
+Loops in R tend to be slow compared to loops in many other languages.
+
+There is also a train of thought that says the `apply` approach is more elegant or aesthetically appealing.
+
+My opinion is that whether or not you choose to use or avoid loops in R, you need to know what loops are and how they work.  Loops are a fundamental concept in computing, within and beyond the R world.
+
+
+<a name="customfunction"></a>
+
+# Intro to custom functions
+
+You used a custom function in the in-class activity on Tuesday.
+
+Here's a *very* simple custom function:
+
+```{r}
+print_number = function(n)
+{
+  print(paste0("The value of the number is ", n))
+}
+```
+
+```{r}
+print_number(145)
+```
+Things to notice:
+
+- use the function `function()` to define a new function.
+- the multiple meanings of the word *function* here is unfortunate.
+- The *arguments* to `function()` become the *arguments* to the new function you want to create. In this example there is only *argument*: `n`.
+- Just like a loop, the code that executes is written within curly braces `{}`
+- When the function executes, the variable `n` within the body of the function takes on the value that you supplied:
+- the code `print_number(145)` causes the variable `n` within the function to take the value 145.
+
+## Some terminology
+
+- Argument: an input to a function.  A function can have *zero* or more arguments.
+- In R, arguments can have default values.
+- Arguments have names.
+- R expects the arguments to be supplied in the order specified by the function definition.  Unless...
+- You can input the arguments in any order if you specify their names.
+
+- Function body: the code that is called *inside* the function.
+- The tasks that the function performs are all written within the *function body*.
+- The function body is written within curly braces `{}`.
+- Function bodies can contain many lines of code.
+- Return value: the value that a function produces.
+- Functions do not have to have a return value.
+- The `print_number()` function above does not have a return value.
+
+
+## Arguments
+
+All of the following calls to `rnorm()` are identical.
+
+```{r eval=FALSE}
+rnorm(10)
+rnorm(n = 10, sd = 1)
+rnorm(sd = 1, mean = 0, n = 10)
+```
+
+If you consult the R help entry for `rnorm()` you will see that the 3 *arguments* are (in order):
+
+- `n`
+- `mean`
+- `sd` 
+
+Both `mean` and `sd` have default values (0 and 1, respectively.
+
+Check out the R-help entry for `rnorm()` by typing `?rnorm` into the console window:
+
+```{r, eval=FALSE}
+?rnorm
+```
+
+
+
+
+# Lab Questions
+
+
+
+
+<!-- ```{r results='hide', echo=FALSE} -->
+
+<!-- questions_dir = here::here("assignments", "eco_634", "lab_02_r_fundamentals_2", "moodle") -->
+<!-- dir.exists(questions_dir) -->
+
+<!-- question_source_files = find_file( -->
+<!--   ".Rmd", -->
+<!--   search_path = questions_dir, -->
+<!--   return_all = TRUE) -->
+<!-- tmp = add_moodle_quiz_questions( -->
+<!--   question_source_files,  -->
+<!--   include_solution = FALSE,  -->
+<!--   include_metadata = FALSE) -->
+<!-- ``` -->
+<!-- ```{r child=tmp} -->
+<!-- ``` -->
+<!-- ```{r echo=FALSE, results = 'hide'} -->
+<!-- file.remove(tmp) -->
+<!-- ``` -->
+
+
+
+
+
+
+
+

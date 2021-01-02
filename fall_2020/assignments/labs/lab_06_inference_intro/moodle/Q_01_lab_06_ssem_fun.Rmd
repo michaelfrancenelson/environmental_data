@@ -1,0 +1,180 @@
+---
+title: "Standard error of the mean function"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+  
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+  
+  return (sample_sd / sqrt(n))
+}
+```
+
+
+
+<div class="instructionsborder">
+
+#### Instructions
+
+> Recall your `sse_mean()` function. Your function should accept a single numeric vector and return a numeric value:
+
+
+```{r eval = FALSE, results='asis'}
+# Function template
+sse_mean = function(x)
+{
+  
+  # ... your code here ...
+  
+  return(sse)  
+}
+```
+
+You can compare your results to these to make sure that your standard error
+function is working correctly:
+
+```{r, results='hold'}
+sse_mean(penguins$body_mass_g)
+sse_mean(mtcars$mpg)
+```
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 3 pts.
+
+- Paste the code you used to define your `sse_mean()` function into the text input.
+
+- include the following line before your function definition:
+
+```{r eval = FALSE}
+rm(list = ls())
+```
+
+and the following two test lines after your function:
+
+```{r eval=FALSE}
+sse_mean(penguins$body_mass_g)
+sse_mean(mtcars$mpg)
+```
+
+
+</div>
+
+
+
+Solution
+========
+
+Their standard error function should return:
+
+- 43.36 for the penguin body mass.
+- 1.065 for the car mpg.
+
+
+
+
+```{r, results='hold'}
+sse_mean(penguins$body_mass_g)
+sse_mean(mtcars$mpg)
+```
+
+My implementation:
+
+
+
+
+```{r reuslts}
+require(palmerpenguins)
+
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+  
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+  
+  return (sample_sd / sqrt(n))
+}
+
+sse_mean(penguins$body_mass_g)
+sse_mean(penguins$flipper_length_mm)
+
+```
+
+
+### Grading guide
+
+Full credit if
+
+- They had to include the `na.rm = TRUE` argument to `sd()` in their function definition.
+  - The function won't run on the penguin data if they didn't include `na.rm = TRUE`.
+- Their function must accurately adjust the number of samples when there are missing data.
+  - They can implement this in many ways, some more complicated than others.  As long as their method works they shoudl get full credit.  They had a similar problem in an earlier lab.
+
+Deductions:
+
+- Deduct 1 point if they didn't include `na.rm = TRUE`.
+- Deduct 1 point if they didn't adjust n for NA values.
+
+
+Some possible ways to adjust n include:
+
+```{r eval = FALSE}
+n = length(na.omit(x))
+n = sum(!is.na(x))
+n = length(x)-length(x[is.na(x)])
+
+```
+
+
+
+Meta-information
+================
+extitle: Standard error of the mean function
+
+extype: string
+
+exsolution: nil
+
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 3
+
+
+

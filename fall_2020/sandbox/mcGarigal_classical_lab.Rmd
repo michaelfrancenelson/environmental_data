@@ -1,0 +1,21 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 2 - all questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+
+
+

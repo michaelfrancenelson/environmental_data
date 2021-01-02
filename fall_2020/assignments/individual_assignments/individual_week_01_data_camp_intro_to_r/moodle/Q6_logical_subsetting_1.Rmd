@@ -1,0 +1,74 @@
+---
+title: "Logical subsetting 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Note: You will use `my_vec` and `my_bool_vec` from the previous question.
+
+Use `my_bool_vec` to retrieve all of the elements of `my_vec` that have a value of `3`.
+
+
+<p class="blackborder">
+Hint: Use the square bracket subsetting operator: `[]`.
+</p>
+
+
+```{r echo = FALSE, results='hide'}
+my_vec = rep(1:3, 5)
+my_bool_vec = my_vec == 3
+```
+
+Your result should look like this:
+
+```{r, echo = FALSE}
+my_vec[my_bool_vec]
+```
+
+- Q1 (2 pts.) Paste the R code that you used to perform the subsetting into the text window below.
+
+
+Solution
+========
+
+A possible solution:
+
+```{r, echo = FALSE}
+my_vec[my_bool_vec]
+```
+
+
+Meta-information
+================
+extitle: Logical subsetting 1
+extype: string
+exsolution: nil
+expoints: 2
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10

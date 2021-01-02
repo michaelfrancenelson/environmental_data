@@ -1,0 +1,83 @@
+---
+title: "salamander data scatterplot"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. Read the salamander dispersal data into a `data.frame` called `dat_dispersal`.
+2. Create a scatterplot of distance class and dispersal rate of first time breeding salamanders.
+
+
+<div class="questionborder">
+
+### Q1 1 pt
+
+- Upload an image file with your scatterplot.  Make sure it has appropriate axis labels and title.
+
+### Q2 2 pts.
+
+- Describe, in nontechnical language, what is shown on the x-axis
+
+### Q3 2 pts.
+
+- Describe, in nontechnical language, what is shown on the y-axis
+
+</div>
+
+
+
+
+Solution
+========
+
+An acceptable plot should resemble:
+
+```{r}
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+plot(
+  dat_dispersal$dist.class,
+  dat_dispersal$disp.rate.ftb,
+  xlab = "distance class", 
+  ylab = "standardized dispersal rate",
+  main = "Marbled Salamander - first time breeders")
+```
+
+
+
+
+
+Meta-information
+================
+extitle: salamander data scatterplot
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 5

@@ -1,0 +1,298 @@
+library(mgcv)
+library(stats)
+library(nlme)
+library(geoR)
+library(car)
+library(spdep)
+library(spatial)
+library(faraway)
+##########################
+#  read model and test data files  #
+##########################
+
+p<-read.table("SpatialBird.dat", header=TRUE,  sep=",")
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+
+#models WHITHOUT TRANSFORMATION
+bird.lm<-lm(Day1~ Xcoord+Ycoord,p)
+bird.gam<-gam(Day1~s(Xcoord, bs="cr")+s(Ycoord, bs="cr"), p, family=gaussian(link="identity"))
+bird.gam2<-gam(Day1~s(Xcoord, bs="cr")+s(Ycoord, bs="cr"), p, family=poisson(link="log"))
+
+#Day1 models WHITH TRANSFORMATION
+dataz<-data.frame(Day1=log(p[,4]),X<-(p[,2]-mean(p[,2])),Y<-(p[,3]-mean(p[,3])))
+
+bird.lm<-lm(Day1~X+Y,dataz)
+bird.gam<-gam(Day1~s(X, bs="cr")+s(Y, bs="cr"), dataz, family=gaussian(link="identity"))
+
+plot(predict(bird.lm),residuals(bird.lm), xlab="predicted", ylab="residuals")
+plot(predict(bird.lm),dataz$Day1, xlab="log(Day1)", ylab="residuals")
+plot(predict(bird.gam),residuals(bird.gam), xlab="predicted", ylab="residuals")
+plot(predict(bird.gam),dataz$Day1.gam, xlab="log(Day1)", ylab="residuals")
+
+summary(bird.lm)
+summary(bird.gam)
+
+AIC(bird.lm)
+AIC(bird.gam)
+logLik(bird.lm)
+logLik(bird.gam)
+
+res.gam<-residuals(bird.gam, type="response")
+res.lm<-residuals(bird.lm)
+
+cor(predict(bird.lm),dataz$Day1)
+cor(predict(bird.gam),dataz$Day1)
+
+mean(abs(res.lm))*length(res.lm)/bird.lm$df.residual
+mean(abs(res.gam))*length(res.gam)/bird.gam$df.residual
+
+sqrt(mean(res.lm^2)*length(res.lm)/bird.lm$df.residual)
+sqrt(mean((res.gam)^2)*length(res.gam)/bird.gam$df.residual)
+
+par(mar=c(4.5,4.5,1,1))
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+qqnorm(residuals(bird.lm), main=NULL)
+qqline(residuals(bird.lm))
+qqnorm(residuals(bird.gam), main=NULL)
+qqline(residuals(bird.gam))
+
+# Detecting of spatial autcorrelation for LM residuals
+permatrix.lm<-matrix(ncol=4,nrow=length(p[,1]), dimnames=list(rownames(p),c("x","y","Day1", "resid")))
+permatrix.lm[,1]<-dataz$X
+permatrix.lm[,2]<-dataz$Y
+permatrix.lm[,3]<-dataz$Day1
+
+bird.lm<-lm(Day1~X+Y, as.data.frame(permatrix.lm))
+permatrix.lm[,4]<-resid(bird.lm)
+#create geodta object from residuals
+bird.geo.lm<-as.geodata(permatrix.lm, coords.col = 1:2, data.col = 4)    
+
+# check normality
+# H-scatterplot. not to run first, before variofit and eyefit!!! because variofit and eyefit and all plots somewhat don't work after this function!
+#otherwise look at this pictures, rerun R and repeat from beginning
+library(sgeostat)
+res.lm<-matrix(ncol=3, nrow=length(p$Day1), dimnames=list(rownames(p), c('x', 'y', 'res')))
+res.lm[,1]<-permatrix.lm[,1]
+res.lm[,2]<-permatrix.lm[,2]
+res.lm[,3]<-permatrix.lm[,4]
+po.lm<-point(as.data.frame(res.lm), x='x', y='y')
+pa.lm<-pair(po.lm, num.lag=10, maxdist=13000)
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+lagplot(po.lm, pa.lm, 'res', lag=1)
+box()
+lagplot(po.lm, pa.lm, 'res', lag=3)
+box()
+
+######################
+# We reject assumption about multinormality of residuals
+H-h plots shows clear violation of this assumption, 
+they show clear drift in data,  
+so we need to use more powerful models to eliminate trend from residuals.
+So we use GAM.
+
+#######################
+# Detecting of spatial autcorrelation for AM residuals
+#######################
+p<-read.table("SpatialBird.dat", header=TRUE,  sep=",")
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+
+dataz<-data.frame(Day1=log(p[,4]),X<-(p[,2]),Y<-(p[,3]))
+
+permatrix.gam<-matrix(ncol=4,nrow=length(p[,1]), dimnames=list(rownames(p),c("x","y","Day1", "resid")))
+permatrix.gam[,1]<-dataz$X
+permatrix.gam[,2]<-dataz$Y
+permatrix.gam[,3]<-dataz$Day1
+
+bird.gam<-gam(Day1~s(y)+s(x), data=as.data.frame(permatrix.gam),  family=gaussian(link="identity"))
+permatrix.gam[,4]<-resid(bird.gam)
+#create geodta object from residuals
+bird.geo.gam<-as.geodata(permatrix.gam, coords.col = 1:2, data.col = 4)    
+
+# check normality
+# H-scatterplot. not to run first, before variofit and eyefit!!! because variofit and eyefit and all plots somewhat don't work after this function!
+#otherwise look at this pictures, rerun R and repeat from beginning
+library(sgeostat)
+res.gam<-matrix(ncol=3, nrow=length(p$Day1), dimnames=list(rownames(p), c('x', 'y', 'res')))
+res.gam[,1]<-permatrix.gam[,1]
+res.gam[,2]<-permatrix.gam[,2]
+res.gam[,3]<-permatrix.gam[,4]
+po.gam<-point(as.data.frame(res.gam), x='x', y='y')
+pa.gam<-pair(po.gam, type="isotropic", num.lag=10, maxdist=13000)
+#pa.gam<-pair(po.gam, type="anisotropic", theta=90, num.lag=10, maxdist=13000)
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+lagplot(po.gam, pa.gam, 'res', lag=1)
+box()
+lagplot(po.gam, pa.gam, 'res', lag=3)
+box()
+
+#spherical correlation structure
+bird.gamm.auto2<-gamm(Day1~s(y)+s(x), data=as.data.frame(permatrix.gam),  family=gaussian(link="identity"), correlation=corSpher(form=~x+y,nugget=TRUE,fixed=FALSE), random=NULL)
+bird.gamm.auto2 #to see AIC of model with spherical correlation structure 
+AIC(bird.gamm.auto2$lme)
+# Parameter estimate(s):
+#       range       nugget 
+#3.764732e+03 8.321517e-02
+
+#exponential correlation structure
+bird.gamm.auto5<-gamm(Day1~s(y)+s(x), data=as.data.frame(permatrix.gam),  family=gaussian(link="identity"), correlation=corExp(form=~x+y,nugget=TRUE,fixed=FALSE), random=NULL)
+bird.gamm.auto5 #to see AIC of model with exponential correlation structure
+AIC(bird.gamm.auto5$lme)
+# Parameter estimate(s):
+#       range       nugget 
+#3.061988e+03 4.461762e-02
+
+
+#explore spatial auto-correlation of residuals
+permatrix.gam[,4]<-(permatrix.gam[,3]-predict(bird.gamm.auto2$gam))
+bird.geo.gam<-as.geodata(permatrix.gam, coords.col = 1:2, data.col = 4)    #make geodata object
+
+#write file for Variowin to calculate variogram surface. Picture 19.20 was plotted in Variowin program.
+write.table(permatrix.gam,file="birdres_new.dat", sep=" ",quote=FALSE, row.name=FALSE, col.names=FALSE, append=TRUE)
+
+
+#to detect anisotropy we plot 4 directional variograms
+par(mar=c(4.5,4.5,1,1))
+par(mfrow=c(2,2))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="black", col.main="black")
+bird.var.gam<-variog4(bird.geo.gam, max.dist=6000, pairs.min = 6, uvec=8, bin.cloud = FALSE, tolerance=pi/6, direction =c(0,pi/4,pi/2,3*pi/4)) #breaks=seq(0,1500,l=10), 
+plot(bird.var.gam, pch=c(19,19,19,19),lty=c(1,1,1,1),col="black", type="b", same=FALSE, legend=FALSE)
+
+#create separate directional sample variograms
+par(mfrow=c(2,2))
+par(mar=c(4.5,4.5,1,1))
+bird.var.gam0<-variog(bird.geo.gam, max.dist=6000, uvec=8, pairs.min = 6, bin.cloud = FALSE, direction =0, tolerance=pi/6) 
+
+#need library(gstat)
+library(gstat)
+varval<-variogram.line(vgm(0.4, "Sph", 3657, 0.19), 6000, 17) #it is isotropic component of variogram. Lets remember lags and veriogram values at these lags
+varval2<-matrix(nrow=8,ncol=2)
+varval2[1,1]<-varval[2,1]
+varval2[1,2]<-varval[2,2]
+varval2[2,1]<-varval[4,1]
+varval2[2,2]<-varval[4,2]
+varval2[3,1]<-varval[6,1]
+varval2[3,2]<-varval[6,2]
+varval2[4,1]<-varval[8,1]
+varval2[4,2]<-varval[8,2]
+varval2[5,1]<-varval[10,1]
+varval2[5,2]<-varval[10,2]
+varval2[6,1]<-varval[12,1]
+varval2[6,2]<-varval[12,2]
+varval2[7,1]<-varval[14,1]
+varval2[7,2]<-varval[14,2]
+varval2[8,1]<-varval[16,1]
+varval2[8,2]<-varval[16,2]
+
+#If R cannot plot these pictures - then re-run R. Probably you used lag plot, it destroys these plots. 
+#Plot components of variogram model - isotropic and anisotropic components, and resulting models as sum of these.
+plot(bird.var.gam0, cex=1.8, pch=20, ylim=c(0,0.9))
+lines.variomodel(cov.model="sph", cov.pars=rbind(c(0.26,9199),c(0.4,3657)), nug=0.19, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.26,9199), nug=0, lty=2, lwd=2, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.4,3657), nug=0.19, lty=2, lwd=1, max.dist=6000)
+points(varval2[,1],bird.var.gam0$v-varval2[,2],  pch=20, cex=1.5)
+
+bird.var.gam45<-variog(bird.geo.gam, max.dist=6000, uvec=8, pairs.min = 6, bin.cloud = FALSE, direction =pi/4, tolerance=pi/6) 
+plot(bird.var.gam45, cex=1.8, pch=20, ylim=c(0,0.9))
+lines.variomodel(cov.model="sph", cov.pars=rbind(c(0.26,4115),c(0.4,3657)), nug=0.19, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.26,4115), nug=0, lty=2, lwd=2, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.4,3657), nug=0.19, lty=2, lwd=1, max.dist=6000)
+points(varval2[,1],bird.var.gam45$v-varval2[,2],  pch=20, cex=1.5)
+
+bird.var.gam90<-variog(bird.geo.gam, max.dist=6000, uvec=8, pairs.min = 6, bin.cloud = FALSE, direction =pi/2, tolerance=pi/6) 
+plot(bird.var.gam90, cex=1.8, pch=20, ylim=c(0,0.9))
+lines.variomodel(cov.model="sph", cov.pars=rbind(c(0.26,9199),c(0.4,3657)), nug=0.19, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.26,9199),nug=0, lty=2, lwd=2, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.4,3657), nug=0.19, lty=2, lwd=1, max.dist=6000)
+points(varval2[,1],bird.var.gam90$v-varval2[,2],  pch=20, cex=1.5)
+
+
+bird.var.gam135<-variog(bird.geo.gam, max.dist=6000, uvec=8, pairs.min = 6, bin.cloud = FALSE, direction =3*pi/4, tolerance=pi/6) 
+plot(bird.var.gam135, cex=1.8, pch=20, ylim=c(0,0.9))
+lines.variomodel(cov.model="sph", cov.pars=rbind(c(0.26,12345),c(0.4,3657)), nug=0.19, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.26,12345),nug=0, lty=2, lwd=2, max.dist=6000)
+lines.variomodel(cov.model="sph", cov.pars=c(0.4,3657), nug=0.19, lty=2, lwd=1, max.dist=6000)
+points(varval2[,1],bird.var.gam135$v-varval2[,2],  pch=20, cex=1.5)
+
+par(mfrow=c(1,1))
+
+#fitting model variogram for 135grad. directional variogram
+var.gam135<-eyefit(bird.var.gam135)
+var.gam135
+#  cov.model sigmasq  phi tausq kappa kappa2
+#1 spherical    0.48 3658  0.19  <NA>      1
+
+#fitting model variogram for 45grad. directional variogram
+var.gam45<-eyefit(bird.var.gam45)
+var.gam45
+#  cov.model sigmasq  phi tausq kappa kappa2
+#1 spherical    0.68 4115  0.19  <NA>      1
+
+
+#approximate components of zonal anisotropy accounting, estimated by eye
+# anisotropy angle 135 grad 3*pi/4
+#anisotropy ratio =3 (=big range/small range) or 0.333 (=small/big)
+
+#fitting variogram model as a sum of some components
+library(gstat)
+v <-variogram(resid~1,loc=~x+y,data=as.data.frame(permatrix.gam),cutoff=5000,wirth=250,map=FALSE)
+birdfit = fit.variogram (v, vgm(psill=0.4,"Sph",3657, nugget=0.19, add.to  = vgm(psill=0.26,"Sph",4115, anis = c(135,0.333))), fit.sills = FALSE, fit.ranges = FALSE)
+birdfit
+#  model psill range ang1 anis1
+#1   Sph  0.26  4115  135 0.333
+#2   Nug  0.19     0    0 1.000
+#3   Sph  0.40  3657    0 1.000
+
+coord<-read.table("coord.dat", sep=",",  header=TRUE)
+border <- matrix(c(536758.9369,537555.5983,538303.7069,539347.5802,539743.4523,540171.03,540495.9946,540495.9946,541111.7086,542326.038,544429.7262,544968.4782,544968.4782,544968.4782,544395.5169,543523.0701,543006.5211,542705.3711,542326.038,541513.6353,539034.418,538460.288,537016.2634,536250.7564,535537.4436,534928.5173,534928.5173,535467.8518,535484.7467,535015.507,535015.507,535885.4008,535920.1967,535502.6477,535502.6477,534980.7111,534980.7111,536758.9369,419977.0395,419558.5426,419106.1381,419071.34,418566.0244,418566.0244,418771.2624,419378.4271,419959.9378,419959.9378,419959.9378,419284.3604,415427.5806,411733.2827,410655.7791,410092.8572,410092.8574,410754.0631,411382.6663,411579.3534,411583.7088,410510.4611,410510.4611,411432.6698,411432.6698,412267.8767,413398.8879,413625.0901,414179.0449,414564.6972,415974.1107,416165.5119,417244.323,417522.7253,418775.5387,419227.9373,419976.149,419977.0395), ncol=2)
+#create kriged object, we will use it just for image creating
+bird.krig1<-krige.conv(coords=permatrix.gam[,1:2],data=permatrix.gam[,4], locations=coord[,1:2], krige=krige.control(cov.model="sph",cov.pars=c(0.55676011, 4678.59), nug=0.09735835))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+par(mar=c(4.5,4.5,1,1))
+
+#kriging of residuals
+u <- krige(resid~1, loc=~x+y, model = birdfit, data =as.data.frame(permatrix.gam) , newdata =coord)
+#library(lattice)
+#levelplot(var1.pred~x+y, u, aspect = mapasp(u), main = "ordinary kriging predictions", col.regions=gray(1000:1/1000))
+bird.pebesma<-bird.krig1
+bird.pebesma$predict<-u$var1.pred
+min(bird.pebesma$predict)
+max(bird.pebesma$predict)
+image(bird.pebesma, val=bird.pebesma$predict, zlim=c( -2.55,2), borders=border, col=gray(1000:1/1000), xlim=c(534250, 545750+2000),ylim=c(409250,420750))  
+contour(bird.pebesma, levels = seq(-5, 4, by = 1), borders=border, add = TRUE) 
+legend.krige(x.leg=c(545750,545750+700), y.leg=c(409250+1000,420750-1000), bird.pebesma$predict, vert=TRUE, off=0.7, cex=1.4, col=gray(1000:1/1000))
+
+#obtain trend map
+bird.krig.trend<-bird.krig1
+#bird.krig.trend$predict<-NULL
+bird.krig.trend$predict<-predict(bird.gamm.auto2$gam,newdata=coord[1:2])
+min(bird.krig.trend$predict)
+max(bird.krig.trend$predict)
+image(bird.krig.trend, val=bird.krig.trend$predict, zlim=c( -0.76,4.47), borders=border, col=gray(1000:1/1000), xlim=c(534250, 545750+2000),ylim=c(409250,420750))  
+contour(bird.krig.trend, levels = seq(-1, 5, by = 1), borders=border, add = TRUE) 
+legend.krige(x.leg=c(545750,545750+700), y.leg=c(409250+1000,420750-1000), bird.krig.trend$predict, vert=TRUE, off=0.7, cex=1.4, col=gray(1000:1/1000))
+
+#map with log(count)
+bird.map<-bird.krig1
+bird.map$predict<-bird.pebesma$predict+bird.krig.trend$predict
+min(bird.map$predict)
+max(bird.map$predict)
+image(bird.map, val=bird.map$predict, zlim=c( -0.74, 5.853), borders=border, col=gray(1000:1/1000), xlim=c(534250, 545750+2000),ylim=c(409250,420750))  
+contour(bird.map, levels = seq(-1, 6, by = 1), borders=border, add = TRUE) 
+legend.krige(x.leg=c(545750,545750+700), y.leg=c(409250+1000,420750-1000), bird.map$predict, vert=TRUE, off=0.7, cex=1.4, col=gray(1000:1/1000))
+
+#map with counts
+bird.map$predict<-exp(bird.pebesma$predict+bird.krig.trend$predict)
+min(bird.map$predict)
+max(bird.map$predict)
+image(bird.map, val=bird.map$predict, zlim=c(0, 348.001), borders=border, col=gray(800:1/1000), xlim=c(534250, 545750+2000),ylim=c(409250,420750))  
+contour(bird.map, levels = seq(0,350, by = 50), borders=border, add = TRUE) 
+contour(bird.map, levels = seq(0,50, by = 25), borders=border, add = TRUE) 
+legend.krige(x.leg=c(545650,545650+700), y.leg=c(409250+1000,420750-1000), bird.map$predict, vert=TRUE, off=1, cex=1.4, col=gray(800:1/1000))
+
+
+

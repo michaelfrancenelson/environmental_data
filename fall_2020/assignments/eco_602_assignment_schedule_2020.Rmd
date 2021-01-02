@@ -1,0 +1,112 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "EC0 602 Assignment Schedule 2020"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+```
+
+
+
+
+
+
+## Reading questions
+
+|	Question Set	|	Due Date	|
+|	----	|	----	|
+|	Reading Questions: Week 2	|	09/02/20	|
+|	Reading Questions: Week 3	|	09/15/20	|
+|	Reading Questions: Week 4	|	09/18/20	|
+|	Reading Questions: Week 5	|	09/25/20	|
+|	Reading Questions: Week 6	|	10/02/20	|
+|	Reading Questions: Week 7	|	10/09/20	|
+|	Reading Questions: Weeks 8/9	|	10/30/20	|
+|	Reading Questions: Week 10/11	|	11/06/20	|
+|	Reading Questions: Week 12	|	11/13/20	|
+|	Reading Questions: Week 13	|	11/20/20	|
+
+
+
+
+
+## Individual Assignments
+
+|	Name	|	Start Week	|	Due	|
+|	----	|	----	|	----	|
+|	Learning Objectives Assessment	|	1	|	Fri., Sep 4: Week 2	|
+|	Install Course Software	|	1	|	Sep 4: Week 2	|
+|	DataCamp: Intro to R	|	1	|	Sep 4: Week 2	|
+|	Course GitHub Repo	|	2	|	Fri., Sep 11: Week 3	|
+|	Deterministic Functions	|	3	|	Fri, Sep. 18: Week 4	|
+|	Dual Models	|	4	|	Fri. Oct 2: Week 6	|
+|	Frequentist Concepts	|	6	|	Fri. Oct 9: Week 7	|
+|	Using Models 1	|	7	|	Fri. Oct 23: Week 9	|
+|	Using Models 2	|	9	|	Fri. Nov 6: Week 11	|
+|	Using Models 3	|	11	|	Fri. Nov 20: Week 13	|
+
+
+<!-- |	Begin Week	| Name	|	Due	| -->
+<!-- |	----	|	----	|	----	| -->
+<!-- |	1	|	Install Course Software	|	9/4/2020	| -->
+<!-- |	1	|	DataCamp: Intro to R	|	9/4/2020	| -->
+<!-- |	1	|	Learning Objectives Assessment	|	9/4/2020	| -->
+<!-- |	2	|	Course GitHub Repo	|	9/11/2020	| -->
+<!-- |	3	|	Deterministic Functions	|	9/18/2020	| -->
+<!-- |	4	|	Dual Models	|	10/2/2020	| -->
+<!-- |	6	|	Frequentist Concepts	|	10/9/2020	| -->
+<!-- |	7	|	Using Models 1	|	10/23/2020	| -->
+<!-- |	9	|	Using Models 2	|	11/6/2020	| -->
+<!-- |	11	|	Using Models 3	|	11/20/2020	| -->
+
+
+```{r}
+require(palmerpenguins)
+
+
+
+
+
+
+aggregate(body_mass_g ~ species + sex, data = penguins, FUN = mean, na.rm = TRUE)
+aggregate(body_mass_g ~ species, data = penguins, FUN = mean, na.rm = TRUE)
+
+
+
+fit_both2 = lm(body_mass_g ~ species * sex, data = penguins)
+fit_both1 = lm(body_mass_g ~ species + factor(sex), data = penguins)
+
+summary(fit_both1)
+summary(fit_both2)
+
+
+boxplot(body_mass_g ~ sex * species, data = penguins)
+
+3368 + 158
+
+3527.206
+
+
+
+
+
+
+```
+
+

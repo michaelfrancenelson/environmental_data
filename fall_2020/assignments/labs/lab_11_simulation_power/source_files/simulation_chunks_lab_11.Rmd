@@ -1,0 +1,453 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis: Lab Code"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+
+
+if (FALSE)
+{
+  require(rmd.utils)
+  rmd.utils::source_rmd_chunks(find_file("function_chunks_lab_11.Rmd", exact_match = TRUE))
+  rmd.utils::source_rmd_chunks(find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE))
+  rmd.utils::source_rmd_chunks(find_file("model_chunks_lab_11.Rmd", exact_match = TRUE))
+  
+}
+
+```
+
+
+```{r simulated_y_1, eval = FALSE}
+y_sim = linear_simulator(
+  x = birdhab$ls,
+  y_int = int_obs,
+  slope = slope_obs,
+  st_dev = sd_obs
+)
+```
+
+
+
+```{r p_val_sim, eval = FALSE, echo = FALSE}
+n_sims = 1000
+p_vals = numeric(n_sims)
+for(i in 1:n_sims)
+{
+  y_sim = linear_simulator(
+    x = birdhab$ls,
+    y_int = int_obs,
+    slope = slope_obs,
+    st_dev = sd_obs
+  )
+  fit_sim = lm(y_sim ~ birdhab$ls)
+  
+  p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+}
+sum(p_vals < 0.05) / n_sims
+```
+
+
+```{r effect_size_simulation, eval = FALSE}
+alpha = 0.05
+n_sims = 10
+p_vals = numeric(n_sims)
+
+n_effect_sizes = 20
+effect_sizes_1 = seq(-.01, .01, length.out = n_effect_sizes)
+
+effect_size_powers = numeric(n_effect_sizes)
+
+for(j in 1:n_effect_sizes)
+{
+  for(i in 1:n_sims)
+  {
+    fit_sim = linear_sim_fit(
+      x = birdhab$ls,
+      y_int = int_obs,
+      slope = effect_sizes_1[j],
+      st_dev = sd_obs
+    )
+    
+    p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+  }
+  effect_size_powers[j] = sum(p_vals < alpha) / n_sims
+}
+
+sim_effect_size = 
+  data.frame(
+    power       = effect_size_powers,
+    effect_size = effect_sizes_1)
+
+```
+
+
+```{r save_effect_size_sim, eval = FALSE}
+data.table::fwrite(
+  sim_effect_size, 
+  file = here::here(
+    "data", "lab_11", 
+    "sim_output_effect_size_1000_200.csv"))
+```
+
+
+
+
+
+```{r sample_size_simulation, eval = FALSE}
+
+alpha = 0.05
+n_sims = 1000
+p_vals = numeric(n_sims)
+
+sample_sizes = seq(5, 100)
+sample_size_powers = numeric(length(sample_sizes))
+
+for(j in 1:length(sample_sizes))
+{
+  x_vals = seq(0, 100, length.out = sample_sizes[j])
+  
+  for(i in 1:n_sims)
+  {
+    fit_sim = linear_sim_fit(
+      x = x_vals,
+      y_int = int_obs,
+      slope = slope_obs,
+      st_dev = sd_obs
+    )
+    p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+  }
+  sample_size_powers[j] = sum(p_vals < alpha) / n_sims
+}
+
+sim_sample_size = 
+  data.frame(
+    power       = sample_size_powers,
+    sample_size = sample_sizes)
+
+```
+
+
+```{r save_sample_size_sim, eval = FALSE}
+data.table::fwrite(
+  sim_sample_size,
+  file = here::here(
+    "data", "lab_11", 
+    "sim_output_sample_size_1000.csv"))
+```
+
+
+
+```{r sample_size_effect_size_simulation, eval = FALSE, echo = FALSE}
+alpha = 0.01
+n_sims = 50
+
+p_vals = numeric(n_sims)
+
+n_effect_sizes = 20
+effect_sizes = seq(-.01, .01, length.out = n_effect_sizes)
+sample_sizes = seq(10, 50)
+
+sim_output_2 = matrix(nrow = length(effect_sizes), ncol = length(sample_sizes))
+
+for(k in 1:length(effect_sizes))
+{
+  effect_size = effect_sizes[k]
+  for(j in 1:length(sample_sizes))
+  {
+    x_vals = seq(0, 100, length.out = sample_sizes[j])
+    
+    for(i in 1:n_sims)
+    {
+      fit_sim = linear_sim_fit(
+        x = x_vals,
+        y_int = int_obs,
+        slope = effect_size,
+        st_dev = sd_obs
+      )
+      p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+    }
+    sim_output_2[k, j] = sum(p_vals < alpha) / n_sims
+  }
+  print(paste0("computing effect size ", k," of ", length(effect_sizes)))
+}
+
+sim_n_effect_size = 
+  list(
+    power = sim_output_2,
+    effect_size = effect_sizes,
+    sample_size = sample_sizes
+  )
+
+```
+
+
+```{r save_sample_size_effect_size_sim, echo=FALSE, eval = FALSE}
+
+save(
+  sim_n_effect_size,
+  file = here::here(
+    "data", "lab_11",
+    "sim_n_effect_size_1000_200.RData"))
+
+# load(file = here::here(
+#     "data", "lab_11",
+#     "sim_n_effect_size_1000.RData"))
+
+# save(sim_output_sample_size_effect_size, file = here::here("data", "sim_output_sample_size_effect_size_1000.RData"))
+# load(file = here::here("data", "sim_output_sample_size_effect_size_1000.RData"))
+
+```
+
+
+
+
+
+```{r pop_sd_simulation, echo = FALSE, eval = FALSE}
+alpha = 0.05
+n_sims = 100
+p_vals = numeric(n_sims)
+sd_obs
+n_sds = 200
+pop_sds = seq(from = 0.05, to = 1.5, length.out = n_sds)
+pop_sd_power = numeric(length(pop_sds))
+
+for(j in 1:length(pop_sds))
+{
+  pop_sd_j = pop_sds[j]
+  for(i in 1:n_sims)
+  {
+    fit_sim = linear_sim_fit(
+      x = birdhab$ls,
+      y_int = int_obs,
+      slope = slope_obs,
+      st_dev = pop_sd_j
+    )
+    p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+  }
+  pop_sd_power[j] = sum(p_vals < alpha) / n_sims
+}
+
+
+sim_output_dispersion = data.frame(sd = pop_sds, power = pop_sd_power)
+data.table::fwrite(
+  sim_output_dispersion, 
+  file = here::here("data", "sim_output_dispersion_1000_200.RData"))
+
+data.table::fwrite(sim_output_dispersion, file = here::here("data", "sim_output_dispersion_1000_200.csv"))
+
+
+plot(power ~ sd, data = sim_output_dispersion, type = "l")
+
+plot(pop_sds, pop_sd_power, type = 'l', 
+abline(v = sd_obs, lty = 2, col = 'red')
+```
+
+
+```{r dispersion_sim_template, eval=FALSE, error=TRUE, echo = FALSE}
+alpha = 0.05
+n_sims = 100
+p_vals = ...
+
+# What was the observed standard deviation?
+sd_obs
+
+# specify the number of different standard deviation values to simulate:
+n_sds = 20
+pop_sds = seq(from = 0.01, to = 1.5, length.out = n_sds)
+
+pop_sd_power = numeric(...)
+
+for(j in 1:length(pop_sds))
+{
+  pop_sd_j = ...
+  for(i in 1:n_sims)
+  {
+    fit_sim = linear_sim_fit(...)
+    p_vals[i] = ...
+  }
+  pop_sd_power[j] = ...
+}
+
+sim_output_dispersion = data.frame(
+  sd = ...,
+  power = ...)
+
+# You should save your simulation results so you don't have to run it every time.
+save(
+  sim_output_dispersion, 
+  file = here::here("data", "lab_ll_dat_dispersion_sim.RData"))
+
+# Line plot of standard deviation (x-axis) and statistical power (y-axis)
+plot(...)
+
+# Add a dotted vertical red line at the observed population standard deviation value.
+abline(v = ...)
+
+```
+
+```{r dispersion_sim, eval=FALSE, error=TRUE, echo = FALSE}
+alpha = 0.05
+n_sims = 5
+p_vals = numeric(n_sims)
+sd_obs
+
+n_sds = 10
+pop_sds = seq(from = 0.05, to = 1.5, length.out = n_sds)
+pop_sds
+pop_sd_power = numeric(length(pop_sds))
+
+for(j in 1:length(pop_sds))
+{
+  pop_sd_j = pop_sds[j]
+  
+  for(i in 1:n_sims)
+  {
+  
+      fit_sim = linear_sim_fit(
+      x = birdhab$ls,
+      y_int = int_obs,
+      slope = slope_obs,
+      st_dev = pop_sd_j
+    )
+    p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+  }
+    pow_j = sum(p_vals < alpha) / n_sims
+
+      pop_sd_power[j] = pow_j
+}
+
+sim_output_dispersion = data.frame(sd = pop_sds, power = pop_sd_power)
+head(sim_output_dispersion)
+head(sim_output_dispersion)
+
+
+save(sim_output_dispersion, file = here::here("data", "sim_output_dispersion_1000.RData"))
+     
+```
+
+```{r dispersion_n_sim, echo=TRUE, eval=FALSE}
+
+alpha = 0.05
+n_sims = 1000
+p_vals = numeric(n_sims)
+
+n_sds = 200
+pop_sds = seq(from = 0.05, to = 1.5, length.out = n_sds)
+
+sample_sizes = seq(5, 100)
+
+sim_output_3 = matrix(nrow = length(pop_sds), ncol = length(sample_sizes))
+
+for(k in 1:length(pop_sds))
+{
+  pop_sd_k = pop_sds[k]
+  for(j in 1:length(sample_sizes))
+  {
+    x_vals = seq(0, 100, length.out = sample_sizes[j])
+    
+    for(i in 1:n_sims)
+    {
+      fit_sim = linear_sim_fit(
+        x = x_vals,
+        y_int = int_obs,
+        slope = slope_obs,
+        st_dev = pop_sd_k
+      )
+      p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+    }
+    
+    sim_output_3[k, j] = sum(p_vals < alpha) / n_sims
+  }
+  print(paste0("Testing standard deviation ", k, " of ", n_sds))
+}
+
+image(sim_output_3)
+
+sim_3_dat = list(power = sim_output_3, sample_size = sample_sizes, pop_sd = pop_sds )
+save(sim_3_dat, file = here::here("data", "sim_output_dispersion_n_1000.RData"))
+
+```
+     
+```{r dispersion_n_template, eval=FALSE, error=TRUE, echo = FALSE}
+alpha = 0.05
+
+# Start with a small number
+n_sims = 10
+p_vals = ... 
+
+# What was the observed standard deviation?
+sd_obs
+
+# specify the number of different standard deviation values to simulate:
+# Start with a small number
+n_sds = 20
+pop_sds = seq(from = 0.05, to = , length.out = n_sds)
+
+pop_sd_power = numeric(...)
+
+sample_sizes = seq(5, 100)
+
+sim_output_3 = matrix(...)
+
+for(k in 1:length(pop_sds))
+{
+  pop_sd_k = pop_sds[k]
+  
+  for(j in 1:length(sample_sizes))
+  {
+    x_vals = seq(0, 100, length.out = sample_sizes[j])
+    
+    for(i in 1:n_sims)
+    {
+      fit_sim = ...
+      p_vals[i] = ...
+    }
+    
+    sim_output_3[k, j] = ...
+  }
+  print(paste0("Testing standard deviation ", k, " of ", n_sds))
+}
+
+image(sim_output_3)
+
+sim_3_dat = 
+  list(
+    power       = sim_output_3,
+    sample_size = sample_sizes,
+    pop_sd      = pop_sds)
+
+
+# You should save your simulation results so you don't have to run it every time.
+save(
+  sim_3_dat, 
+  file = here::here("data", "lab_ll_sim_output_dispersion_n_1000.RData"))
+
+```
+     
+     
+     
+     
+     
+     
+     

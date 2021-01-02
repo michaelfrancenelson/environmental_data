@@ -1,0 +1,156 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Least Squares"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = 'allow')
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+# devtools::install_github("michaelfrancenelson/rmd.utils", force = TRUE)
+
+options(knitr.duplicate.label = "allow")
+
+source_file_ols = 
+  find_file("ordinary_least_squares.Rmd", search_path = here::here("course_docs", "lectures", "modules"))
+  
+# source_file_2 = 
+#   find_file("confidence_intervals_calculating.Rmd", search_path = here::here("course_docs", "lectures", "modules"))
+
+```
+
+
+```{r echo=FALSE, eval=FALSE}
+source_dir  = here::here("course_docs", "lectures", "602", "week_07")
+out_dir     = here::here("docs", "lecture_notes")
+source_file = find_file("week_07_01", search_path = source_dir, extension = ".Rmd")
+
+dir.exists(source_dir)
+dir.exists(out_dir)
+file.exists(source_file)
+
+rmarkdown::render(source_file, output_dir = out_dir)
+```
+
+
+
+
+## Key Concepts
+
+- Optimization criterion
+- Parametric and nonparametric inference
+- Least squares and likelihood
+- Dual model paradigm
+
+
+
+
+## McGarigal's organization of the materials
+
+### McGarigal separated the OLS and Likelihood materials
+
+- OLS is an optimization paradigm: minimize the sum of squared deviations (residuals).
+- Likelihood is an optimization paradigm: choose model parameters that maximize the likelihood of the observed data.
+
+### For general linear models: they are equivalent
+
+$y_0 = \beta_0 + \beta_1 x_1 + \epsilon_1$
+
+
+
+
+## Dual-modeling approach
+
+### Deterministic and stochastic
+
+- Linear model: $y_0 = \beta_0 + \beta_1 x_1$
+- Stochastic model, errors: $\epsilon_i$
+
+### Deterministic Model: parametric and non parametric are equivalent
+
+### Stochastic Model:
+
+- Non parametric modeling: The errors, $\epsilon_i$, exist
+- Parametric modeling: The errors, $\epsilon_i$, exist and we propose they are normally-distributed.
+
+
+
+
+## Non-parametric inference
+
+### We make no claim about how the data are distributed in the population
+
+$y_0 = \beta_0 + \beta_1 x_1 + \epsilon_1$
+
+- We propose that linear function describes the deterministic component of the system.
+  - NOTE: we could propose other deterministic models as well 
+
+### We want to optimize the fit of our deterministic model
+
+- We could use Least Squares as our optimization criterion!
+
+
+
+
+## Parametric inference
+
+### We propose that the stochastic component, $\epsilon_i$ of the system can be adequately described by a parametric distribution.
+
+- It doesn't have to be a Normal distribution!
+
+$y_0 = \beta_0 + \beta_1 x_1 + \epsilon_1$
+
+- We propose that linear function describes the deterministic component of the system.
+  - NOTE: we could propose other deterministic models as well 
+
+### We want to optimize the fit of our deterministic model
+
+- Since we've proposed that a *parametric* distribution describes the stochastic model, we 
+can find model parameters that make our model the most likely.
+
+
+
+
+```{r child = source_file_ols}
+```
+
+
+
+## Least Squares and Parametric Inference
+
+### We propose that a parametric distribution is appropriate for the stochastic model.
+
+- Theoretical distributions are defined by density or mass functions.  
+- We want to optimize parameters in the context of the PDF/PMF.
+  - We want parameters that make the observed data the most likely
+
+### For Normally-distributed errors: OLS methods also optimize for likelihood!
+
+
+
+
+## Recap
+
+- Optimization criterion
+- Parametric and nonparametric inference
+- Least squares and likelihood
+- Dual model paradigm

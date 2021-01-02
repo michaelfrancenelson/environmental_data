@@ -1,0 +1,145 @@
+---
+title: "Analysis of Environmental Data"
+subtitle: "Reading data files: using the here package"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+require(here)
+```
+
+
+
+# Working directories
+
+R utilizes the concept of a *working directory* to locate file resources.  The *working directory* is simply the directory where R will look for files.
+
+You can change the working directory at any time using the function `setwd()`.  
+
+However changing your working directory means that R will look in the new location for files.  If you had previously been working with a file called `my_data.csv` that was in your working directory, but you changed working directories R will no longer be able to find `my_data.csv`.
+
+Understanding the working directory and locating data files are two of the biggest sources of frustration for new R users.
+
+We'll try to save some time and headaches by using *RProjects* and the package *here*.
+
+
+
+
+## About the the `here` package
+
+The package `here` is designed to work with *RProjects*.  
+
+One of the most frustrating aspects for new users of R is understanding the concept of a *working directory* and importing data files.
+
+`Here` simplifies these tasks when used within an *RProject*.
+
+
+
+
+## Using `here()`
+
+For this example, I'm going to assume:
+
+- You are working with RStudio and that you have an RProject loaded.
+- You have a subdirectory of your main RProject directory called `data`.
+- There is a file called `bird.sta.csv` containing data in the *comma separated value* format within your `data` subfolder.
+
+The function `here()` returns the *absolute path* to the base directory of your *RProject*.
+
+For example, on my computer when I'm working in the RProject for the ECo 602 course, here produces:
+
+```{r}
+here()
+```
+
+Note that `here()` will always point to this directory, even if my working directory is set to a different location:
+
+```{r include=FALSE}
+setwd(here("assignments"))
+```
+
+```{r}
+getwd()
+here()
+```
+
+## Opening a file with `here()`
+
+Here's why `here()` is so useful.
+
+> Recall that my file is located in the `data` subdirectory of my RProject folder.
+
+If my working directory were set to the main RProject directory I could just type:
+
+```{r, eval = FALSE}
+read.csv("data/my_data.csv")
+```
+
+But we know my working directory is pointed to a different folder so I get the following:
+
+```{r}
+read.csv("data/my_data.csv")
+```
+
+
+Here is `here()` to the rescue:
+
+```{r}
+read.csv(here("data", "my_data.csv"))
+```
+
+## Basic `here()` syntax.
+
+You'll notice I typed:
+
+```{r echo=TRUE, eval=FALSE}
+read.csv(here("data", "my_data.csv"))
+```
+
+When you call `here()` you should include the subdirectories (in the correct order) and filename as character values (i.e. with quotations marks).  The function will assemble the arguments into an absolute path to the file:
+
+```{r echo=TRUE, eval=FALSE}
+here("data", "my_data.csv")
+```
+NOTE: if your file is located several subdirectories in, you have to list the directory names in the order in which they are nested.
+
+For example if my data file were located within a subdirectory of `data` called `data_sets` I wound type
+
+```{r echo=TRUE, eval=FALSE}
+here("data", "data_sets", "my_data.csv")
+```
+
+- You can consult the help entry for `here()` for a more detailed description.
+
+
+
+## A reality check: `file.exists()`
+
+`here()` is not foolproof.  If you don't tell it the correct subdirectory or filename to search for, it won't find your file.  
+
+An easy way to tell whether you are looking in the right spot for your file is the function `file.exists()`:
+
+
+```{r}
+file.exists(here("data", "data_sets", "my_data.csv"))
+```
+Oops, I forgot that my data file is one directory back in the `data` folder:
+
+```{r}
+file.exists(here("data", "my_data.csv"))
+```
+And I'm good to go!
+
+

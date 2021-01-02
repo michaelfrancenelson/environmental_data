@@ -1,0 +1,47 @@
+---
+title: "Week 02 reading question 5"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+### Measures of Dispersion
+
+- Q1 (1 pt): List at least 3 of the common measures of *spread* or *dispersion* that were mentioned in the readings?
+
+- Q2 (2 pts): Choose two of the measures in your list and explain how they capture different aspects of the concept of spread.
+
+
+
+Solution
+========
+
+Lots of possible answers here.
+
+
+
+Meta-information
+================
+extitle: Week 02 reading question 5
+extype: string
+exsolution: nil
+exname: Week 3 reading questions
+exsection: Week 3 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 3

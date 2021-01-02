@@ -1,0 +1,57 @@
+---
+title: "Week 02 reading Q1"
+output:  
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+    theme: readable
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<p class="blackborder">
+This question draws mostly upon materials from the Bolker reading: Chapter 1, sections 1.1 - 1.3, and the ideas in the Model Thinking lecture.
+</p>
+
+<p class="redborder">
+NOTE: Many of the terms in the table will be unfamiliar.  Please don't let that discourage you!
+<br>
+The Bolker and Zuur texts are classics, but they are both very dense and difficult reads.
+</p>
+
+
+1. Choose one of the modeling dichotomies that Bolker writes about in sections 1.1 - 1.3 (summarized in table 1.1 on page 6).
+2.  Explain the dichotomy in your own words and *briefly* describe how you might approach one of your research interests from each of the dichotomy endpoints.
+
+
+
+
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading Q1
+extype: string
+exsolution: nil
+exname: Week 2 reading questions
+exsection: Week 2 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 12
+expoints: 10

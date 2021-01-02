@@ -1,0 +1,60 @@
+---
+title: "Confidence interval interpretation"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> Recall that we are *not* 95% certain that a 95% confidence interval we calculate contains the true value.
+
+
+<div class="questionborder">
+
+### Question
+
+- (8 pts) Explain what a frequentist 95% confidence interval really means.  Make sure you cover any relevant assumptions of the Frequentist paradigm.  You answer must be in non-technical language.  Imagine you were explaining confidence intervals to an audience of teenagers.
+
+HINT: Your explanation is likely to be more successful if you use an example experiment, or describe your answer in the context of a real-life scenario rather than a purely theoretical explanation.
+
+</div>
+
+
+Solution
+========
+
+
+
+Students should realize that larger sample sizes result in narrower confidence intervals.
+
+
+
+
+Meta-information
+================
+extitle: Confidence Interval Interpretation
+extype: string
+exsolution: nil
+exname: week_06_reading_questions
+exsection: week_06_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 8

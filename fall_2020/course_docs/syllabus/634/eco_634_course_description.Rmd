@@ -1,0 +1,23 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Course Description"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+# Course Description {.tabset}
+
+	
+This laboratory course introduces the statistical computing language R and provides hands-on experience using R to screen and adjust data, examine deterministic functions and probability distributions, conduct classic one- and two-sample tests, utilize bootstrapping and Monte Carlo randomization procedures, and conduct stochastic simulations for ecological modeling. 
+
+Specifically, lab focuses on learning the R language and statistical computing environment, which serves as the computing platform for all ECO statistics courses; emphasis is on learning fundamental R skills that will allow students to grow and expand their expertise in subsequent courses or on their own.

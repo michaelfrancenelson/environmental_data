@@ -1,0 +1,227 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+author: "Michael France Nelson"
+subtitle: "Lab Schedule and Concept Summaries"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    # toc: TRUE
+    # toc_float: TRUE  
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+wed_start = as.Date("2020-08-26")
+dat_fmt = "%b %d"
+dat_str = function() return(paste0(format(wed_start, dat_fmt)))
+
+
+
+```
+
+
+```{r increment_date, include = FALSE, eval=FALSE}
+wed_start = wed_start + 7
+```
+
+
+# Lab Assignment Schedule
+
+
+<details><summary> Lab 1: R Fundamentals 1 `r dat_str()` </summary> 
+
+Key Concepts
+
+- Operators
+- Variables
+- Comments
+- Built-in functions
+- Custom functions
+- Filesystems
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+
+<details><summary> Lab 2: R Fundamentals 2 `r dat_str()` </summary>
+
+Key Concepts
+
+- Data representation in R
+- High- and low-level programming
+- Chaining functions
+- Variable scope
+- Importing data
+- Basic plots
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+
+<details><summary> Lab 3: Data Explortion `r dat_str()` </summary>
+
+Key Concepts
+
+- Data exploration: 
+- Deterministic functions: visual parameter estimation
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 4: Uncertainty and Error `r dat_str()` </summary>
+
+Key Concepts
+
+- Pseudo random numbers
+- Probability distributions
+- Quantifying error
+- Minimizing error
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 5: Uncertainty, Samples, and Populations`r dat_str()` </summary>
+
+Key Concepts
+
+- Null hypotheses
+- Simulating repeated samples
+- Categorical data in R
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 6: Intro to Inference, Confidence Intervals, and Significance`r dat_str()` </summary>
+
+Key Concepts
+
+- T-tests
+- Non-parametric tests
+- Significance
+- False negatives
+- False positivies
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+
+<details><summary> Lab 7: Least Squares, Categorical Data `r dat_str()` </summary>
+
+Key Concepts
+
+- Model objects in R
+- ANOVA in R
+- Model coefficient tables
+- ANOVA tables
+
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 8: Modeling Continuous Data 1 `r dat_str()` </summary>
+
+Key Concepts
+
+- Fitting models
+- Simple and multiple regression with `lm()`
+- Graphical and numerical model summaries
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 9: Modeling Continuous Data 2 `r dat_str()` </summary>
+
+Key Concepts
+
+- Modeling continuous and categorical data
+- Model diagnostics
+- Model selection
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 10: Extending the Linear Model `r dat_str()` </summary>
+
+Key Concepts
+
+- What is linearity?
+- Fitting a deterministic model
+- Logistic regression
+- Nonlinear least squares
+
+</details>
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 11: Frameworks `r dat_str()` </summary>
+
+Key Concepts
+
+- Optimization: Maximum Likelihood
+- Bayesian models
+- What even is statistics?
+
+</details>
+
+
+
+<details><summary> Lab 12: Extending our toolkit `r dat_str()` </summary>
+
+Key Concepts
+
+- Loops
+- Custom functions
+- The Tidyverse
+ 
+</details>
+
+
+```{r ref.label = "increment_date", include = FALSE, echo = FALSE}
+```
+
+
+<details><summary> Lab 13: A Prieview of What's Next `r dat_str()` </summary>
+
+Key Concepts
+
+- Unmet assumptions: dealint with difficult data
+- Multivariate methods
+- Spatial data
+- Random walks
+
+</details>
+

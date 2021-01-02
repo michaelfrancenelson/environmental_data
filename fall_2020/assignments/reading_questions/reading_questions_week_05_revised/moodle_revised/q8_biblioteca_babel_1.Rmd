@@ -1,0 +1,72 @@
+---
+title: "Library of Babel: word length"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> "Those examples allowed a librarian of genius to discover the fundamental law of the Library. This philosopher observed that all books, however different from one another they might be, consist of identical elements: the space, the period, the comma, and the twenty-two letters of the alphabet. ..."
+
+- A set of 25 characters doesn't seem unmanageable.
+
+> "He also posited a fact which all travelers have since confirmed: In all the Library, there are no two identical books. From those incontrovertible premises, the librarian deduced that the Library is "total"-perfect, complete, and whole-and that its bookshelves contain all possible combinations of the twenty-two orthographic symbols (a number which, though unimaginably vast, is not infinite)-that is, all that is able to be expressed, in every language. ..."
+
+
+- That sounds like a permutations/combinations problem.
+
+
+
+<div class="questionborder">
+
+- There are 25 possible *words* consisting of a single character in the Library.
+- There are $25 \times 25 = 25^2 = 625$ possible 2-character words.
+
+### Q1 2 pts
+
+- How many 3-character words are possible?
+
+</div>
+
+
+
+Solution
+========
+
+Three spaces: $25^3 = 15625$
+
+
+
+
+Meta-information
+================
+extitle: Library of Babel - word length
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 8
+expoints: 2
+

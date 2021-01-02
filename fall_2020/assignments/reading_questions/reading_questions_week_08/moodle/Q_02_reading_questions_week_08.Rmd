@@ -1,0 +1,80 @@
+---
+title: "choosing a modeling approach"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="questionborder">
+
+> "In the best case, your data will match a classical technique like linear regression
+exactly, and the answers provided by classical statistical models will agree with the
+results from your likelihood model." - Bolker (2008)
+
+Bolker describes custom-made analyses based on Maximum Likelihood, which often have a biological, ecological, or mechanistic justification.
+
+
+He contrasts these with the familiar Least Squares, *canned* methods that we typically learn in our first statistics course.
+
+### Q1: 1 pt. (short answer)
+
+- Briefly describe some of the the tradeoffs between using more realistic ML methods and more familiar classical techniques.
+
+</div>
+
+
+
+
+Solution
+========
+
+- ML methods are [potentially] harder to code and/or specify
+- More complicated models are harder to explain
+- Classical statistics/models are well-known and may require less justification
+- lots of other possibilities!
+
+
+
+
+Meta-information
+================
+
+extitle: choosing a modeling approach
+
+extype: string
+
+exsolution: nil
+
+exname: week_08_reading_questions
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 1
+

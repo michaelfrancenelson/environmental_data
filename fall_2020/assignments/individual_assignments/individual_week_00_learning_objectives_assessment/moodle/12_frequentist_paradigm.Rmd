@@ -1,0 +1,58 @@
+---
+title: "The Frequentist Paradigm"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Describe the Frequentist paradigm in statistics.
+
+Some things you may want to consider:
+
+- potentially unintuitive ideas in the Frequentist paradigm
+- hypothetical infinite sampling
+- differences with the Bayesian paradigm
+- assumptions
+- sample and population
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: the frequentist paradigm
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

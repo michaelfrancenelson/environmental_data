@@ -1,0 +1,113 @@
+---
+title: "pine seedling bootstrap CI"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+require(simpleboot)
+```
+
+<div class="instructions">
+
+#### Instructions
+
+- Use `two.boot()` to create a bootstrapped data set of the differences in mean tree count between the clipped and control treatments.
+  - Save your results as `tree_boot`.
+- Use `quantile()` to find a 95% CI.
+
+</div>
+
+<div class="questions">
+
+### Q1 1 pt. (numeric answer)
+
+- What were the endpoints of your bootstrap CI?
+
+### Q2 1 pt. (numeric and short-answer)
+
+- What is the observed difference in mean tree counts and does it fall within the 95% bootstrap CI?
+
+</div>
+
+
+Solution
+========
+
+### Grading Guide
+
+Q1: The CI should be approximately:
+
+| 2.5%  | 97.5%  |
+|-------|--------|
+| 4.125 | 29.375 |
+
+They can use `quantile(tree_boot$t, c(0.025, 0.975))` to calculate it.
+
+Q2: Observed difference is 16.  It is within the CI.
+
+| treatment | pine    | mean   |
+|-----------|---------|--------|
+| 1         | clipped | 17.875 |
+| 2         | control | 1.875  |
+
+
+Sample implementation:
+```{r veg_code, eval = FALSE, echo = TRUE}
+veg = read.csv(here::here("data", "vegdata.csv"), header=TRUE)
+dat_tree = droplevels(subset(veg, treatment %in% c("control", "clipped")))
+
+wilcox.test(pine ~ treatment, dat = dat_tree)
+t.test(pine ~ treatment, dat = dat_tree)
+
+aggregate(pine ~ treatment, dat = dat_tree, mean)
+aggregate(pine ~ treatment, dat = dat_tree, mean)
+
+R = 10000
+tree_boot = 
+  two.boot(
+    subset(dat_tree, treatment == "clipped")$pine,
+    subset(dat_tree, treatment == "control")$pine,
+    FUN = mean,
+    R = R,
+    na.rm = TRUE
+  )
+
+hist(tree_boot$t)
+
+quantile(tree_boot$t, c(0.025, 0.975))
+
+```
+
+
+
+Meta-information
+================
+extitle: pine seedling bootstrap CI
+
+extype: string
+
+exsolution: nil
+
+exname: lab_08
+exsection: lab_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 2
+

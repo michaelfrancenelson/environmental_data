@@ -1,0 +1,59 @@
+---
+title: "Formulas and equations"
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "moodle_template_funs.R"))
+```
+
+
+
+Question
+========
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+writeLines(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+If the equations:
+
+<div class="blackborder">
+
+> $cov_{x,y}=\frac{\sum_{i=1}^{N}(x_{i}-\bar{x})(y_{i}-\bar{y})}{N-1}$
+
+> $P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{ - \left( {x - \mu } \right)^2 }/{2\sigma ^2 }}$
+
+</div>
+<br>
+
+are intuitive and easy to interpret, great!
+
+If not, describe what seems difficult or opaque about them and how would you approach learning their meanings?
+
+
+<div class="warn">Note: If you don't know these equations do NOT spend time trying to interpret or understand them now!</div>
+<br>
+<div class="warn">Note: If they don't make much sense now it is fine!  I don't expect them to seem natural for many of us now. </div>
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Formulas and equations 2
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 8

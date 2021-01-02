@@ -1,0 +1,70 @@
+---
+title: "Confidence Intervals"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Standard errors are used to calculate confidence intervals: the size of the interval is proportional to the value of the standard error.
+
+Recall the formula for the standard error of the mean:
+
+$SE_\bar{x} = \frac{SD_{sample}}{\sqrt{n}}$
+
+Where $SD_{sample}$ is the sample standard deviation and $n$ is the sample size.
+
+
+
+<div class="questionborder">
+
+### Question
+
+- (2 pts) What do you expect to happen to a confidence interval as the sample size increases?
+
+</div>
+
+
+
+Solution
+========
+
+- They shoud realize that confidence intervals shrink with larger sample sizes because of the sample size term in the denominator of the SE.
+
+
+
+
+
+Meta-information
+================
+extitle: Confidence Intervals
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 2
+

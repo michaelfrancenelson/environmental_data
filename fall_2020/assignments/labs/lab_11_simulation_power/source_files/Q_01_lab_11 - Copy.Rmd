@@ -1,0 +1,215 @@
+---
+title: "1-way ANOVA by hand"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+### Instructions
+
+- Follow the lab walkthrough and fill out the code template as you go.
+- Make sure you check your calculations against the values from R's `anova()` output.
+
+</div>
+
+<div class="hints">
+- Make sure your data file is stored in your `data` subdirectory so that I can run your code on my machine.
+</div>
+
+
+<div class="hints">
+
+### Code Template
+
+```{r anova_template, eval = FALSE}
+rm(list = ls())
+
+rope = ....
+rope$rope.type = factor(rope$rope.type)
+
+n_obs = ....
+n_groups = ....
+
+ss_tot = ....
+df_tot = ....
+
+agg_sq_resids = ....
+ss_within = ....
+df_within = ....
+
+ss_among = ....
+df_among = ....
+
+ms_within = ....
+ms_among  = ....
+
+f_ratio = ....
+f_pval = ....
+```
+
+</div>
+
+
+
+<div class="hints">
+
+### Self-test
+
+I'll use the following script to test your answers.  You can use it as a self-test prior to submitting your answer.
+
+- The comparison statements (lines with `==`) will return values of `TRUE` if your calculations are correct.
+
+```{r grading_script, eval = FALSE}
+# number comparison tolerance
+digits_check = 5
+
+# Build the reference model using R functions
+fit_1 = lm(p.cut ~ rope.type, data=rope)
+anova(fit_1)
+anova_fit_1 = anova(fit_1)
+
+# Check degrees of freedom
+anova_fit_1$Df == c(df_among, df_within)
+
+# Check sums of squares
+round(anova_fit_1$`Sum Sq`, digits = digits_check) == round(c(ss_among, ss_within), digits = digits_check)
+
+# Check mean squares
+round(anova_fit_1$`Mean Sq`, digits = digits_check) == round(c(ms_among, ms_within), digits = digits_check)
+
+# Check the F-ratio
+round(anova_fit_1$`F value`[1], digits = digits_check) == round(f_ratio, digits = digits_check)
+
+# Check the F test statistic p-value
+round(anova_fit_1$`Pr(>F)`[1], digits = digits_check) == round(f_pval, digits = digits_check)
+
+```
+
+</div>
+
+<div class="questions">
+
+
+
+### Q 8 pt (R-code)
+
+Paste your completed code into the text entry box.
+
+To grade your submission I'll run your code in an empty R environment to load your calculated values into memory.  Then I'll run the grading script above.  You'll get 1 point for each `TRUE` from the grading script.
+
+</div>
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r lab_10_q_1}
+rope = read.csv(here::here("data", "rope.csv"))
+rope$rope.type = factor(rope$rope.type)
+
+n_obs = nrow(rope)
+n_groups = length(levels(rope$rope.type))
+
+ss_tot = sum((rope$p.cut - mean(rope$p.cut))^2)
+df_tot = n_obs - 1
+
+agg_sq_resids = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) sum((x - mean(x))^2))
+
+ss_within = sum(agg_sq_resids$x)
+df_within = n_obs - n_groups
+
+ss_among = ss_tot - ss_within
+df_among = n_groups - 1
+
+ms_within = ss_within / df_within
+ms_among  = ss_among  / df_among
+
+f_ratio = ms_among / ms_within
+f_pval = 1 - pf(f_ratio, df_among, df_within)
+
+```
+
+#### Grading Guide
+
+Run the students' code to load quantities into memory, then run the following script to calculate how many points they should get:
+
+```{r grading_script_2}
+
+# number comparison tolerance
+digits_check = 5
+
+# Build the reference model using R functions
+fit_1 = lm(p.cut ~ rope.type, data=rope)
+anova(fit_1)
+anova_fit_1 = anova(fit_1)
+
+
+sum(
+  # Check degrees of freedom
+  anova_fit_1$Df == c(df_among, df_within),
+  
+  # Check sums of squares
+  round(anova_fit_1$`Sum Sq`, digits = digits_check) == round(c(ss_among, ss_within), digits = digits_check),
+  
+  # Check mean squares
+  round(anova_fit_1$`Mean Sq`, digits = digits_check) == round(c(ms_among, ms_within), digits = digits_check),
+  
+  # Check the F-ratio
+  round(anova_fit_1$`F value`[1], digits = digits_check) == round(f_ratio, digits = digits_check),
+  
+  # Check the F test statistic p-value
+  round(anova_fit_1$`Pr(>F)`[1], digits = digits_check) == round(f_pval, digits = digits_check)
+)
+
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: 1-way ANOVA by hand
+
+extype: string
+
+exsolution: nil
+
+exname: lab_10
+exsection: lab_10
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+
+expoints: 8
+
+
+
+

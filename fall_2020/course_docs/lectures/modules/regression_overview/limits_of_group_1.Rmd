@@ -1,0 +1,345 @@
+---
+title: "Looking Beyond Group 1"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(eval.expr = TRUE)
+require(rmd.utils)
+```
+
+```{r setup_plot_data, echo = FALSE, include = FALSE}
+set.seed(21124)
+s33d = 21252
+s44d = 125266
+n_pts = 67
+
+set.seed(s33d)
+x = sort(runif(n_pts, min = 2.6, max = 15))
+
+set.seed(s33d)
+y1 = rnorm(n = n_pts, mean = 2 + exp(0.17 * x), sd = .3 + 0.03 * x)
+
+set.seed(s44d)
+y2 = rnorm(n = n_pts, mean = 2 + exp(0.13 * x), sd = .1 + 0.12 * x)
+
+fit_1 = lm(y1 ~ x)
+fit_1_log = lm(log(y1) ~ x)
+fit_1_sqrt = lm(sqrt(y1) ~ x)
+
+fit_2 = lm(y2 ~ x)
+fit_2_log = lm(log(y2) ~ x)
+fit_2_sqrt = lm(sqrt(y2) ~ x)
+
+```
+
+
+
+## Group 1: [General] Linear Models
+
+Four key assumptions:
+
+- Normality: normality refers to the model residuals
+- Constant variance a.k.a homoskedasticity, a.k.a. homogeneity
+- Independent observations
+- Fixed x: no measurement error in our predictor variables
+
+Group 1 requirements:
+
+- Group 1 models are linear in the parameters
+- Group 1 models have a single continuous response variable
+
+
+
+
+## Challenge 1: Non-Linearity
+
+Group 1 models have to be *linear in the parameters*, but they can still handle certain types of nonlinear relationships between predictors and responses.
+
+```{r non_linear_data_1, fig.asp = 1/2, echo = FALSE}
+par(mar = c(1, 1, 1, 1), mfrow = c(1, 2), pch = 21)
+plot(x, y1, axes = FALSE, ann = FALSE, col = 1, bg = "steelblue")
+plot(x, y1, axes = FALSE, ann = FALSE, col = 1, bg = "steelblue")
+abline(fit_1)
+```
+
+
+
+
+## Nonlinearity: Some Options You Can Try:
+
+1. Data transformation (often the logarithm)
+2. Adding polynomial or power terms
+3. Adding interaction terms
+
+Each option has pros and cons
+
+
+
+
+## Data transformations
+
+Can help with:
+
+1. Stabilizing the variance: log transformations
+2. Linearizing the relationship
+
+```{r non_linear_data_2, fig.asp = 1/2.8, echo = FALSE, fig.align='center'}
+par(mar = c(1, 1, 4, 1), mfrow = c(1, 3), pch = 21)
+plot(x, y1, axes = FALSE, ann = FALSE, col = 1, bg = "steelblue")
+abline(fit_1); box(); title(main = "Original")
+plot(x, sqrt(y1), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue"); title(main = "Square Root Transformed")
+abline(fit_1_sqrt); box()
+plot(x, log(y1), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue") ; title(main = "Log Transformed")
+abline(fit_1_log); box()
+```
+
+
+
+## Data transformations
+
+```{r non_linear_data_3, fig.asp = 1.8/2.8, echo = FALSE, fig.align='center'}
+par(mar = c(1, 1, 1, 1), oma = c(0, 0, 2, 0), mfrow = c(2, 3), pch = 21)
+plot(x, y1, axes = FALSE, ann = FALSE, col = 1, bg = "steelblue")
+abline(fit_1); box(); title(main = "Original")
+plot(x, sqrt(y1), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue"); title(main = "Square Root Transformed")
+abline(fit_1_sqrt); box()
+plot(x, log(y1), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue") ; title(main = "Log Transformed")
+abline(fit_1_log); box()
+plot(x, residuals(fit_1), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue", ylim = c(-2.5, 2.5))
+abline(h = 0); box(); 
+# title(main = "Original")
+plot(x, residuals(fit_1_sqrt), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue", ylim = c(-.6, .6));
+# title(main = "Square Root Transformed")
+abline(h = 0); box()
+plot(x, residuals(fit_1_log), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue", ylim = c(-.6, .6)) ;
+# title(main = "Log Transformed")
+abline(h = 0); box()
+```
+
+
+
+
+## Log transformations: challenges
+
+Transformations affect both the deterministic and stochastic model components
+
+- Sometimes this helps: it often fixes non-constant variance
+- Transformed model coefficients can be difficult to interpret or explain to others. 
+  - Coefficients are now in terms of proportional increases/decreases not constant amounts.
+- It’s not always straightforward to ‘back-transform’ coefficients.
+
+
+
+
+## Log-Transformed Coefficient Interpretations
+
+Recall the linear slope coefficient interpretation:
+
+- "Every 1% increase in survival was associated with 2 additional killed trees per hectare per year." 
+
+### Log-transformed coefficient:
+
+- "Within a stand, a 1% increase in beetle survival was associated with a 6% proportional increase in tree mortality rate over the mortality rate of the previous year."
+
+
+
+
+## Additional model terms
+
+Polynomial regression: raise the predictor variable to a power
+
+- Nonlinear predictor/response relationship
+- Model parameters are still linear.
+
+Interaction Terms
+
+
+
+
+## Interaction terms
+
+Example model: 
+
+$y_i = 1.3 + 2.0 x_1 + 2.4 x_2 + 2.3 x_1 x_2 + \epsilon$
+
+- 1-unit increase in predictor 1 associated with 2-unit increase in response. 
+- 1-unit increase in predictor 2 associated with 2.4-unit increase in response. 
+- What if we simultaneously increase predictor 1 and 2 by one unit?
+
+
+
+
+## Interaction terms
+
+$y_i = 1.3 + 2.0 x_1 + 2.4 x_2 + 2.3 x_1 x_2 + \epsilon$
+
+- What if we simultaneously increase predictor 1 and 2 by one unit?
+- Without an interaction we would expect an increase of 4.4, the sum of $\beta_1$ and $\beta_2$. 
+- With the interaction we get an increase of 6.7 because the value of the interaction slope is 2.3!
+  - This is a *superlinear* increase.
+
+Interaction effects can be *synergistic* or *inhibiting*
+
+
+
+
+## Nonlinearity: Group 2 approaches
+
+Transforming data has some serious drawbacks.
+
+Some extend linear techniques can directly describe nonlinear relationships:
+
+- Generalized [Nonlinear] Least Squares: GLS and GNLS
+  - still require: independent observations, normal errors
+- Generalized Linear Models: GLM
+  - These can handle certain kinds of non-linearity.
+
+
+
+
+## Challenge 2: Heterogeneity - Non Constant Variance
+
+```{r heterogeneous_data_3, fig.asp = 1.8/2.8, echo = FALSE, fig.align='center'}
+ylm1 = 5
+ylm2 = 1.5
+
+par(mar = c(1, 1, 1, 1), oma = c(0, 0, 2, 0), mfrow = c(2, 3), pch = 21)
+
+plot(x, y2, axes = FALSE, ann = FALSE, col = 1, bg = "steelblue")
+abline(fit_2); box(); title(main = "Original")
+
+plot(x, sqrt(y2), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue"); title(main = "Square Root Transformed")
+abline(fit_2_sqrt); box()
+
+plot(x, log(y2), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue") ; title(main = "Log Transformed")
+abline(fit_2_log); box()
+
+plot(x, residuals(fit_2), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue", ylim = ylm1 * c(-1, 1))
+abline(h = 0); box(); 
+
+plot(x, residuals(fit_2_sqrt), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue", ylim = ylm2 * c(-1, 1))
+abline(h = 0); box()
+
+plot(x, residuals(fit_2_log), axes = FALSE, ann = FALSE, col = 1, bg = "steelblue", ylim = ylm2 * c(-1, 1))
+abline(h = 0); box()
+```
+
+
+
+
+## What is heterogeneity?
+
+- Group 1 requires the variance to be the same at every value of the predictors!
+- This is often unrealistic: hypothetical plant growth
+  - Plants grown in poor soil have 2.0 grams biomass (on average)
+  - Plants grown in rich soil have 20.0 grams biomass (on average)
+  - Do you expect the magnitude of variation to be the same in each group?
+
+
+
+
+## Dealing With Heterogeneity
+
+- Log transformations often help!
+- Weighted Least Squares
+- Regression using a variance/covariance matrix (instead of a single error term)
+  - Model variance as a function of a predictor
+- Simulation: bootstrapping
+- Adjusting standard errors for non-constant variance
+  - This can work well for continuous predictors.
+- Random effects and multi-level models.
+  - These can work well for categorical predictors.
+  
+
+
+
+
+## Challenge 3: non-normal errors
+
+Models of count data won't have normally-distributed errors by definition:
+
+- Generalized Linear Models can accommodate some types of non-normal errors.
+ - Especially useful for binary or count data Data transformations can sometimes fix non-normal errors.
+
+
+
+
+
+
+## Challenge 3: Non-independent observations/errors
+
+### Non-independent observations result in data with lower information content.
+- This seems like a strange statement.
+- Can we reason out why this might be?
+
+Violations of the assumption of independent, randomized sampling affect our estimates of *significance*.
+
+
+
+
+## Autocorrelation
+
+Does the value of your current observation help you guess what you will observe next?
+
+- Observations nearby in space or time might be more similar than expected due to chance alone.f
+- Walter Tobler’s 1 st law of Geography: “Everything is related to everything else, but near things are more related than distant things."
+
+
+
+
+## Temporal dependence
+
+- Can we guess the high temperature on July 28th, 2000 if we know the high temperature on July 27th, 2000?
+- Can we guess the high temperature on July 28 th 2012?
+
+Autoregressive order 1: AR1 - assumes that the current observation is related to the immediately previous observation.
+
+- Not correlated with observations more than 1 time - lag behind.
+- Includes a model prediction term for the t - 1 observation
+
+
+
+
+## Autoregressive order n:
+
+- AR(n)
+- AR(n) with moving average
+
+
+
+
+## Spatial Dependence
+
+Correlation among observations might decrease with increasing distance:
+
+- Nearby observations are more similar than observations separated by large distances.
+  - Points within a *characteristic scale* are correlated.
+
+
+
+
+## Regression with autocorrelated errors
+
+Custom models with custom variance/covariance structures for heterogeneity,
+
+- A difficult (but not impossible) field!
+- Zuur 2009 has some good descriptions and examples.
+
+

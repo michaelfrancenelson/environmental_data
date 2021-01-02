@@ -1,0 +1,53 @@
+---
+title: "Identify a question or problem"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Describe the key ecological, economic, aesthetic, or other problems your group identified related to your scenario.
+
+Describe the questions that guided your group's model building.
+
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Identify a question or problem
+extype: string
+exsolution: nil
+exname: in-class model thinking
+exsection: in-class model thinking
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15

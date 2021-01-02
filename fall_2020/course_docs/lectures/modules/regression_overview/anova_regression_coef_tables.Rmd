@@ -1,0 +1,357 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Group 1: General Linear Models"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+  eval_expr: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(yaml.eval.expr = TRUE)
+options(yaml.eval.expr = TRUE)
+
+require(rmd.utils)
+require(mfn.teaching.utils)
+emphasis_color = "red"
+require(ggplot2)
+require(cowplot)
+require(palmerpenguins)
+```
+
+
+```{r set_up_models, results='hide', echo=FALSE}
+require(palmerpenguins)
+
+fit_species = lm(body_mass_g ~ species, data = penguins)
+
+species_coefs = coef(summary(fit_species))
+fit_species_kab  = knitr::kable(species_coefs, digits = 3)
+
+mean_masses = data.frame(
+  aggregate(
+    penguins$body_mass_g,
+    by = list(penguins$species),
+    mean, na.rm = TRUE))
+
+mean_masses = cbind(mean_masses, species_coefs[, 1])
+
+names(mean_masses) = c("species", "mean body mass (g)", "model coefficient")
+rownames(mean_masses) = NULL
+
+species_mass_kab = knitr::kable(mean_masses, digits = 2)
+
+# anova(fit_species)
+
+anova_species_kab = gsub("NA", "", knitr::kable(anova(fit_species)))
+
+
+
+
+knitr::kable(summary(fit_species))
+
+```
+
+
+
+
+
+## Group 1 model interpretation
+
+### Group 1 models are *linear in the parameters*
+
+This makes the interpretation of model terms *relatively* easy.
+
+- But note, there is still lots of complexity especially when we mix continuous and categorical terms and interaction terms.
+
+Recall the basic equation:
+
+$y_i = \alpha + \beta_1 x_1 + \beta_2 x_2 + ... + \epsilon$
+
+- When all of the predictor variables have a value of zero, we expect $y$ to have a value of $\alpha$, on average.
+- For every 1-unit change in $x_1$ we expect a $\beta_1$-unit change in $y$, on average.
+
+
+
+
+## Group 1 model summary presentations
+
+1. Table of model coefficients model summary.
+  - This table tells us the strength of effects of predictors, overall model significance test
+2. ANOVA table.
+  - This table shows the model variability attributed to each factor, factor-specific significance tests
+
+
+
+
+## Group 1 model summary interpretation: coefficients
+
+1. Intercept: What is the value of the response when the predictor has value zero?
+2. Slope: What is the change in the response with each unit change in the predictor?
+3. Standard Errors: shape of sampling distribution
+4. F-test: overall model significance test
+
+
+
+
+## Group 1 ANOVA table interpretation
+
+1. Degrees of freedom: Reflects the number of samples, number of factor levels, number of individuals per factor level etc.
+2. Sum of squares: Reflects the total squared deviation from the mean explained by a source.
+3. Mean squares: Mean SS due to a source (per DF)
+4. F tests: Test for ratio of variability explained by a particular predictor variable
+
+
+
+
+## ANOVA table vs. model coefficient table
+
+Model coefficient table tells you:
+
+1. Intercept and slope coefficients
+2. Overall model significance test, correlation test
+
+ANOVA table tells you:
+
+1. Variability explained by each factor in the model
+2. Significance tests for each factor separately
+
+
+
+
+## 1-way ANOVA
+
+When we have a continuous response and a single categorical predictor with 2 levels we can use a t-test.
+
+What if there are 3 or more levels?
+
+- The t-test is not enough.
+- Analysis of Variance is a generalization of the t-test for 3 or more groups.
+
+
+
+
+
+
+## Model Coefficient Tables: Dummy Variables
+
+When you fit a model using a categorical predictor with n levels, the algorithm first detects all of the factor levels present in the data, then creates a set of n - 1 *dummy variables*.
+
+- The dummy variables allow the model-building process to treat each factor level as if it were a separate, numerical predictor that can take on only values of zero or one.
+
+
+```{r dummy_var_table, echo = FALSE}
+gen = "Gentoo"; chi = "Chinstrap"; ad = "Adelie"
+knitr::kable(data.frame(
+  species          = c(ad, gen, chi),
+  speciesGentoo    = c( 0,   1,   0),
+  speciesChinstrap = c( 0,   0,   1)
+  ))
+```
+
+
+
+
+## Model Coefficient Tables: Interpretation for Categorical Predictors
+
+Since each factor level is treated as a predictor variable, there will be slope parameters for each.
+
+When R builds a model, it selects one of the factor levels to serve as the *base case*.  
+
+- When the model contains only categorical variables, the base case is analogous to the *intercept* term in a model, i.e. the $\alpha$.
+  
+It'll be easier to understand with an example.
+
+
+
+
+## 1-way ANOVA: Palmer Penguins
+
+The procedure for conducting an ANOVA in R is:
+
+- Create a linear model fit with `lm()`.
+- Use `anova()` to perform the Analysis of Variance and print the ANOVA table.
+
+
+Recall that ANOVA is really a just a different way of looking at a linear model.
+
+- To better understand the relationship, we'll focus on the model coefficient table first:
+
+
+
+
+
+## 1-way ANOVA: Model Coefficients
+
+\tiny
+
+```{r}
+summary(fit_species)
+```
+
+
+
+
+
+
+## Factor Base Cases
+
+There are slopes for Chinstrap and Gentoo, but where is the Adelie coefficient?
+
+- Recall: the *base case* is the intercept in a 1-way ANOVA.
+
+```{r ref.label = "mass_species_lm_summary_kable", echo=FALSE}
+```
+R assigned "Adelie" to be the base case.
+
+- Notice how R formats the factor-level coefficient names:
+  - the variable name prepended to the factor level.
+
+
+
+
+## Interpreting the Coefficient Table
+
+```{r ref.label = "mass_species_lm_summary_kable", echo=FALSE}
+```
+- Mean Adelie penguin mass is 3700 grams
+- Mean Chinstrap penguin mass is 3700 + 32 grams
+- Mean Gentoo penguin mass is 3700 + 1375 grams
+
+Everything is relative to the base case!
+
+
+
+## Interpreting the Coefficient Table
+
+```{r ref.label = "mass_species_lm_summary_kable", echo=FALSE}
+```
+- The intercept is 3700 grams: Adelie penguins weigh 3700g, on average
+- The regression slope for Chinstrap is 32 grams per unit.
+  - Adding one 'penguin unit' increases the penguin mass by 32 grams, on average.
+- The regression slope for Gentoo slope 1375 grams
+  - Adding one 'penguin unit' increases the penguin mass by 1375 grams, on average.
+
+Everything is relative to the base case!
+
+
+
+
+## Interpreting the Coefficient Table: Group Means
+
+`r species_mass_kab`
+
+We can obtain the mean masses of each species from the model coefficient table.
+
+- Mean Chinstrap penguin mass
+  - $3733 = 3701 + 1 \times 32 + 0 \times 1375$
+- Mean Gentoo penguin mass: 
+  - $5076 = 3701 + 0 \times 32 + 1 \times 1375$
+
+
+
+
+## Interpreting the Coefficient Table: Group Means
+
+`r species_mass_kab`
+
+If we consider $x_{chin}$ a dummy variable which is equal to 1 if the observation is a Chinstrap penguin and 0 otherwise, and likewise for $x_{gentoo}$ we could write the regression equation symbolically as:
+
+$y_i = \alpha_{adelie} + \beta_{chin} \times x_{chin} + \beta_{gentoo} \times x_{gentoo}$
+
+What would the coefficient table and equation equation look like if Chinstrap penguins were lighter than Adelie penguins?
+
+
+
+
+
+## 1-way ANOVA: ANOVA Table
+
+We have examined the model coefficients and calculated the group means.
+
+- The masses seem pretty different, but how could we assess the ANOVA null hypothesis?
+  - "The body masses of penguins for *at least one* species are different from the masses of the other species"
+
+\tiny
+
+
+```{r echo=FALSE}
+anova(fit_species)
+```
+
+
+
+
+
+
+## 1-way ANOVA: Model Coefficient Table
+
+What can we learn from the model coefficient table?
+
+`r fit_species_kab`
+
+The *intercept* and *speciesGentoo* coefficients have low p-values, but that's not exactly what we wanted to know!
+
+- We wanted to know about the penguin species *in general*.
+
+
+
+
+## 1-way ANOVA: ANOVA Table
+
+The ANOVA table gives us a clue
+
+
+`r anova_species_kab`
+
+
+- Note how the *species* predictor is now a single line.
+  - There were model coefficients for each factor level.
+
+
+
+## Model Coefficients and ANOVA Provide Complementary Information
+
+We'll cover model coefficient interpretation and the ANOVA table details in greater depth in another slide deck, but you should notice:
+
+1.  Model slope/intercept coefficients: there is one coefficient for each *factor level* of a *categorical predictor*.
+2.  The intercept coefficient corresponds to the *base case*.
+3.  Model coefficient table characterizes the strength and significance of individual intercept and slope coefficients.
+  - It *does not* tell us about the overall significance of the categorical predictor.
+
+## Model Coefficients and ANOVA Provide Complementary Information
+
+3.  The ANOVA table evaluates the ANOVA null hypothesis.
+  - It *does not* tell us *which factor levels* are different
+- The two tables each provide part of the picture.
+
+Neither the model coefficient table nor the ANOVA table tell us if a particular pair of factor levels are *significantly* different form one another!
+
+
+
+
+## Model Coefficients and ANOVA Provide Complementary Information
+
+Neither the model coefficient table nor the ANOVA table tell us whether a particular pair of factor levels are *significantly* different form one another!
+
+- This is the realm of post-hoc testing.
+  - Post-hoc testing is an analysis you perform after (post) you perform the initial analysis (hoc).
+- The Tukey Honest Significant Difference is a common post-hoc method.
+
+
+

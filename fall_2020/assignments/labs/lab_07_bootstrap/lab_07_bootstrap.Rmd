@@ -1,0 +1,179 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Lab 07: The Bootstrap"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = 'allow')
+
+require(here)
+require(mfn.teaching.utils)
+require(rmd.utils)
+
+bootstrap_ci_source_rmd = find_file("bootstrap_1_confidence_intervals.Rmd")
+bootstrap_rarefact_source_rmd = find_file("bootstrap_2_rarefaction.Rmd")
+
+moths_data_url = 
+  "https://michaelfrancenelson.github.io/eco_602_634_2020/data/moths.csv"
+
+
+```
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+source(find_file("build_lab.R"))
+
+build_lab(7, moodle_xml = FALSE, answer_key = TRUE, out_dir = here::here())
+```
+
+
+
+
+
+# Learning objectives, technical skills and concepts:
+
+- Bootstrap
+- Apply functions
+- Building custom functions
+- Resampling
+
+
+
+
+# Bootstrap
+
+We're going to take a brief detour to continue our focus on resampling methods.
+
+This week's lab we'll work through materials covering two applications of
+bootstrap methods.
+
+The material on bootstrapping techniques in this section was adapted from
+laboratory materials and data for ECo 634, Analysis of Environmental Data Lab,
+written by Kevin McGarigal at the University
+of Massachusetts Amherst Department of Environmental Conservation.
+
+
+
+
+# The `apply()` family of functions
+
+
+## The apply philosophy
+
+There exists a strong *anti-loop* school of thought within the R community.  
+
+The *apply* functions attempt to replace the need for *for-loops* by providing
+a function-based set of alternatives.
+
+## `apply()`
+
+To demonstrate the apply philosophy, I'll demonstrate the `apply()` function.
+
+`apply()` works on data frames or other 2-dimensional arrays of data, such as matrices.
+
+It *applies* a function to either the rows or columns of the input data.
+
+The important arguments are:
+
+- `X` the 2-dimensional data, usually a data frame or a matrix
+- `MARGIN` whether to apply the function to rows (`MARGIN = 1`) or columns (`MARGIN = 2`)
+- `FUN` The function to apply to the rows or columns
+
+
+
+### Basic examples
+
+Here are some demos using a matrix:
+
+
+```{r}
+# Create simulated data
+dat = matrix(1:49, nrow = 7, ncol = 7)
+print(dat)
+```
+
+
+Minimum and maximum values in each *row*
+```{r}
+apply(dat, MARGIN = 1, FUN = min)
+apply(dat, MARGIN = 1, FUN = max)
+```
+
+- Note that I used `MARGIN = 1` to indicate that I wanted `apply()` to look at rows
+- I used `FUN = min` and `FUN = max` to tell `apply()` to find the minimum and maximum
+values in the rows.
+
+Mean values in each *column*
+```{r}
+apply(dat, MARGIN = 2, FUN = mean)
+```
+
+- Note that I used `MARGIN = 1` to indicate that I wanted `apply()` to look at rows
+- I used `FUN = mean` to tell `apply()` to find the mean value in each column
+
+
+### More advanced usage
+
+You can use the apply family of functions to accomplish *most* tasks that you could 
+use loops for.
+
+I find that sometimes `apply` functions are simpler, while sometimes it is easier
+to use a for-loop.
+
+There's a DataCamp tutorial on apply functions you can check out for some more examples
+
+https://www.datacamp.com/community/tutorials/r-tutorial-apply-family
+
+
+
+
+
+
+# Data Files
+
+We'll work with a dataset
+containing standardized abundance estimates of 10 rare moth species across 24
+sample plots in the pine barrens of southeast Massachusetts.
+
+The following bootstrapping materials require the following data files:
+
+- <a href="`r moths_data_url`">moths.csv</a>
+
+
+The code examples below assume that you have the 'moths.csv' file saved in
+a subdirectory called `data` of your main RProject directory.
+
+If you plan to access the data file from another location, you'll need to adjust
+your code accordingly.
+
+
+```{r}
+moths = read.csv(here("data", "moths.csv"))
+head(moths)
+```
+
+
+```{r child=bootstrap_ci_source_rmd}
+```
+
+```{r child=bootstrap_rarefact_source_rmd}
+```
+
+
+# Lab Questions
+

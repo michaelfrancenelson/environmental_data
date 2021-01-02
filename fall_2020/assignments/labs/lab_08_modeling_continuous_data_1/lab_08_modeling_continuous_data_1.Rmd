@@ -1,0 +1,583 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Lab 08: Modeling 1"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(eval.expr = TRUE)
+options(warn = -1)
+require(here)
+require(rmd.utils)
+
+
+veg = read.csv(here("data", "vegdata.csv"), header=TRUE)
+
+dat_bird = read.csv(here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here("data", "hab.sta.csv"))
+
+dat_bird = read.csv(here("data", "bird.sub.csv"))
+dat_habitat = read.csv(here("data", "hab.sub.csv"))
+
+dat_all = merge(
+  dat_bird,
+  dat_habitat,
+  by = c("basin", "sub"))
+```
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+
+source(find_file("build_lab.R"))
+# build_lab(8, answer_key = FALSE, moodle_xml = TRUE)
+build_lab(8, answer_key = TRUE, moodle_xml = FALSE)
+
+
+
+
+  build_assignment_doc(
+    doc_source_file = a_f$doc_source_file,
+    question_source_files = a_f$question_source_files,
+    doc_target_file = a_f$doc_target_file,
+    key_target_file = key_target_file
+  )
+  
+
+```
+
+
+
+# Data Files
+
+You'll need to retrieve the following files from [the course github page](/eco_602_634_2020/index.html){target='_blank'}.  You can find it at the bottom in the **Data Files** tab of the **Data, Walkthroughs, etc.** section of the page.
+
+- `vegdata.csv`
+- `bird.sub.csv`
+- `hab.sub.csv`
+
+
+- Save them in the `data` subdirectory of your main course RProject folder.
+
+
+
+
+
+# Bootstrap: Continuous Data
+
+In the  <a href="/eco_602_634_2020/assignments/eco_634/lab_07.html" target="_blank">Bootstrap lab (lab 7)</a>, you used bootstrap resampling to calculate confidence intervals and create a rarefaction curve.
+
+In this lab, we'll be using bootstrap resampling to explore sampling distributions of model parameters in the context of one and two sample difference of means tests.
+
+
+## Bootstrap: Exploring the Alternative Hypothesis
+
+> Recall that t-tests are useful when we have a *categorical* predictor with two levels and a continuous response variable.
+
+<!-- - We can use bootstrap resampling to estimate Type II error rates, i.e. the false positive rate.  The Type II error rate will be important for quantifying *statistical power*, a topic we'll cover later in lecture and lab. -->
+
+
+## Penguin Data
+
+We'll use the `palmerpenguins` dataset again, but this time, let's remove the Gentoo penguins
+
+```{r penguin_data_prep}
+require(palmerpenguins)
+penguin_dat = droplevels(subset(penguins, species != "Gentoo"))
+
+```
+
+```{r penguin_data_boxplots, fig.asp=1 / 1.8, echo = FALSE}
+par(mfrow = c(1, 2))
+boxplot(flipper_length_mm ~ species, data = penguins, main = "Original Penguin Data", ylab = "Flipper length (mm)")
+boxplot(flipper_length_mm ~ species, data = penguin_dat, main = "Gentoo Penguins Removed",  ylab = "Flipper length (mm)")
+```
+
+## Parametric Two-Sample Test
+
+Perform a t-test with the alternative hypothesis that Adelie penguins have shorter flippers than Chinstrap penguins.
+
+```{r peng_t_test}
+t.test(flipper_length_mm ~ species, data = penguin_dat, alternative = "less")
+```
+
+<!-- # t.test(flipper_length_mm ~ species, data = penguin_dat, alternative = "two.sided") -->
+
+Take note of the confidence interval, the p-value, and the group means.
+
+
+
+
+## Bootstrap Two-Sample Test
+
+In a previous lab you calculated bootstrap confidence intervals for the mean value of one group of observations.
+
+You can also create a bootstrap confidence interval on the difference of two means... That sounds a lot like a t-test!
+
+### Use `two.boot()`
+
+You could write your own custom function to do a two-sample bootstrap, but you are already a whiz at writing functions so you can save some time by checking out `two.boot()` in the package `simpleboot`.  Remember that you'll have to install `simpleboot` before you can use any of its functions.
+
+- Install the package.
+- Look at the help entry for `two.boot()`.
+- Conduct a bootstrap analysis of the difference in means of the two penguin species.
+- I suggest using no more than 1000 replicates at first.  If your computer is fast, you can increase the number of reps. Once you get your code right, y ou can run the simulation with 10000 iterations.
+
+
+```{r two_boot_penguin, echo=FALSE, warn = FALSE}
+require(simpleboot)
+require(boot)
+
+pen_boot = 
+  two.boot(
+    subset(penguin_dat, species == "Adelie")$flipper_length_mm,
+    subset(penguin_dat, species == "Chinstrap")$flipper_length_mm,
+    FUN = mean,
+    R = 10000,
+    na.rm = TRUE
+  )
+
+# sum(pen_boot$t >= 0)
+
+hist(
+  pen_boot$t, 
+  main = "Histogram of 10000 bootstrap differences\nin mean penguin flipper length", 
+  sub = "Adelie and Chinstgrap Penguins",
+  xlab = "Difference in mean flipper length (mm)")
+
+# boot.ci(pen_boot)
+```
+
+
+
+
+# Tree data
+
+We'll examine a dataset from a field experiment designed to assess tree seedling response to understory vegetation treatments.
+
+Four treatments (including a control) were randomly assigned to 32 plots in a randomized block design.  For now, we'll not worry about the randomized block design part of the experiment.
+
+For now, let’s consider just the number of pine seedlings (pine) under the various treatments.
+
+
+Let’s visualize the data using box conditional boxplots plots:
+
+```{r veg_boxplots_all}
+boxplot(pine ~ treatment, dat = veg)
+```
+
+- What do you notice?
+
+
+
+## Tree Treatments
+
+Since we're focusing on two-sample tests, let's create a new data frame that contains only the observations that received the "clipped" or "control" treatments.
+
+You can use the `subset()` function in conjunction with a new operator: `%in%`:
+
+```{r}
+dat_tree = droplevels(subset(veg, treatment %in% c("control", "clipped")))
+```
+- Don't forget the call to `droplevels()`.
+
+Create a new conditional boxplot on the new data to verify that your subsetting worked:
+
+```{r veg_boxplots, echo = FALSE}
+boxplot(pine ~ treatment, dat = dat_tree)
+```
+
+Use `table()` to determine how many observations are in each of the treatments.  I'll let you figure out the syntax.  Hint: you'll need to tell `table()` which column of the data to use.
+
+```{r, echo=FALSE, eval=FALSE}
+table(dat_tree$treatment)
+```
+
+
+## Nonparametric two-sample test
+
+Conduct a Wilcoxon ranked sum test on the difference in means between the treatments.
+
+- What was the p-value?
+
+```{r tree_wilcox, echo=FALSE, eval=FALSE}
+wilcox.test(pine ~ treatment, dat = dat_tree)
+t.test(pine ~ treatment, dat = dat_tree)
+
+
+predict()
+
+seq()
+
+```
+
+
+
+## Bootstrap
+
+Conduct a bootstrap of the tree data.
+
+- What are the endpoints of a 95% CI?
+
+```{r tree_boot}
+
+tree_boot = 
+  two.boot(
+    subset(dat_tree, treatment == "clipped")$pine,
+    subset(dat_tree, treatment == "control")$pine,
+    FUN = mean,
+    R = 10000,
+    na.rm = TRUE
+  )
+
+# sum(tree_boot$t >= 0)
+# sum(tree_boot$t < 0)
+
+boot.ci(tree_boot)
+hist(tree_boot$t, main = "Bootstrap sampling distribution")
+
+quantile(tree_boot$t, 0.025)
+
+```
+
+
+
+
+
+
+
+
+
+
+# Resampling: linear regression
+
+We can use Monte Carlo randomization to assess the significance of regression parameters.
+
+We'll estimate the significance of a slope parameter of a simple linear regression.
+
+
+
+## Bird Data
+
+We'll use a standardized version of the Oregon birds data.  
+
+The data in the subbasin files (which we are using here) are aggregated by sub-basin and standardized from the full bird census count data we have used previously.
+
+There are habitat variables for 30 subbasins.
+
+You'll need to retrieve the `bird.sub.csv` and `hab.sub.csv` files from the course github site (see the Data Files section above).
+
+See the corresponding metadata file (birdhab.meta.pdf) for more info.
+
+Read the data files and merge into a single `data.frame`:
+
+```{r}
+dat_bird = read.csv(here("data", "bird.sub.csv"))
+dat_habitat = read.csv(here("data", "hab.sub.csv"))
+
+dat_all = merge(
+  dat_bird, 
+  dat_habitat,
+  by = c("basin", "sub"))
+```
+
+In this case, the relational fields that link the bird and habitat data sets are:
+
+- `basin` (3 unique basins)
+- `sub` (10 unique sub-basins in each basin).
+
+We are only going to use two of the many variables in the data.
+
+
+## Model Variables
+
+We'll only be using two of the many variables in the merged data: 
+
+1. Simpson’s diversity index for breeding birds: `b.sidi`
+1. Simpson’s diversity index for vegetation cover types: `s.sidi`
+
+Note, the latter index represents the diversity in landscape composition as defined largely by vegetation seral stage.
+
+Let’s begin by plotting the data: 
+
+```{r}
+plot(
+  b.sidi ~ s.sidi, data = dat_all,
+  main = "Simpson's diversity indices",
+  xlab = "Vegetation cover diversity",
+  ylab = "Bird diversity")
+```
+
+
+It appears that there is a negative relationship between bird diversity and vegetation diversity; specifically, bird diversity declines as the vegetation diversity increases.
+
+This seems somewhat counter-intuitive, since we usually think of animal diversity increasing with the diversity of habitats (proxied here by vegetation seral stages).
+
+Could this result have been due to chance?
+
+Or is this relationship likely to be real?
+
+
+
+## Simple Linear Regression
+
+We can fit a simple linear regression using a Least Squares criterion.
+
+We can examine the model coefficients with `coef()`.  We'll want to save the slope coefficient for later.
+
+The slope coefficient is labeled `s.sidi` since that is the predictor we specify in the model.
+
+```{r}
+fit_1 = lm(b.sidi ~ s.sidi, data = dat_all)
+coef(fit_1)
+slope_observed = coef(fit_1)[2]
+```
+
+You can easily add a regression line from a model fitted by `lm()` to an existing plot using `abline()` and the fitted model object.
+
+```{r}
+plot(
+  b.sidi ~ s.sidi, data = dat_all,
+  main = "Simpson's diversity indices",
+  xlab = "Vegetation cover diversity",
+  ylab = "Bird diversity")
+abline(fit_1)
+```
+
+
+## The Slope Coefficient
+
+We would like to know how likely it is for us to observe a slope coefficient this large and negative if in fact there is no real relationship between bird diversity and vegetation diversity.
+
+We can use the t statistic and corresponding p-value computed by the `lm()` function, but this assumes that the errors are normally distributed about the mean, which may or may not be the case here.
+
+To be on the safe side, we are going to construct our own null hypothesis test using a Monte Carlo randomization procedure.
+
+First, let’s simplify our data set by extracting just the two variables we need for this exercise:
+
+
+```{r}
+dat_1 = 
+  subset(
+    dat_all,
+    select = c(b.sidi, s.sidi))
+```
+- Note the use of the `select` argument!
+
+
+
+## Resampling The Data
+
+> Monte Carlo randomization breaks up the associations by sampling frandom values from each column, in stead of keeping rows intact.
+
+To create a resampled dataset, we can create two vectors of randomly generated row indices.
+Then we can use these to create two new vectors of bird and vegetation diversity indices.
+
+```{r}
+index_1 = sample(nrow(dat_1), replace = TRUE)
+index_2 = sample(nrow(dat_1), replace = TRUE)
+
+dat_resampled_i = 
+  data.frame(
+    b.sidi = dat_1$b.sidi[index_1],
+    s.sidi = dat_1$s.sidi[index_2]
+  )
+
+fit_resampled_i = lm(b.sidi ~ s.sidi, data = dat_resampled_i)
+slope_resampled_i = coef(fit_resampled_i)[2]
+
+print(slope_resampled_i)
+
+```
+
+And we can re-create the scatterplot with regression line:
+
+```{r}
+plot(
+  b.sidi ~ s.sidi, data = dat_resampled_i,
+  main = "Simpson's diversity indices",
+  xlab = "Vegetation cover diversity",
+  ylab = "Bird diversity")
+abline(fit_resampled_i)
+```
+
+We need to do this many times to see what the range of outcomes we expect to see by chance alone.
+
+We know that because of sampling error, a single permutation could by chance have a slope that is different from nearly zero.
+
+- Think of the sampling error like a book in the Library of Babel that happens to have several pages of perfect English!
+
+
+
+## Randomization Loop
+
+We can repeat the process many times to estimate the sampling distribution of the null hypothesis.
+
+- I call it the distribution of the null because the null hypothesis states that there is no association between variables.  We destroyed associations by shuffling both columns independently.
+
+First we can pre-allocate a vector to hold the results using `numeric()`.  Check out the help entry to find out more about `numeric()`.
+
+```{r}
+m = 10000 
+result = numeric(m) 
+```
+
+Now it's up to you to build a loop that will resample the data, fit a simple linear regression, and extract the slope parameter. Here's a skeleton:
+
+
+```{r eval=FALSE}
+for(i in 1:m)
+{
+  index_1 = sample(...,,)
+  
+  # ... your loop code ...  
+  
+  result[i] = coef(fit_resampled_i)[2]
+} 
+```
+
+
+
+```{r eval=TRUE, echo=FALSE}
+for(i in 1:m)
+{
+  index_1 = sample(nrow(dat_1), replace = TRUE)
+  index_2 = sample(nrow(dat_1), replace = TRUE)
+  
+  dat_resampled_i = 
+    data.frame(
+      b.sidi = dat_1$b.sidi[index_1],
+      s.sidi = dat_1$s.sidi[index_2]
+    )
+  
+  fit_resampled_i = lm(b.sidi ~ s.sidi, data = dat_resampled_i)
+  result[i] = coef(fit_resampled_i)[2]
+} 
+```
+
+
+
+
+## The Null Distribution
+
+The output of your loop is a collection of regression slope parameters that were calculated on randomized and resampled data.
+
+Plot a histogram of the slope values.
+
+- use `abline()` with the argument `v = slope_observed` to draw a vertical line showing the value of the slope from the regression model on the observed data.
+
+
+Your result should look something like this:
+
+```{r}
+hist(result, main = "Null Distribution of Regression Slope", xlab = "Slope Parameter")
+abline(v = slope_observed, lty = 2, col = "red", lwd = 2)
+```
+
+
+## Critical Slope Value
+
+Just like finding the critical z-value for confidence intervals, we can calculate a critical value for the slope.  
+
+- Use `quantile()` to find the 5th percentile of the null distribution of slopes.
+
+In my simulation I got:
+
+```{r}
+quantile(result, c(.05))
+```
+
+
+Do you remember what the observed slope of the real data was?
+
+- How does it compare to the lower critical value?
+
+How many slopes from the Monte Carlo randomization were equal to or less than the observed slope?
+
+For my simulation, I found `r sum(result <= slope_observed)` slopes (out of `r sprintf("%d", m)` simulations) generated from the null distribution that were equal to or less than the observed slope.  
+
+If we want an exact p-value for this lower one-side test, we can compute the percentage of the permuted distribution less than or equal to our observed slope value.
+
+```{r echo=FALSE}
+sum(result <= slope_observed) / m 
+```
+
+There you have it.
+
+Convincing evidence that the slope we observed is real; i.e., that bird species diversity declines with increasing vegetation landscape diversity in this system.
+
+Why this is so, is another question you can ponder.
+
+
+# Questions
+
+
+
+
+
+<!-- # Marbled Salamander -->
+
+<!-- Let’s take the marbled salamander dispersal data introduced in a previous lab -->
+
+<!-- Recall that the data represent the dispersal of first-time breeders (ftb) from their natal ponds, representing juvenile dispersal, and the dispersal of experienced breeders (eb) from their established breeding ponds, Classical Tests 9 representing adult dispersal -->
+
+<!-- The data set includes three variables: (1) dist.class = distance class, based on 100 m intervals; (2) disp.rate.ftb = standardized dispersal rate for first-time breeders, which can be interpreted as a relative dispersal probability; and (3) disp.rate.eb = standardized dispersal rate for experienced breeders, which can be interpreted as a relative dispersal probability -->
+
+<!-- The question arises as to whether the dispersal rates for first-time breeders and experienced breeders are correlated -->
+
+<!-- First, we need to read in the data and check it, as follows:  -->
+
+
+<!-- ```{r load_salamander_data} -->
+<!-- disp = read.csv(here("data", "dispersal.csv"), header=TRUE)  -->
+<!-- disp  -->
+<!-- plot(disp$disp.rate.ftb, disp$disp.rate.eb) -->
+<!-- ``` -->
+
+
+<!-- Next, we can test the significance of the correlation using the cor.test() function, as follows: -->
+
+<!-- ```{r disp_cor_test} -->
+<!-- cor.test(disp$disp.rate.ftb, disp$disp.rate.eb,use='complete.obs') -->
+<!-- ``` -->
+
+
+<!-- Not, we needed to specify the use=’complete.obs’ argument to address the missing values for the 700 m distance class (for which there are no ponds in this particular distance interval) -->
+
+<!-- What does the correlation test say about the significance of the correlation between juvenile and adult dispersal-distance functions? The default correlation test statistic is based on Pearson's product-moment correlation coefficient (r) cor(x,y) which follows a t distribution with length(x)-2 degrees of freedom if the samples follow independent normal distributions -->
+
+<!-- If the data are non-normal, then a non-parametric rank-based measure of association is more appropriate -->
+
+<!-- If method is "kendall" or "spearman", Kendall's tau or Spearman's rho statistic is used to estimate a rank-based measure of association -->
+
+<!-- These tests may be used if the data do not necessarily come from a bivariate normal distribution -->
+
+<!-- Let’s try a test of the Spearman’s rank correlation: -->
+
+
+<!-- ```{r disp_cor_spear} -->
+<!-- cor.test(disp$disp.rate.ftb,disp$disp.rate.eb,use='complete.obs',method='spearman')  -->
+<!-- ``` -->
+
+
+<!-- What does this test say about the correlation between dispersal-distance functions? Does it agree with the parametric test? Which do you trust more with this data set?  -->
+
+
+
+
+

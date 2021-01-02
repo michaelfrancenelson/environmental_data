@@ -1,0 +1,144 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitie: "Week 1 - First lab!"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## For Today
+
+- Announcements
+- Introduction to software
+- Introduction to lab 1
+
+
+
+## Announcements
+
+- Learning objectives assessment questions are now available.
+  - Previously, they had not been associated with the assignment
+  - Due date extended until next Tuesday
+  - Please consider doing it right away - it shouldn't take much of your time
+  
+- Moodle continues to be slow...
+  - Course materials on the course github.io webpage
+  - Lab questions in the lab templates (available on the webpage)
+
+
+
+## Announcements
+
+- Computer and software access challenges
+  - Let's chat case-by-case during lab today
+
+- Access to Lab Moodle
+  - In case the ECo 634 does not yet appear in your Moodle you can use guest access:
+  - https://moodle.umass.edu/course/view.php?id=66536
+  - PWD: MaggieBetsyCallieCooperLacey1999
+ 
+ 
+ 
+## Lab session format
+
+The lab sessions are meant to be a common time that we can all be together for collaboration and questions.
+
+I won't generally have a prepared lecture.
+
+I'll be available to the class for things like:
+
+- Coding demos
+- Questions about coding and R
+- Questions about analyses and data
+- Breakout groups
+ 
+ 
+## Lab grades
+
+- 80% of your grade is based on weekly lab assignments.
+- 5% on learning objectives assessment
+- 15% on learning outcomes assessment
+
+
+
+
+
+
+## Learning objectives and outcomes
+
+### Objectives assessment
+
+- A snapshot at the beginning of the course
+
+### Outcomes assessment
+
+- A tool to gauge learning
+- Same questions as learning objective assessment
+   - some additional more detailed questions about specific topics covered during the semester
+
+
+
+## Lab assignments
+
+There will be 1 lab assignment each week.
+
+- Assignments are due the following Friday by midnight.
+
+NOTE: The lab assignments are adapted from last year's labs.
+
+- The previous assignments were large and multi-week.
+- I believe smaller, more frequent labs will be better with the online format.
+- I appreciate your feedback on the difficulty level and time requirements!
+
+
+ 
+## Lab Software
+
+### You will need:
+
+- R and RStudio
+- Github and Github desktop
+  - We'll begin using these next week
+
+### DataCamp
+
+- You'll find the invite link in the lecture Moodle site
+
+
+## Lab 1
+
+### The lab questions build on the materials in the Intro to R DataCamp course.
+
+- Complete the DataCamp course
+- Download lab template and work through the exercises
+- Submit answers and code snippets through Moodle.
+
+### I suggest you read the Moodle questions right away!
+
+- It'll help you focus on the DataCamp lessons that pertain to the questions
+
+
+
+## Let's get started!
+
+I'm here to help with software setup and other questions.
+
+
+

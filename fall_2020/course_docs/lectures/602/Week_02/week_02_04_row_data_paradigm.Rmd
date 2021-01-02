@@ -1,0 +1,280 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitie: "Data: The Row-Data Paradigm"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warn = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+source(find_file("ggplot_confints.R"))
+
+require(ggplot2)
+require(cowplot)
+
+butterfly_survey = read.csv(find_file("butterfly_table.csv"))
+butterfly_survey_rows = read.csv(find_file("butterfly_table_rows.csv"))
+
+
+library(knitr)
+hook_output = knit_hooks$get('source')  #this is the output for code
+
+knit_hooks$set(source = function(x, options) {
+  # use if the output is PDF and you set an option linewidth to e.g. 70
+  # in the chunk options
+  if (!is.null(n <- options$linewidth) & knitr::is_latex_output()) {
+    x <- strwrap(x, width = n, exdent = 4)
+  }
+  hook_output(x, options)
+})
+
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+```
+
+
+
+
+## Concepts and Learning Objectives
+
+- Recording data: why the row format works
+- Quality control: data cleaning
+- Metadata: data isn't data without metadata
+
+
+## What is the row format?
+
+The idea is simple:
+
+- Each row is one observation.
+- Each column is an attribute, or variable.
+
+
+## Comparison with other formats
+
+
+
+
+## First, some disadvantages
+
+- May not be the standard in your field
+- Not always the most efficient
+- 
+
+
+
+
+
+## Advantages of row-formatted data
+
+- Conceptually consistent:
+- each row is 1 observation
+- row-format facilitates sharing
+
+- Easy to import and manipulate in R (and other platforms)
+- R's `data.frame` and other similar data structures are row-based.
+- `ggplot` is specialized to work with row-formatted data
+
+- Compatibiltiy with relational database operations
+- It's easy to subset and merge tabular data
+
+
+
+compatibility with relational databases
+
+- 
+
+
+
+
+## When row format fails
+
+Row format isn't appropriate for every kind of data
+
+- Spatial data:
+- rasters
+- Is one observation a pixel? The entire raster?
+- vectors
+- Is one observation one vertex? one feature? an feature collection?
+- Spatial data frame-like data structures are compatible with data row paradigm
+- Arrays of data
+- Field-specific data structures
+
+
+
+## Adapting the row-format
+
+You can adapt 
+
+- Spatial data:
+- rasters
+- Is one observation a pixel? The entire raster?
+- vectors
+- Is one observation one vertex? one feature? an feature collection?
+- Spatial data frame-like data structures are compatible with data row paradigm
+- Array data
+
+
+
+
+
+## Quality control: graphical exploration
+
+- Swapped column entries
+- Measurement bias: dotplots
+
+
+
+## Quality control: missing data
+
+
+
+
+## An exercise in frustration
+
+### An in-class exercise in data import and simple plots using R.
+- Supplementary data from Gardner .....
+- The exercise was meant to be straightforward and help the students build their confidence using R.
+- That's not how things worked out.
+
+
+
+## About the data: Background
+
+### Data set for butterfly surveys
+- Survey count data for 6 species of butterflies
+- Survey years: 1996- 2000
+- **not** in row-format!
+- Note: there is nothing intrinsically or conceptually wrong with the recording format.
+
+
+
+
+## About the data: data file format
+
+### Data were organized very logically and efficiently:
+- Rows are species
+- Columns are survey years
+- Elements are counts
+- Maximally efficient storage format
+- Very sensible format for a field data sheet!
+
+
+
+
+## About the data: survey counts
+
+```{r, echo=TRUE, eval=FALSE}
+butterfly_survey = read.csv("butterfly_table.csv")
+print(butterfly_survey)
+```
+```{r echo=FALSE, eval=TRUE, warning=FALSE}
+print(butterfly_survey)
+```
+
+
+
+
+## The in-class exercise
+
+### Learning Objectives
+1. Import data from a csv file
+2. Graphical data exploration
+3. R's formula notation
+3. Build confidence with R
+
+
+## The trainwreck
+
+```{r error=TRUE}
+barplot(Count ~ Species + Year, data = butterfly_survey)
+```
+
+- Hmmmmmm..... an inauspicious start.
+
+
+## Extinguisihing the dumpster fire
+
+### It is possible to manipulate the data into a more R-friendly 
+
+- A brute-force method
+
+```{r}
+counts = 
+  c(
+    butterfly_survey$X1996,
+    butterfly_survey$X1997,
+    butterfly_survey$X1998,
+    butterfly_survey$X1999,
+    butterfly_survey$X2000)
+
+years = rep(1996:2000, 6)  
+species = rep(butterfly_survey$Spp, each = 5)
+```
+
+
+
+
+```{r}
+names(butterfly_survey_rows)
+barplot(Count ~ Species + Year, data = butterfly_survey_rows)
+```
+
+## Extinguisihing the dumpster fire
+
+### Assemble the data vectors into a `data.frame`:
+
+```{r}
+dat_rows = data.frame(
+  Species = species,
+  Count   = counts,
+  Year    = years
+)
+
+print(head(dat_rows))
+```
+
+
+
+## Extinguisihing the dumpster fire
+
+### Now we can create the bar plot with formula syntax:
+
+
+```{r}
+barplot(Count ~ Species + Year, data = dat_rows, beside = TRUE)
+```
+
+
+
+
+
+

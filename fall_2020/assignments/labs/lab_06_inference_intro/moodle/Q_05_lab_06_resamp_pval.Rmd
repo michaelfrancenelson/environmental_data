@@ -1,0 +1,91 @@
+---
+title: "Resampling: p-value"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(palmerpenguins)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+Recall this interpretation of a Frequentist p-value:
+
+> How often would I expect to see a result as extreme, or more extreme, if the null hypothesis were true?
+
+The p-value from the t-test for the difference in mean flipper length was very, very small:
+
+- 6.049e-08
+
+That's less than once in 10 million!
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1: 2 pts
+
+- Given a p value of less than 1 per 10 million, how many simulations
+do you think you would have to do to see a difference in
+mean flipper length equal to or greater than 5.8 mm?
+
+</div>
+
+<div class="hintborder">
+
+- Hint: You don't need to run any simulations to answer this question.
+
+- Hint: The number may be very large, I don't recommend trying to run more 
+than 10 thousand simulations unless you want to wait a very long time for results!
+
+</div>
+
+
+Solution
+========
+
+Students should realize that they would probably need to carry out
+millions of simulations before they saw an *interesting* result!
+
+
+
+Meta-information
+================
+extitle: Resampling: p-value
+
+expoints: 2
+
+extype: string
+
+exsolution: nil
+
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+

@@ -1,0 +1,92 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Bootstrapping 1: Bootstrap Confidence INtervals"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(boot)
+require(ggplot2)
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+moths_data_url = 
+  "https://michaelfrancenelson.github.io/eco_602_634_2020/data/moths.csv"
+
+# This clears the current R session's environment
+
+# Re-read my data:
+moths = read.csv(here("data", "moths.csv"))
+moth_dat = moths[,-1]
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of 
+    # sites in the input data (n_input_rows)
+    for(j in 1:n_input_rows)
+    {
+      # sample the input data row indices, with replacement
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+      
+      t1 = input_dat[rows_j, ]
+      t2 = apply(t1, 2, sum)
+      
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+
+rarefact2 = as.matrix(read.csv(here("assignments", "modules", "bootstrap", "rarefact.csv")))
+rarefact = as.matrix(read.csv(here("assignments", "modules", "bootstrap", "rarefact.csv")))
+
+# head(rarefact2)
+# head(rarefact)
+# class(rarefact)
+# class(rarefact2)
+# rarefact = rarefaction_sampler(moth_dat, 100)
+# head(rarefact)
+
+```
+
+
+```{r}
+
+rm(list = ls())
+```
+
+
+```{r}
+'abcdefg'
+```
+
+
+
+

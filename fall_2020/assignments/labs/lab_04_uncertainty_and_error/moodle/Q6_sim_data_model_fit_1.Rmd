@@ -1,0 +1,95 @@
+---
+title: "Model Fit 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. Choose one of your datasets from the previous question.
+2. Using the code in the lab walkthrough, visually fit a linear deterministic function through the data.  Make sure you save your parameters to variables so you can use them in the next question.
+3. Create a plot of your simulated data and the line of your fitted model.
+
+<div class="questionborder">
+### Questions
+
+- Q1 (3 pts.) Paste the R code you used to fit your model.  This should include:
+  - The code you used to build the dataset.
+  - The code you used to choose parameter values.
+- Q3 (1 pt.) Paste your figure file into the file entry box.
+</div>
+
+
+Solution
+========
+
+- The students must load and use the visual linear parameterizing function:
+```{r}
+# Calculates the value of y for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+
+- Build a dataset
+```{r}
+set.seed(12345)
+n_pts = 100
+x_min = 1
+x_max = 10
+x = runif(n = n_pts, min = x_min, max = x_max)
+dat = data.frame(x = x, y_observed = rnorm(n_pts))
+```
+
+- Visually parameterize a line:
+```{r}
+plot(dat)
+curve(line_point_slope(x, 0, -.3, 0.1), add = T)
+```
+
+
+
+
+Meta-information
+================
+extitle: Model Fit 1
+extype: string
+exsolution: nil
+exname: lab 4
+exsection: lab 4
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 7
+

@@ -1,0 +1,69 @@
+---
+title: "regression and ANOVA"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="questionborder">
+
+### Q1: 1 pt. (short answer)
+
+- Describe a key difference between a simple linear regression and a one-way Analysis of Variance (ANOVA).
+
+<div class="hintborder">
+- Hint: consider the data types of the predictor and response variables.
+</div>
+
+</div>
+
+
+
+
+Solution
+========
+
+My target answer: SLR uses a continuous predictor, one-way ANOVA uses a single categorical variable.
+
+Meta-information
+================
+
+extitle: regression and ANOVA
+
+extype: string
+
+exsolution: nil
+
+exname: week_08_reading_questions
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 1
+

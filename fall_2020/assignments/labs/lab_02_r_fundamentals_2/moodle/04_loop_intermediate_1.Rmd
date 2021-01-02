@@ -1,0 +1,77 @@
+---
+title: "intermediate loop question 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+You may want to review the *for-loop* example in the lab walkthrough.
+
+
+```{r, eval=FALSE}
+for (i in 1:10)
+{
+  print(i)
+}
+```
+
+Note that the loop runs through exactly 10 iterations...
+
+What if you wanted the loop to execute an arbitrary number of times?
+
+<br>
+
+- Create a variable, `n`, that contains an integer value.
+- Modify the code for the loop so that it runs `n` times.
+
+<br>
+
+<div class="questionborder">
+### Q1 (2 pts): 
+
+- Paste the code for the modified loop that executes `n` times into the text window below.
+
+</div>
+
+
+Solution
+========
+
+Students should produce something like:
+```{r, echo = TRUE}
+n = 17
+for (i in 1:n)
+{
+  print(paste0("This is iteration ", i, "."))
+}
+```
+
+
+
+
+
+Meta-information
+================
+extitle: intermediate loop question 1
+extype: string
+exsolution: nil
+exname: lab 02
+exsection: lab 02
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 2
+

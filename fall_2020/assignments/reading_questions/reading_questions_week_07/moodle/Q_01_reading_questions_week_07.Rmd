@@ -1,0 +1,86 @@
+---
+title: "Badness of fit measure"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+In Chapter 6, McGarigal writes:
+
+> The squared measure of deviation has an accelerating penalty: a deviation that is twice as large
+contributes four times as much to the sums of squares. There is no a priori reason to choose
+such a measure.
+
+
+<div class="questionborder">
+
+### Q1 5 pts.
+
+- Propose a possible alternative measure of deviation.  
+  - Briefly describe how your measure of deviation could affect the parameter estimates.  
+  - You may want to consider things such as the effect of large deviations, and the sign of individual deviations.
+
+</div>
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+
+
+Solution
+========
+
+
+
+Meta-information
+================
+
+extitle: Badness of fit measure
+
+extype: string
+
+exsolution: nil
+
+exname: week_07_reading_questions
+
+exsection: week_07_reading_questions
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 5
+

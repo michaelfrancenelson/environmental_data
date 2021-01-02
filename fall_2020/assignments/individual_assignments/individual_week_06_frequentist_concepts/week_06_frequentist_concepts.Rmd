@@ -1,0 +1,262 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Frequentist Concepts"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+require(mfn.teaching.utils)
+require(rmd.utils)
+```
+
+
+```{r build_assignment_page, echo=FALSE, eval=FALSE}
+source_dir  = here::here("assignments", "eco_602", "week_06_frequentist_concepts")
+out_dir     = here::here("docs", "assignments", "eco_602", "individual")
+source_file = find_file("week_06_f", search_path = source_dir, extension = ".Rmd")
+
+dir.exists(source_dir)
+dir.exists(out_dir)
+file.exists(source_file)
+
+rmarkdown::render(source_file, output_dir = out_dir)
+
+if (FALSE)
+{
+  build_moodle_xml_questions(
+    question_source_files = find_file(".Rmd", search_path = file.path(source_dir, "moodle"), return_all = TRUE),
+    assignment_name = "individual_assignment_week_06_frequentist_concepts",
+    xml_output_path = here::here("docs", "moodle_quiz_questions"))
+}
+
+```
+
+
+
+```{r build_xml_questions, echo = FALSE, eval=FALSE}
+
+
+
+
+```
+
+
+
+
+<style>
+
+.bluetext{
+   color:blue;
+   font-size: 20px;
+   font-weight: bold;
+   font-face: italic;
+}
+
+.redtext{
+   color:red;
+   font-size: 20px;
+   font-weight: bold;
+   font-face: italic;
+}
+
+</style>
+
+
+# Learning Objectives
+
+- Use the distribution functions in R.
+- Sampling distribution insight
+
+# Seeing Theory
+
+You'll be using the <a href="https://seeing-theory.brown.edu/index.html">**Seeing Theory**</a> site to practice help with graphical intuition of Frequentist concepts.
+
+It's a fantastic site, and I encourage you to check out the parts that we won't cover in this assignment.
+
+
+
+
+# Distribution functions for discrete distributions
+
+
+R implements probability, cumulative probability, and quantile functions for many *parametric* distributions.
+
+The naming convention is to use the name, or an abbreviation, of the distribution preceded by a prefix.  For example with the *binomial* distribution the functions would be:
+
+<span class="bluetext">p</span><span class="redtext">binom</span>: the cumulative mass function
+
+<span class="bluetext">d</span><span class="redtext">binom</span>: the probability mass function
+
+<span class="bluetext">q</span><span class="redtext">binom</span>: the quantile function
+
+
+* Remember that discrete distributions use the term *mass* rather than *density*.
+* Remember that each distribution has different parameters, and you'll have to look at the documentation on how to specify them with the probability functions.
+
+```{r, include=FALSE, echo=FALSE}
+dbinom(1:3, 5, .5)
+pbinom(1:3, 5, .5)
+qbinom(0.75, 5, 0.5)
+```
+
+> For a *discrete* parametric distribution, the distribution functions allow you to ask the following questions:
+
+1. What is the probability that I observe a value of **exactly** $x$?: The probability mass function, e.g. `dbinom()`
+1. What is the probability that I observe a value of $x$ or less?: The cumulative mass function, e.g. `pbinom()`
+1. What is the probability that I observe a value of $x$ or more?: The cumulative mass function, e.g. `pbinom()`
+1. What is the *median* or 50th percentile?: The quantile function, e.g. `qbinom()`
+1. What is the 90t percentile?: The quantile function, e.g. `qbinom()`
+
+
+
+
+# Distribution functions for continuous distributions
+
+R implements probability, cumulative probability, and quantile functions for many *parametric* distributions.
+
+The naming convention is to use the name, or an abbreviation, of the distribution preceded by a prefix.  For example with the *normal* distribution the functions would be:
+
+<span class="bluetext">p</span><span class="redtext">norm</span>: the cumulative density function
+
+<span class="bluetext">d</span><span class="redtext">norm</span>: the probability density function
+
+<span class="bluetext">q</span><span class="redtext">norm</span>: the quantile function
+
+
+* Remember that continuous distributions use the term *density* rather than *mass*.
+* Remember that each distribution has different parameters, and you'll have to look at the documentation on how to specify them with the probability functions.
+
+```{r, include=FALSE, echo=FALSE}
+pnorm(0)
+pnorm(2.4) - pnorm(1.2)
+1 - pnorm(1.3)
+1 - pnorm(1.96)
+
+
+dnorm(0)
+pnorm(-1.96)
+dnorm(1.2)
+dnorm(2.5)
+qnorm(.2)
+```
+
+> For a *discrete* parametric distribution, the distribution functions allow you to ask the following questions:
+
+1. Is a value of 1.2 or 2.4 more likely? - The probability density function, e.g. `dnorm()`
+1. What is the probability that I observe a value between 1.2 and 2.4?: The cumulative density function, e.g. `pnorm()`
+1. What is the probability that I observe a value of 1.3 or more?: The cumulative density function, e.g. `pnorm()`
+1. What is the 20th percentile of fish lengths?: The quantile function, e.g. `qnorm()`
+
+
+
+
+# The law of total probability
+
+You can use R's distribution functions to answer many probability questions, but sometimes
+you have to be creative and use them in combinations.
+
+> The sum of all events in the sample space is 1.0.
+
+Sometimes it's easier to calculate the probability of the *complement* of an event, rather than the event's probability directly.
+
+Suppose you have an event $E$
+
+The *complement* of an event $E^c$ is just the rest of the sample space not occupied by $E$.
+
+$Pr(E) + Pr(E^c) = 1.0$
+
+
+
+## Total probability: Normal distribution example
+
+The r function `pnorm()` gives us the probability of observing a value of $x$ or *less*.
+
+
+What is the probability of observing a value less than 7.5 in a normal distribution with mean 10 and standard deviation 3? 
+
+```{r, echo=FALSE}
+mfn.teaching.utils::plot_norm_tails(upper_tail = NULL, lower_tail = pnorm(7.5, mean = 10, sd = 3), pop_mean = 10, pop_sd = 3)
+```
+
+It's easy with `pnorm()`:
+
+```{r}
+pnorm(7.5, mean = 10, sd = 3)
+```
+We have around a 20% chance to observe a value of 7.5 or less.
+
+
+
+- What if we want to know the probability of observing the value of $x$ or *higher*?
+
+```{r, echo=FALSE}
+mfn.teaching.utils::plot_norm_tails(lower_tail = NULL, upper_tail = pnorm(7.5, mean = 10, sd = 3), pop_mean = 10, pop_sd = 3)
+```
+
+HINT: you could use `pnorm()` and the law of total probability to figure it out!
+
+
+
+
+# Sampling distribution
+
+> Recall that the *sampling distribution* describes the distribution of a *sample statistic*.
+
+```{r echo = FALSE}
+knitr::include_graphics(find_file("population_sample_sampling_distributions.png"))
+```
+
+
+
+
+Navigate to the <a href="https://seeing-theory.brown.edu/probability-distributions/index.html">probability theory</a> page on Seeing Theory.
+
+Follow the link to the **Central Limit Theorem** section.
+
+## Central limit theorem and the sampling distribution
+
+This demo samples values from the **beta distribution**, a two-parameter continuous distribution with a bounded domain from 0 to 1.
+
+- Adjust the sliders to see how the two parameters affect the distribution's shape.
+
+Try sampling with different numbers of draws and samples.
+
+
+
+
+
+
+# Questions
+
+```{r results='hide', echo=FALSE}
+
+question_source_files = find_file(
+  ".Rmd",
+  search_path = here::here(
+    "assignments", "eco_602", "week_06_frequentist_concepts", "moodle"), 
+  return_all = TRUE)
+tmp = add_moodle_quiz_questions(
+  question_source_files, 
+  include_solution = FALSE, 
+  include_metadata = FALSE)
+```
+```{r child=tmp}
+```
+```{r echo=FALSE, results = 'hide'}
+file.remove(tmp)
+```

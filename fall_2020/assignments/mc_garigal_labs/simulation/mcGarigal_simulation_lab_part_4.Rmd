@@ -1,0 +1,199 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Resampling"
+author: "Kevin McGarigal"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 4. Simulating dynamic processes – population matrix model
+
+The previous example dealt with a static environmental process; the data represented a snapshot of
+the environmental system. However, environmental systems are dynamic – they change over time.
+Therefore, many problems require a dynamic modeling approach. Dynamic models are models that
+describe how environmental processes drive populations (and other properties of ecosystems) to
+change over time. Dynamic models are a vast and increasingly complex subject and therefore one
+that we cannot hope to cover in this lab exercise. Here, we will simply introduce you to dynamic
+models by constructing a very simple population transition matrix model. Knowing how to simulate
+dynamic models is important because fitting dynamic models to data is so tricky that it is essential to
+models to simulated data to confirm that the methods work.
+
+Let’s build a dynamic population model for a single closed population, say, a local population of
+marbled salamanders without immigration or emigration. We will represent four age classes: juvenile,
+subadult1, subadult2, and adult, corresponding to year 0, 1, 2, and 3+. To control the key population
+vital rates, fecundity (number of young produced per breeding individual per timestep) and survival
+(probability of surviving between timesteps), we will employ a Leslie transition matrix, which records
+the fecundity and survival rates for each age class in the population. We will not review the structure
+of a Leslie matrix here, so take some time to review the topic if you need to.
+For this model, we need to build some functions. Let’s start with a function to calculate fecundity:
+
+
+calc.fec<-function(fec.mean=10,fec.sd=10){
+result<-rnorm(1,mean=fec.mean,sd=fec.sd)
+if(result<0) result<-0
+return(result)
+}
+
+This function has two arguments, fec.mean and fec.sd, which have default values assigned. These
+arguments are passed to the rnorm() function to supply the value for the mean and standard
+deviation (sd). We draw a single random normal deviate from a normal distribution with
+mean=fec.mean (10 by default) and sd=fec.sd (10 by default) and store the result in the object called
+‘result’. Because rnorm() can return negative values, we check the result and reset the value to 0 if it
+is negative. The function returns the final result.
+Let’s build a similar function to calculate adult survival:
+
+
+calc.adult.surv<-function(adult.surv.mean=0.61,adult.surv.sd=0.05){
+
+result<-rnorm(1,mean=adult.surv.mean,sd=adult.surv.sd)
+if(result<0) result<-0
+return(result)
+}
+
+And another one to calculate juvenile survival:
+
+calc.juv.surv<-function(juv.surv.mean=0.10,juv.surv.sd=0.03){
+result<-rnorm(1,mean=juv.surv.mean,sd=juv.surv.sd)
+if(result<0) result<-0
+return(result)
+}
+
+Lastly, we need a function to build a transition matrix from the supplied fecundity and survival rates:
+
+build.transition.matrix<-function(fm=10,fs=10,asm=0.61,ass=0.05,jsm=0.1,jss=0.03){
+
+t<-matrix(0,nrow=4,ncol=4)
+t[1,4]<-calc.fec(fec.mean=fm,fec.sd=fs)
+Stochastic Simulation 10
+t[4,4]<-calc.adult.surv(adult.surv.mean=asm,adult.surv.sd=ass)
+t[4,3]<-1
+t[3,2]<-1
+t[2,1]<-calc.juv.surv(juv.surv.mean=jsm,juv.surv.sd=jss)
+return(t)
+}
+
+This function is a bit tricky. It has arguments for each of the arguments of the fecundity and survival
+functions, which we pass to those functions called from within this function. For example, we name
+the argument ‘fm’, give it a default value of 10, and then assign it to the fec.mean argument of the
+calc.fec() function. This will pass the value of fm to the mean of the rnorm() function inside the
+calc.fec() function. Inside this function, we first create a 4x4 matrix filled with 0's. Then we assign
+the calculated value of fecundity to the 1st row, 4th column, which will be the fecundity rate for the
+4th age class (adults). Then we assign the calculated adult survival rate to the 4th row, 4th column, and
+so on. Note that the two assignments of 1 are for the survival rates of the two subadult age classes.
+This is because our survival rate for the juvenile age class is really for the entire period from juvenile
+to adult, which takes 3 years generally. To keep the model simple and accommodate a 1 year
+timestep, we simply added two intermediate age classes and just “pass” individuals through those
+stages. For our purposes, it is not critical to understand this further.
+To see how this works, let’s build a trial transition matrix by running the function once using the
+default values:
+
+build.transition.matrix()
+
+Note that the vital rates are not exactly the default values specified. This is because when we build
+the transition matrix we draw vital rates from random normal distributions as specified in the
+corresponding functions. This way, every time we build a transition matrix we will get slightly
+different vital rates. This is the way we are incorporating stochasticity into the dynamic model.
+Because we have named arguments for each of the vital rate parameters, we can easily change the
+parameters and generate a new transition matrix, for example:
+build.transition.matrix(fm=10,fs=10,asm=0.41,ass=0.05,jsm=0.1,jss=0.03)
+Here, we simply changed the adult survival rate from 0.61 (default) to 0.41, but you change any of
+them if you like.
+Now we are ready to simulate population change over time. Let’s begin by assigning the simulation
+length (number of timesteps) and an initial population age class structure:
+
+tsteps<-100 #simulation length
+pop<-c(40,2,2,20) #initial population age struccture
+
+Next, we need to create a matrix to store the results. The matrix needs as many rows as timesteps
+and as many columns as age classes. Each row will represent the population age structure for a single
+Stochastic Simulation 11
+timestep. And we can name the columns for convenience, but this is not necessary:
+
+output<-matrix(NA,nrow=tsteps,ncol=4) #create object to store results
+colnames(output)<-c('juv','sub1','sub2','adult')
+
+Next, we loop through the timesteps, each time we construct a new transition matrix and then
+multiply it by the population vector to create a new population vector:
+
+for(i in 1:tsteps){
+t<-build.transition.matrix() #build random transition matrix
+pop<- t %*% pop #multiply transition matrix by population vector
+pop[1][pop[1]>300]<-300 #impose ceiling on year 1 cohort size
+output[i,]<-pop # store result
+}
+
+Here, we used the %*% to indicate matrix multiplication. In addition, we implemented a ceiling
+density dependence on juvenile cohort size. If the cohort exceeded 300 individuals, we chopped it
+back to 300. This is perhaps too simplistic a form of density dependence (and thus probably most
+unrealistic), but it will suffice for our example.
+Let’s plot the results using matplot() to plot the trajectories for all four age classes (columns of the
+output object):
+
+matplot(1:tsteps,output,type='l',lty=1,col=5:1,main='Population simulation',
+xlab='Time step',ylab='Count')
+
+The plot shows the trajectory of population change by age class for a single simulation. This is great,
+but it represents a single trajectory of a stochastic population model. Because of the stochastic
+components of the model, we would expect the trajectory to vary each time we run the model. We
+could simply run the above code again, and again, but that would be extremely tedious. Instead, let’s
+create a function that contains everything we’ve done so that we will only need to call the function
+to generate a new simulation.
+
+popsim<-function(tsteps=100,pop=c(40,2,2,20),ceiling=300,
+fm=10,fs=10,asm=0.61,ass=0.05,jsm=0.1,jss=0.03){
+output<-matrix(NA,nrow=tsteps,ncol=4)
+colnames(output)<-c('juv','sub1','sub2','adult')
+for(i in 1:tsteps){
+t<-build.transition.matrix(fm=fm,fs=fs,asm=asm,ass=ass,jsm=jsm,jss=jss)
+pop<- t %*% pop
+pop[1][pop[1]>ceiling]<-ceiling
+output[i,]<-pop
+}
+total<-apply(output,1,sum)
+output<-cbind(output,total)
+matplot(1:tsteps,output,type='l',lty=1,col=5:1,
+main='Population simulation',xlab='Time step',ylab='Count')
+legend('topright',inset=c(.01,.01),legend=colnames(output),lty=1,col=5:1)
+}
+
+Here, we named arguments for all the things we might want to quickly change in the simulation. So
+we have an argument for the number of timesteps (tsteps), the initial population structure (pop),
+ceiling level for the density dependence (ceiling), and all the other arguments for the fecundity and
+survival functions. Otherwise, we added a step to compute the total population size from the
+population age class structure. To do this, we used the apply() function to sum each row of the
+output object and then bound the result back to the output object. Lastly, we added a legend to the
+plot. Obviously, there are many other things we could do in this function to enhance the output, but
+this should suffice to demonstrate the flexibility we have in writing our own functions.
+Now that we have a bonafide function, let’s use it:
+
+popsim()
+
+Now let’s see how easy it is to change any of the parameters and instantly see the result. For
+example, let’s change the mean adult survival rate and the mean juvenile survival rate:
+
+popsim(asm=0.4,jsm=0.05)
+
+You can experiment with changing other parameters to see how the population behaves under
+different scenarios.
+

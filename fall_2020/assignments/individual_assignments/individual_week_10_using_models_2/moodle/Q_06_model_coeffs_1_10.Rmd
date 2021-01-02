@@ -1,0 +1,105 @@
+---
+title: "Model Coefficients 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+<div class="instructions">
+
+### Instructions
+
+> Recall that you can use the model coefficients to calculate group means when you have a model with categorical predictors.
+
+- Use `summary(fit_both)` to examine the model coefficient table.
+
+</div>
+
+<div class="questions">
+
+### Q 1 pt (numeric entry)
+
+
+- What is the average mass of female Chinstrap penguins?
+
+</div>
+
+
+
+
+Solution
+========
+
+You need:
+
+- Intercept
+- speciesChinstrap
+
+The mass is: 3368.84 + 158.37 = 3527.21
+
+If students used an additive model they will get slightly different answers:
+
+3372.39 + 26.92 = 3399.31
+
+
+
+```{r}
+require(penguins)
+
+fit_both = lm(body_mass_g ~ sex * species, data = penguins)
+summary(fit_both)
+
+aggregate(body_mass_g ~ sex * species, data = palmerpenguins::penguins, FUN = mean, na.rm = TRUE)
+
+
+fit_both_additive = lm(body_mass_g ~ sex + species, data = penguins)
+summary(fit_both_additive)
+
+fit_both = lm(body_mass_g ~ sex + species, data = penguins)
+fit_both = lm(body_mass_g ~ sex * species, data = penguins)
+summary(fit_both)
+
+
+3368.8 + 158.4 = 3537.2
+
+aggregate(body_mass_g ~ sex * species, data = palmerpenguins::penguins, FUN = mean, na.rm = TRUE)
+
+
+
+
+```
+
+
+Meta-information
+================
+
+extitle: Model Coefficients 1
+
+expoints: 1
+
+exname: individual_week_10
+exsection: individual_week_10
+
+extype: num
+exsolution: 3527.206
+extol: 10
+
+
+
+expoints: 1
+

@@ -1,0 +1,183 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Lab 01: R fundamentals I"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("rmd_tools", "find_file.R"))
+source(here::here("rmd_tools", "build_moodle_web_questions.R"))
+
+```
+
+
+
+# Learning Objectives
+
+## Technical sills and concepts:
+
+- arithmetic operators
+- script and console
+- assign a value to a variable
+- create a code comment
+- identify the data type of an R object
+
+## Big-picture concepts
+
+- Begin to develop comfort level working with a computer language.
+- Understand the advantage of using variables instead of raw values.
+- What is abstraction?
+- What is a data type?
+
+
+
+
+# Introduction
+
+
+This assignment covers some **basic**, yet **very important** concepts.  Believe it or not, all of the more complicated and sophisticated computing techniques in this course and beyond are built upon a small set of operations like the ones we are learning.
+
+Try to keep in mind the big-picture concepts listed above as you work through the technical exercises.  They will help you understand and appreciate how the technical skills (which will get **more technical**) relate to the larger picture!
+
+
+## Key Terms
+
+During this and the following several labs, you'll become familiar with all of these terms.  It will be **essential** for you to know what each of them means as you continue to build your R and computing skill set:
+
+- Operating system
+- Application
+- Graphical user interface (GUI)
+- Command line
+- Hard drive and memory (and what is the difference?)
+
+- Filesystem concepts
+ - Files and directories
+ - Subdirectory/subfolder
+ - Path
+ - Absolute and relative paths
+ - Root directory
+ 
+- File concepts
+ - File name
+ - Text file
+ - Zip/archive file
+ - File extension and association
+
+
+
+# Instructions {.tabset}
+
+## DataCamp course
+
+Work through the chapters of the Introduction to R course in DataCamp.
+
+The lecture course will have a set of basic questions regarding the concepts in the Intro to R course, the lab will build on these with more technical questions.
+
+
+## Course folder setup
+
+Finding and loading files into R is one of the greatest initial hurdles for new R users.
+
+To that end everybody will set up a common folder structure for the course so that it is easier to collaborate with classmates and to ask questions.
+
+Course folder setup instructions:
+
+1. Select a location on your computer where you want to store your course materials.  In that location, create a directory called: `eco_634_2020`
+  - I'll refer to this as your *lab folder* or *course folder*.
+2. In your lab folder create the following subdirectories:
+  - `data`
+  - `lab_01`
+
+
+## Lab template files
+
+The lab template files are provided as a draft document for you work on the lab questions.
+
+You should do your R work in the template file. You can use it to try out different techniques to answer the questions, etc.  Think of it as a draft document.
+
+When you are happy with your answers, you should paste the final versions into a fresh copy of the lab template file.  The code in your final version should be neatly formatted and include plenty of comments to remind yourself of how you arrived at your answer.
+
+You should rename the final version to `lab_01_[your last name].R`, replacing the text in brackets with your last name.
+
+For many of the Moodle questions, I will ask you to cut-and-paste your answers into a text entry box, but you may occasionally need to upload the entire lab script file.
+
+
+### To find the lab template:
+
+1. Locate the **lab template files** section of the <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/index.html#LabTemplates">course page.</a>
+
+2. Download the lab 1 template into the lab 1 sub folder of your course folder.
+
+
+
+## Lab questions on Moodle
+
+The lab questions and submission forms are in Moodle.  You should do all of  your coding work in the draft lab template.  When you are satisfied with your answers, you can paste the required files, text, or images into the individual question forms.
+
+
+
+# Assignment Questions
+
+
+```{r results = 'hide', echo = FALSE, include=FALSE}
+tmp = build_moodle_web_questions(
+  assignment_filename = "lab_01_r_fundamentals_1.Rmd",
+  search_path = here::here("assignments", "eco_634"),
+  include_header = FALSE,
+  write_html = FALSE,
+  cat_results = FALSE,
+  write_tmp = TRUE)
+```
+
+```{r child=tmp, echo=FALSE, include=FALSE}
+file.remove(tmp)
+```
+
+
+
+
+
+
+<!-- - Respond to the the Moodle assignment questions. -->
+
+<!-- <div class="blackborder"><div class="warn"> -->
+
+<!-- - Some of the quiz questions will require you to paste your R code into the text submission field.  To receive a grade for these questions your code must 1) run without error and 2) produce the correct answer. -->
+<!--   - You should test your code **in a new R session** on your computer before you submit your answer. -->
+<!--   - If your code does not run, your response may be returned to you without a grade so you can fix the errors. -->
+
+<!-- </div></div> -->
+
+
+<!-- # Background -->
+
+
+
+
+<!-- # Grading -->
+
+
+
+
+<!-- ## Course GitHub repository -->
+
+<!-- Before proceeding, make sure you have created your GitHub account and have GitHub desktop running on your computer. -->
+
+<!-- - Navigate to your github profile page. -->
+<!-- - In the 'Repositories' tab, click the green `NEW` icon to create a new repo for ECO 634. -->
+<!--   - You should name your repo `[lastname]`_eco_634_2020.  Replace the `[lastname]` with your last name.  For example, my course repo would be called: -->
+
+<!-- **nelson_eco_634_2020** -->
+
+

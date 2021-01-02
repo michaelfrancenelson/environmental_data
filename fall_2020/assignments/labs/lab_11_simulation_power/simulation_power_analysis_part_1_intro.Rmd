@@ -1,0 +1,165 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+```
+
+<!-- ```{r load_functions, child = find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_data, child = find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_models, child = find_file("model_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_simulations, child = find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_plots, child = find_file("plot_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+
+
+
+
+# Data
+
+For this lab, you'll need the data files:
+
+- bird.sub.csv
+- hab.sub.csv
+
+You'll need to read the two data files and use `merge()` to combine them into a single `data.frame` object.
+
+You need to merge based on the columns: 'basin', and 'sub'.
+
+- Save the merged data frame to a variable called `birdhab`. Make sure to call it `birdhab` so that I can run your code!
+- Your merged data.frame should have the following dimensions:
+
+```{r bird_data_dimensions}
+dim(birdhab)
+```
+
+We'll be working with the Brown Creeper abundance (column `BRCR`) and late successional forest (column `ls`) data within `birdhab`
+
+
+
+
+# Introduction
+
+The purpose of this lab exercise is to introduce you to techniques and ideas related to simulating environmental patterns in R.
+
+The main goals are to show you to generate patterns you can use to sharpen your intuition and test your estimation tools, show you how to estimate statistical power by simulation, and, with an example, illustrate the flexibility of R for simulating environmental patterns and processes.
+
+
+
+
+## Simulation Modeling
+
+Simulation is sometimes called **forward modeling**, to emphasize that you pick a model and parameters and work forward to predict patterns in the data.
+
+Environmental scientists use simulation to explore what kinds of patterns emerge from proposed models.
+
+Often they use theoretical models without accompanying data, in order to understand qualitative patterns and plan future studies, but simulation is useful even if have data.
+
+You can use simulations to explore the functions and distributions you chose to quantify your data; in other words, to explore possible statistical models for your data.
+
+If you can choose parameters that make the simulated output from those functions and distributions look like your data, you can confirm that the models are reasonable, and simultaneously find a rough estimate of the parameters.
+
+You can use simulated data to test your estimation procedures.
+
+We never know the true answer to an environmental question: we use imperfect measurements and models to get as close to the answer as possible.
+
+- Simulation is a way to test whether you can correctly estimate the parameters of an environmental system.
+
+It's always a good idea to test such a best-case scenario, where you know that the functions and distributions you're using are correct, before you proceed to real data.
+
+There are many different types of simulation models, we'll only cover a couple in this lab.
+
+
+
+
+# Power Analysis
+
+Power analysis using simulation models allows you to explore how different experimental designs and sample sizes might affect your ability to get a reasonably precise estimate of your parameters.
+
+We'll work through an example of a power analysis simulation in the context of a linear regression.
+
+
+
+## Simulating Static Environmental Processes: Linear Regression
+
+Static environmental processes, where the data represent a snapshot of some environmental system, are relatively easy to simulate.
+
+Keeping in mind the dual model paradigm, we can specify:
+
+- a deterministic function to simulate the average behavior in our system
+- a stochastic model to simulate the variability in the system.
+
+Our deterministic models might be very simple, for example: a linear function.  
+
+Alternatively we could use any of the more complex mechanistic or phenomenological functions we have studied such as the Ricker or logistic functions.
+
+We could use R's random number generating functions from distributions like the Normal ,`rnorm()`, or Poisson, `rpois()`distributions.
+
+
+Here we will illustrate the process of simulating a static environmental process using a simple linear regression model based on the now familiar Oregon birds data set.
+
+For this example, let's examine the relationship between brown creeper abundance and the extent of late-successional forest across 30 subbasins in the central Oregon Coast Range.
+
+
+
+
+## Graphical Exploration
+
+- Create a scatterplot of brown creeper abundance and the extent of late-successional forest:
+
+```{r ref.label="scatterplot_1", echo = FALSE}
+```
+- Does the relationship look linear?
+- Examining the scatterplot, do you see any potential challenges for a Group 1 model?
+
+
+
+
+## Fit a model
+
+Recall that a simple linear regression model can be written symbolically as: $Y ~ Normal(a + bx, \sigma ^2)$
+
+This means that the i^th^ value of Y, $y_i$, is equal to $a + bx_i$ plus a normally distributed error with mean zero and variance $\sigma^2$.
+
+- Fit a simple linear regression using `lm()`.  Save your model as `fit_1`.
+- Plot the regression line over the scatterplot using `abline()`.
+- Examine the model coefficient table.
+
+```{r ref.label = "fit_model_1", echo = FALSE}
+```
+```{r ref.label = "scatterplot_2", echo = FALSE}
+```
+
+- Does the model suggest a significant relationship between late-successional forest and Brown Creeper abundance?
+- Can we say with confidence that it is real or could it be a sampling artifact or a product of chance?
+
+Recall that the data-collection effort was one realization of the stochastic process of sampling.  There are many, many other possible observations that could have been sampled!
+
+> Stochastic simulation can help us explore what the data might look like if we could take another snapshot.
+
+We can use simulation to build new datasets using the parameters estimated from the observed data.
+
+We can also vary the parameter values, or even simulate data under alternative models!
+

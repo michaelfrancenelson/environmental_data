@@ -1,0 +1,111 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 07 Mike's Reading Notes and Question Ideas"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    # toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+```
+
+
+
+- R markdown notebook
+- functions:
+  - mean, sd, c, data.frame, 
+  - lm, t.test, 
+- subsetting
+
+
+
+
+# Bolker 9.1 - Introduction
+
+- Classical techniques are special cases of the more general ML methods
+
+- Reasons to choose classical methods
+
+
+
+# Bolker 9.2 - General Linear Models
+
+
+
+# Zuur 5.1: Bivariate linear regression
+
+"It is always better to start with a simple model first, only moving on to more
+advanced models when this approach proves inadequate."
+
+
+## Regression Acronyms
+
+- GLM
+- GLS
+- GAM
+
+## RIKZ data
+
+- Dutch beaches:
+  - 75 invertebrate species
+  - 45 sites
+  - NAP: height of sample site compared to average sea level
+  
+  
+Difference between influential and extreme points
+
+
+
+## Back to the basics
+
+> The species richness values are essentially the result of a random process. It is random because we would expect to find a different range of values every time the field sampling was repeated, provided the environmental conditions were the same."
+
+> "...therefore we need to make a series of assumptions before using a linear regression" model.
+
+
+
+
+### 4 assumptions: normality, homogeneity, independent events, fixed x
+
+
+
+
+## Residual Normality Assumption
+
+
+## Homogeneity Assumption
+
+
+
+## Independent Observations Assumption
+
+
+## Fixed X Assumption
+
+
+
+
+
+## Assessing the significance
+
+
+- Partition total variability
+- ANOVA table: null hypothesis that slope is zero
+- t-test: equivalent to the ANOVA for a bivariate regression
+
+
+
+
+
+
+

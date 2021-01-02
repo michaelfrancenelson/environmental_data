@@ -1,0 +1,70 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 05: Modeling Errors"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+require(rmd.utils)
+knitr::opts_chunk$set(echo = TRUE)
+
+
+figure_path = file.path(find_file("lab_05_u", directory = TRUE), "figures")
+
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+
+# Question 1 figure
+
+```{r echo=FALSE, warning=FALSE}
+png(file.path(figure_path, "lab_05_q1.png"), width = 1200, height = 800, res = 200)
+curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 50, ann = FALSE, axes = FALSE, ylab = "f(x)"); box()
+curve(exp_fun(x, 1.2, 0.1), add = TRUE, from = 0, to = 100, col = 2)
+curve(exp_fun(x, 1.2, 0.3), add = TRUE, from = 0, to = 100, col = 3, lty = 2, lwd = 3)
+curve(exp_fun(x, 1.5, 0.03), add = TRUE, from = 0, to = 100, col = 4, lwd = 2)
+curve(exp_fun(x, 1.75, 0.003), add = TRUE, from = 0, to = 100, col = 66, lwd = 3, lty = 4)
+dev.off()
+```
+
+
+
+
+# Question 3 figure
+
+```{r echo=FALSE}
+png(file.path(figure_path, "lab_05_q3.png"), width = 1200, height = 800, res = 200)
+curve(ricker_fun(x, 25.1, .5), add = FALSE, from = 0, to = 10, ann = FALSE, ylab = "f(x)", ylim = c(0, 30)); box()
+curve(ricker_fun(x, 20.2, .3), add = TRUE, col = 2)
+curve(ricker_fun(x, 49.2, .66), add = TRUE, col = 3, lty = 2, lwd = 3)
+curve(ricker_fun(x, 10.5, 0.8), add = TRUE, col = 4, lwd = 2)
+dev.off()
+```
+
+
+
+# Question 4 figure
+
+```{r echo=FALSE}
+png(file.path(figure_path, "lab_05_q4.png"), width = 1200, height = 800, res = 200)
+curve(ricker_fun(x, 25.1, .5), add = FALSE, from = 0, to = 10, ann = FALSE, ylab = "f(x)", ylim = c(0, 30)); box()
+curve(ricker_fun(x, 20.2, .3), add = TRUE, col = 2)
+curve(ricker_fun(x, 49.2, .66), add = TRUE, col = 3, lty = 2, lwd = 3)
+curve(ricker_fun(x, 10.5, 0.8), add = TRUE, col = 4, lwd = 2)
+dev.off()
+```
+
+
+

@@ -1,0 +1,167 @@
+---
+title: "ECo 602/634 - Analysis of Environmental Data Lecture and Lab"
+subtitle: "Post-Course Reflections"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# General Thoughts {.tabset .tabset-pills}
+
+
+## Spelling and Grammatical Errors
+
+These were improved over the 2019 courses, but there is room for improvement.
+
+- RStudio's spell-checker is pretty good, but it doesn't seem to check spelling within section header text.
+
+
+## Writing Style and Ambiguities
+
+- The writing style in content that was written in a hurry was longer and more rambling.
+  - Materials that I was able to re-read and revise before release were clearer and more succinct.
+  
+
+
+## Course Syllabi
+
+The 
+
+
+
+
+# Course Themes
+
+I attempted to organize the course around 4 themes.
+
+- I think this is a great idea to unify content, but I missed lots of opportunities to highlight ways that the lecture and reading topics fit into the themes.
+
+
+# Specific course concepts {.tabset .tabset-pills}
+
+## Distribution Functions
+
+I don't think I communicated the real meaning of the height of the PDF (not the cumulative dist. fun.) for *continuous distributions* as only a ***relative*** measure of likelihood and not a probability of observing a specific value (which is always zero).
+
+
+# Use of GitHub and RMarkdown
+
+
+
+
+
+# Course Format {.tabset .tabset-pills}
+
+I used a mixture of pre-recorded lectures and synchronous in-class materials.
+
+## What Worked
+
+- The pre-recorded content was generally well-received, but it was difficult to stay ahead of the students.
+
+- 
+
+## Room for Improvement
+
+- The list of lectures posted at the beginning of the semester was aspirational... It was confusing for the students (and to me) that lecture content and titles were frequently revised, often at the last minute.
+
+
+
+
+# Technology Obstacles {.tabset .tabset-pills}
+
+## Common Issues {.tabset .tabset-pills}
+
+### Hardware
+
+### Git
+
+### Software Installation
+
+
+
+## Potential Fixes for 2021 {.tabset .tabset-pills}
+
+### Hardware
+
+### Git
+
+### Software Installation
+
+
+
+# In-Class Group Assignments {.tabset .tabset-pills}
+
+## General
+
+## Specific Assignments
+
+
+# Reading Questions {.tabset .tabset-pills}
+
+## General
+
+## Specific Assignments
+
+
+
+# Individual Lecture Assignments  {.tabset .tabset-pills}
+
+## General
+
+## Specific Assignments
+
+
+
+# Indivdiual Lab Assignments {.tabset .tabset-pills}
+
+
+## General
+
+## Specific Assignments
+
+
+
+# Lab/Lecture Integration
+
+In general, the integration between the courses was *much* better than the 2019 courses.
+
+
+
+# Final Project
+
+
+
+# Course Website
+
+
+
+# Course Moodle
+
+
+
+
+# Insight from Students
+
+- "So, learning the range of types of analyses and what types of data, assumptions, and requirements go in to them can make me a better ecologist?"

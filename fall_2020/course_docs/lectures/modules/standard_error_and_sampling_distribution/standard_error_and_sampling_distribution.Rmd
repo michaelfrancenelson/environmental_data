@@ -1,0 +1,185 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Standard Error and the Sampling Distribution"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+figure_dir =
+  file.path(find_file(
+    "standard_error_and_sampling_distribution",
+    directory = TRUE),
+    "figures")
+```
+
+
+
+## Sampling Distributions
+
+\begin{blueborder}{0.9\textwidth}{What is a Sampling Distribution?} \begin{itemize} \item It's the distribution of a \textit{sample statistic}.  
+\item If you took many samples and calculated a sample statistic, such as the mean, many times, the sample statistic would follow the sampling distribution.
+\item The Central Limit Theorem tells us that the sampling distribution of a statistic approaches a Normal distribution, no matter how the original data are distributed! [under certain conditions]
+\end{itemize}
+\end{blueborder}
+
+
+
+
+## Sampling Distributions
+
+- Sampling distributions are **very** important, but often misunderstood.
+- Sampling distributions are **not** the same as the distribution of a population variable.
+
+### Sampling distributions depend on:
+
+- The sample size
+- The population standard deviation (and therefore the sample standard deviation)
+
+### Each sample statistic has a sampling distribution, and a standard error.
+
+- We usually work with the sampling distribution and standard error of the mean.
+
+
+
+
+## Parameterizing the sampling distribution
+
+### We already know: 
+
+- The sampling distribution is a probability distribution of a *sample statistic*.
+- For sample sizes > 30, the sampling distribution approaches a normal distribution.
+- This is *very* useful for inference.
+
+### We can treat the sampling distribution like a Normal distribution
+
+- It's a 2-parameter distribution: mean and standard deviation
+- The mean is the population mean (or our estimate of it)
+- The standard deviation is the *standard error*.
+
+
+
+
+## Standard error of the mean: intuition
+
+We would like to know the population mean and standard deviation, but we know that
+in the frequentist paradigm we assume these are *unknowable*.
+
+### Some intuition questions:
+
+- What could we do to improve our estimates of the population mean?
+- Do you think there would be greater variability in the means in repeated samples of 5 or 50?
+- What do you think happens to the sample standard deviation as you increase the sample size?
+
+
+
+
+## Standard error of the mean: intuition
+
+### Intuition from sample size
+
+As sample size grows, our estimates of the population parameters get better.
+
+- If we took repeated samples of 5 observations, the sample means would bounce around due to *sampling error*.
+- If we took repeated samples of 500 observations, the sampling error would be smaller and the sample means would be closer together.
+- In other words, with increasing sample size our sample means stabilize around the true population mean.
+- With increasing sample size, the sample standard deviation stabilizes around the population standard deviation.
+
+
+
+
+## Sample size and the standard error
+
+Recall the sample variance: $var(X) = s_x^2 = \frac{\sum \left(x_i - \bar{x} \right)^2}{n - 1}$
+
+- The sample standard deviation is just the square root: $s_x = SSD = \sqrt{(var(X))}$
+
+### The standard error is the SSD adjusted for sample size:
+
+$SSE = \frac{s_x}{\sqrt{n}}$
+
+- The standard error **gets smaller** as the sample size increases!
+- The sample standard deviation **stabilizes** as the sample size increases!
+
+
+
+
+## Intuition: simulation experiments
+
+This is technical material.  Let's try to build some intuition with graphical examples.
+
+### A non-normal distribution: a Poisson-distributed popualtion
+
+- Create a  population of 10,000 individuals.
+- Do repeated sampling and calculate the mean.
+- Examine the *sampling distribution* of the mean.
+
+
+
+
+## Poisson population
+
+- 10000 individuals, lambda = 4.5
+
+![](`r find_file("simulated_poisson_population.png", search_path = figure_dir)`)
+
+
+
+
+## Sample from the population
+
+Intuitively, we might think a sample would have a similar distribution to the population.
+
+Let's take a sample of 500:
+
+![](`r find_file("sample_500.png", search_path = figure_dir)`)
+
+
+
+## Sample from the population: 100 samples
+
+\vfill
+
+![](`r find_file("samples_100.png", search_path = figure_dir)`)
+
+
+
+
+## Sampling Distribution of the mean
+
+### What should the distribution of the *means* in repeated sampling look like?
+
+\vfill
+
+![](`r find_file("sampling_distribution_mean_poisson.png", search_path = figure_dir)`)
+
+
+
+
+## Key Points
+
+\begin{blueborder}{0.9\textwidth}{This seems complicated, why do we care?} \begin{itemize} \item We use the sampling distribution to quantify \textit{confidence} and \textit{significance} in Frequentist \textit{inference}.
+\end{itemize}
+\end{blueborder}
+
+- The standard error gets smaller with increasing sample size.
+- The sample standard deviation (and other sample statistics) stabilizes with increasing sample size.
+- Confidence intervals are calculated from standard errors: CIs get narrower with larger samples!
+

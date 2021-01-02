@@ -1,0 +1,75 @@
+---
+title: "Residuals 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. Use the dataset you chose for the previous question.
+2. Using the code in the lab walkthrough, create a column of predicted y-values.
+3. Using the code in the lab walkthrough, create a column of residuals.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts.) Paste the R code you used to create create the columns of predicted values and residuals.
+</div>
+
+
+Solution
+========
+
+- Build random data, visually fit a model
+```{r}
+set.seed(12345)
+n_pts = 100
+x_min = 1
+x_max = 10
+x = runif(n = n_pts, min = x_min, max = x_max)
+dat = data.frame(x = x, y_observed = rnorm(n_pts))
+guess_x = 0
+guess_y = -.3
+guess_slope = 0.1
+```
+
+- Add predicted values and residuals
+```{r}
+dat$y_predicted = 
+  line_point_slope(dat$x, guess_x, guess_y, guess_slope)
+dat$resids = dat$y_predicted - dat$y_observed
+head(dat)
+```
+
+
+
+
+Meta-information
+================
+extitle: Residuals 1
+extype: string
+exsolution: nil
+exname: lab 4
+exsection: lab 4
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+expoints: 2

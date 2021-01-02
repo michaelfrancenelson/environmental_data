@@ -1,0 +1,476 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Resampling"
+author: "Kevin McGarigal"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 5. Final Exercise
+
+The purpose of the following final exercise is to give you additional experience working with stochastic simulation models, but also building on the skills learned throughout this course.
+
+You will be assigned by the instructor to a team to complete one of the following exercises.
+
+
+## 5.1.Power analysis for one-way analysis of variance
+
+This exercise involves conducting a power analysis for a one-way analysis variance (ANOVA) for a real-world experiment involving testing the resistance of several brands of climbing ropes to several types of hand-saw blades commonly used for tree pruning.
+
+
+### Background
+
+The data set comes from a study by Dr. Brian Kane (Umass) in which he was interested in evaluating the differential resistance of various climbing rope types to accidental cutting by different hand-saw blades.
+
+The motivation behind the study was as follows:
+
+A professional tree pruner was cutting through a branch when his blade accidentally struck his climbing rope and severed it, causing him to fall to his death.
+
+A civil suit was filed against the rope manufacturer, who promptly asked Dr. Kane to investigate the problem.
+
+Dr. Kane set up the following controlled experiment.
+
+He designed a two-way factorial experiment with 6 different rope types and 4 different blade types (institutional standards) as the independent factors.
+
+In a replicated experiment involving 5 replicates of each combination of rope type and blade type (i.e. a factorial design), he placed a fixed length of rope under tension, approximating the load of an average human body, and from a fixed height and angle let the blade fall and strike the rope in a manner that approximated the natural field conditions under which this might happen.
+
+For each trial, he measured several response variables, including the percent of the rope cut by the blade (p. cut), the percent of the rope strength lost as a result of the blade-induced damage, and several other measures of rope damage.
+
+For the purposes of this exercise, we will be concerned only with the main effect of rope type (i.e. we will ignore blade type) on the percent of rope cut (p.cut); in other words, a simple one-way ANOVA.
+
+But note that the procedures developed below could easily be extended to a two-way ANOVA, or even more complicated designs.
+
+Dr. Kane wants to use the results of this study to help inform the design of additional experiments,perhaps to examine additional rope types, rope tension levels, and/or other rope conditions.
+
+His primary concern is to ensure that he designs an experiment that has adequate statistical power to detect an effect if in fact there is one.
+
+In addition, given that the subsequent experiments might involve slightly different treatments (e.g., additional rope types), he wants to entertain the possibility that the standard error among replicates might vary from what he observed in the first experiment.
+
+In other words, he would like to understand the statistical power of experiments in relation to varying sample size and error rates.
+
+
+
+### Objectives
+
+Your objective is to design a simulation, mirroring the conditions of Dr. Kane’s experiment, that estimates statistical power to detect effect sizes equal to those observed in the original experiment for a reasonable range of sample sizes and error rates.
+
+Document all steps of the analysis and graphically present the results of your simulation.
+
+
+
+### Suggested steps
+
+Here is a suggested list of steps to take and a few key hints that you might need to complete the exercise.
+
+1. Set up your R work session and read in the raw data (‘rope.csv’)
+
+2. Plot the data. Note, here, we are interested only in the factor rope.type and the response variable p.cut (percent of rope cut).
+
+Hint: try box plots by rope type.
+
+3. Compute a one-way analysis of variance to test for differences in p.cut among rope types.
+
+Because ANOVA may not be familiar to you, I will briefly describe it here.
+
+Very simply, ANOVA in the context of this study involves determining whether the variability in response(p.cut) among treatments (rope.type) is significantly greater than the variability in response within treatments.
+
+To test whether this is so, the ratio of among to within variance is constructed as the test statistic and this is compared to one of the standard probability distributions, the F distribution, to determine if it is significantly greater than expected given the number of treatments and number of replicates.
+
+Here is how to compute the ANOVA manually.
+
+First, we need to know how many levels there are to our independent treatment factor, rope.type, and the total number of observations (i.e., sample size):
+
+``` {r load_data}
+rope = read.csv(here::here("data", "rope.csv"))
+ngroups = length(levels(rope$rope.type))
+nobs = nrow(rope)
+head(rope)
+```
+
+
+Next, we need to partition the total variance in the response variable into its components:
+
+- among-group
+- within-group, so that we can compute the ratio for our test statistic.
+
+Here, the trick is to realize that the total variance is the sum of the among-group variance and withingroup variance, so by calculating any two of these components, we automatically know the third.
+
+We begin by calculating the “sums of squares” for the entire data set; i.e., the squared deviation of each observation from the overall mean, since this is easiest calculation.
+
+This is a measure of total variability in the data set, and we often abbreviate this as SSY:
+
+``` {r ss_total}
+SSY = sum((rope$p.cut-mean(rope$p.cut))^2)
+```
+
+Next, we need to calculate either the “sums of squares within” or “sums of squares among”.
+
+We will compute the former which is also called the “sums of squares error” and abbreviated SSE to reflect the fact that this is the variation that cannot be explained by our treatments (i.e., the model) and thus represents error.
+
+To do this requires some tricky scripting:
+
+``` {r ss_within}
+SSE = sum(tapply(rope$p.cut, INDEX=rope$rope.type, function(x) sum((x-mean(x))^2)))
+```
+
+Here we used the tapply() function, interpreted as follows.
+
+Take the variable p.cut (first argument), and for each level of rope.type (second argument) apply the following function.
+
+In this case, we actually defined the desired function inside the apply function, but we could have defined this function separately and simply called it here.
+
+The function states, for x, which is the variable named in the first argument, p.cut in this case, calculate the following: take the value and subtract the mean and then square the difference, and then sum over all observations.
+
+In this case, however, the mean and sum are applied separately for observations in each group, so the end result is a vector containing the sums of squared differences for each group.
+
+
+We wrap this whole thing in a sum() function to sum the within-group errors across groups.
+
+Note, the result is the sums of squares error pooled across groups.
+
+Now we can compute the remaining variance component, “sums of squares among”, which is often abbreviated SSA:
+
+```{r ss_among}
+SSA = SSY - SSE
+```
+
+The extent to which SSE is less than SSY is a reflection of the magnitude of the differences between the means.
+
+If SSE is much smaller than SSY, then most of the variation in the response is due to differences among groups (or levels of the independent factor).
+
+Another way of looking at this is that as the ratio of SSA to SSE increases, then an increasing amount of the variation is due to differences among groups.
+
+It is tempting to think we are done, but we are not.
+
+We need to adjust the sums of squares to reflect the degrees of freedom available given the number of treatments (or levels of the independent factor) and the number of replicates per treatment.
+
+In our case, we have a total of 121 observations in all, so the total degrees of freedom are 121-1=120.
+
+We lose 1 d.f. because in calculating SSY we had to estimate one parameter from the data in advance, namely the overall mean.
+
+Five of the rope types had n=20 replications, so they each had 20-1=19 d.f., for error because we estimate one parameter from the data for each rope type, namely the treatment means, in calculating their contribution to SSE.
+
+One of the rope types had n=21 replications, so it had 21-1=20 d.f. to contribute to the overall SSE.
+
+Overall, therefore, the error has 5x19 + 1x20 = 115 d.f.
+
+Lastly, there were six rope types, so there are 6-1=5 d.f. for rope type (SSA).
+
+The mean squares are obtained simply by dividing each sum of squares by its respective degrees of freedom, as follows:  
+
+
+``` {r mean_squares}
+MSA = SSA/(ngroups-1)
+MSE = SSE/(nobs-ngroups)
+```
+
+
+By tradition, we do not calculate the total mean square.
+
+The test statistic is the F- ratio, defined as the among-group variance divided by the error variance:
+
+
+``` {r f_val}
+F = MSA/MSE
+```
+
+
+The F-ratio is used to test the null hypothesis that the treatment means are all the same.
+
+If we reject this null hypothesis, we accept the alternative hypothesis that at least one of the means is significantly different from the others.
+
+The question naturally arises at this point as to whether the observed F-ratio is a big number or not.
+
+If it is a big number, then we reject the null hypothesis.
+
+If it is not a big number, then we fail to reject the null hypothesis.
+
+As ever, we decide whether the test statistic is big or small by comparing it to the values from an F probability distribution, given the number of degrees of freedom in the numerator and the number of degrees of freedom in the denominator.
+
+Specifically, we want to know the Type 1 error rate (p-value); i.e., the probability of observing an F-ratio as large as ours given that the null hypothesis is true and thus the treatment means are the same.
+
+To do this, we use the pf() function for cumulative probabilities of the F distribution, like this:
+
+``` {r f_pval}
+pval = 1-pf(F,ngroups-1,nobs-ngroups)
+```
+
+OK, now that you know how to compute the p-value for the ANOVA manually, here is how you do it the easy way using the built-in aov() function:  
+ 
+``` {r aov_fun}
+summary(aov(p.cut~rope.type,data=rope))  
+```
+
+The summary of the aov object provides the ANOVA table with all the components we calculated above.
+
+You will need to be able to extract the p-value and the mean square error from the summary object, which you can do as follows:  
+ 
+ 
+``` {r}
+
+pval = summary(aov(p.cut~rope.type,data=rope))[[1]][1,5]
+
+y.error = summary(aov(p.
+
+cut~rope.type,data=rope))[[1]][2,3]  
+
+```
+
+4. Next, create a single stochastic simulation of the model that mirrors the original study.
+
+Hint: there are three key parts to this task: (1) Create a factor for the independent variable that mirrors the structure of the original study in terms of number of treatment levels and number of replicates per treatment.
+
+Hint: assuming that you have defined the number of groups (ngroups) and the number of replicates (nreps), try the following: 
+
+``` {r}
+groups = factor(rep(1:ngroups,each=nreps))
+```
+
+2. Create a numeric response variable that mirrors the effect size and the residual error of the original data set.
+
+Hint: there are two parts to consider: 
+
+1. the deterministic part of the model and
+2. the error component of the model.
+
+For the deterministic part, try the following:  
+
+``` {r}
+grp.means = tapply(rope$p.cut,INDEX=rope$rope.type,mean) y.det = grp.means[groups]
+```
+
+Now add some error to create the final vector.
+
+Hint, see the linear regression example.
+
+Also, watch out for negative values and decide how to deal with them.
+
+3. Lastly, compute the p-value for the test of group differences for the random sample.
+
+5. Next, once you have successfully simulated the data set once and computed the p-value, repeat the process many times and calculate the power of the test.
+
+6. Lastly, once you have successfully calculated the power for a fixed sample size and error, calculate the power for a gradient in sample size (e.g., from 2 to 50 replicates per treatment) and error (e.g., from 0.01 to 0.1) and plot the results.
+
+Hint; to do this you will need to embed the above function inside two additional outer loops, one for sample size and one for error.
+
+
+
+
+## 5.2 Power analysis for linear trend–date of flowering data
+
+
+This exercise involves conducting a power analysis for a linear trend for a hypothetical observational study involving the date of flowering in a spring annual.
+
+Background.–This problem is motivated by the growing awareness of climate change impacts on ecological systems.
+
+Among other impacts, it has been documented that recent climate changes, in particular, global warming, has led to measurable changes in plant phenology with unknown consequences for the affected organisms and the organisms directly or indirectly dependent on them.
+
+One of the more dramatic documented changes has been in the earlier timing of emergence or flowering of plants due to warmer temperatures.
+
+One of the many concerns with earlier flowering is that host-specific dependent species such as pollinators may not be synchronized with the phenological changes in the plants, and both the plant and the dependent species may decline as a result.
+
+For the purposes of this exercise, let’s assume that you are a biologist with an environmental agency and you are responsible for establishing a monitoring program to document trends in the timing of flowering of spring annuals to better understand the potential impacts of climate change.
+
+You have the good fortune of having a preliminary data set to work with.
+
+Specifically, a botonist working with the Trustees of Reservations by the name of Trilly has been monitoring the flowering dates of Trillium () over the past 10 years on one of the Trustees Reservations.
+
+Specifically, Trilly established 5 permanent plots distributed randomly across the Reservation and has been surveying them intensively during the spring emergence period each year.
+
+The resulting data set includes the Julian date of first flowering on each plot for each year in addition to a number of other environmental variables related to annual climatic conditions.
+
+You are able to use the results of this small-scale study to help inform the design of a monitoring program for the state lands under your jurisdiction, perhaps to monitor a wide range of plant species in a wide range of biophysical settings.
+
+Your primary concern is to ensure that your study design has adequate statistical power to detect a trend over the next 10 years if in fact there is one.
+
+In addition, you are interested in evaluating the relative tradeoffs between the number sample plots (i.e., sample size) and the magnitude of the trend (i.e., the slope of the trend line), because there is a real cost to each additional sample plot but at the same time you would like to confirm the existence of even a minor trend..
+
+In other words, you would like to understand the statistical power of experiments in relation to varying sample size and slope of the trend line.
+
+Objectives.–Your objective is to design a simulation, mirroring the conditions of Trilly’s experiment, that estimates statistical power to detect a trend of varying magnitudes for a reasonable range of sample sizes over a 10-year period.
+
+Document all steps of the analysis and graphically present the results of your simulation.
+
+Suggested steps.–Here is a suggested list of steps to take and a few key hints that you might need to complete the exercise.
+
+### Instructions
+
+#### 1: Set up R Session
+
+Set up your R work session and read in the raw data (‘flower.csv’)
+
+
+#### 2: Graphical Exploration - Dates
+
+Plot the data to determine the distribution of Julian dates.
+
+In addition, we might suspect that the plots differ in their mean Julian dates, reflecting differences in the biophysical setting among plots.
+
+Therefore, it will be useful to plot the distribution of mean Julian dates among plots and determine the probability distribution that best represents it, since you will need this to simulate new data.
+
+Hint: plot a histogram of Julian date first, just for kicks, then plot a histogram of the mean Julian date for each plot after subtracting the minimum mean Julian date (and plot it on the probability scale). Try the following:
+
+
+``` {r}
+plot.mu = aggregate(flower$julian,by=list(flower$plot.id),mean)
+hist(plot.mu$x-min(plot.mu$x),prob=TRUE)
+```
+
+
+What probability distribution might describe the observed distribution? Can you estimate the parameters of that distribution? Try adding a curve to the histogram with using the curve() function, for example:
+
+``` {r}
+curve(dnorm(x,mean=4,sd=2),0,20,add=TRUE)
+```
+
+
+What about the distribution of initial Julian dates; i.e., the Julian dates of first flowering during the first year of the study (tstep=0).
+
+To look at this, we need to extract the dates for the first year of the study.
+
+Try the following:
+
+``` {r}
+
+init = flower$julian[flower$tsteps==0]
+
+```
+
+Now, plot a histogram of this data and then add a curve to the histogram using the dnorm function as above, but this time use the sample mean and standard deviation.
+
+
+#### 3: Graphical Exploration: Scattedrplot/Linear Trend
+
+Plot the data to evaluate whether a linear trend is appropriate.
+
+Note, here you will want to plot the trend separately for each plot, since you are interested in controlling for the differences among plots.
+
+Hint: you can simply plot a bivariate scatterplot of time against Julian data and color and symbolize the points for each plot separately.
+
+Alternatively, you might try plotting each plot separately using the groupedData() function in the nlme library, as follows:
+
+``` {r}
+
+library(nlme)
+result = groupedData(julian~tsteps|plot.id,data=flower)
+
+plot(result)
+
+```
+
+Does a linear trend seem reasonable for these plots?
+
+#### 4: Linear Regression
+
+Next, fit a linear regression model to the data, but account for the differences among plots.
+
+Note, there are many issues and many different statistical methods for analyzing trends, which is way beyond the scope of this lab.
+
+For example, in the current context, you could fit a separate trend line to each plot and simply look for consistency across plots or average the resulting slopes and intercepts across plots.
+
+Alternatively, you could add plot.id as a categorical (factor) fixed effect to the model, making it a multiple linear regression model or an analysis of covariance, which would allow the intercepts to varying among plots.
+
+Alternatively, you could use what is known as a “mixed effects” model in which you treat plot.
+
+id as a random effect, essentially accounting for the differences among plots, and let either the slope or intercept or both vary among plots.
+
+In any of these models, you could ignore the serial autocorrelation in the errors that occurs when the response in one year can be partially predicted from the response in the previous year or years.
+
+, or you could try to model the autocorrelation, for which there are several different methods.
+
+For practical purposes, you can keep it relatively simple and use the analysis of covariance approach described above, which allows you to focus on the slope of the trend while accounting for differences in the mean among plots in a relatively simple way, which I will refer to here as a “varying intercept model”.
+
+First, plot the data and fit a linear regression or trend line to each plot to confirm that a varying intercept model is reasonable.
+
+Hint: here you might first plot the data (as above) and then, in a loop, fit a linear trend to each plot and add it to the plot, like this:
+
+
+``` {r}
+
+plot(julian~tsteps,pch=19,col=plot.id,data=flower)
+
+for(i in 1:5)
+{ 
+fit = lm(julian~tsteps,subset=plot.id==i,data=flower)
+abline(reg=fit,col=i) 
+}
+```
+
+Next, assuming that you accept the varying intercept model as reasonable, go ahead and fit an analysis of covariance model, as follows: 
+
+
+``` {r}
+fit = lm(julian~tsteps+factor(plot.id),data=flower) 
+#try ancova model
+summary(fit)
+```
+
+What do the results say about the slope of the overall trend (i.e., the estimate for tsteps) and its significance? Also, what is the residual standard error? You will need these estimates for your simulation.
+
+#### 5 Stochastic Simulation
+
+Next, create a single stochastic simulation of the model that mirrors the original study.
+
+Hint: there are three key parts to this task – the first part is a bit tricky:  1.
+
+Create a data set that mirrors the structure of the original study in terms of number of plots and number of years.
+
+Hint: first you will need to create a vector of random initial Julian dates for the plots based on the distribution you described above, and call this vector y.init.
+
+You will also need to create a vector called tsteps that varies from 0 to 10 by 1 to mimic the original data.
+
+Lastly, you will need to define the number of plots (nreps), the common slope (slope), and the residual error (sigma).
+
+With these objects defined, try the following:  
+
+``` {r}
+
+y.sim = matrix(NA,nrow=length(tsteps),ncol=nreps) 
+y.sim[1,] = y.init
+
+for(j in 2:length(tsteps)){ y.sim[j,] = sapply(y.init,function(x) x+(slope*tsteps[j])+rnorm(1,mean=0,sd=sigma)) }
+
+y.sim = as.data.frame(cbind(tsteps,y.sim))
+
+y.sim = reshape(y.sim,direction='long',varying=list(2:ncol(y.sim)), timevar='plot.id',v.names='julian')
+
+```
+
+Since this is the core of the simulation, make sure you understand what this is doing.
+
+Can you identify the deterministic part of the model and the error component of the model? A bunch of the script is just formatting the simulated data set to look like the original.
+
+For example, the reshape command takes the y.sim object in “wide” format and converts it to the “long” format consistent with the original data.
+
+2. Next, fit the analysis of covariance model, as above, and you may want to plot the data first to make sure it looks right (see previous code).
+
+3. Lastly, extract the computed p-value for the slope of the trend line, as above.
+
+6. Next, once you have successfully simulated the data set once and computed the p-value, repeat the process many times and calculate the power of the test.
+
+Hint: to do this you will have to embed the core function above within an outer loop over the number of simulations.
+
+7. Lastly, once you have successfully calculated the power for a fixed sample size and slope, calculate the power for a gradient in sample size (e.g., from 2 to 40 plots) and slope (e.g., from 0 to 0.5) and plot the results.
+
+Hint: to do this you will need to embed the function above in two additional outer loops, one for sample size and one for slope.

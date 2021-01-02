@@ -1,0 +1,68 @@
+---
+title: "Subsetting a list 2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+You will use the `my_list_1` object that you created in the previous question.
+
+
+<p class="blackborder">
+Hint: remember the subsetting operators `[]` and `$`?
+</p>
+
+
+Paste the R code for the the following questions into the text input box below:
+
+- Q1 (1pt): The third element.
+- Q2 (1pt): The element with the name "one".  Note: there are at least two ways to do this!
+
+
+
+Solution
+========
+
+Some possible answers are:
+
+```{r, eval=FALSE, echo = TRUE}
+my_list_1[[3]]
+my_list_1$one
+my_list_1[["one"]]
+
+```
+
+
+Meta-information
+================
+extitle: Subsetting a list 1
+extype: string
+exsolution: nil
+expoints: 2
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10

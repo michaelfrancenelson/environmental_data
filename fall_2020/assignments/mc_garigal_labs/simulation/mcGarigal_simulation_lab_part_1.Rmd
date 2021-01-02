@@ -1,0 +1,410 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Resampling"
+author: "Kevin McGarigal"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Analysis of Environmental Data - Stochastic Simulation
+(Written by Kevin McGarigal, but borrowed heavily from Ben Bolker (2008))
+
+The purpose of this lab exercise is to introduce you to techniques and ideas related to simulating
+environmental patterns in R. The main goals are to show you to generate patterns you can use to
+sharpen your intuition and test your estimation tools, show you how to estimate statistical power by
+simulation, and, with an example, illustrate the flexibility of R for simulating environmental patterns
+and processes. Of course it is impractical to illustrate the full range of uses of stochastic simulation.
+Rather, the intent here is to simply wet your appetite for the great utility of simulation. Here is an
+outline of what is included in this lab exercise:
+
+
+# 1. Introduction
+
+Simulation is sometimes called forward modeling, to emphasize that you pick a model and parameters and work forward to predict patterns in the data.
+
+Environmental scientists often use simulation to explore the patterns that emerge from environmental models.
+
+Often they use theoretical models without accompanying data, in order to understand qualitative patterns and plan future studies.
+
+But even if you have data, you might want to start by simulating your system.
+
+You can use simulations to explore the functions and distributions you chose to quantify your data; in other words, to explore possible statistical models for your data.
+
+If you can choose parameters that make the simulated output from those functions and distributions look like your data, you can confirm that the models are reasonable – and simultaneously find a rough estimate of the parameters.
+
+You can use simulated “data” from your system to test your estimation procedures.
+
+Since you never know the true answer to an environmental question – you only have imperfect measurements with which you’re trying to get as close to the answer as possible – simulation is the only way to test whether you can correctly estimate the parameters of an environmental system.
+
+It’s always a good idea to test such a best-case scenario, where you know that the functions and distributions you’re using are correct, before you proceed to real data.
+
+Power analysis is a specific kind of simulation testing where you explore how large a sample size you would need to get a reasonably precise estimate of your parameters.
+
+You can also use power analysis to explore how variations in experimental design would change your ability to answer environmental questions.
+
+
+# 2. Set up your R work session
+
+Open R and set the current working directory to your local workspace, for example:
+
+```{r}
+setwd('c:/work/stats/ecodata/lab/simulation/')
+```
+
+Load the biostats library (which is not a formal library) by typing, substituting the appropriate path:
+
+```{r}
+source('.../biostats.R')
+```
+
+
+# 3. Simulating static environmental processes
+
+Static environmental processes, where the data represent a snapshot of some environmental system, are relatively easy to simulate.
+
+For static data, we can use a single function to simulate the deterministic process and then add heterogeneity or stochasticity.
+
+Often, however, we will chain together several different functions and probability distributions representing different stages in an environmental process to produce surprisingly complex and rich descriptions of environmental systems.
+
+
+## 3.1 Linear Regression Model
+
+Here we will illustrate the process of simulating a static environmental process using a simple linear regression model based on the now familiar Oregon birds data set.
+
+For this example, let’s examine the relationship between brown creeper abundance and the extent of late-successional forest across 30 subbasins in the central Oregon Coast Range.
+
+First, read in the bird and habitat data sets (see birdhab.meta.pdf for a complete description of the
+data sets), merge them, and plot the relationship between brown creeper abundance and the extent
+of late-successional forest, as follows:
+
+```{r}
+birds<-read.csv('bird.sub.csv',header=TRUE)
+hab<-read.csv('hab.sub.csv',header=TRUE)
+birdhab<-merge(hab,birds,by=c('basin','sub'))
+plot(birdhab$ls,birdhab$BRCR,pch=19)
+```
+
+
+What is the apparent relationship? How strong is it? Can we say with confidence that it is real or
+could it be a sampling artifact or a product of chance? To answer these questions we might fit a
+linear model with normal errors:
+
+$Y ~ Normal(a + bx, \sigma ^2)$
+
+which specifies that Y is a random variable drawn from a normal distribution with a mean a + bx
+and variance ó .
+
+This means that the i value of Y, yi, is equal to a + bxi plus a normally distributed 2 th error with mean zero and variance $\sigma ^2$.
+
+Let’s fit this model using the lm() function in R, as follows:
+
+```{r}
+fit1<-lm(BRCR~ls, data=birdhab)
+fit1
+```
+
+
+Let’s not worry about how we fit the model for now (that’s coming later).
+
+Suffice it to say that the
+procedure used by the lm() function to fit this model finds us the “best” estimates of our moodel
+parameters, a, b and ó.
+
+Let’s add the fitted line (i.e., predicted values) and a 95% confidence interval
+(again, let’s not worry about how we find this interval for now) to the scatterplot, as follows:
+
+
+```{r}
+abline(reg=fit1)
+ci.lines(fit1)
+```
+
+Look’s pretty good, doesn’t it? But let’s remember that the data represent a single snapshot of the environmental system.
+
+If the regression model is the truth, what might the data look like if we were to obtain another snapshot? This is where stochastic simulation comes in to play.
+
+We can simulate the system using our model and see what kind of range of data we might observe.
+
+This can give us great insight into the level of certainty we have in our model.
+
+This is in fact the theoretical basis for the frequentist approach to statistical inference, in which we evaluate the likelihood of our data given the model, which implicitly means how likely would we observe our original data if we were to repeatedly sample the system.
+
+This is exactly what simulation allows us to do – repeatedly sample the environmental system under the assumption that the model is the truth. Let’s create a simulation for our linear model.
+
+First, lets create a vector of values for x, which represents the percentage of the subbasin comprised of late-successional forest.
+
+Here, we could allow x to vary randomly between 0-100 to reflect sampling a different set of landscapes each time, or we could fix the values at the original values of x to reflect repeated random sampling of these
+same subbasins.
+
+Both approaches are legitimate, so the choice depends on the objective of the simulation.
+
+For our purpose, let’s keep the original values of x and let only the brown creeper abundance to vary among simulations.
+
+```{r}
+xvec<-birdhab$ls
+```
+
+Next, let’s store the intercept and slope values from the fitted linear model so that we can use them more conveniently in our simulation:
+
+```{r}
+a<-coef(fit1)[1]
+b<-coef(fit1)[2]
+```
+
+Note, there are several ways to extract the coefficients from the fitted lm() object.
+
+Here we used the coef() function which extracts coefficients from modeling functions.
+
+The indexing is used to extract the first and second elements of the vector of coefficients extracted from the fit1 object, which corresponds to the intercept (a) and slope (b) parameters, respectively.
+
+Next, let’s calculate the deterministic part of the model:  y.det<-a + b*xvec  Note, because xvec is a vector, the mathematical equation produces a vector for output.
+
+Y.det contains a single element, the predicted value of Y, for each element of xvec.
+
+Next, let’s pick random normal deviates (errors) with the mean equal to the deterministic equation and the standard deviation equal to the residual standard error of the fitted model (i.e., the standard deviation of the residuals).
+
+First, we have to extract the residual standard error from the fitted object, which is stored in the summary() object in the component named sigma: 
+
+
+```{r}
+y.error<-summary(fit1)$sigma 
+```
+
+Next, we generate a vector of random observations drawn from a normal distribution with a mean equal to the predicted value from our deterministic model, y.det, and a standard deviation equal to the residual standard error, y.error.
+
+```{r}
+ysim<-rnorm(n=length(xvec),mean=y.det,sd=y.error)
+```
+
+Note, because y.det is a vector, we want to extract a vector of random numbers of equal length; consequently, we specify n=length(xvec), which means draw a vector of random numbers that contains the same number of elements as xvec, and for each random draw, let the mean equal the corresponding value of y.det and the standard deviation equal the constant y.error.
+
+The object ysim now holds a random sample of brown creeper abundances derived from our model.
+
+Let’s add this new set of points to the scatterplot, as follows: 
+
+```{r}
+points(xvec,ysim,add=TRUE,col='red')
+```
+
+
+Is the new pattern of points the same as the original pattern? Are there any notable discrepancies? You might want to run the model a couple of more times to see how variable the results are? After running the model a few times, do you notice any problems with the model? In other words, does the model reproduce the patterns in the original data perfectly or are there issues with the spread of values or with the generation of illogical values? One problem with the use of the normal distribution is that it is unbounded on the lower limit.
+
+Thus, negative values are possible.
+
+In this case, because the y-intercept is close to 0, the simulation is likely to produce negative values occasionally when x60.
+
+Since brown creeper abundance cannot be negative, this is an undesirable behavior of the model.
+
+One way to fix this problem is to use the gamma distribution, which allows only positive values.
+
+I will not describe the gamma error model here, but the script is included for those that wish to try it.
+
+One issue that arises with the gamma distribution is that yi=0 is not allowed, so we need to add a very small number to all the observations before we can use the model (see script).
+
+
+
+
+## 3.2 Power analysis for the linear regression model
+
+Power analysis in the narrowest sense means figuring out the (frequentist) statistical power, the probably of correctly rejecting the null hypothesis when it is false.
+
+While we are generally less concerned with power analysis in the conventional sense of hypothesis testing, we are very interested in the role of power analysis in addressing a much broader question: How do the quality and quantity of the data and the true properties (parameters) of the environmental system affect the quality and of the answers to our questions about environmental systems?  For any real experiment or observation situation, we don’t know what is really going on (the “true” model or parameters), so we don’t have the information required to answer these questions from the data alone.
+
+But we can approach them by analysis or simulation.
+
+Historically, questions about statistical power could only be answered by sophisticated analyses, and only for standard statistical models and experimental designs such as one-way ANOVA or linear regression.
+
+Increases in computing power have extended power analysis to many new areas, and R’s capability to run repeated stochastic simulations is a great help.
+
+Here, we will illustrate the use of stochastic simulation for power analysis using the linear regression model above.
+
+Let’s start by finding out whether we can reject the null hypothesis in a single experiment.
+
+To do this, we simulate a dat set with a given intercept and slope, and number of data points; run a linear regression; extract the p-value (recall, this represents the probability of observing our data if in fact it came from distribution described by the null model, which in this case means that brown creeper abundance is independent of ls or has no relationship to ls); and see whether it is less than our specified alpha criterion (usually 0.05), as follows: 
+
+
+
+```{r}
+xvec<-birdhab$ls
+a<-coef(fit1)[1]
+b<-coef(fit1)[2]
+y.det<-a + b*xvec
+y.error<-summary(fit1)$sigma
+ysim<-rnorm(length(xvec),mean=y.det,sd=y.error)
+fit<-lm(ysim~xvec)
+summary(fit)$coefficients['xvec','Pr(>|t|)']
+```
+
+Note, many of the objects were defined previously, but to be safe, we defined them again here. Also,
+extracting p-values from R analyses can be tricky. In this case, the coefficients of the summary() of
+the linear fit are a matrix including the standard error, t statistic, and p-value for each parameter; I
+used matrix indexing based on the row and column names to pull out the specific value I wanted.
+To estimate the probability of successfully rejecting the null hypothesis when it is false (the power),
+we have to repeat this procedure many times and calculate the proportion of the time that we reject
+the null hypothesis. First, we specify the number of simulations to run and set up a vector to hold
+the p-value for each simulation. Then, we repeat what we did above (without redefining some of the
+objects that have not changed, such as xvec, a, b, and y.error), each time saving the p-value in the
+storage vector:
+
+```{r}
+nsim<-1000
+pval<-numeric(nsim)
+for(i in 1:nsim){
+  y.det<-a + b*xvec
+  ysim<-rnorm(length(xvec),mean=y.det,sd=y.error)
+  fit<-lm(ysim~xvec)
+  pval[i]<-summary(fit)$coefficients['xvec','Pr(>|t|)']
+}
+```
+
+
+
+Next, we calculate the power by summing up how many times we rejected the null hypothesis at the
+specified alpha-level, and dividing by the number of simulations to convert it to a proportion:
+
+```{r}
+sum(pval<0.05)/nsim
+```
+
+What is our power in this case? But this is the power to detect a slope of roughly b=0.006 with a
+sample size of N=30, given our specified statistical model. Usually we don’t just want to know the
+power for a single experimental design. Rather, we want to know how the power changes as we
+change some aspect of the design such as the sample size or the effect size (slope, in this case). Thus,
+we have to repeat the entire procedure multiple times, each time changing some parameter of the
+simulation such as the slope or the sample size. Coding this in R usually involves nested “for” loops.
+Here is an example to examine how power changes as a function of the slope:
+
+```{r}
+nsim<-1000
+pval<-numeric(nsim)
+bvec<-seq(-.01,.01,by=0.001)
+power.b<-numeric(length(bvec))
+for(j in 1:length(bvec)){
+  b<-bvec[j]
+  for(i in 1:nsim){
+    y.det<-a + b*xvec
+    ysim<-rnorm(length(xvec),mean=y.det,sd=y.error)
+    fit<-lm(ysim~xvec)
+    pval[i]<-summary(fit)$coefficients['xvec','Pr(>|t|)']
+  }
+  power.b[j]<-sum(pval<0.05)/nsim
+}
+```
+
+
+Note that this is basically the same function as before, but with the original loop (over simulations)
+nested within a loop over slope values. Thus, we needed to create a vector of slope values to
+evaluate (bvec) and a storage vector to hold the results (power.b). The power is computed for the
+first value of slope in bvec (as before) and the result is stored in the first position of the storage
+vector power.b. Each time through the outer loop, a new value of power is computed for the next
+value of slope. The result is a vector of power values for increasing values of slope.
+Let’s plot the result and add a vertical line to show the slope of our original data set:
+
+plot(bvec,power.b,type='l',xlab='Effect size',ylab='Power')
+abline(v=coef(fit1)[2],lty=2,col='red')
+
+What is the power for a slope of say .002?
+We can do the same thing for a gradient in sample sizes, as follows. Note, we need to define b back
+Stochastic Simulation 7
+to its original value because it was changed in the previous simulation.
+
+b<-coef(fit1)[2]
+nsim<-1000
+pval<-numeric(nsim)
+nvec<-seq(10,50)
+power.n<-numeric(length(nvec))
+for(j in 1:length(nvec)){
+xvec<-seq(0,100,length.out=nvec[j])
+for(i in 1:nsim){
+y.det<-a + b*xvec
+ysim<-rnorm(length(xvec),mean=y.det,sd=y.error)
+fit<-lm(ysim~xvec)
+pval[i]<-summary(fit)$coefficients['xvec','Pr(>|t|)']
+}
+power.n[j]<-sum(pval<0.05)/nsim
+}
+
+And plot the result as before:
+
+plot(nvec,power.n,type='l',xlab='Sample size',ylab='Power')
+abline(v=length(birdhab$ls),lty=2,col='red')
+
+How much power is lost if we reduce the sample size from 30 to 20?
+We could repeat this process for other parameters such as the error component of the model, but
+you get the idea. While we can do these power analysis simulations for one parameter at a time, it
+might be more interesting to vary combinations of parameters, say of slope and sample size, using
+yet another loop, saving the results in a matrix, and using contour() or persp() to plot the results. Try
+the following:
+
+nsim<-1000
+pval<-numeric(nsim)
+bvec<-seq(-.01,.01,by=0.001)
+nvec<-seq(10,50)
+power.bn<-matrix(nrow=length(bvec),ncol=length(nvec))
+for(k in 1:length(bvec)){
+b<-bvec[k]
+for(j in 1:length(nvec)){
+xvec<-seq(0,100,length.out=nvec[j])
+for(i in 1:nsim){
+y.det<-a + b*xvec
+ysim<-rnorm(length(xvec),mean=y.det,sd=y.error)
+fit<-lm(ysim~xvec)
+pval[i]<-summary(fit)$coefficients['xvec','Pr(>|t|)']
+}
+
+power.bn[k,j]<-sum(pval<0.05)/nsim
+}
+}
+
+Note, the only difference in this code is that we added a third outer loop and created a matrix to
+store the results, since we have a power result for each combination of slope and sample size.
+Let’s plot the result using the contour() function, as follows:
+
+contour(x=bvec,y=nvec,z=power.bn)
+
+Let’s try a perspective plot using the persp() function, as follows:
+
+persp(x=bvec,y=nvec,z=power.bn,col='lightblue',theta=30,phi=30,expand=.75, ticktype='detailed')
+
+Or, if your really ambitious, try the code below to add a color gradient to the surface:
+
+jet.colors<-colorRampPalette(c("blue","green"))
+nbcol<-100
+color<-jet.colors(nbcol)
+nrz<-nrow(power.bn)
+ncz<-ncol(power.bn)
+zfacet<-power.bn[-1,-1] + power.bn[-1,-ncz] + power.bn[-nrz,-1] + power.bn[-nrz,-ncz]
+facetcol<-cut(zfacet,nbcol)
+persp(x=bvec,y=nvec,z=power.bn,col=color[facetcol],theta=30,phi=30,expand=.75,
+ticktype='detailed')
+
+What does the power surface reveal about the relationship between slope and sample size? If you
+wanted say a power of >0.8 to detect a slope of b=.002, how large would your sample size need to
+be?
+
+As you can see, stochastic simulation is an extremely powerful tool for examining power, even in
+this simple linear regression example where canned approaches exist. For more complex models, the
+coding is more complex, but the process is the same. The same basic tools learned in this example
+can be extended to more complex situations.
+

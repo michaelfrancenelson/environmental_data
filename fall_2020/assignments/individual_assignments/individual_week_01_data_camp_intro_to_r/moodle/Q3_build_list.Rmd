@@ -1,0 +1,88 @@
+---
+title: "Creating a list"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Create a list, named `my_list_1` with following three elements:
+
+1. first element is numeric:  `5.2`
+2. second element is a string `"five point two"`
+3. third element is a vector of all integers from 0 to 5 [how do you do this?]
+
+Name the elements in `my_list_1`:
+
+1. "two"
+2. "one"
+3. "three"
+
+<div class="warning"> Make sure the elements in your list are in the order specified.</div>
+
+
+- Q1 (2 pts): Paste the R code you used to create `my_list_1` into the text entry box below.
+
+
+Solution
+========
+
+
+Some possible answers
+
+```{r, echo = TRUE, results='hide'}
+
+# using the names() function
+my_list_1 = list(5.2, "five point two", 0:5)
+names(my_list_1) = c("two", "one", "three")
+
+# creating the names when you build the list
+my_list_1 = list(two = 5.2, one = "five point two", three = 0:5)
+```
+
+Other approaches are fine too, as long as they produce the same answer.
+
+The following should return TRUE
+
+```{r}
+ref_answer = list(two = 5.2, one = "five point two", three = 0:5)
+identical(ref_answer, my_list_1)
+```
+
+
+
+
+
+
+Meta-information
+================
+extitle: Creating a list
+extype: string
+exsolution: nil
+expoints: 2
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10

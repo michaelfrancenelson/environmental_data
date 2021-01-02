@@ -1,0 +1,63 @@
+---
+title: "lab 1 Q2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Run the following two lines of code in the console and consider the differences:
+
+```{r, eval = FALSE, echo=TRUE}
+c_1 = c(1, 2, 3)
+c_2 = "c(1, 2, 3)"
+```
+
+Answer the following:
+
+- Q1 (1pt). Is c_1 a variable, or a function?
+- Q2 (1pt). Is c_2 a variable, or a function?
+- Q3 (1pt). If c_1 and c_2 have different values, why?
+
+
+Solution
+========
+
+- Both are variables
+- c_1 is a vector
+- c_2 is a string
+
+
+Meta-information
+================
+extitle: lab 1 Q2
+extype: string
+exsolution: nil
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 8
+expts: 3

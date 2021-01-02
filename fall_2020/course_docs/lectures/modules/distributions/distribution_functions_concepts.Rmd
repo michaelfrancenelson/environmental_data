@@ -1,0 +1,254 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Distribution Functions Concepts"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+require(ggplot2)
+require(cowplot)
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+require(palmerpenguins)
+
+# source(here::here("rmd_tools", "find_file.R"))
+source(find_file("proportional_image_crop.R"))
+# source(find_file("norm_density_plot.R"))
+# source(find_file("norm_quantile_plot.R"))
+# source(find_file("norm_cdf_plot.R"))
+
+n_fit_fmt = "x = %1$s cm\nf(x) = %2$s\nPr(x < %1$s cm) = %3$s"
+n_fit_fmt = "x = %1$s cm: f(x) = %2$s"
+cdf_fmt = "x: %1$s gm\nquantile: %2$s"
+q_fmt = "quantile: %1$s\nlength = %2$s cm"
+
+img =  proportional_image_crop(filename = "brown_bullhead.jpg", height_pct = .38, width_pct = .7, height_offset = .23, width_offset = .2)
+
+gg_img = ggdraw() + draw_image(img)
+gg_img_rev = ggdraw() + draw_image(image_flop(img))
+
+
+n_fit_fmt = "x = %1$scm\nf(x) = %2$s\nPr(x < %1$s) = %3$s"
+norm_density_plot(10.2, pop_mean = 11.2, pop_sd = 3, title_fmt = n_fit_fmt)
+```
+
+
+
+
+<!-- ## Key Distributions Terms and Concepts -->
+
+<!-- - Theoretical and empirical distributions -->
+<!-- - Parameters -->
+<!-- - Distribution functions -->
+<!--   - Probability Density/Mass -->
+<!--   - Cumulative Density/Mass -->
+<!--   - Quantile Functions -->
+
+
+
+
+## Probability Distribution Functions
+
+![](`r find_file("Measuring_Bony_Fishes_tfs.png")`)
+
+
+
+
+## What questions should a distribution function answer?
+
+```{r echo=FALSE, results='asis', fig.align='center', fig.height = 0.75}
+g = gg_img
+plot_grid(g, g, g, g, g, nrow = 1)
+```
+> - What is the probability a is between 10 and 11cm long?
+>   - Probability Density Function
+> - What is the probability that a fish is longer than 20cm?
+>   - Cumulative Density Function
+> - How long is a fish in the 90th percentile?
+>   - Quantile Function
+```{r echo=FALSE, results='asis', fig.align='center', fig.height=0.75}
+g = gg_img_rev
+plot_grid(g, g, g, g, g, nrow = 1)
+```
+
+
+
+
+## Probability Density/Mass Functions
+
+### Probability density or mass functions answer the questions:
+
+- Am I more likely to catch a fish that measures 6cm or 14.5cm?
+- What is the probability that I collect *exactly* two acorns of Red Oak out of a mixture of Red Oak and Bur Oak acorns?
+
+### They associate an event with a measure of likelihood
+- This is the probability of the event for discrete distributions
+- For continuous distributions it is more complicated, but you can think of it as relative likelihood.
+
+
+
+## Probability Density/Mass Functions
+
+### They are maps of events in the sample space to probabilities.
+
+- **Probability Density Functions** for continuous distributions
+- **Probability Mass Functions** for discrete distributions.
+
+### Probabilities are always between zero and 1:
+- The values of PDFs and PMFs are always non-negative.
+
+
+
+
+## Probability Density Function
+
+### Am I more likely to catch a fish that measures 6cm or 14.5cm?
+
+```{r, echo=FALSE}
+plot_grid(
+norm_density_plot(
+  6, pop_mean = 11.2, pop_sd = 3.5, 
+  title_fmt = n_fit_fmt, x_lab = "length (cm)"),
+norm_density_plot(
+  14.5, pop_mean = 11.2, pop_sd = 3.5, 
+  title_fmt = n_fit_fmt, x_lab = "length (cm)"))
+```
+
+
+
+
+
+## Cumulative Probability Functions: CDFs & CMFs
+
+### The CDF/CMF answers:
+
+- What is the probability that I catch a fish that weighs 153g or less?
+- What is the probability that *at least* 3 of the acorns are Bur Oak?
+
+Cumulative density is the **accumulated area under the density curve** to the left of x.
+
+- It's an integral (or a sum for discrete distributions).
+- It is the probability of observing a value equal to or less than x.
+- The nth percentile (quantile).
+
+
+
+## Cumulative Probability Functions: CDFs & CMFs
+
+### What is the probability that I catch a fish that weighs 153g or less?
+
+```{r, echo=FALSE, fig.height=6.5}
+
+norm_cdf_plot(
+  153, pop_mean = 151, pop_sd = 8, title_fmt = cdf_fmt, x_lab = "mass (g)", 
+  y_lab="Pr(mass < x)")
+```
+
+
+
+## Quantile Functions
+
+### The quantile function answers:
+
+- What is the 90th percentile of fish lengths?
+- What length will 90% of all fishes be shorter than?
+
+### The quantile function is the *inverse function* of the cumulative density/mass function.
+
+
+
+## Quantile Functions
+
+### What length will 90% of all fishes well be shorter than?
+
+```{r echo = FALSE, fig.height=6.5}
+
+norm_quantile_plot(
+  0.9, pop_mean = 12, pop_sd = 1,
+  title_fmt = q_fmt, 
+  x_lab = "Pr(length < x)", y_lab = "length(cm)")
+```
+
+
+
+## Parametric (Theoretical) Distributions
+
+### Parametric distributions are defined by mathematical *functions*
+
+- The functions have one or more *parameters* that define how probabilities are allocated to events.
+- We often want to estimate the parameters from samples.
+
+### The *binomial distribution* has two parameters: $n, p$.
+
+\begin{center}
+$Pr\left(X=k\right) = {n \choose k} p^k(1-p)^{n-k}$
+\end{center}
+
+### The *Poisson* distribution has only one parameter: $\lambda$
+
+\begin{center}
+$Pr\left(X=k\right)=\frac{\lambda ^k e ^ {-k}}{k!}$
+\end{center}
+
+
+
+
+## Empirical Distributions
+
+### Empirical distributions are computed from *observations*.
+
+- There is no analytical function: the shape is computed from data.
+- We can compare empirical distributions to parametric distributions. 
+
+### Histograms are analogous to a PDF/PMF
+
+### Empirical cumulative distribution function are analogous to the CDF/CMF
+
+
+
+## Empirical Distributions
+
+### Histogram and ECDF of penguin body masses
+
+```{r, echo=FALSE}
+x = penguins$body_mass_g
+par(mfrow = c(1, 2))
+hist(x, main = "Histogram of body mass (g)", xlab = "body mass (g)")
+plot(
+  ecdf(x),
+  main = "Empirical distribution of body mass", 
+  xlab = "body mass (g)", ylab = "cumulative density")
+
+```
+
+
+
+
+
+
+<!-- ## Recap -->
+
+<!-- - Theoretical and empirical distributions -->
+<!-- - Parameters -->
+<!-- - Distribution functions -->
+<!--   - Probability Density/Mass -->
+<!--   - Cumulative Density/Mass -->
+<!--   - Quantile Functions -->

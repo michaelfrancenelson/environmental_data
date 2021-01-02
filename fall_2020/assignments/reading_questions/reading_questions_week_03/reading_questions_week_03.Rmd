@@ -1,0 +1,225 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 03 Reading Questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+```
+
+```{r build_questions, eval= FALSE, echo = FALSE}
+require(rmd.utils)
+source(find_file("gather_assignment_paths.R"))
+source(find_file("build_lab.R"))
+
+build_reading_questions(3, moodle_xml = FALSE)
+```
+
+
+
+# Questions
+
+
+<!-- - Zuur Chapter 4.1.  Focus on the sections below.  We’ll cover some of the other plot types later.  -->
+<!--   - Boxplots and conditional boxplots  -->
+<!--   - Histograms  -->
+<!--   - Scatterplots  -->
+<!--   - Pair plots  -->
+<!-- - McGarigal Chapter 3: Data Exploration, Screening & Adjustments -->
+<!--   - sections 1 – 5.  This covers much of the same material as the Zuur reading. -->
+<!-- - McGarigal Chapter 4: Deterministic Functions -->
+<!--   - Sections 1-3, 5 -->
+<!--   - section 4:  -->
+<!--     - Glance through this section.  Try not to get caught up in the mathematical details. -->
+<!--     - Focus on the figures and the shapes of the functions. -->
+<!--     - We’ll cover the details of selected functions in lecture and discussion.  -->
+
+
+
+
+<!-- # My reading notes -->
+
+
+<!-- ## Zuur 4.1 -->
+
+<!-- - exploration questions to ask yourself -->
+
+<!-- - examples of assumption problems: -->
+<!--   - PCA and linear relationships -->
+<!--   - overdispersion in GLMs -->
+
+<!-- - "Expect to spend at least 20% of your research time exploring your data." -->
+
+<!-- - Boxplots: Argentinian salt marsh worms example -->
+<!--   - extreme value/outlier figure 4.1 -->
+<!--   - spread calculated as interquartile range -->
+<!--   - discusses square root transformation -->
+
+<!-- - the "double zero problem" -->
+<!--   - It is like saying that butterflies and elephants -->
+<!-- are similar because they are both absent from the North Pole, the Antarctic -->
+<!-- and the moon. -->
+
+
+<!-- - conditional boxplots -->
+
+<!-- - Cleveland dotplots -->
+<!--   - I find the description very confusing.   -->
+<!--   - The concept is not difficult, but I don't love this explanation. -->
+
+<!-- - Histograms: center and [shape of the] distribution -->
+
+<!-- - Conditional histogram -->
+<!--   - good example using squid sex as the conditioning variable -->
+
+
+<!-- - QQ plots -->
+<!--   - It's easy to explain that we want data to lie on the x=y line. -->
+<!--   - explaining how the QQ plot is constructed is difficult -->
+<!--   - Doesn't make sense to spend time on this plot in class now -->
+
+<!-- - scatterplots -->
+
+<!-- - pairplot: matrix of scatterplots -->
+<!--   - 3 classes of pairplots should be constructed: -->
+<!--     1. pp of all response vars -->
+<!--     1. pp of all predictor vars -->
+<!--     1. pp of all vars -->
+<!--   pp1: multivariate techniques -->
+<!--   pp2: collinearity -->
+<!--   pp3: linearity between predictors and responses -->
+
+<!-- - Coplot (these were really difficult in class last year!) -->
+<!--   - conditional scatterplot -->
+<!--     - can be nominal or continuous -->
+<!--   - Fig 4.10, the upper panel, showing weeks, is so misleading! -->
+<!--     - the upper panel in 4.11 is a little better, but it's not obvious which panel corresponds to which temperature range.   -->
+<!--     - They really should be be labeled in some way. -->
+<!--   - continuous conditional variables: can have overlap -->
+
+<!-- - Lattice graphs -->
+<!--   - It's unclear how they are conceptually different from coplots! -->
+
+
+
+<!-- ## McGarigal 3 sections 1-5 -->
+
+<!-- - Purpose of exploration screening + adustments -->
+
+<!-- - data snooping, data dredging, fishing expiditions -->
+
+<!-- - parameters and statistics -->
+
+<!-- - Normal distribution -->
+<!--   - as a reference framework -->
+<!--   - basic for classical stats -->
+<!--   -bell-shaped -->
+
+<!-- - Central tendency -->
+<!--   - mean, median, mode -->
+<!-- - Spread/dispersion -->
+<!--   - variance, sd, cv -->
+<!--   - range, IQR, median absolute deviation -->
+
+<!-- - Non-normality -->
+<!--   - skew: assymetry -->
+<!--   - kurtosis: peakedness -->
+<!--      - platy- and -lepto -->
+
+<!-- - Should I mention moments? -->
+
+<!-- - Single variable plots -->
+<!--   - EDF: rank -->
+<!--   - ECDF: cumulative density -->
+<!--   - histograms -->
+<!--     - I like how he describes them as a method fo 'binning' -->
+<!--   - box -->
+<!--   - QQ -->
+<!--     - i like his exploation of the theoretical quantiles: quantiles of a theoretical dataset of the same size -->
+
+<!-- - Measures of association -->
+<!--   - correlation: spearman (rank) and perarson (z-score) -->
+<!--   - covariance and correlation -->
+<!--   - spearman - monotonic -->
+
+<!-- - scatterplot, pairplot, coplot -->
+
+
+
+<!-- ## McGarigal Ch 4: determinsitic functions -->
+
+<!-- - What is a det. function? -->
+<!--    - good graphic and exploation of determinsiitic vs stochastic processes -->
+
+
+<!-- - Brown creeper abundance: linear fun -->
+<!-- - Brown creeper presence/absence: logit function -->
+<!--   - I like his juxtaposition here -->
+
+<!-- - Striped bass stocking and recruitment: Ricker function -->
+
+<!-- - section 3: phenomenologicla vs. mechanistic functions -->
+<!--   - ph: model parameters do not have an explicit environmental interpretation -->
+
+<!-- - salamander larvae and predation example -->
+<!--   - a priori model of functional response: Holliong type II - saturating (Michaelis-Menten) -->
+<!--   - the quadratic polynomial function fits the data extremely well, better than any of the mechanistic models  -->
+
+<!-- # Question Ideas -->
+
+
+<!-- ## General questions -->
+
+<!-- - What is a quantile? -->
+<!-- - What is an outlier? -->
+
+
+<!-- - Reasons to do data exploration? -->
+
+<!-- ## Data exploration -->
+
+<!-- ### Numerical exploration questions -->
+
+<!-- - Coefficient of variation -->
+<!--   - McGarigal says "The coefficient of variation allows us to compare the spread for variables measured on different scales." -->
+<!--   - is it ok to use on an interval scale (as opposed to a ratio scale?) [not really...] -->
+
+<!-- ### Graphical exploration questions -->
+
+<!-- - Zuur figure 4.4: dotplot -->
+<!--   - boxplot is like an aggregation of the dots in a dotplot -->
+<!--   - compare figure 4.3 a and figure 4.4 -->
+<!--     - note that axes are flipped -->
+
+
+<!-- - Types of plots that show all data vs. data summaries -->
+
+<!-- - What is meant by a conditional plot? -->
+<!--   - histogram example in Zuur -->
+
+<!-- - What is meant by univariate and bivariate plot? -->
+
+<!-- ### Modeling and function questions -->
+
+<!-- - McGarigal's juxtaposition of brown creeper abundance and presence/absence -->
+
+<!-- - Larval salamander exmaple -->
+<!--   - What were the pros and cons of ricker and quadratic models? -->
+<!--   - consider mechanistic vs. phenomoenological, goodness-of fit, -->
+

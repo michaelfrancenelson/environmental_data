@@ -1,0 +1,103 @@
+---
+title: "Logical subsetting - intermediate q1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+n = 12345
+```
+
+
+You've used logical subsetting to select elements of a matrix on a vector.  With small data sets it's possible to look at all of the elements at once and visually detect the indices of the elements you want.  This is not possible with larger data sets.
+
+Run the following code to create a large vector containing randomly generated integers between 1 and 12:
+
+<br>
+
+```{r eval=FALSE}
+n = 12345
+vec_1 = sample(12, n, replace = TRUE)
+head(vec_1)
+```
+
+<br>
+
+Use a logical test operator to create a Boolean vector (called `vec_1`) whose entries are `TRUE` if the corresponding entry in `vec_1` is 3 and `FALSE` otherwise.
+
+<br>
+
+```{r, echo=FALSE, results='hide'}
+vec_1 = sample(12, n, replace = TRUE)
+vec_2 = vec_1 == 3
+```
+
+<br>
+
+Self test: you can use `vec_2` to retrieve all of the `3` elements of `vec_1` using the following:
+
+<br>
+
+```{r, echo = TRUE, eval = FALSE}
+vec_1[vec_2]
+```
+<br><br>
+
+When you run that code, you should see a vector whose elements are all `3`.
+
+<br>
+
+
+<div class="questionborder">
+
+### Q1 2 pts
+
+- Paste the R code you used to create `vec_2` into the text input box below.
+
+### Q2 2 pts
+
+- Why shouldn't you select the indices in `vec_1` with value `3` by visual inspection of the contents of `vec_1`?
+
+</div>
+
+Solution
+========
+
+- Q1: Students have to use a logical test, not eyeballing to guess the correct indices.
+- Q2: Students should realize that eyeballing such a large vector is impractical or impossible.  They may also notice that since the data are randomly-generated the indices would change with each realization.
+
+```{r, echo = TRUE}
+vec_1 = sample(12, n, replace = TRUE)
+vec_2 = vec_1 == 3
+vec_1[vec_2]
+```
+
+
+
+
+Meta-information
+================
+extitle: logical subsetting intermediate 1
+extype: string
+exsolution: nil
+exname: lab 02
+exsection: lab 02
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 4

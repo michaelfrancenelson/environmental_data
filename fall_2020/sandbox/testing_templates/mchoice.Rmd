@@ -1,0 +1,49 @@
+---
+title: "Choice with multiple correct answers"
+---
+
+
+
+
+Question
+========
+
+Choose one of the correct answers
+
+
+Answerlist
+----------
+* correct 1
+* correct 2
+* incorrect 1
+* incorrect 2
+* incorrect 3
+
+
+
+
+Solution
+========
+
+Did you get it right?
+
+
+Answerlist
+----------
+* right 1
+* right 2
+* wrong 1
+* wrong 2
+* wrong 3
+
+
+
+
+Meta-information
+================
+extitle: Multiple Correct Choices
+extype: mchoice
+exname: exam name
+exsection: section name
+exsolution: 11000
+exshuffle: 5

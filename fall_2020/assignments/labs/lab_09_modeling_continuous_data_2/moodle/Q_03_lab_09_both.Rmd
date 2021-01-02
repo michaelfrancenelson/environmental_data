@@ -1,0 +1,121 @@
+---
+title: "homogeneity: penguin body mass, sex, and species"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+#### Instructions
+
+In the lecture assignment, we conducted a two-way ANOVA on a linear model of penguin body mass as predicted by penguin species and sex.
+
+- The model in the lecture assignment did not include *interactions*, but eventually we'll want to test for a species/sex interaction.
+- We need to test homogeneity of variance within the groups of observations formed by all the combinations of species and sex.
+
+A conditional boxplot may help to understand the problem:
+
+```{r}
+require(palmerpenguins)
+par(mar = c(8, 4, 2, 2))
+boxplot(
+  body_mass_g ~ sex * species,
+  data = penguins,
+  las = 2, 
+  xlab = NULL,
+  ylab = "body mass (g)")
+```
+
+You need to figure out how to extract separate vectors of body masses for each of the sex/species groups.
+
+
+</div>
+
+<div class="hints">
+
+Hint: Here's some code that I used to extract the body mass observations, grouped by island:
+
+```{r}
+dat_groups = aggregate(
+  body_mass_g ~ island,
+  data = penguins,
+  FUN = c)
+str(dat_groups)
+
+```
+
+I can use the $ operator extract a list containing the body mass observations in each group.  The name of the list is `body_mass_g`:
+
+```{r eval = FALSE}
+dat_groups$body_mass_g
+```
+
+- Check the help entry for `bartlett.test()`.  Can you use a list as an argument?
+
+</div>
+
+<div class="hints">
+
+Hint: Notice the use of the formula notation in the code examples above.
+
+</div>
+
+<div class="questions">
+
+### Q1 2 pt (numeric entry)
+
+- What was the p-value from the Bartlett test of the sex/species groups?
+  - You can round your answer to 4 decimal digits.
+
+</div>
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r lab_09_q_1}
+require(palmerpenguins)
+bartlett.test(body_mass_g ~ sex, data = penguins)
+bartlett.test(body_mass_g ~ species, data = penguins)
+
+dat_groups = aggregate(
+  body_mass_g ~ sex * species,
+  data = penguins,
+  FUN = c)
+str(dat_groups)
+
+bartlett.test(dat_groups$body_mass_g)
+```   
+
+
+
+Meta-information
+================
+extitle: homogeneity: penguin body mass, sex, and species
+
+exname: lab_09
+exsection: lab_09
+
+extype: num
+exsolution: 0.1741
+extol: 0.01
+
+expoints: 2

@@ -1,0 +1,43 @@
+---
+title: "Student learning objectives"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+---
+
+
+
+
+
+Question
+========
+
+Briefly describe what you what you hope to learn in this course.
+
+Some things to consider:
+
+
+<div class="blackborder">
+- Are there specific technical skills you hope to gain?
+- What types of data do you want to learn about?
+- How do you plan to use data and data analysis in your research?
+</div>
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: student learning objectives
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

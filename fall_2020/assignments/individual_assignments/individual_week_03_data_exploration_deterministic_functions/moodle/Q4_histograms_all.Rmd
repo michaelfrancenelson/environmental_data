@@ -1,0 +1,56 @@
+---
+title: "Interpret terrain histograms"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Consider the terrain (elevation, slope, and aspect) in the state of Oregon.  Consult a topographic map if needed (Dr. Google is your friend).
+
+
+<div class="questionborder">
+
+### Q1 3 pts. 
+
+- Discuss the distribution of the terrain characteristics of the sampling sites in reference to the terrain of the state of Oregon.
+
+
+### Q2 2 pts. 
+
+- Speculate on how the histograms might differ if the research were conducted in a less rugged state such as Ohio.
+
+</div>
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Interpret terrain histograms
+extype: string
+exsolution: nil
+exname: data exploration det. funs
+exsection: data exploration det. funs
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 5

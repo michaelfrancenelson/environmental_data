@@ -1,0 +1,168 @@
+---
+title: "Rarefaction curve"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+   
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+
+  return (sample_sd / sqrt(n))
+}
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+
+- Plot your moth sampling rarefaction curve using the code in the lab walkthrough as a template.
+- Save your plot to an image file.
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1: 1 pt.
+
+- Upload the image file of your rarefaction curve with the upper and lower 95% CIs.
+  
+
+</div>
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r reuslts='hold'}
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of 
+    # sites in the input data (n_input_rows)
+    for(j in 1:n_input_rows)
+    {
+      
+      # sample the input data row indices, with replacement
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+
+      # Creates a new data matrix
+      t1 = input_dat[rows_j, ]
+      
+      # Calculates the column sums
+      t2 = apply(t1, 2, sum)
+      
+      # Counts the number of columns in which any moths were observed
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+
+
+if (FALSE) rarefact = read.csv(find_file("rarefact.csv"))
+
+
+rarefact = rarefaction_sampler(moth_dat, 1000)
+
+rare_mean = apply(rarefact, 2, mean)
+rare_quant = apply(rarefact, 2, quantile, probs=c(0.025, 0.975))
+rare = t(rbind(rare_mean, rare_quant))
+
+matplot(
+  rare,
+  type='l',
+  xlab='Number of sampling plots',
+  ylab='Species richness', 
+  main='Rarefaction Curve')
+
+legend(
+  'bottomright',
+  legend=c('mean','2.5%','97.5%'),
+  lty=c(1,2,3),col=c(1,2,3), inset=c(.1,.1))
+
+```
+
+
+
+### Grading guide
+
+This question was easy if they wrote their function correctly.  They [hopefully] realize that they can literally cut-and-paste the plotting code from the walkthrough.
+
+This question is also a test of whether their implementation of `rarefaction_sampler()` was correct.
+
+Full credit if:
+
+- plot looks reasonable similar to the walkthrough:
+  - Mean curve should be asymptotic-increasing.  
+  - CI curves should be above/below the mean curve.
+
+Note: they should have used 10000 replicates, but I wasn't explicit about the rep count in the wording of the question.
+
+
+Meta-information
+================
+extitle: Rarefaction curve
+
+extype: string
+
+exsolution: nil
+
+exname: lab_07
+
+exsection: lab_07
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: FALSE
+
+exextra[essay_fieldlines,numeric]: 1
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 1
+
+
+
+
+
+

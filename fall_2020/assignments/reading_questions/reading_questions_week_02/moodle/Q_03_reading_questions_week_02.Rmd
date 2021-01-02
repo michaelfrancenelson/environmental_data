@@ -1,0 +1,50 @@
+---
+title: "Week 02 reading Q3"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<p class="blackborder">
+This question draws mostly upon materials from the McGarigal Chapter 1 and Bolker Chapter 1 readings.
+</p>
+
+<br>
+
+- What are the primary components of a model constructed in the **dual model paradigm**?
+- Give an example of the two components in the context of a *system* you are interested in studying.
+
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading Q3
+extype: string
+exsolution: nil
+exname: Week 2 reading questions
+exsection: Week 2 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 10

@@ -1,0 +1,282 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Data exploration and deterministic functions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r setup, include=FALSE}
+require(here)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+knitr::opts_chunk$set(warning = TRUE)
+options(knitr.duplicate.label = "allow")
+
+
+require(rmd.utils)
+
+
+if (FALSE)
+{
+  png(here("habitat_example.png"))
+  hist(
+    dat_habitat$aspect, 
+    main = "Histogram of sampling site slope", 
+    xlab = "aspect", breaks = 42)
+  dev.off()
+}
+
+# source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+dat_bird = read.csv(here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+```
+
+
+
+
+
+
+```{r build_assignment_page, eval=FALSE, include=FALSE}
+
+assn_base_name = "week_03_data_exploration_deterministic_functions"
+
+assn_source_file = find_file(assn_base_name, extension = ".Rmd")
+
+assn_source_dir = dirname(assn_source_file)
+
+question_source_files = find_file(
+  "", search_path = file.path(assn_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+assn_dir_out    = here::here("docs", "assignments", "eco_602", "individual")
+
+assn_file_out = file.path(assn_out_dir, assn_base_name)
+
+
+file.exists(assn_source_file)
+file.exists(assn_source_dir)
+file.exists(assn_dir_out)
+file.exists(assn_file_out)
+
+key_file_out = here::here(
+  "docs", "answer_keys",
+  sprintf("individual_answer_key_%s", assn_base_name))
+
+build_assignment_doc(
+  assn_source_file,
+  question_source_files,
+  # assignment_render_file = NULL,
+  assignment_render_file = assn_file_out,
+  key_render_file = key_file_out)
+
+exams::exams2moodle(
+  file = question_source_files,
+  verbose = TRUE,
+  # dir = lab_dir,
+  dir = here::here("docs", "moodle_quiz_questions"),
+  name = sprintf("reading_questions_week_%0.2d", wk)
+)
+
+```
+
+
+
+
+# Learning objectives and technical skills
+
+- Working with working directories
+- Importing data from the internet and local files
+- Data manipulation: merging data frames
+- Graphical and numerical data exploration
+- Installing R packages
+
+
+
+# Introduction
+
+- This assignment will build upon previous in-class activities.
+
+
+
+# Overview
+
+In this assignment you'll:
+
+1. Install the `here` package.
+1. Download and read data files into R.
+1. Perform an exploratory data analysis.
+
+
+
+```{r installing_r_packages, child = find_file("install_r_package.Rmd")}
+```
+
+
+
+# Assignment Data
+
+## Download the data files.
+
+You will be working with the bird census habitat data for this assignment.  Download the data file and save them to the `data` sub directory of your main ECo 602 repository directory:
+
+- <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/data/hab.sta.csv">hab.sta.csv</a>
+
+Here is the metadata, which describes the data and decodes the names of the columns:
+
+- <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/data/birdhab_metadata.pdf">birdhab_metadata.pdf</a>
+
+
+
+
+```{r reading_data_with_here, child = find_file("read_data_with_here.Rmd")}
+```
+
+
+
+# Load the data into R
+
+You have saved the data file to a sub directory called `data` and you now know how to use the `here()` function to make finding it easy.
+
+Use `here()` and `read.csv()` to read `hab.sta.csv` into a `data.frame` called `dat_habitat`.
+
+
+
+# Sample site characteristics
+
+Let's focus on the terrain variables at the sampling locations:
+
+- elevation
+- slope
+- aspect
+
+and the tree cover, as measured by basal area.
+
+
+## Histograms
+
+Examine histograms of the three terrain variables.  
+
+This is how my basic histogram of slope looks:
+
+```{r slope_histograms, echo=FALSE}
+hist(
+  dat_habitat$slope,
+  main = "Histogram of sampling site slope", xlab = "slope")
+# 
+# hist(
+#   dat_habitat$aspect, main = "Histogram of sampling site aspect",
+#   xlab = "aspect", breaks = 42)
+# 
+# 
+# hist(dat_habitat$ba.tot)
+# 
+# par(mfrow = c(2, 1))
+# hist(dat_all[dat_all$BRCR > 0, ]$aspect, breaks = 20)
+# hist(dat_all$aspect, breaks = 20)
+# density(dat_all$aspect)
+```
+
+
+
+## Scatterplots
+
+Next, create scatterplots of the three terrain variables (on the x-axis) and basal area (on the y axis).
+
+Hint: use the `plot()` function to make scatterplots.
+
+- Check out the `main`, `xlab`, and `ylab` arguments to `plot()` to customize your scatterplots.
+
+
+Here's my plot of basal are and slope:
+
+
+```{r fig.asp=1, echo=FALSE}
+dat_bird = read.csv(here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+
+pch = 16
+p_col = rgb(0, 0.4, 0.1, 0.2)
+par(pch = 16, col = p_col)
+plot(ba.tot ~ slope, data = dat_all, main = "Basal area and slope", ylab = "Total Basal Area")
+
+```
+
+
+
+
+
+## Fitting linear functions
+
+Recall the visual estimation of linear models from the in-class activity.  Here is the code again to visually parameterize a linear function.  Try to estimate linear function parameters using your scatterplots.  Add the lines to your scatterplots to judge the fit visually.
+
+Here are the linear parameterization functions again:
+
+
+```{r line_point_slope}
+# Calculates the value of y for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Recall how we used them on the Iris data (you could probably find a better line than the one I show below...)
+
+
+```{r}
+plot(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width,
+  xlab = "Petal Length",
+  ylab = "Petal Width",
+  main = "Visually-estimated linear model fit\nIris petal length and width"
+)
+curve(line_point_slope(x, x1 = 3.5, y1 = 1.25, slope = 0.4), add = TRUE)
+```
+
+
+You should review the week 2 in-class activity instructions if you need a refresher.
+
+
+# Instructions and Deliverables
+
+1.  Create *histograms* of the following **terrain variables**:
+- elevation
+- aspect
+- slope
+
+1.  Create *scatterplots* of *total basal area* and the terrain variables (consult the metadata file to see which column(s) you need).  Basal area should be on the y-axis.
+- Visually inspect the plots and fit a *linear function* to each of the scatterplots using the parameterization functions provided above.
+
+1. Answer the assignment questions and submit your final answers via Moodle.
+
+
+# Assignment Questions
+

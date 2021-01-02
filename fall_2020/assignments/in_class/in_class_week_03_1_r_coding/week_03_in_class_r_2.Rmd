@@ -1,0 +1,258 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 03: in class graphical exploration 1"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+source(here::here("rmd_tools", "find_file.R"))
+source(here::here("rmd_tools", "build_moodle_web_questions.R"))
+
+```
+
+
+
+# Learning Objectives
+
+- Practice plotting data in R
+- Save plots to files programmatically
+
+
+
+# Introduction
+
+You'll be working with the `palmerpenguins` dataset to practice creating and interpreting different plot types in R
+
+The purpose of this activity is for you to explore different types of plots and discuss the different kinds of *insight* they provide.
+
+
+
+
+# Instructions
+
+## Install the `palmerpenguins` package and dataset
+
+<a href="https://github.com/allisonhorst/palmerpenguins">You can check out the information about the data set here.</a>  It's a nice alternative to the original iris data we've used before.
+
+Before you can use it you'll have to install the `palmerpenguins` package:
+
+```{r eval=FALSE}
+install.packages("palmerpenguins")
+```
+
+You should also install the `here` package while you're at it:
+
+```{r eval=FALSE}
+install.packages("here")
+```
+
+
+
+Then you'll need to load it into R's environment:
+
+```{r}
+require(palmerpenguins)
+require(here)
+```
+
+> To Quote or not to quote
+
+<div class="warn"?> 
+<ul>
+<li>Quotation marks are optional when loading installed packages, even though it seems like you should need them.</lil>
+<li>It's also ok to include them.</li>
+</ul>
+</div>
+
+<br>
+
+This will also run:
+```{r}
+library("palmerpenguins")
+```
+
+
+## Prepare the dataset
+
+> Use `class()` to check what kind of object `penguins` is.
+
+- The data are in a slightly different type of object than our familiar `data.frame`.
+- To avoid any difficulties, you need to convert it to a `data.frame` object:
+
+```{r}
+penguins = data.frame(penguins)
+```
+
+
+
+# Data exploration
+
+```{r, include = FALSE}
+head(penguins)
+```
+
+
+## Numerical exploration
+
+
+### Mean
+
+Try to calculate the mean bill length of all the penguins:
+
+```{r error=TRUE}
+mean(penguins$body_mass_g)
+```
+> Oops... What happened?
+
+Use `head()` to preview the data.  Do you see any potential issues?
+
+Some functions, like `mean()` don't work well with missing data, i.e. elements that are `NA` or `NULL`.
+
+
+- Take a look at the help entry for `mean()`.  
+- Did you notice the description for the `na.rm` argument. 
+  - What does it do?
+  - Try setting it to TRUE.
+
+Try out the `summary()` function on the entire `penguins` data frame.  This function provides a lot of information:
+
+
+```{r, echo = FALSE}
+summary(penguins)
+```
+
+
+## Graphical exploration
+
+
+- Try out some of the plots you already know:
+  - pair plot
+  - scatterplot
+  - histogram
+
+- And some of the others we haven't used in class yet:
+  - `boxplot()`
+  - `coplot()`
+
+
+### Boxplots
+
+I'll give you a template for the coplot and boxplot syntax:
+
+```{r}
+boxplot(penguins$bill_depth_mm)
+boxplot(bill_depth_mm ~ sex, data = penguins)
+```
+
+> How are these two plots different?
+
+- What is the different insight you can gain from each boxplot separately and together?
+
+
+- It might be easier to compare them side-by-side:
+
+```{r}
+
+par(mfrow = c(1, 2))
+boxplot(penguins$bill_depth_mm)
+boxplot(bill_depth_mm ~ sex, data = penguins)
+
+```
+
+See if you can figure out what the `par(mfrow = c(1, 2))` code did.  Folks who are in the lab course may be able to help.
+
+
+### Coplots
+
+> Coplots can be difficult to interpret
+
+Here's some sample code:
+
+```{r}
+coplot(body_mass_g ~ bill_depth_mm | sex, data = penguins)
+```
+
+- What variable did I use as the *conditioning variable*?
+- Try different conditioning variables. 
+  - You should try both categorical and numerical *conditioning variables*.
+
+
+
+
+# Saving plots to a file
+
+There are several methods of exporting graphics, but the best way is with one of the image output functions.
+
+I'll demonstrate the `png()` function.
+
+
+The process is easy:
+
+1. call `png()` with appropriate arguments. 
+1. Run the code you need to build your plot.
+1. Call `dev.off()` to tell R to save the file.
+
+> PNG export demo:
+
+```{r, echo=TRUE, message=FALSE, results='hide'}
+require(here)
+png(filename = here("basic_histogram.png"), width = 800, height = 600)
+hist(penguins$body_mass_g)
+dev.off()
+```
+Now you should find the image file in your eco 602 r project directory.
+
+
+
+
+
+
+# Questions and deliverables
+
+As a group, select *two* different classes of plots.
+
+Try plotting different combinations of variables.
+
+Your group will submit a single document.
+
+
+For the two classes of plots you chose:
+
+- Export your plots to image files and paste them into a document along with your responses to the questions below
+- Describe whether the plot shows a summary of the data, or all of the data points.
+- Describe the insight your plot can provide, for example:
+  - Are the data evenly distributed, or skewed?
+  - If your plot contains more than one variable, does the plot reveal any interesting relationships?
+
+
+
+
+
+```{r}
+require(psych)
+require(palmerpenguins)
+pairs.panels(penguins)
+
+
+
+```
+
+
+
+
+
+
+

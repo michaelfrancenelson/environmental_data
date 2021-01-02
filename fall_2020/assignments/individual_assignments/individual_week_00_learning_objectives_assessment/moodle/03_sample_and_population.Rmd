@@ -1,0 +1,48 @@
+---
+title: "Samples and Populations"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+---
+
+
+
+Question
+========
+
+How would you characterize the differences between a **population** and a **sample**?
+
+Some of the following may concepts may (or may not) be relevant to your answer:
+
+<div class="blackborder">
+- Parameter
+- Descriptive
+- Statistic
+- Random
+- Inference
+- Significance
+- Standard Deviation
+- Standard Error
+- Sampling Scheme
+- Central Limit Theorem
+</div>
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: samples and populations
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

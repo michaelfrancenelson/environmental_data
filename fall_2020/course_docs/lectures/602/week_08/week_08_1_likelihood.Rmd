@@ -1,0 +1,70 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Likelihood Basics"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+  \usepackage{animate}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+options(knitr.duplicate.label = "allow")
+
+# devtools::install_github("michaelfrancenelson/rmd.utils", force = TRUE)
+
+```
+
+
+```{r build_slides, echo=FALSE, eval=FALSE}
+source_dir  = here::here("course_docs", "lectures", "602", "week_08")
+out_dir     = here::here("docs", "lecture_notes")
+source_file = find_file("week_08_1", search_path = source_dir, extension = ".Rmd")
+
+dir.exists(source_dir)
+dir.exists(out_dir)
+file.exists(source_file)
+
+rmarkdown::render(source_file, output_dir = out_dir)
+```
+
+
+
+## Key Concepts
+
+- What is likelihood?
+- How do we calculate it?
+- What is maximum likelihood?
+
+
+
+```{r likelihood_basics_slides, child = find_file("likelihood_basics.Rmd")}
+```
+
+
+
+
+
+## Key Concepts
+
+- What is likelihood?
+- How do we calculate it?
+- What is maximum likelihood?
+

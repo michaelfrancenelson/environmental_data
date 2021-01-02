@@ -1,0 +1,62 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 12 Reading Questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    # toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+```{r echo=FALSE, eval=FALSE}
+
+wk = 12
+week = sprintf("week_%0.2d", wk)
+
+source_dir  = here::here("assignments", "reading_questions", "week_xx")
+out_dir     = here::here("docs", "assignments", "eco_602", "reading_questions")
+source_file = find_file(sprintf("602_week_%0.2d_reading", wk), search_path = source_dir, extension = ".Rmd")
+
+dir.exists(source_dir)
+dir.exists(out_dir)
+file.exists(source_file)
+
+rmarkdown::render(source_file, output_dir = out_dir)
+```
+
+```{r build_doc, echo=FALSE, eval=FALSE}
+wk = 12
+
+
+```
+
+
+
+# Readings
+
+The reading questions this week are drawn from material in the readings:
+
+
+
+# Questions
+
+
+

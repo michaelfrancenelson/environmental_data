@@ -1,0 +1,238 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Final Project"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+```
+
+
+
+
+# Part 2: Data Analysis
+
+You'll perform a complete data analysis on the Delomys species data.
+
+
+## Data Exploration
+
+### Numerical Exploration
+
+Create a code chunk that includes the following:
+
+- Use `summary()` on the body mass and body length data columns in the Delomys data set to display summary statistics.
+
+- Perform a test of normality on the body mass and length columns.  You can use `shapiro.test()`
+
+
+### Graphical Exploration
+
+<div class="notes"> You can adjust the size of the plots on your rendered document using the following code chunk arguments:
+
+`fig.height=`
+`fig.width=`
+
+You can adjust the aspect ratio using
+`fig.aspect=`
+
+The code chunk format with an option looks like:
+
+```{r echo = FALSE, comment = ""}
+cat(
+  '```{r fig.width=10}', "\n",
+  'require(palmerpenguins)',"\n",
+  'plot(bill_length_mm ~ body_mass_g, data = penguins)',"\n",
+  '```', sep = "\n")
+```
+
+Producing the following output:
+
+```{r fig.width=10, fig.asp = 1}
+require(palmerpenguins)
+plot(bill_length_mm ~ body_mass_g, data = penguins)
+```
+
+- Try different values for the chunk options to get a feel for how they affect the plots.
+
+</div>
+
+You will need to experiment with different width, height, and/or aspect values for each of your figures.
+
+
+
+Using code chunks, create the following plots.
+
+
+- A scatterplot of body mass and body length
+- A histogram of body mass
+- A histogram of body length
+- A conditional boxplot of body mass, conditioned on species (column `binomial`)
+- A conditional boxplot of body mass, conditioned on sex (column `binomial`)
+- A conditional boxplot of body mass, conditioned on both species and sex
+
+
+<div class="questions">
+
+Answer the following in your report:
+
+1. Qualitatively describe the relationship between body mass and length.
+- Does the relationship seem linear, curved, nonexistent?
+
+2. Qualitatively describe the shapes of the histograms.
+- Do the data appear normally-distributed? Explain why or why not.
+
+3. Using both the histograms and normality tests, do you think the (unconditioned) body masses and body length are normally-distributed?
+- Contrast your visual assessment of normality to the results of the numerical normality tests.
+
+4. Examine the conditional boxplots.  Describe any graphical evidence you see for body mass differences based on species and/or sex.
+
+
+</div>
+
+
+
+## Model Building
+
+We know that the normality assumption applies to the *residual values* after we fit a model.
+
+Using a code chunk, fit 5 models using `lm()`:
+
+- The first model predicts body length as a function of body mass
+
+- The other models use the categorical variables `binomial` and `sex` to predict *body mass*.
+
+<div class="instructions">
+
+- Model 1: simple linear regression `body_length ~ body_mass`
+- Model 2: 1-way ANOVA `body_mass ~ sex`
+- Model 3: 1-way ANOVA `body_mass ~ binomial`
+- Model 4: 2-way ***additive*** ANOVA `body_mass ~ sex + binomial`
+- Model 5: 2-way ***factorial*** ANOVA `body_mass ~ sex * binomial`
+
+</div>
+
+Save your model objects to variables called `fit1`, `fit2`, `fit3`, `fit4`, `fit5`.
+
+
+
+## Model Diagnostics
+
+Let's check whether our models fulfill the assumption of normality of the residuals.
+
+First, use a graphical approach: plot histograms of the model residuals.
+
+- You can retrieve the model residuals using the `residuals()` function.  For example, I could get the residuals from the first model using `residuals(fit1)`.
+
+Use a code chunk to create histograms of the residuals of each of the 5 models.
+
+Next, use `shapiro.test()` on each model to test the null hypothesis that the residuals are drawn from a normally-distributed population.
+
+
+<div class="questions">
+
+Answer the following in your report:
+
+- What do you conclude about residual normality based on the numerical and graphical diagnostics?
+- Are violations of the normality assumption equally severe for all the models?
+
+</div>
+
+
+
+## Model Interpretation
+
+<div class="hints"> 
+
+You can use the following code within a code chunk to print out a nicely formatted model coefficient table:
+
+`knitr::kable(coef(summary(my_model_fit)))`
+
+where `my_model_fit` is the name of your fitted model object.
+
+You can use similar syntax to print a nicely formatted ANOVA table:
+`knitr::kable(anova(my_model_fit))`
+
+- Check out the `digits` argument to control how many decimal digits are printed.
+
+</div>
+
+
+
+
+### Body Length
+
+Print the model coefficient table using `summary()` and answer the following:
+
+
+<div class="questions">
+- What is the magnitude of the mass/length relationship?
+- What is the expected body length of an an animal that weighs 100g?
+- What is the expected body length of an animal that weighs 0g?
+</div>
+
+
+
+### Body Mass: Model Coefficients
+
+Print the model coefficient tables for each of the body mass model fits.
+
+
+<div class="questions">
+Answer the following:
+
+- What is the base level for *sex*?
+- What is the base level for *binomial*?
+- Which sex is heavier?
+- Which species is heavier?
+</div>
+
+
+
+
+### Body Mass: ANOVA
+
+Print the ANOVA tables for each of the body mass models.
+
+<div class="questions">
+Answer the following in your report:
+
+- Are sex and species significant predictors for body mass?
+- Is there a significant interaction?
+- Does the significance (as measured by p-value) of either of the *main effects* (sex and species) differ much between the single-predictor models, the additive model, and the interactive model?
+</div>
+
+
+
+
+## Model Comparison: Body Mass
+
+You built four different models of body mass.  How do you choose the best one?
+
+One option is to choose the model with the lowest AIC.  You can calculate AIC using the appropriately named `AIC()` function.
+
+Create a code chunk that calculates the AIC values for each of the body mass models.
+
+<div class="questions">
+
+Answer the following in your report:
+
+- Which two models have the lowest AIC?
+- Which of the two models with lowest AIC scores would you select?
+  - Explain your decision based on model fit and the complexity/understanding tradeoff.
+
+</div>
+

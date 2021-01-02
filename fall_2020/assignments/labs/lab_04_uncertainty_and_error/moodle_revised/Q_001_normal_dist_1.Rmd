@@ -1,0 +1,94 @@
+---
+title: "Random Normal Data 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r echo = FALSE, include=FALSE, message = FALSE} 
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructionsborder">
+
+
+Instructions:
+
+1. Create three vectors of normally-distributed random numbers, `norm_17`, `norm_30`, and `norm_300`.  
+  - You should tell R that you want your random deviates have a *mean* of 10.4 and a *standard deviation* of 2.4.
+  - `norm_17` should have 17 elements, `norm_30` should have 30 elements, and `norm_300` should have 300 elements.
+
+</div>
+
+<div class="questionborder">
+
+### Q1 1pt
+
+- Paste the R code you used to create your vectors into the text entry box.
+
+</div>
+
+<div class="hintborder">
+
+- Hint: You should save the *parameters* you use for *mean* and *standard deviation* into *variables* so that they are easy to re-use (and easy to change later, if needed).
+
+- NOTE: you need to paste your code from a text editor (such as the script window in RStudio).
+  - If you paste your code from the R Console, each line starts with a **`>`** character and it won't run directly when pasted into the console (i.e. when we grade your code).
+
+This is OK:
+
+`norm_17 = ....your code here...`
+
+This is incorrect:
+
+`> norm_17 = ....your code here...`
+
+</div>
+
+
+
+
+
+
+Solution
+========
+
+
+```{r answer_key, echo = TRUE, eval = FALSE}
+mean_1 = 10.4
+sd_1 = 2.4
+
+norm_17  = rnorm(n = 17,  mean = mean_1, sd = sd_1)
+norm_30  = rnorm(n = 30,  mean = mean_1, sd = sd_1)
+norm_300 = rnorm(n = 300, mean = mean_1, sd = sd_1)
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Random Normal Data 1
+extype: string
+exsolution: nil
+exname: lab 4
+exsection: lab 4
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 1

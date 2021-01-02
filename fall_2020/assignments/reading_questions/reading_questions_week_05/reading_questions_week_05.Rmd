@@ -1,0 +1,45 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 05 Reading Questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+```
+
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+wk = 5
+
+```
+
+
+# Readings
+
+The reading questions this week are drawn from material in the readings:
+
+- Bolker ch 1, section 1.4: focus on 1.4.1
+- McGarigal Ch 5b, 5c, 5d
+- Jorge Luis Borges: The Library of Babel
+
+
+# Questions
+

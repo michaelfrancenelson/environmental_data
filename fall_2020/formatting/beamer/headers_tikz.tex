@@ -1,0 +1,44 @@
+\usepackage{tikz}
+\usepackage{caption}
+\usetikzlibrary{patterns,arrows,decorations.pathreplacing}
+\usepackage{tikzpagenodes}
+\definecolor{grn}{rgb}{0.0, 0.2, 0.0}
+\usepackage{tabto}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\definecolor{OG}{RGB}{0,64,8}
+\definecolor{LG}{RGB}{0,102,51}
+\definecolor{myRed}{RGB}{228,26,28}
+\definecolor{myBlue}{RGB}{55,126,184}
+\definecolor{myGreen}{RGB}{77,175,74}
+\definecolor{myPurple}{RGB}{152,78,163}
+\setbeamercolor{itemize item}{fg=white!0!LG}
+\setbeamercolor{enumerate item}{fg=white!0!LG}
+\setbeamercolor{enumerate subitem}{fg=white!70!LG}
+\setbeamercolor{itemize subitem}{fg=white!70!LG}   
+\setbeamercolor{itemize subsubitem}{fg=white!70!LG}   
+\setbeamercolor{navigation symbols}{fg=white!70!LG, bg=white!70!LG}
+\usepackage{inputenc}
+\usepackage{booktabs}
+\newcommand{\logoSoutheast}[1]{
+  \vfill
+  \begin{tikzpicture}[remember picture,overlay]
+     \node[xshift=-2cm,yshift=1cm] at (current page.south east)%
+     {
+       \includegraphics[height=0.25in]{#1}
+     };
+   \end{tikzpicture}
+}
+\newcommand{\pic}[4]{
+  \begin{tikzpicture}[remember picture,overlay]
+  \node[xshift=#1cm,yshift=#2cm] at (current page)
+  {\includegraphics[height=#3cm]{#4}};
+  \end{tikzpicture}
+}
+\newcommand{\picOver}[5]{
+  \begin{tikzpicture}[overlay]
+  \node[inner sep=#1pt] (one) at (#2,#3) {\includegraphics[height=#4cm]{#5}};
+  \end{tikzpicture}
+}

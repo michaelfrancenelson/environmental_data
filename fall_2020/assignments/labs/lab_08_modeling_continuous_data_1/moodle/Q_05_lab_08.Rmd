@@ -1,0 +1,143 @@
+---
+title: "flipper bootstrap empirical distribution"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+- Use the `two.boot()` function to calculate 10000 bootstrap replicates of the difference in mean flipper length of Chinstrap and Adelie penguins.
+  - Save the output of `two.boot()` to a variable called `pen_boot`.  This is so that I can replicate your code easily on my machine for grading and assistance.
+
+- Create a distribution function from `pen_boot` using `ecdf()`.  
+  - Name the function created by `ecdf()` `pen_ecdf`. 
+  - The `ecdf()` function is a little different than other functions that we've worked with because it returns a new function.  You can use the new function to calculate the cumulative density.
+
+
+</div>
+
+
+<div class="hintborder">
+
+- Recall that we used bootstrapping to characterize the sampling distribution of the *alternative hypothesis*.
+- Remember the law of total probability and complementary events.
+
+- `pen_ecdf()` is a lot like `pnorm()`.  It calculates the area under the density curve *to the left* of x.
+
+- Remember plots like this one that show the shaded area to the left of x for a standard normal distribution?
+  - For this plot I have used $x = -0.5$.
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+x = -.5
+options(warn = -1)
+require(mfn.teaching.utils)
+mfn.teaching.utils::plot_norm_tails(lower_tail = pnorm(x), upper_tail = NULL)
+```
+
+We get the area of the blue shaded area with `pnorm(-0.5)`, which turns out to be `r pnorm(x)`.  
+
+- The usage of `ecdf()` is very similar.
+
+</div>
+
+<div class="questionborder">
+
+### Q1 1 pt. (numeric answer)
+
+- Use `pen_ecdf()` to calculate the empirical probability of observing a mean difference of -4.5 or greater. What is the probability?
+
+### Q2 1 pt. (numeric answer)
+
+- Use `pen_ecdf()` to calculate the empirical probability of observing the mean difference predicted by the null hypothesis, i.e. 0 or greater.
+  - Note we could also ask what is the probability of observing some value in the range of -1 to 1, for example.  
+  - We could even ask what is the probability of observing a value within the range of a 95% CI of the null hypothesis...  We might even generate such a 95% CI of the null hypothesis using a Monte Carlo simulation!
+  - This sounds a lot like Type I error rates, Type II error rates, and statistical power.
+
+</div>
+
+
+
+Solution
+========
+
+### Grading Guide
+
+The students can use the following code:
+
+```{r echo = TRUE, eval = FALSE}
+1 - pen_ecdf(-4.5)
+1 - pen_ecdf(0)
+```
+
+- Q1: Answer should be about 0.0883
+- Q2: Answer should be about 0.0
+  - NOTE: This was a poor question that caused some confusing among students.
+  - Be generous with partial credit.
+
+
+Sample implementation:
+```{r q_05_flipper_btstrp_ci, reuslts='hold', message = FALSE, warn = FALSE, results = 'hide', }
+require(palmerpenguins)
+require(simpleboot)
+require(boot)
+
+penguin_dat = droplevels(subset(penguins, species != "Gentoo"))
+
+R = 10000
+
+pen_boot = 
+  two.boot(
+    subset(penguin_dat, species == "Adelie")$flipper_length_mm,
+    subset(penguin_dat, species == "Chinstrap")$flipper_length_mm,
+    FUN = mean,
+    R = 10000,
+    na.rm = TRUE
+  )
+
+pen_ecdf = ecdf(pen_boot$t)
+
+1 - pen_ecdf(-4.5)
+1 - pen_ecdf(0)
+
+```
+
+
+
+Meta-information
+================
+extitle: flipper bootstrap empirical distribution
+
+extype: string
+
+exsolution: nil
+
+exname: lab_08
+exsection: lab_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+
+expoints: 2
+
+
+

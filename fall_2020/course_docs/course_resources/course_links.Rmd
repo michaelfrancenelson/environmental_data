@@ -1,0 +1,90 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Useful Course Links"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Course Software  {.tabset .tabset-fade .tabset-pills}
+
+Some links to course software resources.
+
+## R - Comprehensive R Archive Network
+
+Go here to obtain R for your operating system.
+
+- https://cran.r-project.org/
+
+
+
+## RStudio
+
+Go here to obtain RStudio.
+
+There is lots of info about RStudio and other products by the RStudio team.
+
+- https://rstudio.com/
+
+
+## YaRrr! The Pirate’s Guide to R
+
+Nathaniel D. Phillips has a great free and open-source book for learning and using R and RStudio
+
+- https://bookdown.org/ndphillips/YaRrr/
+
+
+
+# Course Materials and References {.tabset .tabset-fade .tabset-pills}
+
+
+## Kevin McGarigal's pages
+
+Kevin is a retired professor in the Department of Environmental Conservation here at UMass.
+
+He was the previous instructor for ECo 602 and 634 (and many other ECo courses).
+
+His Landscape Ecology page is still available (as of July 2020).  It contains lots of great materials on ECo 602/634 and his other courses.
+
+Some of the readings for the current course's readings are based on Kevin's materials.
+
+- https://www.umass.edu/landeco/
+
+
+
+## Formatting test tab 1
+
+
+## Formatting test tab 2
+
+
+
+
+# Other Valuable Links {.tabset .tabset-fade .tabset-pills}
+
+## Allison Horst
+
+Among other things, Allison creates artwork for teaching statistics and data science.
+
+Her artwork is humorous, effective, and educational!
+
+- https://github.com/allisonhorst
+- https://www.allisonhorst.com/
+- https://twitter.com/allison_horst
+
+
+
+

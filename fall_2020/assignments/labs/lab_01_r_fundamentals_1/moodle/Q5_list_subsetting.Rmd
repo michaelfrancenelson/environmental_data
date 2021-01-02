@@ -1,0 +1,86 @@
+---
+title: "Lab 1 Q5: list subset challenge"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+![](`r system.file("img", "Rlogo.png", package="png")`){width=65%}
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Create a list, named `my_list_1` with following three elements:
+
+1. first element is numeric:  `5.2`
+2. second element is a string `"five point two"`
+3. third element is a vector of all integers from 0 to 5.  Do recall how to do this from the DataCamp course?
+
+Name the elements in `my_list_1`:
+
+1. "two"
+2. "one"
+3. "three"
+
+Run the following lines of code.
+
+```{r eval = FALSE, echo = TRUE}
+
+my_list_1[[1]]
+my_list_1[[as.numeric("1")]]
+my_list_1[["1"]]
+my_list_1[["one"]]
+my_list_1$one
+my_list_1$"one"
+my_list_1$1
+my_list_1$"1"
+
+
+```
+
+- Q1 (8 pts): for each subsetting operation, explain why R produced the corresponding output.
+  - Identify the type of subsetting operation.
+  - Explain how the operation chose which element (1, 2, or 3) to return.
+- Q2 (2 pts): Hypothesize why some of the lines may have produced errors or `NULL` outputs.
+- Q3 (2 pts): Identify which lines produced the same output and explain why.
+
+
+Solution
+========
+
+- Students should recognize subsetting by index number and element name using square brackets.
+- Students should recognize subsetting by dollar sign.
+- Students should realize that $ is only for selecting by strings.
+- Students should realize that NULL is returned when you try to subset using a name that does not exist in the list.
+
+
+
+Meta-information
+================
+extitle: Lab 1 Q5: list subset challenge
+extype: string
+exsolution: nil
+expoints: 10
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 12

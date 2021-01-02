@@ -1,0 +1,73 @@
+---
+title: "interpolation and extrapolation"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+McGarigal writes:
+
+- There are two kinds of prediction, and these are subject to very different levels of uncertainty:
+  - Interpolation – which is prediction within the measured range of the data.
+  - Extrapolation – which is prediction beyond the measured range of the data.
+
+
+
+<div class="questionborder">
+
+### Q1 2 pts
+
+- Explain why extrapolation has more potential pitfalls than interpolation.
+
+</div>
+
+
+
+Solution
+========
+
+
+
+Meta-information
+================
+
+extitle: interpolation and extrapolation
+
+extype: string
+
+exsolution: nil
+
+exname: week_07_reading_questions
+
+exsection: week_07_reading_questions
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 2
+

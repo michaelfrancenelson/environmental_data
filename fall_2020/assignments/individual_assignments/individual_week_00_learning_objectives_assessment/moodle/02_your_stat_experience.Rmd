@@ -1,0 +1,39 @@
+---
+title: "Student stats experience"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+---
+
+
+
+
+
+Question
+========
+Briefly describe your previous experience learning or using statistics. Some potential things to consider include:
+
+<div class="blackborder">
+- What types of stats courses have you taken
+- How have you used statistics (or not) in your work?
+</div>
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: student prior stats experience
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

@@ -1,0 +1,104 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Week 12: In-class Final Project Data"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  # epuRate::epurate:
+  #   toc: TRUE
+  #   number_sections: FALSE
+  # code_folding: "hide"
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+```
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r build_assignment_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+```
+
+
+
+# Learning Objectives
+
+- Import data for the final project.
+- Preliminary graphical exploration.
+
+
+
+# Data Files
+
+You'll need to download the `delomys.csv` data file from the Final Project Data section of the course GitHub page https://michaelfrancenelson.github.io/eco_602_634_2020/.
+
+- Make sure you save the file in the "data" subdirectory of your main course RProject directory.
+- Load the data into a data.frame in R.  You should call your data frame `dat_delomys`.
+
+
+
+# Numerical and Graphical Exploration
+
+## Take a peek at the data.
+ 
+- Which data columns hold continuous data?
+- Which data columns hold categorical data?
+
+
+## Graphical exploration
+
+- Plot a histogram of body mass.
+- Plot a histogram of body length.
+- Plot a scatterplot of body length (on the y-axis) and body mass (on the x-axis)
+
+
+# Questions
+
+As a group, submit a document with answers to the following:
+
+1. Which data columns hold continuous data?
+2. Which data columns hold categorical data?
+
+Include the following figures in your document:
+
+1. Scatterplot of body length and body mass.
+2. Conditional boxplot of body mass grouped by sex.
+3. Conditional boxplot of body mass grouped by species.
+4. Conditional boxplot of body mass grouped by species and sex.
+
+
+
+```{r data_analysis, echo=FALSE, eval=FALSE}
+
+here::here("data", "delomys.csv")
+
+dat_delomys = read.csv(here::here("data", "delomys.csv"))
+head(dat_delomys)
+
+
+plot(body_length ~ body_mass, data = dat_delomys)
+boxplot(body_mass ~ binomial, data = dat_delomys)
+boxplot(body_mass ~ sex, data = dat_delomys)
+boxplot(body_mass ~ sex * binomial, data = dat_delomys)
+
+
+
+```
+

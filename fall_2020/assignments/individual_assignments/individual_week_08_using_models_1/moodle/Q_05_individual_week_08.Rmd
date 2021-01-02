@@ -1,0 +1,84 @@
+---
+title: "one-sample t-test interpretation"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(here)
+```
+
+
+<div class="instructions">
+
+### Instructions
+
+Interpret the results of your one-sample t-test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.  
+
+</div>
+
+
+<div class="question">
+
+### Q1 1 pt (numeric)
+
+- What is the p-value from your t-test?
+
+### Q2 1 pt (numeric, short answer)
+
+- What is the confidence interval for the difference between the null hypothesis and alternative hypothesis means?  Did it include zero?
+
+### Q3 2 pt (short answer/essay)
+
+- Considering the results from your t-test, did you conclude that there was strong evidence to reject the null hypothesis?
+  - Make sure you justify your answer using the output of the t-test.
+
+</div>
+
+
+
+
+Solution
+========
+
+
+T t-test has a low p-value
+
+```{r reuslts='hold'}
+catrate = read.csv(here("data", "catrate.csv"))
+t.test(catrate$cat.rate, mu = 2/7)
+```
+
+
+
+
+
+Meta-information
+================
+extitle: one-sample t-test interpretation
+
+extype: string
+
+exsolution: nil
+
+expoints: 4
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+
+

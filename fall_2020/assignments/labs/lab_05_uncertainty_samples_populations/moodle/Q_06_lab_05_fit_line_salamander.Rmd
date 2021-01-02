@@ -1,0 +1,124 @@
+---
+title: "salamander linear model fit"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Recall the function we have used to visually estimate linear model parameters:
+
+```{r}
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Instructions:
+
+1. Using the scatterplot of the dispersal data, visually fit a linear mode
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts.) Upload an image file with your scatterplot and fitted line.  Make sure it has appropriate axis labels and title.
+
+</div>
+
+
+
+
+Solution
+========
+
+```{r}
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+For example:
+
+```{r}
+plot(
+  dat_dispersal$dist.class,
+  dat_dispersal$disp.rate.ftb,
+  xlab = "distance class", 
+  ylab = "standardized dispersal rate", 
+  main = "Marbled Salamander - first time breeders")
+curve(line_point_slope(x, 1400, 0.1, -0.0001), add = TRUE)
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: salamander linear model fit
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 2

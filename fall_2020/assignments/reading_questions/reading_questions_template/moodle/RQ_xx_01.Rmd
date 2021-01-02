@@ -1,0 +1,68 @@
+---
+title: ""
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+<div class="questionborder">
+
+### Q1
+
+</div>
+
+
+
+
+
+Solution
+========
+
+
+
+Meta-information
+================
+extitle: 
+
+extype: string
+
+exsolution: nil
+
+exname: week_xx_reading_questions
+
+exsection: week_xx_reading_questions
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: FALSE
+
+exextra[essay_fieldlines,numeric]: 5
+
+expoints: 2
+

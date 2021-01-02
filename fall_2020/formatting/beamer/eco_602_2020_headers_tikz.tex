@@ -1,0 +1,105 @@
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usetikzlibrary{patterns,arrows,decorations.pathreplacing}
+\usepackage{tikzpagenodes}
+\definecolor{grn}{rgb}{0.0, 0.2, 0.0}
+\usepackage{tabto}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\definecolor{OG}{RGB}{0,64,8}
+\definecolor{LG}{RGB}{0,102,51}
+\definecolor{myRed}{RGB}{228,26,28}
+\definecolor{myBlue}{RGB}{55,126,184}
+\definecolor{myGreen}{RGB}{77,175,74}
+\definecolor{myPurple}{RGB}{152,78,163}
+\setbeamercolor{itemize item}{fg=white!0!LG}
+\setbeamercolor{enumerate item}{fg=white!0!LG}
+\setbeamercolor{enumerate subitem}{fg=white!70!LG}
+\setbeamercolor{itemize subitem}{fg=white!70!LG}   
+\setbeamercolor{itemize subsubitem}{fg=white!70!LG}   
+\setbeamercolor{navigation symbols}{fg=white!70!LG, bg=white!70!LG}
+\usepackage{inputenc}
+\usepackage{booktabs}
+\let\tempone\itemize
+\let\temptwo\enditemize
+\renewenvironment{itemize}{\tempone\addtolength{\itemsep}{0.5\baselineskip}}{\temptwo}
+
+\let\olditem\item
+\renewcommand{\item}{%
+\olditem\vspace{6pt}}
+
+\newcommand{\logoSoutheast}[1]{
+  \vfill
+  \begin{tikzpicture}[remember picture,overlay]
+     \node[xshift=-2cm,yshift=1cm] at (current page.south east)%
+     {
+       \includegraphics[height=0.25in]{#1}
+     };
+   \end{tikzpicture}
+}
+\newcommand{\pic}[4]{
+  \begin{tikzpicture}[remember picture,overlay]
+  \node[xshift=#1cm,yshift=#2cm] at (current page)
+  {\includegraphics[height=#3cm]{#4}};
+  \end{tikzpicture}
+}
+\newcommand{\picOver}[5]{
+  \begin{tikzpicture}[overlay]
+  \node[inner sep=#1pt] (one) at (#2,#3) {\includegraphics[height=#4cm]{#5}};
+  \end{tikzpicture}
+}
+
+
+
+
+
+\xdefinecolor{mycolor}{RGB}{62,96,111} % Neutral Blue
+\colorlet{bancolor}{mycolor}
+
+\def\bancolor{mycolor}
+\newenvironment{mybox}[3][]{%
+    \begin{tikzpicture}[#1]%
+        \def\myboxname{#3}%
+        \node [draw,inner sep=1.5ex,text width=#2]% good options: minimum height, minimum width
+            (BOXCONTENT) \bgroup\rule{0pt}{3ex}\ignorespaces
+}{%
+        \egroup;
+        \node [right,inner xsep=1em,fill=bancolor!75,outer sep=0pt,text height=2ex,text depth=.5ex] (BOXNAME) 
+            at ([shift={(-1em,0pt)}]BOXCONTENT.north west) {\myboxname};
+        \fill[bancolor] (BOXNAME.north east) -- +(-1em,1em) -- +(-1em,0) -- cycle;
+        \fill[bancolor] (BOXNAME.south west) -- +(1em,-1em) -- +(1em,0) -- cycle;
+    \end{tikzpicture}
+}
+
+\newenvironment{blueborder}[3][]{%
+    \begin{tikzpicture}[#1]%
+        \def\myboxname{#3}%
+        \node [draw,inner sep=2.5ex,text width=#2]% good options: minimum height, minimum width
+            (BOXCONTENT) \bgroup\rule{0pt}{3ex}\ignorespaces}{%
+        \egroup;
+        \node [right,inner xsep=1em,fill=bancolor!75,outer sep=0pt,text height=2ex,text depth=.5ex] (BOXNAME)
+            at ([shift={(-1em,0pt)}]BOXCONTENT.north west) {\myboxname};
+    \end{tikzpicture}
+}
+
+\usepackage{tcolorbox}
+
+\newtcolorbox{blackborder}{
+\definecolor{shaded}{rgb}{0.85, 0.85, 0.85}
+    colback=shaded,
+    colframe=black,
+    coltext=black,
+    boxsep=5pt,
+    arc=4pt}
+
+\newenvironment{shadebox}{
+\definecolor{shaded}{rgb}{0.85, 0.85, 0.85}
+  \definecolor{shadecolor}{rgb}{0, 0, 0}  % black
+  \color{white}
+  \begin{shaded}}
+ {\end{shaded}}
+ 

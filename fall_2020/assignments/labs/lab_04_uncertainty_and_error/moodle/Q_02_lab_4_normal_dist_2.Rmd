@@ -1,0 +1,94 @@
+---
+title: "Random Normal Data 2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r, echo = FALSE, results = "hide", message = FALSE} 
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Directions:
+
+1. Create a figure including histograms of your vectors `norm_17`, `norm_30`, and `norm_300`.
+- The three histograms should all be on the same figure, arranged vertically (3 rows, 1 column).
+- Each histogram must have an informative title that indicates how many randomly generated data points were used to build the histogram.
+2. Save your figure to a file called `lab_04_hist_01.png`.
+- Your figure should be 1400 pixels high, and 700 pixels wide.
+- It should have a resolution of 180 dpi.
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts) Paste the R code you used to create your figure into the text entry box.
+- Q2 (1 pt) Upload your figure image file into the file upload box.
+</div>
+
+<div class="hintborder">
+- You'll need to check out the help entry for the appropriate arguments to `png()` to set the width, height, and resolution.
+- If you get a strange gray border around your image, try setting the background color argument to transparent: `bg = "transparent"`. 
+</div>
+
+
+
+
+Solution
+========
+
+```{r results='hold'}
+mean_1 = 10.4
+sd_1 = 2.4
+
+norm_17 = rnorm(n = 17, mean = mean_1, sd = sd_1)
+norm_30 = rnorm(n = 30, mean = mean_1, sd = sd_1)
+norm_300 = rnorm(n = 300, mean = mean_1, sd = sd_1)
+
+if (FALSE)
+  png(
+    file.path(
+      find_file(
+        filename = "lab_04_uncertainty_and_error", directory = TRUE), 
+      "lab_4_hist_1.png"), 
+    width = 1000, height = 1500, res = 220)
+
+par(mfrow = c(3, 1))
+hist(norm_17,  main =  "17 normally-distributed numbers")
+hist(norm_30,  main =  "30 normally-distributed numbers")
+hist(norm_300, main = "300 normally-distributed numbers")
+
+if (FALSE)
+  dev.off()
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Random Normal Data 1
+extype: string
+exsolution: nil
+exname: lab 4
+exsection: lab 4
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 3

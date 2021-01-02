@@ -1,0 +1,254 @@
+---
+title: "Student Questions: Week 11 "
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+
+require(palmerpenguins)
+fit_2 = lm(body_mass_g ~ sex * species, data = penguins)
+fff = knitr::kable(coef(summary(fit_2)), digits = 3)
+ffa = knitr::kable(anova(fit_2), digits = 2)
+```
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r render_doc, include=FALSE, eval=FALSE}
+source_file = rmd.utils::find_file("responses_to_week_11_student_questions_beamer", extension = "Rmd")
+
+# source_file = rmd.utils::find_file("responses_to_week_11_student_questions.Rmd", extension = "Rmd")
+
+rmarkdown::render(
+  input = source_file, 
+  output_file = basename(tools::file_path_sans_ext(source_file)),
+  output_dir = here::here("docs", "lecture_notes"))
+
+```
+
+
+
+
+## The F-test
+
+Question: *Please go over F values again.*
+
+What is an F-test?
+
+- The F statistic is just the ratio of two variances.
+- We use it in ANOVA to compare how much variability is explained by different model predictor variables. The values in the Mean Squares colulmn of the ANOVA table are used or the comparison.
+
+
+
+
+## F-ratio
+
+
+| Source        | SS    | df        | MS              | F |
+| -             | -     | -         | -               | - | 
+| Main A	| given |	$A = (a - 1)$ | $MS_A = \frac{SS}{df}$ | $\frac{MS_A}{MS_W}$ |
+| Main B	| given |	$B = (b - 1)$ | $MS_B=\frac{SS}{df}$ | $\frac{MS_B}{MS_W}$ |
+| A * B	| given |	$(a-1)(b-1)$ | $MS_{AB}=\frac{SS}{df}$ | $\frac{MS_{AB}}{MS_W}$ |
+| Within        | given |	$N - ab$ | $MS_{W}=\frac{SS}{df}$ | |
+
+
+
+
+## F-ratio: Penguins
+
+Remember the penguins ANOVA table?
+
+```{r echo = FALSE}
+ffa
+```
+
+## Reading Questions
+
+Question: *(Reading questions week 10/11: Question 7) Do we need to multiply our result by 17 because the biomass accumulation was over 17 weeks and each factor was only for 1 week?*
+
+Short answer: no
+
+- The experiment description stated: *"The response variable was plant biomass accumulation* **after*** *17 weeks (in grams)."*
+
+If the response had been something like: "Weekly growth rate", "Average weekly growth", etc. then you would have had to measure biomass each week.  You'd have a much more complicated experiment.
+
+
+
+
+## Reading Questions
+
+If you measured biomass each week you would have to deal with:
+
+- Non-independent observations: Time series data, within- versus among- treatment variability.
+- More complicated models that can accommodate time-series data.
+  - The response not only depends on the water, nitrogen, etc. but also on the values of the response in previous weeks.
+
+
+
+
+## Reading Questions
+
+The ***after*** *17 weeks* text is simply meant to describe the experimental set up and the fact that biomass was measured at the end. 
+
+- If we ignore the biomass accumulation in previous weeks, we can simply consider the overall biomass accumulation at the end of the experiment.  This answers a slightly different question than if we had asked about weekly growth rates.
+
+
+
+
+
+## Quasi-likelihood
+
+Question: *Can you please explain quasi-likelihood?*
+
+Quasi-likelihood is useful for count data when there is more *dispersion* or *variability* than expected from a Poisson distribution.  It can be used with other distributions, but most commonly with Poisson count data.
+
+Recall that the Poisson has a single parameter, $\lambda$, that is both the **standard deviation** and the **mean**.
+
+In overdispersed data, the observed standard deviation is much greater than the mean.
+
+- The *overdispersion parameter* is the factor by which the standard deviation is greater than expected with a Poisson.
+
+
+
+## Quasi-likelihood
+
+In the Normal distribution, the mean and standard deviation are totally independent.
+
+- In many other distributions, such as the binomial and Poisson, mean and standard deviation are not independent.  I.e. the mean and standard deviation are both influenced by the same distribution parameters.
+
+- If your data are overdispersed (relative to your chosen distribution), the observed standard deviation in your data doesn't make sense in with the observed mean value.
+  - Adjusting the observed s.d. by the oversdispersion factor helps both the mean and s.d. match the theoretical distribution.
+
+
+
+## Limits of Group 1
+
+Question: *Are there specific validation plots that you should always use to decide when to go from group 1 to group 2 models?*
+
+- Pre-analysis data exploration should always precede any model-fitting exercise.  This helps to preview any obvious issues you may face with Group I methods.
+  - Always examine scatterplots of pairs of continuous variables.  *Pairplots* are a perfect tool.
+  - Histograms and conditional boxplots are useful to assess normality and heterogeneity
+
+
+
+
+## Limits of Group 1 - Always fit a linear model first!
+
+You should always start with simple linear fits.
+
+- It's best to start with linear fits of a single predictor.
+
+Use the *residual plots* to examine
+
+- Increasing/decreasing variance: heterogeneity
+- Obvious patterns: possible non-independence
+
+
+
+
+## Limits of Group 1 - Residual plots
+
+Types of residual plots:
+
+- residuals vs. predicted values
+- residuals vs. observed response values
+- residuals vs. order in which the data points were collected
+- residuals vs. predictor variables
+
+
+
+## Limits of Group 1 - Always fit a linear model first!
+
+
+
+
+## Using the Model Coefficient Table
+
+*Can you give some examples of questions you can answer utilizing the model coefficient table?*
+
+We can use the model coefficients for *prediction*.  Some possible practical examples:
+
+- Crop yields in a field given soil and weather conditions
+- Expected population of a predator or herbivore given forest cover, prey populations, other environmental conditions.
+
+We often refer to the *regression equation*.  We can do interpolation (and extrapolation) using the `predict()` function in R.
+
+
+
+
+
+
+## Data Types: Predictor and Response Variable
+
+Question: *We would love to talk about the predictor/response variables for different tests (for example ANOVA vs binomial... etc) and really understanding what the tests are used for.*
+
+
+
+
+
+
+
+## Using Model Coefficient Tables: Prediction
+
+Question: *Also discuss more complex numerical questions with adding average values in a coefficient table (like the one in the reading questions with the amount of nitrogen, phosphorus added)*
+
+
+
+
+## Crossed and Nested Effects
+
+Question: *How do interactive categorical effects differ from nested effects?*
+
+
+- Crossed factors have observations within every possible factor level combination.  There were observations of male and female penguins for each of the three species.
+  - If you don't have observations in each combination, you can't calculate interactions!
+
+- Nested factors can arise from hierarchical structure:
+  - Different islands may host different suites of penguin species.
+
+
+Nested factors are treated as *random effects*.  This belongs to the realm of *mixed modeling*.
+
+
+## Penguin boxplots
+
+
+```{r, echo = FALSE}
+require(palmerpenguins)
+par(mar = par("mar") + c(4, 0, 0, 0), mfrow = c(1, 2))
+boxplot(body_mass_g ~ species * island, data = penguins, las = 2, xlab = "")
+boxplot(body_mass_g ~ sex * species, data = penguins, las = 2, xlab = "")
+```
+
+
+## Random and Fixed Effects
+
+
+In his book "Mixed Effects Models and Extensions in R", Alain Zuur states:
+
+
+"Welcome to our world, the world of mixed effects modelling. The bad news is that it is a complicated world. Nonetheless, it is one that few ecologists can avoid, even though it is one of the most difficult fields in statistics."
+
+

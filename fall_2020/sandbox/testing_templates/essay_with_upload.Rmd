@@ -1,0 +1,33 @@
+---
+title: "Essay with file upload"
+---
+
+
+Question
+========
+
+This template creates an essay question with:
+- required essay answer
+- one required flie upload
+
+
+
+Solution
+========
+
+
+
+
+Meta-information
+================
+extitle: Question title: essay with upload
+extype: string
+exsolution: nil
+exname: exam name
+exsection: section name
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE

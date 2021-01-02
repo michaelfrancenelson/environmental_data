@@ -1,0 +1,604 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "ANOVA By Hand"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Building an ANOVA by Hand
+
+In this exercise you'll get a chance to practice your R-coding skills and build an understanding of the inner workings of one-way Analysis of Variance by using R to do an ANOVA "by hand"!
+
+
+
+## Data
+
+You will need the data file `rope.csv`, which you can download from the <a href="https://michaelfrancenelson.github.io/eco_602_634_2020/">course github site.</a>
+
+
+## Background
+
+The data set comes from a study by Dr. Brian Kane (Umass) in which he was interested in evaluating the differential resistance of various climbing rope types to accidental cutting by different hand-saw blades.
+
+
+
+### Motivation
+
+The motivation behind the study was an accident in which a professional tree pruner was cutting through a branch when his blade accidentally struck and severed his climbing rope, causing him to fall to his death.
+
+A civil suit was filed against the rope manufacturer, who promptly asked Dr. Kane to investigate the problem.
+
+Dr. Kane set up the following controlled experiment.
+
+
+
+### Factorial Experiment
+
+He designed a two-way factorial experiment with the following predictor variables
+
+- Rope: 6 rope types
+- Blade: 4 types 
+
+The experiment was a fully crossed design with 5 replicates of each rope type and blade type.
+
+He reproduced the circumstance of the accident with the following setup:
+
+- Placed a fixed length of rope under tension, approximating the load of an average human body.
+- Let the blade fall and strike the rope in a manner that approximated the natural field conditions.
+
+
+For each trial, he measured several response variables, including:
+
+- percent of the rope cut by the blade (p. cut)
+- percent of the rope strength lost
+- several other measures of rope damage.
+
+For the purposes of this exercise, we will create a simple one-way ANOVA with:
+
+- predictor: rope type
+- response: percent rope cut
+
+<div class="notes">
+Note: You could extend the following procedure to more complex experimental designs such as a two-way ANOVA.
+</div>
+
+
+
+### Research Objectives  
+
+Dr. Kane wants to use the results of this study to help inform the design of additional experiments, perhaps to examine additional rope types, rope tension levels, and/or other rope conditions.
+
+His primary concern is to ensure that he designs an experiment that has adequate ***statistical power*** to detect an effect if in fact there is one.
+
+Given that the subsequent experiments might involve slightly different treatments (e.g., additional rope types).
+
+- He wants to explore the possibility that the standard errors among replicates in extended experiments might vary from the first experiment.
+- In other words, he would like to understand the statistical power of experiments in relation to varying sample size and error rates.
+
+Before we try to build a simulation, we'll familiarize ourselves with the data by performing an Analysis of Variance by hand.
+
+
+
+## ANOVA by hand
+
+First, we need to know how many levels there are to our independent treatment factor, `rope.type`, and the total number of observations (i.e., sample size).
+
+- Make sure that `rope.type` is a factor, and not a string variable.
+- Use `factor()` to convert a string into a factor.
+- Use `levels()` to view the different levels within a factor.
+
+<div class="notes">
+
+Self test: when you have correctly read in your data and factorized `rope.type` you should get this output when you run `levels(rope$rope.type)`:
+
+``` {r load_data, echo = FALSE}
+rope = read.csv(here::here("data", "rope.csv"))
+rope$rope.type = factor(rope$rope.type)
+n_groups = length(levels(rope$rope.type))
+n_obs = nrow(rope)
+
+if(FALSE)
+{
+  head(rope)
+  boxplot(p.cut ~ rope.type, data = rope)
+}
+
+```
+
+```{r rope_levels}
+levels(rope$rope.type)
+```
+</div>
+
+
+
+## Number of observations and groups
+
+You will need to know the total number of observations and the number of groups for the ANOVA.
+
+- Recall that when we use a *categorical predictor*, we can also think if it as a *grouping factor*.  Individual observations that have the same value for the categorical variable are within the same group.
+
+- Calculate the total number of observations and save it to a variable called `n_obs`.
+- Calculate the number of groups (rope types) and save it in a variable called `n_groups`. 
+
+`n_obs = ....`
+
+`n_groups = ....`
+
+```{r n_obs_groups, echo = FALSE}
+n_obs = nrow(rope)
+n_groups = length(levels(rope$rope.type))
+```
+
+
+
+## Partitioning Variance: Total
+
+Next, we need to partition the total variance in the response variable into its components:
+
+- among-group
+- within-group, so that we can compute the ratio for our test statistic.
+
+Here, the trick is to realize that the total variance is the sum of the among-group variance and within-group variance, so by calculating any two of these components, we automatically know the third.
+
+We begin by calculating the “sums of squares” for the entire data set; i.e., the squared deviation of each observation from the overall mean, since this is easiest calculation.
+
+This is a measure of total variability in the data set, and we often abbreviate this as `ss_tot`:
+
+<div class="hints">
+- Recall that the sum of squares is the *sum of squared residuals*.
+- In this case our *deterministic model* of the percent rope cut is the **mean** rope cut (of all observations).
+- This is also called the *grand mean*.
+- The residuals are the the differences of the observed values from the *grand mean*.
+</div>
+
+
+Calculate the **total sum of squares** and save it to a variable called `ss_tot`:
+
+`ss_tot = ....`
+
+``` {r ss_total, echo = FALSE}
+ss_tot = sum((rope$p.cut - mean(rope$p.cut))^2)
+```
+
+
+## Partitioning Variance: Within-Group
+
+Next, we need to calculate the the sums of squares within groups (rope types).
+
+<div class="notes">
+You can think of this as a refinement of the model we used to calculate `ss_tot`:
+
+- This refined model calculates a mean, and sum of squares, for each group.
+- A sum of squares can be calculated for each group (analogous to the calculation of `ss_tot`).
+- The sum of each individual group's sum of squares is the *within-group* sum of squares for the ANOVA.
+
+</div>
+
+You can gain intuition about *ss_tot* and *ss_within* by comparing boxplots of the unconditioned data and the data conditioned on the grouping factor:
+
+```{r boxplots_tot_groups, fig.asp = 1 / 1.75, echo = FALSE}
+# par(mfrow = c(1, 2))
+layout(matrix(1:2, nrow = 1), widths = c(1, 1.75))
+boxplot(
+  rope$p.cut,
+  # xlab = "",
+  ylab = "Percent rope cut",
+  main = "total", 
+  width = 4,
+  xlab = "all ropes",
+  # names = "all ropes",
+  las = 2)
+boxplot(
+  p.cut ~ rope.type,
+  data = rope,
+  las = 2,
+  xlab = "",
+  ylab = "Percent rope cut",
+  main = "group")
+```
+
+The SS within is also called the sum of squares error (SSE), or the sum of squares of residuals.
+
+- You can think of this quantity as the sum of squares of the refined model: the model that conditions the observations on the grouping factor.
+- We hope that adding the grouping factor leads to a reduction in the sum of squares!
+
+
+Calculating the within-group SS isn't as easy as calculating `ss_tot`.
+
+For each group we must:
+
+1. Calculate the group mean.
+2. Calculate the group SS.
+3. Sum the group SSs.
+
+We can use `aggregate()` to accomplish this for us, but the implementation will take some finessing.  You should read the help entry for `aggregate()` now.
+
+As a first approximation, we can calculate the group means with `aggregate()`:
+
+```{r aggregate_1}
+aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type), 
+  FUN = mean)
+```
+
+Notice the argument `FUN = mean`.  This tells `aggregate()` to use `mean()` directly on the subsets of the data (the groups).
+
+I can be more explicit using this syntax:
+
+```{r aggreagate_2}
+aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) mean(x))
+
+```
+
+
+This time I used `FUN = function(x) mean(x)`.
+
+The syntax should be familiar to you from all of your function-building experience.  
+
+How could I change the `FUN` argument syntax to calculate the within-group residuals?
+
+- Hint: remember that R is *vectorized*.
+
+Try to modify my code to calculate the residuals.  Save the output of your call to `aggregate()` to a variable called `agg_resids`.
+
+You can test your work by comparing the structure of your `agg_resids` object to mine:
+
+```{r aggreagate_3, echo = FALSE}
+agg_resids = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) x - mean(x))
+```
+
+```{r}
+str(agg_resids)
+```
+
+<div class="notes">
+
+The function you create with the `FUN = ` argument is called an **anonymous function**.
+
+- It's not a built-in R function, or a custom function that you have defined and loaded into memory so it doesn't have a name and it disappears as soon as `aggregate()` has finished.
+- Anonymous functions are an important concept in many other programming languages, including *Object Oriented* programming languages like Java. 
+
+</div>
+
+You're nearly there!
+
+Now modify your `aggregate()` call to calculate **sums of squared residuals within each group**. 
+
+- Note that this will require **two** modifications of the code for `agg_resids`:
+  - Square the residuals within a group.
+  - Calculate the sum of the squared residuals in the group.
+
+Save the output to a variable called `agg_sq_resids`.
+
+```{r aggreagate_4, echo = FALSE}
+agg_sq_resids = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) sum((x - mean(x))^2))
+```
+
+As a self test, see if your output matches mine:
+
+```{r}
+str(agg_sq_resids)
+```
+
+Now you can use the $ subsetting operator to extract the group SSs (and then calculate their sum).
+
+Note, the final sum is the sums of squares error pooled across groups.
+
+Save your within-group sum of squares to a variable called `ss_within`.
+
+```{r echo = FALSE}
+ss_within = sum(agg_sq_resids$x)
+```
+
+
+
+
+## Partitioning Variance: Among Groups
+
+Now we can compute the remaining variance component, “sums of squares among”, which is often abbreviated **SSA**:
+
+```{r ss_among}
+ss_among = ss_tot - ss_within
+```
+
+The extent to which `ss_within` is less than `ss_tot` is a reflection of the magnitude of the differences between the means.
+
+
+If `ss_within` is much smaller than `ss_tot`, then most of the variation in the response is due to differences among groups (or levels of the independent factor).
+
+Another way of looking at this is that as the ratio of `ss_among` to `ss_within` increases, then an increasing amount of the variation is due to differences among groups.
+
+
+## Normalizing
+
+It is tempting to think we are done, but we are not.
+
+We've briefly touched upon the concept of *normalization*.  In this case, we can't compare the sums of squares directly because the numbers of groups are different than the total number of observations.  We know that larger samples will have larger sums of squared residuals, even if the variance is the same.  When we *normalize* a sum of squared deviations from a mean we end up with our old friend *variance*.
+
+We can compare the within-group and among-group variance directly, whereas we cannot directly compare the within-group and among-group SS.
+
+We need to adjust the sums of squares to reflect the degrees of freedom available given the number of treatments (or levels of the independent factor) and the number of replicates per treatment.
+
+You calculated the total number of observations above and saved it as `n_obs`.  To calculate variances we have to convert numbers of observations to degrees of freedom.  The total degrees of freedom is just `n_obs - 1`.
+
+We lose 1 d.f. because in calculating `ss_tot` we had to estimate one parameter from the data in advance: the grand mean.
+
+- Calculate the total degrees of freedom and save the quantity to a variable called `df_tot`.
+
+Now we need to know how many degrees of freedom to allocate to `ss_within`. 
+
+Fortunately we can use a shortcut.  
+
+We know that for each group we lose one degree of freedom because we calculated a group mean.
+
+The within-group degrees of freedom is just the number of observations minus the number of groups!
+
+- Calculate this quantity and save it to a variable called `df_within`
+
+Therefore we can calculate the there were in each of the groups (rope types).  
+
+
+
+Five of the rope types had n = 20 replications, so they each had $20-1=19$ d.f., for error because we estimate one parameter from the data for each rope type, namely the treatment means, in calculating their contribution to `ss_within`.
+
+One of the rope types had $n = 21$ replications, so it had $21-1=20$ d.f. to contribute to the overall `ss_within`.
+
+Overall, therefore, the error has $5 \times 19 + 1 \times 20 = 115$ d.f.
+
+Lastly, there were six rope types, so there are $6 - 1 = 5$ d.f. for `rope.type` (`ss_among`).
+
+The mean squares are obtained simply by dividing each sum of squares by its respective degrees of freedom, as follows:
+
+``` {r}
+ms_among  =  ss_among / (n_groups - 1)
+ms_within = ss_within / (n_obs - n_groups)
+```
+
+
+By tradition, we do not calculate the total mean square.
+
+
+## The Test Statistic: F
+
+The test statistic is the F-ratio, defined as the among-group variance divided by the within-group variance.
+
+- Calculate this ratio and save it in a variable called `f_ratio`
+
+``` {r}
+f_ratio = ms_among/ms_within
+```
+
+The F-ratio is used to test the null hypothesis that the treatment means are all the same.
+
+If we reject this null hypothesis, we accept the alternative hypothesis that at least one of the means is significantly different from the others.
+
+The question naturally arises at this point as to whether the observed F-ratio is a big number or not.
+
+If it is a big number, then we reject the null hypothesis.
+
+If it is not a big number, then we fail to reject the null hypothesis.
+
+As ever, we decide whether the test statistic is big or small by comparing it to the values from an F probability distribution, given the number of degrees of freedom in the numerator and the number of degrees of freedom in the denominator.
+
+Specifically, we want to know the Type 1 error rate (p-value); i.e., the probability of observing an F-ratio as large as ours given that the null hypothesis is true and thus the treatment means are the same.
+
+To do this, we use `pf()` for cumulative probabilities of the F distribution, like this:
+
+- The F-distribution has two parameters:
+  - degrees of freedom of the numerator
+  - degrees of freedom of the denominator
+
+In our case the numerator was the among-group variance and the denominator was the within-group variance.
+
+Look up the help entry for `pf()` 
+- Recall that we want the *upper-tail* p-value.  You may need to use the law of total probability in conjunction with `pf()`.
+
+``` {r p_val, eval = FALSE, echo = FALSE}
+pval = 1 - pf(f_ratio, n_groups - 1, n_obs - n_groups)
+pval = 1 - pf(f_ratio, df_among, df_within)
+pf(f_ratio, df_among, df_within)
+1 - pf(f_ratio, df_among, df_within)
+
+```
+
+# ANOVA in R
+
+OK, now that you know how to perform a 1-way ANOVA manually, here is how you do it the easy way using `anova()` with a fitted model object.
+
+``` {r}
+fit_1 = lm(p.cut ~ rope.type, data=rope)
+anova(fit_1)
+```
+
+You will need to be able to extract the p-value and other relevant quantities from the ANOVA table.
+
+You can use `str()` to reveal the structure of the anova table object and use the subset operator $ to extract the values of interest:
+
+
+``` {r}
+anova_fit_1 = anova(fit_1)
+str(anova_fit_1)
+```
+
+You might notice that some of the named elements have names that include spaces or other characters that we normally use as operators or symbols in R code.
+
+What happens when you try to extract the `Sum Sq` element?
+
+```{r illegal_subsetting_1, error=TRUE}
+anova_fit_1$Sum Sq
+```
+
+Well, that didn't work well.  What about using quotes?
+
+```{r legal_subsetting, error=TRUE}
+anova_fit_1$"Sum Sq"
+```
+
+Success!
+
+
+
+
+# Code Template
+
+There were a lot of steps in the above outline.  You can use this template to store your work as you complete each of the steps in the walkthrough.
+
+- Before you submit your answer, be sure to check that your calculate values match those in the anova table that R created.
+
+
+```{r anova_template, eval = FALSE}
+rm(list = ls())
+
+rope = ....
+rope$rope.type = factor(rope$rope.type)
+
+n_obs = ....
+n_groups = ....
+
+ss_tot = ....
+df_tot = ....
+
+agg_sq_resids = ....
+ss_within = ....
+df_within = ....
+
+ss_among = ....
+df_among = ....
+
+ms_within = ....
+ms_among  = ....
+
+f_ratio = ....
+f_pval = ....
+```
+
+
+
+
+
+# Question
+
+
+
+```{r mcGarigal_answer_key, eval = FALSE, echo = FALSE}
+rope = read.csv(here::here("data", "rope.csv"))
+rope$rope.type = factor(rope$rope.type)
+n_groups = length(levels(rope$rope.type))
+n_obs = nrow(rope)
+
+SSY = sum((rope$p.cut-mean(rope$p.cut))^2)
+SSE = 
+  sum(tapply(
+    rope$p.cut,
+    INDEX=rope$rope.type,
+    function(x) sum((x-mean(x))^2)))
+SSA = SSY - SSE
+
+MSA = SSA / (n_groups - 1)
+MSE = SSE / (n_obs - n_groups)
+
+F = MSA/MSE
+pval = 1-pf(F,n_groups-1,n_obs-n_groups)
+
+
+
+summary(aov(p.cut~rope.type,data=rope))  
+
+```
+
+
+```{r anova_answer_key, eval = FALSE, echo = FALSE}
+rope = read.csv(here::here("data", "rope.csv"))
+rope$rope.type = factor(rope$rope.type)
+
+n_obs = nrow(rope)
+n_groups = length(levels(rope$rope.type))
+
+ss_tot = sum((rope$p.cut - mean(rope$p.cut))^2)
+df_tot = n_obs - 1
+
+agg_sq_resids = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) sum((x - mean(x))^2))
+
+ss_within = sum(agg_sq_resids$x)
+df_within = n_obs - n_groups
+
+ss_among = ss_tot - ss_within
+df_among = n_groups - 1
+
+ms_within = ss_within / df_within
+ms_among  = ss_among  / df_among
+
+f_ratio = ms_among / ms_within
+f_pval = 1 - pf(f_ratio, df_among, df_within)
+
+
+
+pval
+
+
+
+f_ratio == F
+
+
+
+SSE == ss_within
+SSA == ss_among
+
+MSE == ms_within
+MSA == ms_among
+
+
+
+
+agg_means = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) mean(x))$x
+
+agg_lengths = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) length(x))$x
+
+agg_means
+agg_lengths
+
+sum(((agg_means - mean(agg_means))^2) * agg_lengths)
+(agg_means - mean(agg_means))^2 
+
+ss_among
+SSA
+```
+

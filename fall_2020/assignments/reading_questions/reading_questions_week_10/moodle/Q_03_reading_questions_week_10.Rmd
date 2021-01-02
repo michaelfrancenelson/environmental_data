@@ -1,0 +1,86 @@
+---
+title: "Model Coefficients"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructions">
+
+Consider an experiment looking at plant biomass response to water treatments.
+
+- The three water level treatments are: "low", "med", and "high". 
+- The response is plant biomass in grams after 7 weeks of growth.
+
+|                 | Estimate| Std. Error| t value| Pr(>&#124;t&#124;)|
+|:----------------|--------:|----------:|-------:|------------------:|
+|(Intercept)      | 2.4     |       2.19|  98.371|              0.001|
+|waterMed         | 1.3     |       5.12|   0.480|              0.231|
+|waterHigh        | 13.6    |       3.48|  24.495|              0.001|
+
+</div>
+
+
+<div class="questions">
+
+### Q 1 pt (numeric entry)
+
+- What was the average plant mass, in grams, for the **low** water treatment?
+</div>
+
+
+
+
+
+Solution
+========
+
+### Grading Guide
+
+Answer is 2.4 
+
+Students could do the calculation, or realize that low water is the base case and the coefficient is given as the intercept in the table.
+
+```{r solution}
+coeffs = c(2.4, 1.3, 13.6)
+x      = c(  1,   0,    0)
+
+sum(coeffs * x)
+```
+
+
+Meta-information
+================
+
+extitle: Model Coefficients
+
+extype: num
+exsolution: 2.4
+extol: 0.01
+
+exname: week_10_reading_questions
+exsection: week_10_reading_questions
+
+expoints: 1

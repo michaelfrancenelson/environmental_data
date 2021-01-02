@@ -1,0 +1,348 @@
+---
+title: "Student Questions: Week 09 "
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+```
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r render_doc, include=FALSE, eval=FALSE}
+source_file = rmd.utils::find_file("responses_to_week_09_student_questions_beamer", extension = "Rmd")
+
+# source_file = rmd.utils::find_file("responses_to_week_09_student_questions.Rmd", extension = "Rmd")
+
+
+rmarkdown::render(
+  input = source_file, 
+  output_file = basename(tools::file_path_sans_ext(source_file)),
+  output_dir = here::here("docs", "lecture_notes"))
+
+```
+
+
+
+## Assignment Questions
+
+- In addition, we would love to know whether we use 0.05 as the p value for significance.
+
+- We would love to discuss questions 5 and 7 in the Week 8/9 reading questions
+
+- and also talk about questions 8 and 11 in the individual assignment “Models 1”.
+
+
+
+
+
+## Data Exploration
+
+Question: *In question 8 of the individual assignment, how do you tell which is the most appropriate way of performing a numerical and graphical data exploration?*
+
+- In reference to this assignment question pertaining to the catastrophic rate data:
+  - *Considering the numerical and graphical data exploration, which test do you think was more appropriate for these data?*
+
+We were comparing the catastrophic rate to a fixed value: we wanted to perform a 1-sample comparison-of-means test.
+
+
+
+## Data Exploration
+
+How do we know what kind of graphical exploration to do?
+
+- A **histogram** is always a good place to start.
+- If you have categorical predictors, conditional boxplots are helpful.
+- Scatterplots are great for continuous variables.
+- Consider your experiment, data types, and research questions.
+  - What tests are you considering?
+  - What assumptions do you want to test?
+
+
+
+
+## Assumptions
+
+Question: *What are some examples of alternative models when your data doesn't meet any of the four assumptions?*
+
+The assumptions are:
+
+1. Normal errors
+2. Constant variance
+3. Independent observations
+4. Fixed x
+
+
+
+
+## Assumptions
+
+Question: *What are some examples of alternative models when your data doesn't meet any of the four assumptions?*
+
+- The group 2 methods can accommodate violations of 1 or more of the first 3 assumptions.
+- There are examples in the *Constellation of Methods* and *Limits of Group 1* lecture slides.
+
+- How could you model uncertainty in your *predictor variables*?
+
+
+
+
+
+## Assumptions
+
+Question: *What are some examples of alternative models when your data doesn't meet any of the four assumptions?*
+
+- How could you model uncertainty in your *predictor variables*?
+
+Uncertainty in your predictor variable measurements should increase uncertainty in your model output, right?
+
+- You could try simulation methods:
+  - Add noise to your continuous x-values
+  - Randomly relabel categorical variables
+
+
+
+## Assumptions
+
+Questions:
+
+- Are any of the four rules absolutely necessary?
+- Isn't linear modeling still possible if any of these rules are broken? 
+  - Would this just result in a weaker model?
+  
+It's always possible to use software to fit a model.  The computer doesn't care if assumptions are met, it will happily calculate coefficients for an inappropriate model.
+
+Most commonly violations of assumptions affect our estimates of *sampling distributions*.  The *deterministic* models may not be affected.
+
+- Violations invalidate estimates of p-values and confidence intervals.
+
+
+
+
+## Assumptions: Homogeneity
+
+Question: *Zuur mentions that violation of homogeneity is common in ecological studies. How do you test for it and what do you do to fix it?*
+
+Some ideas to detect it:
+
+- Graphical: examine plots of residuals.
+- Numerical: Statistical tests of homogeneity in R, for example `bartlet.test()`
+
+
+
+## Assumptions: Homogeneity
+
+Question: *Zuur mentions that violation of homogeneity is common in ecological studies. How do you test for it and what do you do to fix it?*
+
+Some ways to fix it:
+
+- Data transformations
+- Group 2 models
+- Examine the *variance/covariance matrix* to adjust p-values
+
+
+
+
+## Assumptions: Homogeneity
+
+Question: *Can’t the rule of homogeneity be broken and accounted for with something like generalized modeling?*
+
+- Certain kinds of homogeneity can be accommodated in GLMs.
+- Data transformation can also help.
+
+
+
+
+## Assumptions: Normality
+
+Question: *Does the assumption of normality actually work in all cases?*
+
+Question: *What if the underlying distribution is not actually normal?*
+
+Question: *What if it’s highly right skewed? Isn't this possible in biological systems?*
+
+This is very common! Normality is frequently violated.
+
+- Small violations are OK
+- Other approaches:
+  - data transformation
+  - Generalized Linear Models
+
+
+
+
+## Testing for Normality
+
+Question: *Using the Shapiro test, how do we know when to accept the null hypothesis? When to reject it?*
+
+- The Shapiro null hypothesis is that the data are from a normally-distributed population.
+- A low p-value indicates strong evidence of non-normality
+- This is similar to the interpretation for the Bartlett test of homogeneity.
+
+
+
+## Stochastic Model
+
+- Question *How does epsilon function as a measure of stochasticity?*
+
+Consider the simple regression equation:
+
+$y_i = \alpha + \beta _1 x_{1i} + \epsilon$
+
+The $\epsilon$ term captures the *noise* that we might observe after we calculate the *deterministic part*: $\alpha + \beta _1 x_{1i}$
+
+- Our model proposes that each time we observe a value of $x$, we get the same *expected value* for y, plus some error.  The error will be a different quantity every time, even for the same value of x.
+- $\epsilon$ is a random variable.
+
+
+
+
+## Stochastic Model
+
+Consider the simple regression equation:
+
+$y_i = \alpha + \beta _1 x_{1i} + \epsilon$
+
+Notice there's no subscript on the $\epsilon$!
+  
+- This equation assumes that all observations follow the same stochastic model.
+
+You could specify that individual observations have different error models:
+
+$y_i = \alpha + \beta _1 x_{1i} + \epsilon_i$
+
+You could also specify a more complicated error model in which the parameters of the stochastic model depend on the values of the response or predictor variables.
+
+
+
+
+## Model Comparison
+
+Question: *What exactly is the AIC? What is it doing and why is the smallest value the best?*
+
+- AIC attempts to balance model complexity with model *information content*.
+
+$AIC=2k-2ln\left(\hat{L}\right)$
+
+- The $2k$ part penalizes the model based on the number of parameters: the model complexity.
+- The $-2ln\left(\hat{L}\right)$ part credits the model for a better fit.
+
+
+
+
+## AIC
+
+Question: *Why is the smallest the best?*
+
+Essentially the AIC was designed to capture a complexity/fit tradeoff such that: 
+
+- increased complexity contributes a positive quantity
+- increased likelihood contributes a negative quantity
+
+Adding a parameter increases the complexity. 
+
+- The increase in likelihood gained by adding the complexity has to be large enough to make the added complexity worth it.
+
+
+
+
+## pH 
+
+Questions:
+
+- *Unrelated to the homework and more of a general statistical analysis question, what is the best way of comparing pH values?*
+- *If you have pH values of samples from 10 years ago and pH values of the same samples from this year, can you use a simple t-test to compare the values?*
+- *Since pH is on a logarithmic scale, it seems a little disingenuous to compare the change in pH simply by comparing the numbers between the years.*
+- *Would you need to perform some kind of transformation on the data to account for the log scale?*
+
+
+
+
+## pH
+
+- *If you have pH values of samples from 10 years ago and pH values of the same samples from this year, can you use a simple t-test to compare the values?*
+
+You could use a t-test to compare the means of two groups of pH measurements as long as the measurements meet the assumptions: normality and heterogeneity.
+
+What test could you use if the assumptions weren't met?
+
+
+
+## pH
+
+- *Since pH is on a logarithmic scale, it seems a little disingenuous to compare the change in pH simply by comparing the numbers between the years.*
+
+Depending on how your organism responds to pH, you can usually use pH values directly.
+
+- You wouldn't want to do a log transform on pH values!
+
+- It's kind of like musical notes: we generally perceive pitch classes on the log scale.
+- The frequency of the C above middle C is exactly twice the frequency of middle C, etc.
+  - We would perceive a 262 Hz increase in frequency as the C above middle C (an octave).
+  - We would perceive a 262 Hz increase over the C above middle C as close to a G (a musical fifth).
+
+
+
+
+## pH 
+
+- *Would you need to perform some kind of transformation on the data to account for the log scale?*
+
+- Not necessarily.
+- You wouldn't want to do another log transformation!
+
+
+
+
+
+## Least Squares
+
+Question: *Regarding weeks 8-10, one area we find difficult to understand is the Least Squares.*
+
+
+Least squares is just a *criterion* that we use to decide which parameter values are *best*.
+
+- Least squares has an accelerating penalty for values far from the mean.
+
+
+
+
+
+
+
+## Regression Equations
+
+Element-by-element form:
+
+$y_i = \alpha + \beta_1 x_{1i}  + \beta_2 x_{2i} + \epsilon$
+
+Vector form: 
+
+$Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + ... + \epsilon$
+
+Question: *I don’t understand this slide above. Could you please explain the difference between element-by-element form and the Vector form?*
+
+
+

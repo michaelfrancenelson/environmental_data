@@ -1,0 +1,95 @@
+---
+title: "salamander ricker model residuals"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+Instructions:
+
+1. Using the parameters you chose for your Ricker curve fit, calculate the residuals and store them in a vector `resids_ricker`.
+
+
+1. Using the scatterplot of the dispersal data, visually fit a ricker curve model.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (4 pts.) Upload an image file with a histogram of the residuals of your Ricker curve model.
+
+</div>
+
+
+
+
+Solution
+========
+
+
+```{r}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+For example:
+
+```{r}
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+rick_a = 0.007
+rick_b = 1/200
+
+
+plot(
+  dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, 
+  xlab = "distance class", ylab = "standardized dispersal rate",
+     main = "Marbled Salamander - first time breeders\nRicker model")
+curve(ricker_fun(x, rick_a, rick_b), add = TRUE)
+
+
+resids_ricker = ricker_fun(dat_dispersal$dist.class, rick_a, rick_b) - dat_dispersal$disp.rate.ftb 
+hist(resids_ricker)
+
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: salamander ricker model residuals
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4

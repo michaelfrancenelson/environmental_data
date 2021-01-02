@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q1 : Learning Objectives Assessment Q1 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Please describe your previous experience with programming using R (or another language).</p>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q2 : Learning Objectives Assessment Q2 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Please describe the technical skills you hope to gain, and how they will help with your future research and career.</p>
+<p>Some things to consider</p>
+<ul>
+<li>specific analyses</li>
+<li>specific packages</li>
+<li>data visualization</li>
+</ul>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q3 : Learning Objectives Assessment Q3 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Describe the importance of <strong>documentation</strong>, i.e. comments, within your computer code.</p>
+<p>Some things to consider:</p>
+<ul>
+<li>Collaboration</li>
+<li>Sharing code and analyses</li>
+<li>Readability</li>
+<li>Reproducibility</li>
+</ul>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q4 : Learning Objectives Assessment Q4 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>What do we mean when we describe a programming language as high-level or low-level?</p>
+<p>Where does R fit into the spectrum?</p>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q5 : Learning Objectives Assessment Q5 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Explain the term <strong>variable scope</strong> and why it is important to think about when you write R code, especially custom functions.</p>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q6 : Learning Objectives Assessment Q6 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Briefly define each of the terms below, and describe how they relate to importing data into R:</p>
+<ul>
+<li>absolute path</li>
+<li>relative path</li>
+<li>working directory</li>
+<li>row-format data paradigm</li>
+</ul>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q7 : Learning Objectives Assessment Q7 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Describe some strategies you have used when you get stuck while working on a problem or debugging code in R (or another language).</p>
+<p>Some things to consider:</p>
+<ul>
+<li>R internal help files</li>
+<li>message boards (Stackexchange etc.)</li>
+<li>colleagues, mentors, friends</li>
+<li>have certain resources been more helpful than others?</li>
+</ul>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+
+<question type="category">
+<category>
+<text>$course$/ECo 634 Learning Objectives</text>
+</category>
+</question>
+
+
+<question type="essay">
+<name>
+<text> Q8 : Learning Objectives Assessment Q7 </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<style type="text/css" rel="stylesheet"> .btn {     border-width: 0 0px 0px 0px;     font-weight: normal;     text-transform: ; }  .btn-default {     color: #2ecc71;     background-color: #ffffff;     border-color: #ffffff; }  .warn { background-color:#F5A796; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .info { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .red  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); } .blue { background-color:#E6F0FF; color: rgba(0,0,0,1); } .gray { background-color:#ECE8E7; color: rgba(0,0,0,1); }  .ared  { background-color: rgba(255, 0, 0, 0.1); color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .ablue { background-color:#E6F0FF; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;} .agray { background-color:#ECE8E7; color: rgba(0,0,0,1); border-radius: 0.2cm; padding: 0.3cm;}  .blueborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); } .redborder   { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #FF0000; color: rgba(0,0,0,1); } .grayborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .blackborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); }  .questionborder { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #000000; color: rgba(0,0,0,1); } .hintborder  { border-radius: 0.2cm; padding: 0.3cm; border: 0.1cm solid #ECE8E7; color: rgba(0,0,0,1); } .outputborder  { border-radius: 0.01cm; padding: 0.3cm; border: 0.1cm solid #E6F0FF; color: rgba(0,0,0,1); }     .showopt {   background-color: #004c93;   color: #FFFFFF;    width: 100px;   height: 20px;   text-align: center;   vertical-align: middle !important;   float: right;   font-family: sans-serif;   border-radius: 8px; }  .showopt:hover {     background-color: #dfe4f2;     color: #004c93; }  pre.plot {   background-color: white !important; }   </style>
+<p>Explain why you want to learn R and how you think it is a benefit to your academic or research career.</p>
+<p>Some possible things to consider:</p>
+<ul>
+<li>Learning curve</li>
+<li>Pros and cons of scripting vs. point-and-click</li>
+<li>use of R in your field</li>
+</ul>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>1</defaultgrade>
+<responseformat>editor</responseformat>
+<responserequired>1</responserequired>
+<responsefieldlines>5</responsefieldlines>
+<attachments>0</attachments>
+<attachmentsrequired>0</attachmentsrequired>
+
+</question>
+
+</quiz>

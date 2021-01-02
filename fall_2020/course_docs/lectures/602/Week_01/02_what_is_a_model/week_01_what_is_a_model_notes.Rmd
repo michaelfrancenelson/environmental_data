@@ -1,0 +1,292 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Lecture notes: What is a model?"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+# header-includes:
+  # \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Objectives
+
+- Understand what **model** means in the context of this course.
+- Learn some of the important classes of models.
+- Understand the basics of model thinking and the model building process.
+
+
+
+
+## What is a model?
+
+
+### Here's a (very) simple, but effective definition:
+
+> A model is a simplified version of reality.
+
+\vfill
+
+### We use models every day
+
+- Can you think of any that you have already used today?
+
+\vfill
+
+
+
+## Some model examples
+
+### We might take these for granted, but they are all models:
+
+- Sunrise/sunset times
+- Seasons: expected phenology
+- Tides and moon phase predictions
+- Weather forecasts
+- Mental geospatial models:
+  - The layout of your house/apartment
+  - The streets of your hometown
+- Social cues
+- Language?
+
+
+
+
+## A very cute example
+
+[https://www.youtube.com/watch?v=ghoKX86Nfhc]
+
+### Cute, and we can learn a lot about modeling from this pup.
+
+
+
+
+
+
+## Clarification: What is a system?
+
+\vfill
+
+I will often use the term **system**, but what does it mean in the context of this course?
+
+\vfill
+
+A definition from Merriam-Webster:
+
+
+### a regularly interacting or interdependent group of items forming a unified whole, such as:
+
+> a: a group of interacting bodies under the influence of related forces
+
+> b: a group of body organs that together perform one or more vital functions
+
+> c: a group of related natural objects or forces
+
+Definition c most closely matches the types of *systems* we'll discuss in this course.
+
+
+
+
+
+## What is model thinking?
+
+### Model thinking means:
+
+- Learning to see potential models everywhere.
+- Being aware of models we already use.
+- Recognizing benefits, pitfalls, and limitations of a model.
+- Considering multiple models.
+- Thinking **iteratively.**
+
+
+
+
+## Model Thinking: How to think like a modeler
+
+### A model thinker would first consider questions like:
+
+- What do I already know about this system?
+- What are some of the important parts of a system?
+- What are some of the important interactions?
+- What questions are important?
+
+### Then they might ponder, draw some sketches, write down their ideas, discuss with friends or colleagues...
+
+
+
+
+## Model Thinking: How to think like a modeler
+
+### In the second round the model thinker might consider questions like:
+
+- What components are vital, and which could I ignore?
+- Can I identify knowledge gaps and known unknowns?
+- How could I create a computer simulation?
+- What if my model is wrong?
+  - Can I hypothesize a competing model?
+- Can I identify biases in my model?
+  - Cultural
+  - Species
+  - My personal background and training
+
+
+
+
+## Model Thinking: How to think like a modeler
+
+### A model thinker knows that modeling is **iterative**...
+
+### As the model thinker refines their model, further questions they might consider are:
+
+- Why do I want to build a model?
+- What will I use the model for?
+  - Prediction? Understanding? Experimenting?
+- What data could I use to calibrate or validate my model?
+- What are the sources of uncertainty and randomness?
+- What if I discover my model is wrong?
+
+
+
+
+## What can we learn about the modeling process from our canine friend?
+
+- I think there is a lot to learn, but I want to hear some of your ideas.
+
+
+
+
+## Classes of Models
+
+### Modeling is a very broad concept.  Some types of models inclulde:
+
+- Conceptual
+- Phenomenological
+- Mechanistic
+
+### These categories are not mutually exclusive.
+
+- Since modeling is iterative, you may use (for example) a conceptual model to inform an experiment.
+- You could then use a phenomenological model to explain patterns you observe in the results.
+- This may support or refute your conceptual model, or help you develop a mechanistic model.
+
+
+
+
+## Conceptual Models
+
+\vfill
+- Conceptual models are useful to identify important components and hypothesize interactions.
+\vfill
+- Conceptual models don't have to be **quantitative**.
+\vfill
+
+
+
+## Phenomenological Models
+
+\vfill
+- Phenomenological models use **quantitative tools** to *describe* observed patterns.
+\vfill
+- The form of a phenomenological model doesn't have to reflect the structure of the underlying system.
+\vfill
+
+
+* Note: *phenomenological* is incredibly hard to spell, and to pronounce so please be patient with me and each other!
+
+
+
+
+## Mechanistic Models
+
+\vfill
+- Mechanistic models use **quantitative tools** to *describe* observed patterns.
+\vfill
+- Mechanistic models use a known or hypothesized structure of the underlying system to specify the model form.
+\vfill
+
+
+
+
+## Some Model Examples
+
+\vfill
+
+- What are the important components in a mangrove estuary in southern Florida, and how do they interact?
+  - Davis et al (2005)
+
+\vfill
+
+- What are the advantages and differences among fragmentation, variegation, and contour landscape models?
+  - Fischer, Lindenmeyer, and Fazey (2004)
+
+\vfill
+
+
+
+## Some Model Examples
+
+\vfill
+
+- What predictor variables best explain plant presence/absence and cover in vernal pools?
+  - Ray and Colligne (2014)
+
+\vfill
+
+- How well can models of of connectivity describe plant presence/absence and cover in vernal pools?
+  - Ray and Colligne (2014)
+
+\vfill
+
+- Do black bear responses to resource availability conform the Ideal-Free Distribution Model?
+  - Beckmann and Berger (2003)
+
+\vfill
+
+
+
+## What is a model?
+
+### So...what is a model?
+
+- We can learn a lot about models and model thinking from our canine friend!
+
+\vfill
+
+### In the words of some famous model thinkers:
+
+> "All models are wrong, but some are useful" - George Box
+
+\vfill
+  
+> “Everything should be made as simple as possible, but no simpler.” - Albert Einstein
+
+\vfill
+
+
+
+## References for the example models
+
+
+- Beckmann, J.P., and Berger, J. (2003). Using Black Bears to Test Ideal-Free Distribution Models Experimentally. Journal of Mammalogy 84, 594–606.
+
+- Davis, S.M., Childers, D.L., Lorenz, J.J., Wanless, H.R., and Hopkins, T.E. (2005). A conceptual model of ecological interactions in the mangrove estuaries of the Florida Everglades. Wetlands 25, 832.
+
+- Fischer, J., Lindenmayer, D.B., and Fazey, I. (2004). Appreciating Ecological Complexity: Habitat Contours as a Conceptual Landscape Model. Conservation Biology 18, 1245–1253.
+
+- Ray, C., and Collinge, S.K. (2014). Quantifying the dominance of local control and the sources of regional control in the assembly of a metacommunity. Ecology 95, 2096–2108.
+
+

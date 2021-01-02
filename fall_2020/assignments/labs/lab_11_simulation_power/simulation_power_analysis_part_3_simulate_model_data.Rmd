@@ -1,0 +1,110 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+```
+
+
+<!-- ```{r load_functions, child = find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_data, child = find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_models, child = find_file("model_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_plots, child = find_file("plot_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+
+
+# Build the simulation
+
+## Retrieve the model coefficients
+
+To simulate new data, you need to retrieve the intercept, slope, and standard deviation from the model you fit to the data.  You can use `coefficients()` to extract the intercept and slope values.  Use `str()` to examine the output of `coefficients()` to
+
+```{r get_coefficients_1, ref.label = "get_coefficients_1"}
+```
+
+
+Retrieving the standard deviation parameter is slightly more difficult:
+
+- Create an model summary object using `summary()`.
+- The value you want is stored in an element called `sigma`.  You can extract it using the dollar sign.
+
+```{r get_coefficients_sigma, ref.label = "get_coefficients_sigma"}
+```
+
+Store the intercept, slope, and standard deviation parameters from the model into the following variables:
+
+- `int_obs`
+- `slope_obs`
+- `sd_obs`
+
+
+
+
+## Choose Predictor Values
+
+The first goal of the simulation is to generate some new "data" using our model.
+
+We have several options:
+
+- Allow x (the late successional forest extent) vary randomly between 1 and 100.
+- Use the observed x values.
+- Resample the observed x values.
+
+Any of the approaches are legitimate, so for our purpose, let's keep the original values of x and let brown creeper abundance vary among simulations.
+
+
+
+## Simulate Data
+
+Now that you know the model parameter values and have a strategy for choosing x-values, you can create some sampled Brown Creeper data!
+
+- Try running the following code a few times to view different simulation results:
+
+```{r simulated_data_plot_1, ref.label = "simulated_data_plot_1"}
+```
+
+
+Alternatively, you could plot the observed data first, then add the simulated data to the existing plot:
+
+```{r simulated_data_plot_2, ref.label = "simulated_data_plot_1"}
+```
+
+You might want to run the model a couple of more times to see how variable the results are.
+
+- Is the new pattern of points the same as the original pattern?
+  - Are there any notable discrepancies?
+  - Does the pattern of the simulated points vary much among realizations?
+
+After running the model a few times, do you notice any potential problems with the model?
+
+In other words, does the model reproduce the patterns in the original data perfectly or are there issues with the spread of values or with the generation of illogical values?
+
+One problem with the use of the normal distribution is that it is unbounded on the lower limit.
+
+Thus, negative values are possible.
+
+In this case, because the y-intercept is close to 0, the simulation is likely to produce negative values occasionally when x = 60.
+
+Since brown creeper abundance cannot be negative, this is an undesirable behavior of the model.
+
+- For now, we'll ignore this discrepancy, but you should think about how you could modify `linear_simulator()` to correct the illogical values.

@@ -1,0 +1,246 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Hypothesis Testing 2"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:a
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Key Concepts and Terms
+
+- Hypotheses: null and alternative
+
+
+
+
+## Hypotheses
+
+### Hypothesis testing is central to Frequentist statistics.
+
+What is hypothesis testing?
+
+What is a hypothesis?
+
+
+
+
+## Null Hypotheses
+
+
+
+
+## Alternative Hypotheses
+
+
+
+
+
+
+
+
+
+
+## Bolker's seeds example
+
+Bolker's writing is ... difficult.  Let's decipher the seed predation example.
+
+### The question (as originally posed in the reading): Are there different predation rates on different plants' seeds?
+
+Two example species (the largest and smallest from a set of 8) used in the example:
+- Polyscias fulva (pol: seed mass < 0.01 g)
+- Pseudospondias microcarpa (psd: seed mass ≈ 50 g).
+
+### The null hypothesis: seed predation rates are equal among species
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### Why is this a good null hypothesis?
+
+- It is intuitive: if we find good *evidence* that the predation rates are different, it's reasonable to conclude there is a  *true difference*.
+- It's simple
+- It's easy to test!
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### Where are the opportunities for *improvement*?
+
+- Is it reasonable to expect that predation rates should ever be equal?
+- If we find good evidence that rates are different, what does that tell us?
+
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### If the null hypotheses were true, what would we expect to observe?
+
+### What differences in rates could we expect to observe by chance alone?
+
+
+
+## Bolker's seeds example: exploration of H_0
+
+### Simulations in R
+
+Let's do some simulations to see what we might expect to observe *by chance alone*.
+
+For the simlations, let's use the following parameters
+
+- 200 observation stations
+- Predation rates for the two species are equal: 50%
+- For each station there is a binary outcome: taken or not taken
+
+### This sounds a lot like a binomial distribution problem!
+
+
+
+
+```{r}
+n_simulations = 1000
+n_stations = 200
+pred_rate = 0.5
+
+
+set.seed(12345)
+sim_taken = 
+  data.frame(
+    pol = rbinom(n = n_simulations, size = n_stations, prob = pred_rate),
+    psd = rbinom(n = n_simulations, size = n_stations, prob = pred_rate))
+sim_not_taken = n_stations - sim_taken
+
+
+
+
+sim_taken_rate = sim_taken / sim_not_taken
+hist(apply(sim_taken_rate, 1, FUN = function(x) x[1] / x[2]))
+
+
+head(sim_data)
+```
+
+
+
+```{r}
+
+sim_i = 4
+ft_i = fisher.test(
+  rbind(
+  sim_data[sim_i, ],
+  n_stations - sim_data[sim_i, ]))
+
+ft_i$p.value
+ft_i$conf.int
+ft_i$estimate
+
+
+fisher.test(cbind(c(109, 91), c(105, 95)))
+fisher.test(rbind(c(109, 91), c(105, 95)))
+fisher.test(rbind(c(109, 105), c(91, 95)))
+```
+
+
+```{r}
+
+
+
+
+
+sim_data$pol_not_taken = n_stations - sim_data$pol_taken
+sim_data$psd_not_taken = n_stations - sim_data$psd_taken
+sim_data$pol_rate = sim_data$pol_taken / n_stations
+sim_data$psd_rate = sim_data$psd_taken / n_stations
+
+sim_i = 1
+
+fisher.test(matrix(sim_data[i, ]))
+
+sim_data_i = 
+  matrix(
+    sim_data[sim_i, 1:4],
+    nrow = 2,
+    byrow = TRUE,
+           dimnames = list(
+             pol = c("taken", "not_taken"),
+             psd = c("taken", "not_taken"))
+)
+
+TeaTasting <-
+  matrix(c(3, 1, 1, 3),
+       nrow = 2,
+       dimnames = list(Guess = c("Milk", "Tea"),
+                       Truth = c("Milk", "Tea")))
+
+TeaTasting
+sim_data_i
+
+
+fisher.test(
+  x = factor(rbinom(n_stations, 1, pred_rate), labels = c("taken", "not_taken")),
+factor(rbinom(n_stations, 1, pred_rate), labels = c("taken", "not_taken")))
+
+fisher.test(TeaTasting)
+fisher.test(sim_data_i)
+fisher.test(
+  matrix(sim_data[sim_i, 1:4], nrow = 2, byrow = TRUE)
+)
+head(sim_data)
+
+```
+
+
+
+
+- It is intuitive: if we find good *evidence* that the predation rates are different, it's reasonable to conclude there is a  *true difference*.
+- It's simple
+- It's easy to test!
+
+
+
+
+### The setup: seeds
+
+
+
+The exp
+
+
+
+
+
+
+```{r}
+seed_dat = 
+  data.frame(
+    species   = c("POL", "PSD"),
+    predation = c(   26,    25),
+    no_pred   = c(  184,    76)
+  )
+fisher.test()
+
+
+
+
+```
+

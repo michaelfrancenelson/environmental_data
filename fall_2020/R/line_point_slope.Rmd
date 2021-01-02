@@ -1,0 +1,383 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 04: Uncertainty and Error"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(here)
+require(ggplot2)
+require(cowplot)
+
+source(find_file("norm_density_plot.R"))
+
+# Calculates the value of y for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+
+
+plot_resids = function(x, y, guess_x, guess_y, guess_slope)
+{
+  for (i in 1:n)
+  {
+    segments(
+      x0 = x[i], 
+      y0 = line_point_slope(
+        x = x[i], guess_x, guess_y, guess_slope), 
+      x1 = x[i],
+      y1 = y[i], 
+      col = "red", lwd = 2)
+  }
+}
+
+
+# dat_bird = read.csv(here("data", "bird.sta.csv"))
+# dat_habitat = read.csv(here("data", "hab.sta.csv"))
+# dat_all = merge(dat_bird, dat_habitat)
+
+n = 1000
+
+
+```
+
+
+
+# Learning objectives, technical skills and concepts:
+
+- Random number generation
+- Defining and quantifying error
+- Intro to optimization
+
+
+
+# Probability distributions in R
+
+R has built-in functions to calculate probability density (or mass), cumulative probability, and to generate random numbers sampled from lots of distributions.
+
+We'll focus on:
+
+- Probability functions
+- Cumulative probability functions
+- Generating random deviates
+
+Each common distribution has a set of 4 R functions.  The naming scheme is as follows (using the normal distribution as an example):
+
+- `dnorm()`: the probability density
+- `pnorm()`: the cumulative probability density
+- `qnorm()`: the quantile function
+- `rnorm()`: function to generate random, normally-distributed numbers.
+
+- Probability distributions may have one or more parameters.  You'll need to check out the help entry for the functions for the particular distribution you want to use to see how to specify them.
+
+
+### Exercise: name the distribution function
+
+In the plots below of standard normal curves below (mean = 0, sd = 1), name the functions I used to calculate the:
+
+- Probability density, i.e. the height of the curve at x
+- Cumulative density, i.e. the area under the curve left of x
+
+```{r, echo = FALSE}
+fmt = "height: %1$s\narea: %2$s"
+
+plot_grid(
+  norm_density_plot(-1.96, title_fmt = fmt),
+  norm_density_plot(-1, title_fmt = fmt),
+  norm_density_plot(0, title_fmt = fmt),
+  norm_density_plot(1.96, title_fmt = fmt),
+  nrow = 2
+)
+
+```
+
+<div class="hintborder">
+
+Hint: I used the following values of x: -1.96, -1, 0, 1.96.
+
+- You can test your answers with these values to check that you have the right functions.
+</div>
+
+### Plotting a PDF curve
+
+Study the following example of how to create a basic plot of a normal curve:
+
+```{r}
+# Generate a vector of x-values
+x = seq(-3, 3, length.out = 1000)
+y = dnorm(x)
+
+plot(x, y, main = "Normal PDF", type = "l")
+abline(h = 0)
+```
+
+<div class="info">
+Things to consider:
+
+- How did I create the y-values (the density)?
+- What are the *mean* and *standard deviation* of the distribution that I used?
+- What arguments could I use to change those values?
+- How did I plot a horizontal line at y = 0?
+</div>
+
+
+
+
+# Sampling from a distribution
+
+## Random deviates functions
+
+
+
+
+
+# Measuring error
+
+## Let's build a function to calculate residuals!
+
+> What's a residual?
+
+- A residual is the difference between a *predicted value* and the *observed value*.
+
+
+Here's some points and a line of *predicted values* from a deterministic model I created.
+
+- I guessed the slope and intercept parameters for the linear function.
+
+
+```{r}
+set.seed(123)
+n = 17
+slope = 0.7
+intcp = 0.2
+
+guess_x = 6
+guess_y = 4
+guess_slope = 0.72
+
+x = runif(n = n, min = 1, max = 10)
+y = rnorm(n = n, mean = slope * x + intcp)
+
+plot(x, y, pch = 16)
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+
+```
+
+
+> The residuals are the difference between the predicted and observed values:
+
+```{r echo = FALSE}
+plot(x, y, pch = 16)
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+plot_resids(x, y, guess_x, guess_y, guess_slope)
+
+```
+
+
+
+Remember the function I built to find a y-value given a point and slope:
+
+```{r}
+# Calculates the value of y for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+
+### Create the data
+
+If we visually estimate a linear function to create a deterministic model to fit a set of points, we can use it to calculate **predicted values**.
+
+
+We can use some *simulated data* as an example.  Simulated data can be very helpful for learning because it is well-behaved, unlike real messy data.
+
+
+- Create a `data.frame` with some random values:
+
+```{r}
+n_pts = 10
+x_min = 1
+x_max = 10
+x = runif(n = n_pts, min = x_min, max = x_max)
+
+dat = data.frame(x = x, y_observed = rnorm(n_pts))
+
+plot(y_observed ~ x, data = dat, pch = 8)
+
+```
+
+
+
+Each time run the code, you'll get different numbers.  Why?
+
+- Try running it several times to see what happens.  You can try different numbers of points and different point shapes.
+
+We can force R to generate the same sequence using the `set.seed()` function before we use the random-number generator.
+
+Try using `set.seed(123)` before running the code above.  Run it twice and see what happens.
+
+Try using a different seed number.
+
+
+
+### Fit a linear determinsitic model
+
+Use the `line_point_slope()` to estimate a linear model for the simulated points.
+
+- Hint: you will probably want to use `set.seed()` so that you can build the same "random" points while you're working on this.
+
+<div class="hintborder">
+Be sure to save the values of the point coordinates and slope of your visually-estimated linear model into variables so you can re-use and change them easily later on.
+</div>
+
+
+Here's my guess:
+
+
+```{r}
+n_pts = 10
+x_min = 1
+x_max = 10
+x = runif(n = n_pts, min = x_min, max = x_max)
+
+dat = data.frame(x = x, y_observed = rnorm(n_pts))
+
+plot(y_observed ~ x, data = dat, pch = 8)
+
+guess_x = 6
+guess_y = 0
+guess_slope = 0.1
+
+plot(y_observed ~ x, data = dat, pch = 8)
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+
+```
+
+
+### Add predicted values
+
+
+I can calculate the predicted y values based on my estimated model parameters:
+
+```{r}
+line_point_slope(dat$x, guess_x, guess_y, guess_slope)
+```
+
+
+
+
+I'll add these as a column called `y_predicted` to `dat`.  I'll let you figure out the code to add the column.
+
+```{r echo = FALSE}
+dat$y_predicted = line_point_slope(dat$x, guess_x, guess_y, guess_slope)
+
+head(dat)
+```
+
+
+### Calcualte the residuals
+
+Now I can finally calculate the residuals!
+
+> The residuals are the difference between the predicted and observed values...
+
+I'll add them as a column called `resids`.  I'll let you figure out the code.
+
+```{r echo = FALSE}
+dat$resids = dat$y_observed - dat$y_predicted
+print(head(dat))
+```
+
+What happens when you calculate the sum of the `resids` column?
+
+I got the following:
+
+```{r include=FALSE}
+sum(dat$resids)
+```
+
+
+Notice that the negative and positive residuals partially cancel out.  How would I calculate the sum of the *absolute values* of the residuals?
+
+<div class="hintborder">
+- Hint: check out the `abs()` function.
+</div>
+
+
+- Challenge question: Should a good model fit have a low or high sum of residuals?
+
+
+
+
+# Lab Questions
+
+```{r results='hide', echo=FALSE}
+question_source_files = find_file("Q", search_path = find_file("lab_04", directory = TRUE), return_all = TRUE)
+tmp = add_moodle_quiz_questions(
+  question_source_files, 
+  include_solution = FALSE, 
+  include_metadata = FALSE)
+```
+
+```{r child=tmp}
+```
+```{r echo=FALSE, results = 'hide'}
+file.remove(tmp)
+```
+
+
+
+
+<!-- ```{r results = 'hide', echo = FALSE, include=FALSE} -->
+<!-- tmp = build_moodle_web_questions( -->
+<!--   assignment_filename = "lab_04_uncertainty_and_error.Rmd", -->
+<!--   search_path = here::here("assignments", "eco_634"), -->
+<!--   include_header = FALSE, -->
+<!--   write_html = FALSE, -->
+<!--   cat_results = FALSE, -->
+<!--   write_tmp = TRUE) -->
+<!-- ``` -->
+
+<!-- ```{r child=tmp, echo=FALSE, include=FALSE} -->
+<!-- ``` -->
+<!-- ```{r echo=FALSE, results = 'hide'} -->
+<!-- file.remove(tmp) -->
+<!-- ``` -->
+
+
+

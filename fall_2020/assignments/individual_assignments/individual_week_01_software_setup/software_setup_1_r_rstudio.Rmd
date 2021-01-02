@@ -1,0 +1,105 @@
+---
+title: "ECo 602/634 - Analysis of Environmental Data"
+subtitle: "Setting up R and RStudio"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+```
+
+
+# Installing R and RStudio on your computer
+
+If you're already a whiz at installing software, feel free to install R and RStudio on your own and jump to the assignment questions.
+
+R is here: https://cran.r-project.org/
+RStudio is here: https://rstudio.com/
+
+
+# Objectives
+
+- Successfully install R on your computer.
+- Successfully install RStudio on your computer.
+
+
+# Instructions
+
+To complete this assignment you'll need to install both R and RStudio on your computer.
+
+Rather than reinventing a wheel that's been invented successfully by many others I'll direct you to some resources with more in-depth instructions for setting up the software:
+
+## Installation Resources {.tabset}
+
+### Text-based tutorials
+
+
+<div class="blueborder">
+#### rstudio-education
+
+RStudio Education has some straightforward instructions here:
+
+https://rstudio-education.github.io/hopr/starting.html
+</div>
+
+<hline>
+
+
+<div class="blueborder">
+#### YaRrr! The Pirate's Guide to R
+
+YaRrr is a great free and open-source R learning resource.  Check out the instructions for installing R and RStudio here
+
+- https://bookdown.org/ndphillips/YaRrr/started.html
+</div>
+
+
+### YouTube tutorials
+<br>
+If you like video tutorials check out these resources:
+<br>
+<br>
+
+
+
+<div class="blueborder">
+#### Xperimental Learning
+
+This is a detailed and gently-paced tutorial
+
+- https://www.youtube.com/watch?reload=9&v=9-RrkJQQYqY
+
+</div>
+
+
+# Self-Assessment
+
+Once you've successfully set up the software, you should be able to open the RStudio program and see something like this:
+
+
+
+
+```{r echo=FALSE, warning=FALSE, results='asis'}
+build_popup_figure("rstudio_running.PNG", thumb_width = "75%", recursive = TRUE)
+# build_popup_figure("rstudio_running.PNG", recursive = TRUE)
+# build_popup_figure("rstudio_running.PNG", thumb_width = 75,recursive = TRUE)
+# build_popup_figure("rstudio_running.PNG", thumb_width = "75%",recursive = TRUE)
+# build_popup_figure("rstudio_running.PNG", thumb_width = "75vw",recursive = TRUE)
+
+```
+
+<!-- ![RStudio session](`r here::here("images", "screenshots", "rstudio_running.PNG")`) -->
+
+
+<div class="info">NOTE: Your RStudio session may have slightly different fonts, styling, colors, etc. depending on your operating system and operating system themes.</div>

@@ -1,0 +1,269 @@
+---
+title: "Resampling: Bootstrap and Monte Carlo Methods"
+subtitle: ""
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \usepackage{animate}
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+require(palmerpenguins)
+
+```
+
+
+
+## What is resampling?
+
+Resampling methods create new samples from our existing sample.
+
+- Resampling *with replacement* allows us to create many "new" data sets from our original that we can analyze.
+- It sounds like cheating, but….
+  - Remember our random sampling scheme?
+  - Nonparametric inference can’t help us if we use a poor sampling design.
+
+
+
+## What is resampling good for?
+
+- Nonparametric inference
+
+- Null and alternative hypotheses
+  - Monte Carlo randomization helps us characterize the null hypothesis.
+  - Bootstrapping is like the alternative hypothesis.
+
+- Confidence intervals
+  - Especially helpful when we don't want to claim the population follows a theoretical distribution
+
+
+
+
+
+## Resampling x and y
+
+- Bootstrapping: samples entire rows of the data, preserves structure
+  - Keeps $x_i$ and $y_i$ together.
+  - Keeps all of the attributes of a *sampling unit* together
+  - Preserves associations among data columns (if they exist!)
+
+- Monte Carlo resampling: Sample predictor/response variables separately.
+  - Samples each column of the data separately.
+  - Can pair different x, and y values: e.g. $x_2$ and $y_53$.
+  - Jumbles attributes among *sampling units*.
+  - Destroys the associations among columns, removes the structure from data
+
+
+
+
+## Bootstrap Resampling
+
+Simple concept: randomly select **entire rows** of data *with replacement* from the original data set.
+
+The new data sets may have some repeated observations, and some may be left out.
+
+- There are many possible resamplings of the data.
+  - Many will resemble the original data.
+  - Due to sampling error, some resamplings will be very different than the original.
+    - Imagine rolling a 6 on a die 20 times out of 25.
+
+
+
+## Bootstrapping uses
+
+- Estimate standard errors.
+  - Remember SE is a parameter of the sampling distribution of a statistic, not the population distribution.
+- Estimate confidence intervals.
+  - Helpful with small samples when we don't want to, or can't, assume a theoretical distribution of the population and don't want to rely on the Central Limit Theorem.
+ - Recall the Central Limit Theorem doesn't always apply with less than 30 observations.
+ 
+
+
+
+## Bootstrap pitfalls
+
+Why don't we always use bootstrapping (or other resampling techniques), instead of estimating parameters ?
+
+- Bootstrap sampling distributions tend to be too narrow: narrowness bias.
+- Bootstrap distributions won't fix nonrepresentative or too-small samples.
+- Bootstrap estimates of the median can be problematic.
+- May be computationally intensive.
+
+
+
+
+## Bootstrap Advantages
+
+- Conceptually simple, easy to implement, may be more intuitive than formulas for calculating standard errors:
+  - SE of the mean calculation is simple, but SEs of other statistics are much more complicated.
+  - Formulas for more than one predictor or response can be very complicated!
+
+- Can be used to illustrate concrete examples of theoretical principles:
+  - Bootstrapping is a good way to show how an empirical distribution compares to the theoretical.
+
+
+
+## Confidence Intervals
+
+### Parametric slope/intercept CIs
+
+- If we use parametric inference, we can often* find a closed form solution for parameter estimates and standard errors.
+
+- However... often cannot find analytical solutions for the models we actually want to use!
+
+- Bootstrapping can simulate a standard error for the alternative hypothesis.
+- MC resampling can simulate a standard error for the null.
+
+
+
+## Monte Carlo Randomization
+
+### Resampling each column of the data separately.
+
+- Creates new observations: combinations of x and y that weren't in the observed data.
+  - Bill width of penguin #1 paired with bill depth of penguin #37.
+- Breaks associations within sampling units:
+  - The flipper length of a large penguin might be paired with the body mass of a small penguin.
+
+
+
+
+## Monte Carlo Randomization and the Null Hypothesis
+
+### The null hypothesis is that predictors and responses vary independently.
+
+- There is no *coordinated* variation between x and y.
+  - Large values of x are equally likely to be paired with large or small values of y.
+
+Monte Carlo randomization destroys within-row associations thereby simulating the null.
+
+- MC resampled data are what we could observe if the null hypothesis were true.
+  - But remember that sampling error can result in unrepresentative samples in which strong associations are estimated by chance alone.
+
+
+
+
+## Resampling Examples: The Penguin Data - Categorical
+
+Consider penguin species, a categorical predictor, and flipper length, a continuous response:
+
+What are null and alternative hypotheses?
+
+- Null: there is no association between penguin species and flipper size.
+  - Flipper size does not vary among species.
+- Alternative: Flipper size differs between *at least* one pair of penguin species.
+  - If we have more than 2 species, we might not expect all species to be different.
+
+
+
+
+## Resampling Examples: The Penguin Data - Categorical
+
+### The flipper lengths, segregated by species:
+
+```{r penguin_boxplots, echo=FALSE, fig.height=5.5}
+require(palmerpenguins)
+boxplot(flipper_length_mm ~ species, data = penguins, xlab = "Penguin Species", ylab = "Flipper Length (mm)")
+```
+
+
+
+
+## Penguin Flippers: Monte Carlo Randomization
+
+It looks like Gentoo penguins have long flippers, while Adeline and Chinstrap pengiuns have shorter flippers.
+
+- Could the apparent differences be due to sampling error?
+
+We could perform some MC resampling to see how often we observe a pattern like what we see in the original data.
+
+
+
+
+## Penguin Flippers: Monte Carlo Randomization
+
+Let's randomly assign species to flipper lengths:
+
+
+```{r mc_boxplots_1, echo=FALSE, fig.height=5}
+set.seed(13)
+boxplot(flipper_length_mm ~ sample(species), data = penguins, xlab = "Penguin Species", ylab = "Flipper Length (mm)")
+```
+
+The medians are still slightly different, but there's more overlap.  Now it looks like Chinstrap penguins are the smallest.
+
+
+
+## Penguin Flippers: Monte Carlo Randomization
+
+Let's look at some more MCMC randomizations:
+
+
+```{r mc_boxplots_many, echo=FALSE, fig.height=5}
+par(mfrow = c(4, 5), mar = c(0, 0, 0, 0))
+for (i in 1:20)
+boxplot(flipper_length_mm ~ sample(species), data = penguins, xlab = "", ylab = "", ann = FALSE, axes = FALSE)
+```
+
+There is some noise, but the all look pretty same-ish.  It's like collecting many samples if the null hypothesis were true!
+
+
+
+
+## Bootstrap Resampling: Resampling the Alternative Hypothesis
+
+- We've seen what the data look like when we randomly relabel the flipper lengths with species.
+  - This is a good representation of a null hypothesis.
+  
+Alternative hypothesis: flipper lengths for each species are drawn from *different* distributions.
+
+- Bootstrapping resamples entire rows: it's analogous to taking multiple samples from the population.
+- If the null hypothesis were true, bootstrapping results should be indistinguishable from the MCMC results.
+
+
+
+
+## Penguin Flippers: Bootstrap Randomization
+
+Let's randomly sample some rows of data
+
+```{r bootstrap_boxplots_1, echo=FALSE, fig.height=5}
+set.seed(13)
+boxplot(flipper_length_mm ~ species, data = penguins[sample(nrow(penguins), replace = TRUE), ], xlab = "Penguin Species", ylab = "Flipper Length (mm)", axes = FALSE)
+```
+
+It looks pretty similar to the original data.
+
+
+
+
+## Penguin Flippers: Bootstrap Randomization
+
+Let's look at some more bootstrap randomizations:
+
+
+```{r bootstrap_boxplots_many, echo=FALSE, fig.height=5}
+par(mfrow = c(4, 5), mar = c(0, 0, 0, 0))
+for (i in 1:20)
+boxplot(flipper_length_mm ~ species, data = penguins[sample(nrow(penguins), replace = TRUE), ], xlab = "", ylab = "", ann = FALSE, axes = FALSE)
+```
+
+There is some noise, but the all look pretty same-ish.  It's like collecting many samples if there were the null hypothesis were false!
+
+
+

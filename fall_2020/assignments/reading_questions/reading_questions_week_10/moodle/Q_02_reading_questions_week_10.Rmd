@@ -1,0 +1,81 @@
+---
+title: "Base Case"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructions">
+
+Consider an experiment looking at plant biomass response to water treatments.
+
+- The three water level treatments are: "low", "med", and "high". 
+- The response is plant biomass in grams after 7 weeks of growth.
+
+|                 | Estimate| Std. Error| t value| Pr(>&#124;t&#124;)|
+|:----------------|--------:|----------:|-------:|------------------:|
+|(Intercept)      | 2.4     |       2.19|  98.371|              0.001|
+|waterMed         | 1.3     |       5.12|   0.480|              0.231|
+|waterHigh        | 13.6    |       3.48|  24.495|              0.001|
+
+</div>
+
+
+<div class="questions">
+
+### Q 1 pt (short answer)
+
+- What is the *base case* for water treatment?
+
+</div>
+
+
+
+
+
+Solution
+========
+
+### Grading Guide
+
+Low is the base case.
+
+From the model coefficient table you can see that "low" is missing.
+
+
+Meta-information
+================
+
+extitle: Base Case
+
+extype: string
+exsolution: nil
+
+exname: week_10_reading_questions
+exsection: week_10_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+
+expoints: 1

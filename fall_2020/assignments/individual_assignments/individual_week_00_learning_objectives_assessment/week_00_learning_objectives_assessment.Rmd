@@ -1,0 +1,52 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Learning Objectives Assessment"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    # toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Learning Objectives
+
+- Create a snapshot of your understanding of course materials at the beginning of the semester.
+
+
+# Introduction
+
+It's helpful for both students and instructors to define learning objectives at the beginning of a course and asses the outcomes at the end.
+
+This set of questions will create a snapshot now that we can revisit at the end of the course.
+
+
+# Instructions
+
+This assignment is meant to take an inventory of your understand before working through the course.
+
+It is very important that you answer **honestly** and do not try to look for outside resources to try to find *the right answers*.
+
+Don't worry, there are questions and concepts in this inventory that I don't expect you to be familiar with!
+
+For those questions, you should state that you don't know the answer and move on.
+
+
+
+# Grading
+
+Grading of this assessment is by completion only.  You will receive full credit when you provide answers to all of the questions.
+
+Grading is not based on right or wrong answers!
+

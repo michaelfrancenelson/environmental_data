@@ -1,0 +1,56 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitie: "****Deck Title Here****"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Function to calculate the logistic parameter a given the slope and midpoint
+get_logistic_param_a = function(slope, midpoint)
+{
+  b = slope / 4
+  return (-midpoint * (slope / 4))
+}
+
+# Function to calculate the logistic parameter b given the slope
+get_logistic_param_b = function(slope)
+{
+  return (slope / 4)
+}
+
+
+# Calculate the value of the logistic function at x, given the parameters a and b.
+logistic = function(x, a, b)
+{
+  val = exp(a + b * x)
+  return(val / (1 + val))
+}
+
+# Calculate the value of the logistic function at x, given a slope and midpoint.
+logistic_midpoint_slope = function(x, midpoint, slope)
+{
+  b = get_logistic_param_b(slope)
+  a = get_logistic_param_a(slope, midpoint)
+  return(logistic(x, a, b))
+}
+
+```
+

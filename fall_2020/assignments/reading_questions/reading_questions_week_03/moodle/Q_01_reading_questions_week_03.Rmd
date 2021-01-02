@@ -1,0 +1,66 @@
+---
+title: "Week 02 reading question 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="blackborder">
+Consider the following types of plots described in the McGarigal and Zuur readings:
+
+<div class="grayborder">
+- Histogram
+- Scatterplot
+- Cleveland dotplot
+- Boxplot
+- QQ plot
+- coplot
+</div>
+</div>
+
+<br>
+
+- Q1 (1 pt): Which of the plot types show every data point?
+- Q2 (1 pt): Which of the plot types show aggregated or summarized data?
+
+
+Solution
+========
+
+- Aggregated/summarized:
+  - histogram
+  - boxplot
+- All data:
+  - scatterplot
+  - dotplot
+  - qqplot
+  - coplot (but see note)
+  
+NOTE: coplots show all data points, but they are aggregated by a nominal or continuous variable.   If a student includes coplot in the aggregated/summarized list they should explain the aggregation component of a coplot.
+
+
+
+Meta-information
+================
+extitle: Week 02 reading question 1
+extype: string
+exsolution: nil
+exname: Week 3 reading questions
+exsection: Week 3 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 2

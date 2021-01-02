@@ -1,0 +1,197 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Frequentist Confidence Intervals"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+```
+
+
+
+## Note on terminology: frequentist *confidence* and *significance*
+
+![](`r find_file("simulated_conf_intervals_wide_1800_300_01.png")`)
+
+- Constructing a 95% confidence interval does **not** mean you are 95% sure your interval contains the true value!
+  - It either does or does not, but you can't know.
+- "If I were to repeat the experiment many times, approximately 95% of the CIs I construct would contain the true population parameter"
+
+![](`r find_file("simulated_conf_intervals_wide_1800_300_02.png")`)
+
+
+
+
+
+## Sample standard deviation
+
+### Sample Standard Deviation: a measure of the spread of data
+- "The square root of the average squared deviation from the mean."
+  - That's a lot. We'll temporarily get rid of the outer square root to simplify the concept.
+
+- We'll look at variances first.  Standard deviation is just the square root.
+
+- Population variance: $var(X) = \sigma^2 = \frac{\sum \left(x_i - \mu \right)^2}{N}$
+- Sample variance: $var(X) = s_x^2 = \frac{\sum \left(x_i - \bar{x} \right)^2}{n - 1}$
+
+
+
+
+## Sample variance
+
+Let's dissect the formula for some insight
+
+$var(X) = s_x^2 = \frac{\sum \left(x_i - \bar{x} \right)^2}{n - 1}$
+
+We recognize some parts:
+
+- A residual: $x_i - \bar{x}$ and squared residual $\left( x_i - \bar{x} \right) ^ 2$
+  - Residual: difference between an observed value and an expected value
+  - Why do we square the residuals?
+- Sum of squared residuals: $\sum \left( x_i - \bar{x} \right) ^ 2$
+- Sample size: $n-1$
+
+
+
+
+## Sample variance
+
+Let's dissect the formula for some insight
+
+$var(X) = s_x^2 = \frac{\sum \left(x_i - \bar{x} \right)^2}{n - 1}$
+
+In words:
+
+- A residual: the difference between what we observe and what our model predicts.
+- Squared residual.  Squaring results in:
+  - All values become positive.
+  - Large residuals contribute a **lot** more to the sum than small values.
+
+
+
+## Sample variance
+
+Let's dissect the formula for some insight
+
+$var(X) = s_x^2 = \frac{\sum \left(x_i - \bar{x} \right)^2}{n - 1}$
+
+- Large residuals contribute *much* more to the sum than small residuals.
+  - Large residuals are highly **influential**, or highly **penalized** when we use sums of squares for optimization.
+
+- Normalizing by the population size:
+  - Variance can be interpreted as *a measure of* how much observed values differ from expected values.
+
+
+
+
+## Sample variance: normalizing by the sample size
+
+### Normalization
+
+Sum of residuals and population size: The sum of the squared residuals is *normalized* by the population size.
+
+- It's like the *average* squared residual.
+
+This may seem unimportant, but *normalizing* is key to gaining insight into the sampling distribution.
+
+- By normalizing the sum of squared residuals by the sample size, it means that as sample size grows, the sample variance *stabilizes* around a fixed value (hopefully the population value).
+
+
+
+
+## Standard deviation: It's just the square root of variance
+
+- Why transform by the square root function?
+  - What are the units of *variance*?
+- Standard deviation has a very nice interpretation for a *Standard Normal* distribution: 68% of observations are within 1 sd from the mean, 95% within 2 sd:
+
+![](`r find_file("standard_normal_standard_deviation_interpretation.png")`)
+
+
+
+
+
+
+
+## The sampling distribution
+
+### The sampling distribution is crucial to Frequentist inference
+
+- Confidence intervals are cool and all, but the sampling distribution does all the work.
+
+### The standard error is the key to the sampling distribution
+
+- The standard error describes how we feel about our estimate of the mean (or another *sample statistic*).
+
+
+
+
+## Standard error vs sample standard deviation
+
+- Standard deviation describes how we feel about the **individuals in the population or sample** we have collected.
+- Standard error describes how we feel about the **population of possible samples** we could collect.
+
+- This is not a simple distinction.
+
+
+
+## Population, sample, and sampling distributions
+
+I hope that this graphic can help build some intuition:
+
+![](`r find_file("population_sample_sampling_distributions.png")`)
+
+
+
+## Population, sample, and sampling distributions
+
+![](`r find_file("population_sample_sampling_distributions.png")`){width=10cm}
+
+- Note: how did the population and sample distributions differ from one another?
+- Note: how did the population/sample distributions differ from the sampling dists.?
+
+
+
+
+
+## Calculating the intervals... is much less important than understanding what they mean
+
+### Software will almost always do this for us.
+
+When we focus on constructing the intervals themselves, we lose focus of the 
+*much* more important *sampling distribution* context.
+
+### Remember our standard normal:
+
+![](`r find_file("standard_normal_standard_deviation_interpretation.png")`){width=9cm}
+
+
+
+## Calculating the intervals
+
+![](`r find_file("standard_normal_standard_deviation_interpretation.png")`){width=9cm}
+
+- Per the Central Limit Theorem, we can consider the sampling distribution to be normal
+  - If needed, review details in the previous lecture/slides on standard errors and sampling distributions.
+- We can use the nice properties of the standard normal to calculate CIs.
+

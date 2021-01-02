@@ -1,0 +1,48 @@
+---
+title: "Choice with single correct answer"
+---
+
+
+
+
+Question
+========
+
+Choose the single correct answer
+
+
+Answerlist
+----------
+* correct
+* incorrect 1
+* incorrect 2
+* incorrect 3
+* incorrect 4
+
+
+
+
+Solution
+========
+
+Did you get it right?
+
+
+Answerlist
+----------
+* correct ans
+* wrong 1
+* wrong 2
+* wrong 3
+* wrong 4
+
+
+
+Meta-information
+================
+extitle: Single Correct Choice
+extype: schoice
+exname: exam name
+exsection: section name
+exsolution: 10000
+exshuffle: 5

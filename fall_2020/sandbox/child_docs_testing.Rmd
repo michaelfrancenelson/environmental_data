@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_document
+---
+
+
+
+```{r}
+require(rmd.utils)
+options(knitr.duplicate.label = "allow")
+```
+
+# Plain Child
+
+```{r child = find_file("functions_lab_11.Rmd", exact_match = TRUE)}
+```
+
+# Child with echo = TRUE
+
+```{r child = find_file("functions_lab_11.Rmd", exact_match = TRUE), echo = TRUE, eval=TRUE}
+```
+
+
+# Child with echo = FALSE
+
+```{r child = find_file("functions_lab_11.Rmd", exact_match = TRUE), echo = FALSE, eval=TRUE}
+```
+

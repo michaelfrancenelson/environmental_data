@@ -1,0 +1,349 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Group 1: General Linear Models"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+emphasis_color = "red"
+require(ggplot2)
+require(cowplot)
+require(palmerpenguins)
+```
+
+
+
+
+## Analysis of Variance and Linear Models
+
+I claim that all of the Group 1 methods are really linear regressions.
+
+- But... how can we draw a line on an x-y plane when the x-axis is a categorical variable?
+
+
+
+## Dummy Variables
+
+Recall the basic regression equation:
+
+$y = \alpha + \beta x + \epsilon$
+
+Penguin sex
+
+- Factor with two levels: female, male.
+- We could represent these levels as female = 0, male = 1 (or vice versa.)
+
+
+
+## Dummy Variables
+
+A deterministic function is a *model of the means*.  With a model of penguin body mass as a function of sex:
+
+$y = \alpha + \beta x + \epsilon$
+
+We propose to explain body mass by sex only.
+
+```{r, fig.height = 4, fig.width = 10, echo =FALSE}
+boxplot(body_mass_g ~ sex, data = penguins)
+```
+
+
+
+## Dummy Variables: Sex as Numeric
+
+We could relabel sex as a numeric variable:
+
+```{r plot_boxplot_points, fig.height = 7.5, fig.width = 10, echo =FALSE}
+fit_sex = lm(body_mass_g ~ sex, data = penguins)
+
+par(mfrow = c(2, 1))
+boxplot(body_mass_g ~ sex, data = penguins, names = c(0, 1))
+plot(
+  y = penguins$body_mass_g, 
+  x = jitter(as.numeric(factor(penguins$sex)) - 1, 0.2),
+  xlab = "sex",
+  pch = 16, cex = 0.7, ylab = "body mass",
+  xlim = c(-0.5, 1.5))
+```
+
+```{r echo = FALSE}
+dat_p = data.frame(penguins[complete.cases(penguins), ])
+dat_p$sex_n = as.numeric(factor(dat_p$sex)) - 1
+knitr::kable(head(dat_p[c("body_mass_g", "sex_n", "sex")], 4))
+```
+
+
+## Dummy Variables
+
+We could fit a linear model to that!
+
+```{r}
+fit_sex = lm(body_mass_g ~ sex, data = penguins)
+```
+
+```{r echo = FALSE}
+knitr::kable(coef(summary(fit_sex)))
+```
+```{r plot_model_fit, fig.height = 3.5, fig.width = 10, echo = FALSE}
+plot(
+  y = penguins$body_mass_g, 
+  x = jitter(as.numeric(factor(penguins$sex)) - 1, 0.2),
+  xlab = "sex",
+  pch = 16, cex = 0.7, ylab = "body mass",
+  xlim = c(-0.5, 1.5))
+abline(fit_sex, col = 2, lwd = 2)
+
+```
+
+
+## Model Design Matrix
+
+We could now think of the data represented as:
+
+```{r echo = FALSE}
+dat_p = data.frame(penguins[complete.cases(penguins), ])
+dat_p$sex_n = as.numeric(factor(dat_p$sex)) - 1
+knitr::kable(head(dat_p[c("body_mass_g", "sex_n", "sex")]))
+```
+
+
+## Model Design Matrix
+
+Recall the *matrix/vector* form of the regression equation:
+
+$\textbf{Y}= \alpha + \beta \textbf{X} + \epsilon$
+
+Using linear algebra, i.e. working with matrices and vectors, we can use the matrix/vector form to calculate all of the predicted values at once.
+
+The matrix of predictor variables looks like this:
+```{r echo = FALSE}
+hhh = head(model.matrix(fit_sex), 4)
+rownames(hhh) = paste("penguin", 1:4)
+knitr::kable(hhh)
+```
+
+
+## Model Design Matrix and Dummy Variables
+
+Now we can do matrix-vector multiplication using a vector of the model coefficients and the matrix/vector form to multiply the model matrix directly:
+
+
+
+
+
+## Factor Levels
+
+What if a factor variable has more than 2 levels?
+
+- We could use 0 and 1 to represent a two-level factor.
+- Categorical scale: "interval" between levels is not consistent.
+  - Is the "distance" between Adelie and Gentoo twich the the "distance" between Adelie and Chinstrap?
+  
+```{r fig.height = 4, echo = FALSE}
+boxplot(body_mass_g ~ species, data = penguins)
+```
+
+
+
+## Factor Levels
+
+For n-level factors, we have to create n-1 dummy variables.
+
+- Each dummy variable can only take on values of 0 or 1.
+- When the factor level is the **base case**, all dummy variables have value 0.
+
+
+```{r sex_design_matrix, echo = FALSE}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+set.seed(123)
+hhh = head(model.matrix(fit_species)[sample(1:(nrow(penguins) - 10)), ], 6)
+
+rownames(hhh) = paste("penguin", 1:6)
+knitr::kable(hhh)
+```
+
+
+## Dummy Variables and Model Coefficients
+
+The coefficients for dummy variables are showin in the model coefficient table:
+
+```{r , eval = FALSE}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+summary(fit_species)
+```
+```{r echo = FALSE}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+
+kab_fit_species = knitr::kable(coef(summary(fit_species)), digits = 3)
+kab_fit_species
+```
+
+
+
+
+## Dummy Variables and ANOVA
+
+Since the dummy variables all *belong* to a single predictor variable, they collapse to a single line in the ANOVA table
+
+```{r eval = FALSE}
+anova(fit_species)
+```
+
+```{r echo = FALSE}
+knitr::kable(anova(fit_species))
+```
+
+
+
+
+
+## Interactions
+
+```{r}
+bb = boxplot(body_mass_g ~ sex * species, data = penguins, las = 2, xlab = "", plot = FALSE)
+par(mar = c(6, 4, 1, 1))
+boxplot(body_mass_g ~ sex * species, data = penguins, las = 2, xlab = "", names = gsub("\\.", "\n", bb$names))
+```
+
+
+
+## Interactions
+
+Consider two models:
+
+Model 1 - body mass predicted by sex and species
+Model 2 - body mass predicted by the *interaction* between sex and species
+
+In R:
+```{r}
+fit_1 = lm(body_mass_g ~ sex + species, data = penguins)
+fit_2 = lm(body_mass_g ~ sex * species, data = penguins)
+```
+
+
+
+## Interactions: Model 1
+
+What does model 1 propose?
+
+1. A *species* effect: each species has a has a slope that defines the difference between the base case and the species.
+2. A *sex* effect: There is a difference between the base case (female) and the male sex.
+
+How are species and sex effects related?
+
+- The *species* effect is the same within a sex.
+- The *sex* effect is the same within a species.
+
+
+## Interactions: Model 1
+
+```{r, echo = FALSE}
+fff = knitr::kable(coef(summary(fit_1)), digits = 3)
+fff
+```
+
+- Male penguins are always 668 grams heavier than females, regardless of species.
+- Gentoo penguins are always 1378 grams heavier than Adelie penguins, regardless of sex.
+
+
+
+## Interactions: Model 1
+
+Does the model 1 structure make sense?  We can assess graphically, grouped by species:
+
+- Males are always 668 grams heavier.
+
+```{r echo = FALSE, fig.height = 5}
+par(mar = c(6, 4, 1, 1))
+boxplot(body_mass_g ~ sex * species, data = penguins, las = 2, xlab = "", names = gsub("\\.", "\n", bb$names))
+```
+
+## Interactions: Model 2
+
+What does model 2 propose?
+
+Main Effects
+
+1. A *species* effect: each species has a has a slope that defines the difference between the base case and the species.
+2. A *sex* effect: There is a difference between the base case (female) and the male sex.
+
+Interaction Effects
+
+- The *species* and *sex* effects might not be independent:
+  - The difference between sexes can be different for each species.
+  - The differences among species can be different for each sex.
+  
+
+
+## Interactions: Model 2
+
+The model now has *interaction* slope coefficients:
+
+```{r, echo = FALSE}
+fff = knitr::kable(coef(summary(fit_2)), digits = 3)
+fff
+```
+
+- species/Gentoo interaction is negative: The difference between sexes is larger for Gentoo penguins
+- species/Chinstrap interaction is negative: The difference between sexes is smaller for Chinstrap penguins
+
+
+## Model 2
+
+We can see the interactions graphically:
+
+```{r echo = FALSE, fig.height = 5}
+par(mar = c(6, 4, 1, 1))
+boxplot(body_mass_g ~ sex * species, data = penguins, las = 2, xlab = "", names = gsub("\\.", "\n", bb$names))
+```
+
+
+## Interactions: ANOVA Tables
+
+Compare the ANOVA tables:
+
+```{r echo = FALSE}
+knitr::kable(anova(fit_1))
+knitr::kable(anova(fit_2), digits = 2)
+```
+
+## Interactive Model Matrix
+
+\tiny
+```{r}
+head(model.matrix(fit_2))
+```
+
+## Interactions
+
+You can think of interactions in may ways, inclulding:
+
+- Inhibiting
+- Facilitating
+- Synergistic
+- Adjusting
+
+Interactions are easiest to understand with factors, but they also work with continuous predictors.
+

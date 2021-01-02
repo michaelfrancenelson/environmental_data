@@ -1,0 +1,80 @@
+---
+title: "one-sample t-test"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="instructionsborder">
+
+### Instructions
+
+Conduct a one-sample t-test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.  
+
+- Review the assignment walkthrough if needed.
+
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 1 pt (short answer)
+
+- State the null hypothesis of the test, in plain nontechnical English.
+
+### Q2 1 pt (R code)
+
+- Paste the code you used to conduct the t-test.
+  - Hint: your answer should only be a single line of code.
+
+
+</div>
+
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r reuslts='hold'}
+catrate = read.csv(here("data", "catrate.csv"))
+t.test(catrate$cat.rate, mu = 2/7)
+```
+
+
+
+Meta-information
+================
+extitle: one-sample t-test
+
+extype: string
+
+exsolution: nil
+
+expoints: 2
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15

@@ -1,0 +1,73 @@
+---
+title: "Library of Babel: library size"
+output:  
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+```{r, echo = FALSE, results = "hide"}
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+NOTE: I wanted students to get 25 * B, but most did not get it. 
+
+I need to do a better lead up next year
+
+
+> There are $25^{1,312,000}$ possible books in the Library.
+
+
+
+- Each book in the library has the same number of available positions for the 25 possible characters:
+
+$410 \times 40 \times 80 = 1,312,000$
+
+- Let's define the variable $B$ as the number of books in the Library of Babel:
+
+<div class="questionborder">
+### Q1 2 pts
+
+- How many books would the Library contain if you added *one* additional position to the book size?
+  - You shouldn't write out any numbers, provide you answer in terms of B.
+  
+</div>
+
+
+
+Solution
+========
+
+
+The expanded library would contain 25 * B books.
+
+
+
+Meta-information
+================
+extitle: Library of Babel - library size
+extype: string
+exsolution: nil
+exname: week_05_reading_questions
+exsection: week_05_reading_questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 2
+

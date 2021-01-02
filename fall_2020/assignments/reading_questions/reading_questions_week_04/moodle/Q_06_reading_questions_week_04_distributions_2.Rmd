@@ -1,0 +1,66 @@
+---
+title: "Distributions 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Consider a Binomial distribution with $n = 10$ and $p = 0.6$
+
+
+The size of the sample space is
+
+
+Answerlist
+----------
+* 10
+* 11
+* 0
+* 6
+* $\infty$
+* 2
+
+
+
+
+Solution
+========
+
+Did you get it right?
+
+
+Answerlist
+----------
+* incorrect
+* correct
+* incorrect
+* incorrect
+* incorrect
+* incorrect
+
+
+
+
+Meta-information
+================
+extitle: Multiple Correct Choices
+extype: mchoice
+exname: week 4 reading questions
+exsection: week 4 reading questions
+exsolution: 010000
+exshuffle: 5
+expoints: 1

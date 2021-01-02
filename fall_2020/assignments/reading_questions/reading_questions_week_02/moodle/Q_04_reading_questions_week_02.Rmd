@@ -1,0 +1,47 @@
+---
+title: "Week 02 reading Q4"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<p class="blackborder">
+This question draws mostly upon materials from the McGarigal chapter 2 slides.  
+</p>
+
+
+1.  Describe the difference between a *statistical* and *biological or ecological* population.
+2.  Which of these populations may vary depending on the spatial or temporal scale of the research question?
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading Q4
+extype: string
+exsolution: nil
+exname: Week 2 reading questions
+exsection: Week 2 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 10

@@ -1,0 +1,611 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Lab 06: Introduction to Inference"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(palmerpenguins)
+
+sse_mean = function(x) {return (sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x))))}
+
+figure_dir = file.path(find_file("lab_06_", directory = TRUE))
+
+  png(file.path(figure_dir, "resampled_penguins.png"), width = 1500, height = 1500)
+  par(mfrow = c(4, 4))
+  for (i in 1:16)
+  {
+    penguins$flipper_shuffled =
+      sample(penguins$flipper_length_mm, replace = TRUE)
+    boxplot(flipper_shuffled ~ species, data = penguins)
+  }
+  dev.off()
+
+```
+
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+source(find_file("build_lab.R"))
+
+build_lab(6, moodle_xml = FALSE)
+# lab = 6
+# sprintf("lab_%0.2d_", lab)
+# 
+# lab_source_dir = find_file(sprintf("lab_%0.2d_", lab), directory = TRUE)
+# lab_out_dir    = here::here("docs", "assignments", "eco_634")
+# lab_source_file = find_file(sprintf("lab_%0.2d", lab), search_path = lab_source_dir, extension = ".Rmd")
+# 
+# question_source_files = find_file(
+#   "", search_path = file.path(lab_source_dir, "moodle"), 
+#   return_all = TRUE, extension = ".Rmd")
+# 
+# lab_file_out = file.path(lab_out_dir, sprintf("lab_%0.2d", lab))
+# key_file_out = here::here("docs", "answer_keys", sprintf("lab_%0.2d_answer_key", lab))
+#                           
+# build_assignment_doc(
+#   lab_source_file,
+#   question_source_files,
+#   # assignment_render_file = NULL, 
+#   assignment_render_file = lab_file_out,
+#   key_render_file = key_file_out
+# )
+# 
+# exams::exams2moodle(
+#   file = question_source_files,
+#   verbose = TRUE,
+#   # dir = lab_dir,
+#   dir = here::here("docs", "moodle_quiz_questions"),
+#   name = sprintf("lab_%0.2d_moodle_questions", lab)
+# )
+
+```
+
+
+
+```{r build_exam_questions, eval=FALSE, include=FALSE}
+lab_dir = find_file("lab_06_", directory = TRUE)
+question_source_files = 
+  find_file(
+    ".Rmd", 
+    search_path = file.path(lab_dir, "moodle"), 
+    return_all = TRUE)
+
+exams::exams2moodle(
+  file = question_source_files,
+  verbose = TRUE,
+  # dir = lab_dir,
+  dir = here::here("docs", "moodle_quiz_questions"),
+  name = "lab_06_moodle_questions"
+)
+
+```
+
+
+
+# Learning objectives, technical skills and concepts:
+
+- Sampling distribution: sample standard deviation vs standard error
+- Building custom functions
+- T-tests
+- Resampling
+- R formula notation
+- R object structure
+
+
+
+
+## Formula for the standard error of the mean
+
+> The sample standard error of the mean is the sample standard deviation divided by the square root of the sample size
+
+$SSE_m = \frac{s_x}{\sqrt{n}}$
+
+R does not have a built-in function to calculate the standard error of the mean.
+
+You should write one of your own!
+
+`sse_mean = function(...`
+You can test it out on the penguin data:
+
+```{r, results='hold', message=FALSE}
+require(palmerpenguins)
+sse_mean(penguins$bill_depth_mm)
+```
+
+Did you get the same result?  If you got a NA instead, you may have had an issue with **missing data**.
+
+Try out all of the intermediate steps you used in your calculation to make sure they can deal with NA values.
+
+<div class="hintborder">
+
+- Hint 1: when you calculate the sample size, you'll need to exclude any missing values from the count.
+
+- Hint 2: Check out the `is.na()` function, it may be of use to you along with the not operator `!`.
+
+</div>
+
+
+
+
+# Formula Notation
+
+We've been using R's formula notation, but I haven't specifically talked about it
+
+It's a powerful and expressive way to specify a statistical model.  We'll
+be making use of it a lot in the rest of the course.
+
+Here's a nice tutorial you can skip to get the basics
+
+https://www.datacamp.com/community/tutorials/r-formula-tutorial
+
+We'll have plenty of opportunity for more discussion and practice.
+
+
+
+
+# Classical p-value interpretation
+
+In lecture, we've discussed a decision criterion in which we set a threshold 
+false-positive rate that we are willing to accept.  We then use a test statistic 
+generated from the data to see if our data meet our criterion.
+
+> Classical tests return a p-value
+
+The p-value is what we compare against our decision criterion to decide if we can
+reject the null hypothesis.
+
+
+
+
+## What does the p-value mean?
+
+One way to interpret a p-value is:
+
+> "How often would I expect to see a result as extreme, or more extreme, if
+the null hypothesis were true?"
+
+It's a small rephrasing of the definition of a false-positive rate.
+
+
+In the first t-test below you'll calculate a p-value for the difference 
+in mean flipper length for two penguin species:
+
+- The p-value from the t-test is tiny: 6.049e-08
+- Let's just say it is less than 0.001
+- The difference between mean flipper lengths for the two species was about 5.9mm
+
+We can interpret that in words as:
+
+> "If I repeatedly sampled flipper lengths for Adelie and Gentoo penguins randomly
+from a normally-distributed population of measurements, I would expect to
+observe a difference in mean flipper length of 5.9mm or greater less than 1 in
+1000 experiments."
+
+
+
+
+# The penguin data
+
+Consider the flipper lengths of three species of penguins:
+
+```{r palmer penguins flipper length, fig.cap="Flipper lengths of the three penguin species"}
+boxplot(flipper_length_mm ~ species, data = penguins)
+```
+
+> They look different, but how could we back up our visual assessment?
+
+- We could use a simple Analysis of Variance (ANOVA) to perform a parametric, frequentist analysis.
+
+- We could also do a resampling simulation to estimate how likely the observed differences in flipper length would be if there truly was no difference.
+
+
+## 2-species data
+
+For most of the lab walkthrough, you'll use a version of the penguins data with one of the species removed:
+
+```{r, fig.cap="Flipper length of Chinstrap and Adelie penguins"}
+dat_pen = subset(penguins, species != "Gentoo")
+boxplot(flipper_length_mm ~ species, data = dat_pen)
+```
+
+- That's not what we wanted!
+
+### `droplevels()`
+
+Working with factors and factor levels can be frustrating.
+
+- We can use `droplevels()` to remove unused factor levels from a data.frame:
+
+
+```{r fig.width=10, fig.cap="Flipper length of Chinstrap and Adelie penguins - fixed"}
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+{
+  par(mfrow = c(1, 2))
+  boxplot(flipper_length_mm ~ species, data = penguins)
+  boxplot(flipper_length_mm ~ species, data = dat_pen)
+}
+```
+
+> Much better!
+
+
+
+# Resampling
+
+Most of the lecture course focuses on inference with parametric distributions.
+
+Resampling methods are also important, especially when some of the parametric
+inference assumptions are not amenable to your data.
+
+Although resampling methods aren't *parametric* in the sense of a linear regression
+or t-test, they personify the Frequentist ideal of repeated sampling.
+
+
+
+## Resampling with replacement
+
+What if we randomly shuffled the data and made another boxplot?
+
+```{r, fig.cap="Flipper length: original and resampled data"}
+# for reproduceability
+set.seed(123)
+
+flipper_shuffled = sample(penguins$flipper_length_mm, replace = TRUE)
+par(mfrow = c(1, 2))
+boxplot(flipper_length_mm ~ species, data = penguins)
+boxplot(flipper_shuffled ~ penguins$species, xlab = "species")
+```
+
+
+> If this process reminds you of picking up acorns or writing a book for the Library of Babel, you're on the right track!
+
+
+What if we repeated this process many times?  How often do you think we'd see a pattern like the one in the real data?
+
+
+```{r echo=FALSE, fig.cap="Resampled flipper length data"}
+knitr::include_graphics(file.path(figure_dir, "resampled_penguins.png"))
+```
+
+
+
+
+
+## Classical t-test: Adelie and Chinstrap penguins
+
+The two-sample t-test is a great starting point to compare the mean values of two groups:
+
+```{r}
+t.test(dat_pen$flipper_length_mm ~ dat_pen$species)
+```
+
+- The t-test suggests that there is good evidence that the flipper length is different between the two species.
+
+
+
+
+
+## Two-sample resampling
+
+You're going to perform a resampling version of a t-test on penguin flipper length.
+
+
+> We can resample the flipper lengths *with replacement* using the `sample()` function:
+
+```{r}
+# for reproduceablility
+set.seed(1)
+flipper_shuffled = sample(dat_pen$flipper_length_mm)
+```
+
+- Now our data look like this:
+
+```{r, fig.cap="Shuffled flipper length data"}
+boxplot(flipper_shuffled ~ dat_pen$species)
+```
+
+- Visually it seems the difference has disappeared...
+
+
+## Classical test on resampled data
+
+> What if we reshuffled the data and re-ran the t-test?
+
+```{r}
+t_test_1 = t.test(flipper_shuffled ~ dat_pen$species)
+t_test_1
+```
+
+The t-test output does not support rejecting a null hypothesis that the two
+flipper lengths are different between the two species:
+
+
+
+
+
+## Difference of means
+
+The t-test great for comparing the means of two groups.  We can see the group means in the t-test output:
+
+```{r}
+t_test = t.test(dat_pen$flipper_length_mm ~ dat_pen$species)
+t_test
+t_test$estimate
+```
+
+The difference in means is:
+
+
+```{r}
+diff_observed = round(diff(t_test$estimate), digits = 3)
+print(diff_observed, digits = 3)
+```
+
+- You can check out the `Retrieving named elements` section below to understand the dollar sign usage here.
+
+### Using `aggregate()`
+
+We can also calculate the difference in means using the `aggregate()` function:
+
+```{r results='hold'}
+agg_means = aggregate(
+  flipper_length_mm ~ species, 
+  data = dat_pen, 
+  FUN = mean, 
+  na.rm = TRUE)
+diff_observed = diff(agg_means[, 2])
+
+agg_means
+diff_observed
+```
+
+
+
+## Sample sizes
+
+
+The number of individuals of each species in the data are:
+
+```{r}
+table(dat_pen$species)
+```
+
+Resampling with replacement is the same thing as randomly sampling 68 flipper lengths in one group and 152 in another.
+
+
+```{r}
+n_1 = 68
+n_2 = 152
+
+dat_1 = sample(dat_pen$flipper_length_mm, n_1, replace = TRUE)
+dat_2 = sample(dat_pen$flipper_length_mm, n_2, replace = TRUE)
+
+diff_simulated = 
+  mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+```
+
+What was the difference in means for the resampled data?
+
+```{r}
+print(c(observed = diff_observed, simulated = diff_simulated))
+```
+
+<!-- Let's get rid of that name attribute in the observed difference: -->
+
+<!-- ```{r} -->
+<!-- names(diff_observed) = NULL -->
+<!-- print(c(observed = diff_observed, simulated = diff_simulated)) -->
+<!-- ``` -->
+
+
+
+## Simulation function
+
+I could modify the code I used to resample and wrap it into a function:
+
+```{r}
+x = dat_pen$flipper_length_mm
+n_1 = 68
+n_2 = 152
+
+dat_1 = sample(x, n_1, replace = TRUE)
+dat_2 = sample(x, n_2, replace = TRUE)
+
+diff_simulated = 
+  mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+```
+
+
+
+My function might look something like this:
+
+`two_group_resample = function(x, n_1, n_2) {...}`
+
+- I'll let you fill in the code.  See the second lab question for a hint.
+
+
+```{r echo = FALSE}
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  dat_1 = sample(x, n_1, replace = TRUE)
+  dat_2 = sample(x, n_2, replace = TRUE)
+  
+  diff_simulated = 
+    mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+  
+  return(diff_simulated)
+}
+
+```
+
+
+Here's a typical output of my implementation:
+
+```{r}
+set.seed(54321)
+two_group_resample(dat_pen$flipper_length_mm, 68, 152)
+```
+
+
+
+## Resampling experiment
+
+If I ran this function many times, how often would I see a mean difference greater than `diff_observed`?
+
+I'll try it 200 times:
+
+```{r}
+n = 200
+mean_differences = c()
+for (i in 1:n)
+{
+  mean_differences = c(
+    mean_differences,
+    two_group_resample(dat_pen$flipper_length_mm, 68, 152)
+  )
+}
+hist(mean_differences)
+```
+
+```{r}
+sum(abs(mean_differences) >= diff_observed)
+```
+
+I didn't see any differences as extreme as what was in the real data.  You should try to re-run the code with 2000 simulations to see if you observe any differences greater than 5.8.
+
+- Are these simulation results consistent with the t-test?
+
+
+
+
+
+
+
+
+
+<!-- ```{r} -->
+<!-- boxplot(bill_depth_mm ~ species, data = dat_pen) -->
+<!-- boxplot(bill_length_mm ~ species, data = dat_pen) -->
+<!-- boxplot(body_mass_g ~ species, data = dat_pen) -->
+
+
+<!-- aggregate(bill_depth_mm ~ species, data = dat_pen, FUN = mean) -->
+<!-- aggregate(bill_length_mm ~ species, data = dat_pen, FUN = mean) -->
+
+<!-- by(dat_pen$bill_depth_mm, INDICES = dat_pen$species, mean, ... = list("na.rm = TRUE")) -->
+<!-- by(dat_pen$bill_depth_mm, INDICES = dat_pen$species, mean, ... = na.rm = TRUE) -->
+
+<!-- n = 2000 -->
+<!-- mean_differences = c() -->
+<!-- for (i in 1:n) -->
+<!-- { -->
+<!--   mean_differences = c( -->
+<!--     mean_differences, -->
+<!--     two_group_resample(dat_pen$bill_length_mm, 68, 152) -->
+<!--   ) -->
+<!-- } -->
+<!-- hist(mean_differences) -->
+
+
+<!-- t.test(bill_depth_mm ~ species, data = dat_pen) -->
+<!-- t.test(bill_length_mm ~ species, data = dat_pen) -->
+
+<!-- diff_observed = diff(aggregate(bill_depth_mm ~ species, data = dat_pen, FUN = mean)[, 2]) -->
+<!-- sum(abs(mean_differences) >= diff_observed) -->
+
+<!-- ``` -->
+
+
+
+
+
+
+
+<a name = "retrieving"></a>
+
+# Retrieving named elements
+
+We've used the dollar sign to retrieve subsets of data.frames.
+
+It can also be useful with different types of objects.
+
+
+We saved the t-test output to an object:
+
+```{r}
+t_test = t.test(flipper_shuffled ~ dat_pen$species)
+```
+
+Then we can use `str()` to examine what the object contains:
+
+```{r}
+str(t_test)
+```
+
+There's an item called `estimate`.  We can access elements of most objects with the dollar sign:
+```{r}
+t_test$estimate
+```
+
+This method doesn't work for all objects in R, but it is often helpful to use the `str()` function to see what an object contains and the dollar sign to retrieve items of interest.
+
+The structure of objects in R is complicated, but if you are interested here are a couple of resources
+
+https://techvidvan.com/tutorials/r-object-oriented-programming/
+
+http://adv-r.had.co.nz/S4.html
+
+
+
+
+
+
+
+
+
+
+# Lab Questions
+
+
+
+<!-- ```{r results='hide', echo=FALSE} -->
+
+<!-- dir.exists(here::here("assignments", "eco_634", "lab_06_inference_intro", "moodle")) -->
+
+
+<!-- question_source_files = find_file( -->
+<!--   ".Rmd", -->
+<!--   search_path = here::here( -->
+<!--     "assignments", "eco_634", "lab_06_inference_intro", "moodle"),  -->
+<!--   return_all = TRUE) -->
+<!-- tmp = add_moodle_quiz_questions( -->
+<!--   question_source_files,  -->
+<!--   include_solution = FALSE,  -->
+<!--   include_metadata = FALSE) -->
+<!-- ``` -->
+<!-- ```{r child=tmp} -->
+<!-- ``` -->
+<!-- ```{r echo=FALSE, results = 'hide'} -->
+<!-- file.remove(tmp) -->
+<!-- ``` -->
+
+

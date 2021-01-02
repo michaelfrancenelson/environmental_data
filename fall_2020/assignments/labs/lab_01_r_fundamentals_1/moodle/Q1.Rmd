@@ -1,0 +1,60 @@
+---
+title: "lab 1 Q1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+# include_supplement(
+#     "",
+#   dir = here::here(),
+  # recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Run the following two lines of code in the console and explain the differences in output (2pts.).
+
+```{r, eval = FALSE, echo=TRUE}
+c(1, 2, 3)
+"c(1, 2, 3)"
+```
+
+
+
+
+Solution
+========
+
+Line 1 creates and prints the content of a vector.
+Line 2 creates and prints a string
+
+
+
+
+Meta-information
+================
+extitle: lab 1 Q1
+extype: string
+exsolution: nil
+exname: R Introduction
+exsection: R Introduction
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 8
+expts: 2

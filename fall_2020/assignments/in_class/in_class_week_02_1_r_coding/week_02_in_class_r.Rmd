@@ -1,0 +1,267 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 02: In-class R coding"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+source(here::here("rmd_tools", "find_file.R"))
+source(here::here("rmd_tools", "build_moodle_web_questions.R"))
+
+
+# source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) return(-(x1 * slope) + y1)
+  linear = 
+    function(x, yint, slope) return(yint + x * slope)
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+
+```
+
+# Objectives
+
+- Practice R coding
+- Numerical and graphical data exploration
+- *Very* basic R plotting
+- R functions:
+  - `head()`
+  - `mean()`
+  - `sd()`
+  - `plot()`
+  - `points()`
+  - `curve()`
+  - `data()`
+
+
+# Instructions
+
+As a group, work through the following sections.
+
+Everyone in your group should run the code on their own computer.  Please work with your group members to work through any difficulties!
+
+Proceed as far as you can during the class session and include a report on your group's progress in the Moodle assignment page.  Only one group member needs to submit an answer.
+
+Respond to the following questions:
+
+- (3 pts) How far did your group get?
+- (3 pts) What parts of the exercise were difficult, or too easy?
+- (4 pts) Upload at least one figure or screenshot from work and explain 
+
+
+
+# R's built-in data sets
+
+R comes with lots of built-in data sets for reference and learning.
+
+Today, we will use some of the built-in data sets for some simple data exploration.
+
+
+
+
+## The 'iris' dataset
+
+The *iris* data set is a classic set of measurements on floral characteristics of three *Iris* species.
+
+Load the dataset into R's memory using:
+```{r}
+data(iris)
+```
+
+Take a look at the top 6 rows:
+```{r}
+head(iris)
+```
+
+
+# Calculate the mean and standard deviation of columns
+
+You know from DataCamp that you can use the `[]` and `$` operators retrieve subsets of data frames.
+
+To get the entries in the "Sepal.Width" column you can type:
+```{r}
+iris$Sepal.Width
+```
+
+Use the functions `mean()` and `sd()` to calculate the mean and standard deviation of vectors:
+
+```{r}
+mean(iris$Sepal.Length)
+sd(iris$Sepal.Width)
+```
+
+
+# Very simple scatterplot
+
+R's lowly base `plot()` function has a lot of uses.  We'll just practice the basics.  To build a scatterplot of iris sepal width and length:
+
+```{r}
+plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+```
+
+
+Where is the *center* of the data?
+
+In this case, let's think of center as the point whose x-coordinate is the mean of iris sepal length, and y-coordinate is the mean of sepal width.
+
+```{r}
+data_center_x = mean(iris$Sepal.Width)
+data_center_y = mean(iris$Sepal.Length)
+c(data_center_x, data_center_y)
+```
+
+
+# Add a point to an existing plot:
+
+Use `points()` to add to an existing plot:
+
+```{r}
+plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+points(x = data_center_x, y = data_center_y, col = "red")
+```
+
+
+
+
+
+
+# Can you draw a line that describes the data?
+
+```{r, echo = FALSE}
+plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+points(x = data_center_x, y = data_center_y, col = "red")
+curve(line_point_slope(x, 3.5, 6.5, -0.1), add = TRUE)
+```
+
+Maybe that one wasn't so great.  It should probably pass throught he data's center point:
+
+
+```{r, echo = FALSE}
+plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+points(x = data_center_x, y = data_center_y, col = "red")
+curve(line_point_slope(x, data_center_x, data_center_y, -0.1), add = TRUE)
+```
+
+
+How did I do that?
+
+- I created a custom function to plot a line through a given point.
+
+
+# Loading a custom function into R's workspace
+
+NOTE: This is a preview of more advanced R techniques that you'll use later.  For now, we won't worry about the details of how it works.
+
+One of the most powerful reasons to use R is that you can write your own functions to accomplish tasks that you need to do, but that would otherwise be difficult or tedious to accomplish with existing R functions.
+
+I wrote a simple function to calculate the coordinates of points on a line given the x- and y- coordinates of a known point and a slope.
+
+The code looks like:
+
+```{r echo = TRUE, eval = FALSE}
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+If I paste the code for the function definition in the R console, I can use the function just like any other one I already know, like `c()` or `mean()`.
+
+
+Try running the code in your R session then running the function with the arguments: 2, 4, 4, -2
+
+Your RStudio session should look something like this:
+
+![](`r find_file("line_point_slope.png")`)
+
+Now I can use this function to calculate the y-value along any line for which I know the slope and the coordinates of a single point.
+
+(This will seem more impressive and useful when we talk about deterministic functions...)
+
+
+
+# Add a curve to an existing plot
+
+You added a point to an existing plot using `points()`.
+
+You can use `curve()` to draw a line (or other curve).
+
+Here's the syntax to re-create the iris plot with a line passing through the center:
+
+```{r, echo = TRUE}
+plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+points(x = data_center_x, y = data_center_y, col = "red")
+curve(
+  line_point_slope(
+    x, 
+    data_center_x, 
+    data_center_y,
+    -0.1), 
+  add = TRUE)
+```
+
+Note that the four arguments to `line_point_slope()` are:
+
+1. the x-value for which to calculate the y-value output
+1. the x-coordinate of the known point along the line.
+1. the y-coordinate of the known point along the line.
+1. the slope of the line.
+
+
+Try to modify the code I ran above to re-draw the plot with a different slope.  Something like this:
+
+```{r, echo = FALSE}
+plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+points(x = data_center_x, y = data_center_y, col = "red")
+curve(
+  line_point_slope(
+    x, 
+    data_center_x, 
+    data_center_y,
+    7.6), 
+  add = TRUE)
+```
+
+
+
+# Try other variables or datasets.
+
+Try to re-use the code above to work with other datasets.  Experiment with plotting other lines to graphically describe the data.
+
+
+
+- dataset Iris contains lots of other floral characteristics.
+- Try the `CO2` dataset
+- Load the `MASS` package and try out the `Animials` dataset:
+```{r}
+library(MASS)
+data(Animals)
+head(Animals)
+```
+

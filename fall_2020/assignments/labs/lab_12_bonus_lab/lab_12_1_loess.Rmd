@@ -1,0 +1,370 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Bonus Lab"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+knitr::opts_chunk$set(echo = TRUE)
+source(rmd.utils::find_file("lab_12_functions.R", exact_match = TRUE))
+source(rmd.utils::find_file("lab_12_read_data.R", exact_match = TRUE))
+```
+
+
+```{r n_simulation_data, echo = FALSE}
+sim_sample_size = read.csv(here::here(
+  "data", "lab_11", "sim_output_sample_size_1000.csv"))
+
+here::here(
+  "data", "lab_11", "sim_output_sample_size_1000_p_005.csv")
+sim_sample_size_01 = read.csv(here::here(
+  "data", "lab_11", "sim_output_sample_size_1000_p_01.csv"))
+sim_sample_size_005 = read.csv(here::here(
+  "data", "lab_11", "sim_output_sample_size_1000_p_005.csv"))
+# sample_size_powers = sim_sample_size$power
+# sample_sizes = sim_sample_size$sample_size
+```
+
+
+```{r sample_size_simulation_30, eval = FALSE}
+sim_1 = power_sim_lm(y_intercept = int_obs, slopes = slope_obs, sigmas = sd_obs, alpha = 0.05, x_min = 0, x_max = 100, n_sims = 30, sample_sizes = 5:40)
+
+plot(sim_1$sample_size, sim_1$power[1, 1, , ], type = "l", ylim = c(0, 1), xlab = "sample size", ylab = "statistical power")
+
+matplot(x = sample_sizes, y = powers, type = "l")
+
+```
+
+```{r lowess_n, eval = FALSE, echo = FALSE}
+l_span = 0.25
+
+fits_loess = apply(powers, 2, function(x) loess(x ~ sample_sizes, span = l_span))
+powers_fitted = sapply(fits_loess, predict)
+
+matplot(x = sample_sizes, y = powers, type = "l")
+
+sapply(fits_loess, function(x) points(sample_sizes, predict(x), type = "l"))
+
+i = 6
+matplot(x = sample_sizes, y = powers[, i], type = "l", ylim = c(0, 1))
+sapply(fits_loess[i], function(x) points(sample_sizes, predict(x), type = "l"))
+
+
+
+```
+
+
+
+```{r dispersion_n_sim, echo=TRUE, eval=FALSE}
+
+n_sims = 20
+p_vals = numeric(n_sims)
+
+alphas = c(0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001)
+
+n_sds = 20
+pop_sds = seq(from = 0.05, to = 1.5, length.out = n_sds)
+
+sample_sizes = seq(5, 20)
+length(sample_sizes)
+
+powers_n_sd = array(0, dim = c(n_sds, length(sample_sizes), length(alphas)))
+
+
+for(k in 1:length(pop_sds))
+{
+  pop_sd_k = pop_sds[k]
+  for(j in 1:length(sample_sizes))
+  {
+    x_vals = seq(0, 100, length.out = sample_sizes[j])
+    
+    for(i in 1:n_sims)
+    {
+      fit_sim = linear_sim_fit(
+        x = x_vals,
+        y_int = int_obs,
+        slope = slope_obs,
+        st_dev = pop_sd_k
+      )
+      
+      p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
+      # powers[j, ] = sapply(alphas, function(x) sum(p_vals < x) / n_sims)
+      
+    }
+    powers_j = sapply(alphas, function(x) sum(p_vals < x) / n_sims)
+    powers_n_sd[k, j, ] = powers_j
+    # sim_output_3[k, j] = sum(p_vals < alpha) / n_sims
+  }
+  print(paste0("Testing standard deviation ", k, " of ", n_sds))
+}
+
+image(powers_n_sd[, , 3])
+
+sim_n_sd_dat = list(power = powers_n_sd, sample_size = sample_sizes, pop_sd = pop_sds )
+
+```
+
+```{r loess_n_sd}
+names(sim_n_sd_dat)
+
+l_span = 0.25
+
+sim_n_sd_dat = within(
+  sim_n_sd_dat,
+  {
+    pred_dat = expand.grid(
+      x_sd = pop_sd, 
+      x_n = sample_size)
+    dim(powers_n_sd)
+    c(powers_n_sd[, , 1])
+    
+    powers_df = sapply(
+      1:length(alphas), 
+      function(x) c(powers_n_sd[, , x]))
+    
+    fits_loess = apply(
+      powers_df, 2, 
+      function(x) loess(x ~ pred_dat$x_sd + pred_dat$x_n, span = l_span))
+    
+    fitted_powers_df = sapply(fits_loess, predict)    
+  }
+)
+
+str(sim_n_sd_dat, 1)
+
+i = 1
+rgl::persp3d(
+  x = sim_n_sd_dat$pop_sd,
+  y = sim_n_sd_dat$sample_size,
+  # z = sim_n_sd_dat$fitted_powers_df[, i],
+  z = sim_n_sd_dat$powers[, i],
+  alpha = 0.2,
+  color = "steelblue"
+)
+i = 6
+rgl::persp3d(
+  x = sim_n_sd_dat$pop_sd,
+  y = sim_n_sd_dat$sample_size,
+  # z = sim_n_sd_dat$fitted_powers_df[, i],
+  z = sim_n_sd_dat$powers[, i],
+  alpha = 0.2,
+  add = T,
+  color = 2
+)
+
+rgl::persp3d(
+  x = sim_n_sd_dat$pop_sd,
+  y = sim_n_sd_dat$sample_size,
+  z = sim_n_sd_dat$powers_df[, i],
+  alpha = 0.2,
+  color = "steelblue",
+  add = F
+)
+
+
+
+```
+
+
+
+```{r save_sample_size_sim, eval = FALSE}
+data.table::fwrite(
+  sim_sample_size,
+  file = here::here(
+    "data", "lab_11", 
+    "sim_output_sample_size_1000.csv"))
+```
+
+
+
+
+# Additive Models: LOWESS
+
+Recall our power analysis of sample size for the Brown Creeper and Late-Successional Forest cover.
+
+Here's plot of a realization of the simulation with 30 replicates at each sample size:
+Locally Weighted Sums of Squares
+
+
+
+
+## Sample Size Power Analysis
+
+Recall the sample size analysis you performed:
+
+```{r}
+
+```
+
+
+
+
+```{r n_dat, echo = FALSE}
+sim_sample_size = read.csv(here::here(
+  "data", "lab_11", "sim_output_sample_size_1000.csv"))
+
+here::here(
+  "data", "lab_11", "sim_output_sample_size_1000_p_005.csv")
+sim_sample_size_01 = read.csv(here::here(
+  "data", "lab_11", "sim_output_sample_size_1000_p_01.csv"))
+sim_sample_size_005 = read.csv(here::here(
+  "data", "lab_11", "sim_output_sample_size_1000_p_005.csv"))
+
+
+plot(power ~ sample_size, data = sim_sample_size, type = "l", xlim = c(0, 100))
+points(power ~ sample_size, data = sim_sample_size_01, type = "l")
+points(power ~ sample_size, data = sim_sample_size_005, type = "l")
+
+# sample_size_powers = sim_sample_size$power
+# sample_sizes = sim_sample_size$sample_size
+```
+
+```{r effect_size_dat, echo = FALSE}
+sim_effect_size = read.csv(here::here(
+  "data", "lab_11", "sim_output_effect_size_1000_200.csv"))
+# effect_powers = sim_effect_size$power
+# effect_sizes = sim_effect_size$effect_size
+```
+
+```{r n_effect_size_dat, echo = FALSE}
+# rm(list = ls())
+load(
+  file = here::here(
+    "data", "lab_11",
+    "sim_n_effect_size_1000_200.RData"))
+```
+
+```{r dispersion_n_dat, echo = FALSE}
+# rm(list = ls())
+load(
+  file = here::here(
+    "data", "lab_11",
+    "sim_output_dispersion_n_1000.RData"))
+# "sim_output_sample_size_effect_size_1000_200_2.RData"))
+
+# effect_sample_sizes_powers = sim_3_dat$power
+# pop_sd       = sim_3_dat$pop_sd
+# sample_sizes = sim_3_dat$sample_size
+```
+
+```{r dispersion_dat, echo = FALSE}
+dat_dispersion_sim = 
+  read.csv(
+    here::here(
+      "data", "lab_11",
+      "sim_output_dispersion_1000_200.csv"))
+```
+
+
+
+```{r smoothing}
+
+library(mgcv)
+
+n_pts = 50
+
+aa = within(
+  sim_n_effect_size,
+  {
+    pred_dat = expand.grid(
+      x_beta = effect_size, 
+      x_n = sample_size)
+    x_beta = matrix(
+      effect_size, 
+      nrow = nrow(power), ncol = ncol(power), byrow = F)
+    x_n    = matrix(
+      sample_size, 
+      nrow = nrow(power), ncol = ncol(power), byrow = T)
+    # fit_1 = mgcv::gam(c(power) ~ te(c(x_beta), c(x_n)))
+    # fit_z_1 = predict(fit_1, pred_dat)
+    fit_2 = loess(
+      c(power) ~ c(x_beta) + c(x_n), span = n_pts / length(power))
+    fit_z_2 = predict(fit_2, pred_dat)
+  })
+
+
+head(sim_effect_size)
+sim_beta = within(
+  as.list(sim_effect_size),
+  {
+    fit = loess(power ~ effect_size, span = 0.1)
+    pred = predict(fit, effect_size)
+    plot(power ~ effect_size, type = "l")
+    points(pred ~ effect_size, type = "l", col = 2)
+  }
+)
+
+with(
+  sim_beta,
+  {
+    plot(power ~ effect_size, type = "l")
+    # plot(power ~ pred_1, type = "l")
+    points(pred ~ effect_size, type = "l", col = 2)
+  }
+)
+
+
+predict(fit_l, sim_effect_size$effect_size)
+
+loess()
+
+with(
+  aa,
+  rgl::persp3d(
+    x = effect_size, y = sample_size, z = power, 
+    alpha = 0.2, color = "red")
+)
+
+with(
+  aa,
+  rgl::persp3d(
+    x = effect_size, y = sample_size, z = fit_z_1, 
+    alpha = 0.2, color = "steelblue", add = T)
+)
+
+with(
+  aa,
+  rgl::persp3d(
+    x = effect_size, y = sample_size, z = fit_z_2, 
+    alpha = 0.2, color = "green", add = T)
+)
+
+
+rgl::persp3d(x = aa$effect_size, y = aa$sample_size, z = aa$fit_z_1, alpha = 0.2, add = T, color = "steelblue")
+
+rgl::persp3d(x = aa$effect_size, y = aa$sample_size, z = aa$fit_z_2, alpha = 0.2, add = F, color = "green")
+
+predict(aaa$fit_1, expand.grid(x_beta = aaa$x_beta, x_n = aaa$x_n))
+mgcv::predict.gam()
+
+loess()
+aa$
+  
+  x <- rnorm(200)
+y <- rnorm(200)
+z <- rnorm(200)
+
+tab <- data.frame(x,y,z)
+
+mod <- mgcv::gam(z ~ te(x, y), data = tab)
+grid <- -5:5
+rgl::persp3d(grid, grid, zfit)
+
+
+```
+

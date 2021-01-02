@@ -1,0 +1,164 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Assignment Template"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    # toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+```
+
+
+# Readings
+
+- Bolker ch 1, section 1.4
+- McGarigal Ch 5b, 5c, 5d
+- Jorge Luis Borges: The Library of Babel
+
+
+
+
+
+
+
+
+
+
+
+
+# Bolker Notes
+
+Section 1.4: frameworks
+
+## 1.4.1 Classical Frequentist
+
+Drawbacks:
+ 
+- Relies on tail probabilities: outcomes that didn't happen
+- Based upon hypothetical repeated sampling
+- Straw-man null hypotheses
+- Reliance on p-values
+  - act as though low p-values mean h1 is 'true'
+  - Type II errors can happen if we have insufficient data
+    -  This is similar to the argument against p-values in analyses of simulation model outputs
+  - [correctly] reject null but differences are not biologically meaningful
+  - point null hypothesis: "the slope of plant productivity vs. temp is zero"
+    - Converts p-value into statement of whether we have enough data or not
+
+- better to look at confidence limits of biologically meaningful parameters
+
+
+### This section is really hard to read
+
+- The table is located far away from where the references to it are made in the text
+
+
+
+
+Polyscias fulva (pol: seed mass < 0.01 g)
+Pseudospondias microcarpa (psd: seed mass ≈ 50 g).
+```{r}
+data.frame(
+  species   = c("POL", "PSD"),
+  predation = c(   26,    25),
+  no_pred   = c(  184,    76)
+  )
+```
+
+
+
+# McGarigal Notes
+
+
+# Borges notes {.tabset}
+
+## Notes
+
+## Quotes
+
+
+> You who read me-are you certain you understand my language?
+
+> Each wall of each hexagon is furnished with five bookshelves; eachbookshelf holds thirty-two books identical in format; each book contains four hundred ten pages; each page, forty lines; each line, approximately eighty black letters
+
+
+> First: The Library has existed ab aeternitate.
+
+> Second: There are twenty-five orthographic symbols.' That discovery enabled mankind, three hundred years ago, to formulate a general theory of the Library and thereby satisfactorily solve the riddle that no conjecture had been able to divine-the formless and chaotic nature of virtually all books. 
+
+> ... whowe penultimate page contains the phrase O Time thy pyramids. 
+
+> O tiempo, tus pirámides
+
+> ...and that books in themselves have no meaning. 
+
+
+> Those examples allowed a librarian of genius to discover the fundamental
+law of the Library. This philosopher observed that all books, however different from one another they might be, consist of identical elements: the
+space, the period, the comma, and the twenty-two letters of the alphabet.
+
+
+> He also posited a fact which all travelers have since confirmed: In all the Library, there are no two identical books. From those incontrovertible premises, the librarian deduced that the Library is "total"-perfect, complete, and whole-and that its bookshelves contain all possible combinations of the twenty-two orthographic symbols (a number which, though unimaginably vast, is not infinite)-that is, all that is able to be expressed, in every language. 
+
+
+> There was no personal problem, no world problem, whose eloquent solution did not exist-somewhere in some hexagon. 
+ 
+> The Vindications do exist (I have seen two of them, which refer to persons in the future, persons perhaps not imaginary), but those who went in quest of them failed to recall that the chance of a man's finding his own Vindication, or some perfidious version of his own, can be calculated to be zero. 
+ 
+> Clearly, no one expects to discover anything. 
+
+> The sect disappeared, but in my childhood I have seen old men who for long periods would hide in the latrines with metal disks and a forbidden dice cup, feebly mimicking the divine disorder. 
+
+
+> Their name is execrated today, but those who grieve over the "treasures" destroyed in that frenzy overlook two widely acknowledged facts: One, that the Library is so huge that any reduction by human hands must be infinitesimal. And two, that each book is unique and irreplaceable, but (since the Library is total) there are always several hundred thousand imperfect facsimiles-books that differ by no more than a single letter, or a comma
+
+
+> Infidels claim that the rule in the Library is not "sense," but "non-sense," and that "rationality" (even humble, pure coherence) is an almost miraculous exception. 
+
+
+
+
+
+
+
+# Question Ideas
+
+
+
+
+
+
+
+
+
+# Learning Objectives
+
+
+
+
+
+# Introduction
+
+
+
+
+# Instructions
+
+
+
+
+# Grading
+
+
+

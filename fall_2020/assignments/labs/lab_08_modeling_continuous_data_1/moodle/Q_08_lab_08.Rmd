@@ -1,0 +1,103 @@
+---
+title: "Simpson's diversity resampling loop"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+#### Instructions
+
+- Complete the code for a loop to resample the slope parameter of a simple linear regression of the Simpson's diversity indices for vegetation and birds.
+
+</div>
+
+<div class="hints">
+
+- Hint: Recall how we have 'wrapped up' code into loops or functions before?
+
+</div>
+
+<div class="questions">
+
+### Q1 2 pt. (R code)
+
+- Paste the code for your completed loop.
+
+</div>
+
+
+
+Solution
+========
+
+### Grading guide
+
+Loop Code:
+```{r complete_loop, eval = FALSE, echo = TRUE}
+dat_bird = read.csv(here::here("data", "bird.sub.csv"))
+dat_habitat = read.csv(here::here("data", "hab.sub.csv"))
+
+dat_all = merge(
+  dat_bird, 
+  dat_habitat,
+  by = c("basin", "sub"))
+
+m = 1000
+result = numeric(m) 
+
+for(i in 1:m)
+{
+  index_1 = sample(nrow(dat_all), replace = TRUE)
+  index_2 = sample(nrow(dat_all), replace = TRUE)
+  
+  dat_resampled_i = 
+    data.frame(
+      b.sidi = dat_all$b.sidi[index_1],
+      s.sidi = dat_all$s.sidi[index_2]
+    )
+  
+  fit_resampled_i = lm(b.sidi ~ s.sidi, data = dat_resampled_i)
+  result[i] = coef(fit_resampled_i)[2]
+} 
+
+```
+
+
+
+Meta-information
+================
+extitle: Simpson's diversity resampling loop
+
+extype: string
+
+exsolution: nil
+
+exname: lab_08
+exsection: lab_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 2
+
+
+

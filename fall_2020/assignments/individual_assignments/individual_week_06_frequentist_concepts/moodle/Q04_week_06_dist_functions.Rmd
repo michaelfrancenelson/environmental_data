@@ -1,0 +1,84 @@
+---
+title: "Using distribution functions"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+require(mfn.teaching.utils)
+require(ggplot2)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+```{r, echo = FALSE, fig.asp=0.5, fig.cap="Normal Distribution - Probability Density Function"}
+fill_upper = rgb(0, 0, 0, 0)
+fill_lower = rgb(0, 0.3, 0.8, 0.25)
+fill_middle = rgb(0, 0, 0, 0)
+mfn.teaching.utils::plot_norm_tails(upper_tail = NULL, lower_tail = pnorm(1.2, mean = 2, sd = 2), fill_lower = fill_lower, fill_upper = fill_upper, fill_middle = fill_middle, pop_mean = 2, pop_sd = 2) +
+  scale_x_continuous(breaks = c(-4, -2, 0, 1.2, 2, 4, 6))
+```
+
+
+<div class="questionborder">
+### Q1: 2 pts.
+
+- What is the probability of observing a value of *less than* 1.2 from a normally-distributed population with mean = 2 and standard deviation = 2?
+- Paste the R code that you used to find your answer.
+
+</div>
+
+
+Solution
+========
+
+0.344
+
+This is the code they should have used:
+
+```{r}
+pnorm(1.2, mean = 2, sd = 2)
+```
+
+
+
+
+
+
+Meta-information
+================
+
+extitle: Using distribution functions
+
+extype: string
+
+exsolution: nil
+
+exname: Frequentist concepts
+
+exsection: Frequentist concepts
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 2
+

@@ -1,0 +1,99 @@
+---
+title: "ECo 602 Readings"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+# Course Materials {.tabset}
+
+Electronic versions of all required texts are available from UMass Libraries unless otherwise noted.
+
+Any materials not available in electronic form from UMass Libraries will be made available on the course Moodle. 
+
+<div class="info"> NOTE: Additional items may be added as needed throughout the semester. </div>
+
+
+
+
+
+## Textbooks 
+
+<a name="textbooks"></a>
+
+- Bolker, B.M. (2008). Ecological models and data in R (Princeton University Press). [Electronic version available at UMass Libraries] 
+  <!-- - DOI: 10.2307/j.ctvcm4g37 -->
+  - DOI: https://doi-org.silk.library.umass.edu/10.2307/j.ctvcm4g37
+  - eISBN: 978-1-4008-4090-8
+
+- Zuur, A.F. (2007). Analyzing ecological data (New York; London: Springer). [Electronic version available at UMass Libraries]
+  - DOI: https://doi-org.silk.library.umass.edu/10.1007/978-0-387-45972-1
+  - ISBN: (online) 978-0-387-45972-1
+
+- Kevin McGarigal’s course readings for previous versions ECo 602/634. **Available on course Moodle**
+
+
+
+## Additional Required Readings
+
+UMass students can access these resources through the <a href="https://www.library.umass.edu/" target="_blank">UMass libraries website.</a>
+
+- Jorge Luis Borges, The Library of Babel (Original title in Spanish: La Biblioteca de Babel. Don't worry, you can read the English translation!). <a href="https://libraryofbabel.info/">libraryofbabel.info</a>
+
+- Epstein, J.M. (2008). Why Model? Journal of Artificial Societies and Social Simulation 11, 12. 
+  - ISSN 1460-7425
+
+- Bang, Megan, Ananda Marin, and Douglas Medin. If Indigenous Peoples Stand with the Sciences, Will Scientists Stand with Us? Daedalus 147, no. 2 (March 1, 2018): 148–59.
+  - DOI: https://doi.org/10.1162/DAED_a_00498
+
+
+
+
+## Supplementary Readings
+
+This is a citation list of other resources used in the lectures, class discussions, etc.
+
+- Beckmann, J.P., and Berger, J. (2003). Using Black Bears to Test Ideal-Free Distribution Models Experimentally. Journal of Mammalogy 84, 594–606.
+
+- Davis, S.M., Childers, D.L., Lorenz, J.J., Wanless, H.R., and Hopkins, T.E. (2005). A conceptual model of ecological interactions in the mangrove estuaries of the Florida Everglades. Wetlands 25, 832.
+
+- Fischer, J., Lindenmayer, D.B., and Fazey, I. (2004). Appreciating Ecological Complexity: Habitat Contours as a Conceptual Landscape Model. Conservation Biology 18, 1245–1253.
+
+- Ray, C., and Collinge, S.K. (2014). Quantifying the dominance of local control and the sources of regional control in the assembly of a metacommunity. Ecology 95, 2096–2108.
+
+
+
+
+
+## Computer Resources {.tabset}
+
+Downloading and installation of the course software will be covered during the first week of class.
+
+
+### R and RStudio {.unlisted .unnumbered}
+
+We'll use the free and open-source R programming language.  You can download an appropriate version of R here: https://cran.r-project.org/
+
+We'll use the RStudio Integrated Development Environment (IDE) to edit and run our R code.  Download RStudio here: https://rstudio.com/
+
+
+
+### GitHub and GitHub Desktop {.unlisted .unnumbered}
+
+- You will need to create a free account on github.com.
+- You can also find links to install GitHub Desktop on your computer.
+
+
+### DataCamp
+
+We'll use DataCamp materials for R training.  You'll find an invite link in the course Moodle.
+
+
+### Other Software {.unlisted .unnumbered}
+
+In addition, you'll need word processing software, as well as software that can easily display comma separated values (CSV) files.  
+
+All UMass students are eligible for a free license of Microsoft Office 365, a suite of programs including Word, Excel, and PowerPoint.  Visit the Information Technology page for more info: https://www.umass.edu/it/software/microsoft-office-365-education
+
+You may also use browser-based software such as Google Docs.  Your UMass Box account gives you access to browser-based versions of Word, Excel, and PowerPoint.

@@ -1,0 +1,67 @@
+---
+title: "Random Normal Data 3"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructionsborder">
+
+> This is a poor description
+
+Consider the figure with three histograms you created.
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 1 pt
+
+- Qualitatively describe the differences among the three histograms.
+
+
+### Q2 2 pts
+
+- Explain *why* the shapes of the histograms are different.
+
+</div>
+
+
+
+
+Solution
+========
+
+Students should realize that as the sample size increases, the histograms are smoother and smoother, approximating a normal curve.
+
+
+
+
+
+
+Meta-information
+================
+extitle: Random Normal Data 3
+extype: string
+exsolution: nil
+exname: lab_04
+exsection: lab_04
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+expoints: 3

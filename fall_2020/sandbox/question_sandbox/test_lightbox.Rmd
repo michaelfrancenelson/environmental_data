@@ -1,0 +1,75 @@
+---
+title: "Install Github Desktop"
+output:
+  html_document:
+    theme: readable
+---
+
+```{r, echo = FALSE, results = "hide", eval=TRUE, warning=FALSE}
+# source(here::here("formatting", "functions", "moodle_template_funs.R"))
+source(here::here("formatting", "functions", "rmd_functions.R"))
+exams::include_supplement(
+  c("github_desktop_sign_in.PNG", "github_desktop_signed_in.PNG", "GitHub-Mark-120px-plus.png"),
+  dir = here::here(), recursive = TRUE)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+# writeLines(readLines(here::here("formatting", "css", "moodle_questions.css")))
+# writeLines(readLines(here::here("formatting", "css", "lightbox.css")))
+```
+
+
+![](GitHub-Mark-120px-plus.png){ height=30pt }
+
+
+Instructions: 
+
+- Set up the GitHub Desktop program on your computer.
+- Link your GitHub account.  You can find the login option in the **File** menu.  The login option should look like:
+
+```{r echo = FALSE, results='asis'}
+expandable_html_image(filename = "github_desktop_sign_in.PNG"s)
+# expandable_html_image("github_desktop_sign_in.PNG", 20)
+```
+
+- Take a screenshot after you have signed in.
+
+
+
+<div class="blackborder">
+
+GitHub desktop running on my computer looks like this:
+
+```{r echo = FALSE, results='asis'}
+expandable_html_image("github_desktop_signed_in.PNG", img_width = 50)
+```
+
+
+- Note that if you haven't used GitHub before, you won't have a repository list.
+</div>
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: lightbox test
+extype: string
+exsolution: nil
+expoints: 2
+exname: sandbox
+exsection: sandbox
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE

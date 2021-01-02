@@ -1,0 +1,172 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Setting up Your ECo 602 Repository"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+require(rmd.utils)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+```
+
+
+
+# Learning Objectives
+
+- Create a class git repository
+- Create a course RProject
+- Upload your repository to GitHub
+
+
+# Class Repository Instructions
+
+## ECo 602 Git Repository
+
+You will be creating a git repository to hold your course R work.  
+
+Instructions:
+
+1. Open up GitHub Desktop and click the appropriate button to **create a new repository on your computer.**
+
+```{r echo = FALSE, results='asis', warning=FALSE}
+expandable_html_image("new_repository_github_desktop_2.png", img_width = 60)
+```
+
+You will call your repository "ECo_602_2020".
+
+Make sure that you:
+- check the box to create a README
+- select the **R** option from the **Git Ignore** drop down menu.
+
+<br>
+
+When you're ready, click the button to create the repository.  Make sure you know how to find the folder on your computer that contains the new repository.
+
+<br>
+
+On my computer, the new repository was created here:
+```{r results='asis', echo=FALSE, message=FALSE}
+expandable_html_image("new_repository_github_desktop_file_location.png")
+```
+
+If you look inside the new folder, you should see something like this:
+
+```{r results='asis', echo=FALSE}
+expandable_html_image("new_repository_github_desktop_folder_contents.png")
+```
+
+The important things to notice are:
+
+1. A directory called *.git*
+1. A file called *.gitignore*
+
+
+<div class="note">
+NOTE: Your operating system may hide files and folders that begin with a period character.  You can change the folder view settings to show files and folders that start with a period.
+
+You can find instructions to set your system to show *hidden files* here:
+
+- <a href="https://support.microsoft.com/en-us/help/4028316/windows-view-hidden-files-and-folders-in-windows-10" target="_blank">Windows</a>
+- <a href="https://www.businessinsider.com/how-to-view-hidden-files-on-mac" target="_blank">Mac OS</a>
+</div>
+
+
+## Create a RProject
+
+Now you need to create an *RProject* in your new repository directory.
+
+1. Open up RStudio.
+2. Select the *New Project* option in the *File* menu.
+3. On the popup select the *Existing Directory* option.
+```{r echo = FALSE, results='asis'}
+expandable_html_image("rstudio_new_project_existing_directory.png")
+```
+4. Find the location where you created your **ECo_602_2020** repository in GitHub Desktop.
+```{r echo = FALSE, results='asis'}
+expandable_html_image("rstudio_new_project_select_directory.png")
+```
+
+## Course Repository Directory
+
+To make grading, data organization, and collaboration with your classmates, we will all be using a common directory structure for the coding work in this course.
+
+1. In your computer's file browser, find the folder where you created your new repository.  
+1. Create the following folders:
+  - *data*
+  - *individual_assignments*
+  - *in_class_assignments*
+  - *figures*
+  
+<br>
+Your class code directory should now look like this:
+```{r echo=FALSE, results='asis'}
+expandable_html_image("602_repo_folder_contents.png", thumb_width = 120, img_width = 40)
+```
+
+## Add some files
+
+Now it's time to add some files to your repository:
+
+- Copy the R script you used to do your work for the first lecture R assignment (DataCamp: Intro to R) into the *individual_assignments* folder.
+
+- Copy the R script you used to do your work in the in-class group assignment (Week 2: In-class R) into the *in_class_assignments*.  You should rename the script file to `week_02_group.R`
+
+- Create a new R script called `week_03_data_exploration.R` and save it in the *individual_assignments* folder.
+
+<br>
+
+At this point my individual assignments folder looks like this:
+
+```{r echo=FALSE, results='asis'}
+expandable_html_image("602_individual_assignments_folder.png", thumb_width = 120, img_width = 40)
+```
+
+
+## Commit changes and push to GitHub
+
+Now, go back to GitHub Desktop and commit your changes to your repository.  Each time you create a snapshot by committing your changes, you will have to add a short commit message.
+
+You should type the text *First commit!* in the Summary field.
+
+```{r echo=FALSE, results='asis'}
+expandable_html_image("github_desktop_ready_to_commit.png", thumb_width = 120)
+```
+
+Notice the *Changes* field in the left of the window.  You'll see the names of the new files that you created in your repository directory.
+
+When you're ready, click the **Commit to Master** button in the lower left.
+
+## Push changes to GitHub
+
+Now that you've created a snapshot of your work, it's time to push your changes to github.com.  You should see a button that says **Publish Repository**.  Click this to upload your changes to your github profile.
+
+```{r echo=FALSE, results='asis'}
+expandable_html_image("github_desktop_ready_to_push_1.png", thumb_width = 120)
+```
+```{r echo=FALSE, results='asis'}
+expandable_html_image("github_desktop_ready_to_push_2.png", thumb_width = 120)
+```
+
+
+## Check your github profile
+
+Now you should verify that your new repository is up and running on github.com.
+
+Navigate to your profile on github.com and verify that you have a repository called `ECo_602_2020`
+
+
+## Create a zip file of your course folder.
+

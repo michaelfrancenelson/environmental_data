@@ -1,0 +1,154 @@
+---
+title: "ECO 602: Analysis of Environmental Data"
+subtitie: "Model Thinking 1: What is a model?"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Week 1 – Model Thinking: What is a model?
+
+# Lecture learning objectives
+
+- Define "model"
+- 
+
+# Lecture Outline
+
+- Dog and screen door video
+
+- What is a model?
+    - Simplified representation of reality
+    - We use them every day, usually subconsciouslay
+- Example models (that we may not think of as models)
+  - Sunrise and sunset times
+  - Weather forecasts
+  - Maps
+  - Mental geospatial models:
+    - Your home
+    - Your city or town
+  - Interpersonal interactions
+    - Mental model of social cues
+    - Language models
+  - Floating point decimal approximations of real numbers
+
+
+How to think like a modeler
+Modeling is iterative
+Define ‘system’
+
+You are confronted with a new problem/system/etc.:
+Build a first conceptual model
+How many components of the system can you identify?
+How might the components interact (or not)?
+Are there sources of randomness or noise in the system?
+What are some relevant questions you could ask about the system?
+Identify a question or goal (if you didn’t already have one)
+Refine conceptual model
+Which components seem most important for your question?
+Which components do you think you could ignore?
+Are there important unknowns?
+Propose component interactions relevant to your question/goal?
+Propose some candidate mechanistic models
+Predator-prey dynamics
+Density-dependent population growth
+Use of traditional ecological knowledge increases species diversity.
+Data needs
+What information would help you support (or not) your mechanistic models?
+Thinking like a modeler example: Mountain Pine Beetles
+
+
+
+
+Relevance of model thinking to data
+Helps us realize that we are using a simplified version of reality
+forces us to be explicit about axioms/assumptions
+Helps us think about what is important or not
+Helps us be mindful of questions we want to ask
+Some types of models we will consider in this course
+Conceptual models
+Theoretical and mathematical models
+Deterministic and stochastic
+Phenomenological and Mechanistic
+
+
+
+
+
+
+
+Week 1 – Model Thinking: What is a model?
+Lecture Outline
+Dog and screen door video
+What is a model?
+Simplified representation of reality
+We use them every day 
+Usually subconsciouslay
+Example models (that we may not think of as models)
+Sunrise and sunset times
+Weather forecasts
+Maps
+Mental geospatial models
+Your home
+Your city or town
+Interpersonal interactions
+Mental model of social cues
+Language models
+Floating point decimal approximations of real numbers
+
+
+How to think like a modeler
+Modeling is iterative
+Define ‘system’
+
+You are confronted with a new problem/system/etc.:
+Build a first conceptual model
+How many components of the system can you identify?
+How might the components interact (or not)?
+Are there sources of randomness or noise in the system?
+What are some relevant questions you could ask about the system?
+Identify a question or goal (if you didn’t already have one)
+Refine conceptual model
+Which components seem most important for your question?
+Which components do you think you could ignore?
+Are there important unknowns?
+Propose component interactions relevant to your question/goal?
+Propose some candidate mechanistic models
+Predator-prey dynamics
+Density-dependent population growth
+Use of traditional ecological knowledge increases species diversity.
+Data needs
+What information would help you support (or not) your mechanistic models?
+Thinking like a modeler example: Mountain Pine Beetles
+
+
+
+
+Relevance of model thinking to data
+Helps us realize that we are using a simplified version of reality
+forces us to be explicit about axioms/assumptions
+Helps us think about what is important or not
+Helps us be mindful of questions we want to ask
+Some types of models we will consider in this course
+Conceptual models
+Theoretical and mathematical models
+Deterministic and stochastic
+Phenomenological and Mechanistic
+
+

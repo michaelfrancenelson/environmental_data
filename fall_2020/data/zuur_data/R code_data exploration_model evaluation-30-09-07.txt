@@ -1,0 +1,104 @@
+######################################
+# R code for
+# 1. Data exploration
+# 2. Fitting models
+# 3. Tranformation of boreality
+# 4. Evaluation of models
+######################################
+
+library(mgcv)
+library(stats)
+library(nlme)
+library(geoR)
+library(car)
+##########################
+#  read model and test data files  #
+##########################
+
+p<-read.table("original_data.txt", header=TRUE)
+attach(p)
+
+#histograms of boreality
+oldpar<-par
+hist(p$boreal, main=NULL, xlab=NULL, ylim=c(0,140), xlim=c(0,50), freq=TRUE)
+
+#Cleveland plot
+dotchart(boreal, main="Boreality", xlab="Range", ylab="Observations", lcolor="white")
+
+#remove atypical points
+num<-length(p[,1])
+ind<-rep(TRUE,num) 
+ind<-rownames(p)!="50"&rownames(p)!="358"&rownames(p)!="49"&rownames(p)!="51"&rownames(p)!="376"&rownames(p)!="39" &rownames(p)!="185" &rownames(p)!="338"&rownames(p)!="206" 
+ind.lm<-rownames(p)!=  "378"&rownames(p)!= "355"&rownames(p)!= "369"&rownames(p)!= "357"&rownames(p)!= "478"&rownames(p)!= "139"&rownames(p)!= "464"&rownames(p)!= "338"&rownames(p)!= "206"&rownames(p)!= "357"&rownames(p)!= "355"&rownames(p)!= "169"&rownames(p)!= "269"&rownames(p)!= "243"&rownames(p)!= "369"&rownames(p)!= "378"&rownames(p)!= "248"&rownames(p)!= "397"&rownames(p)!= "249"&rownames(p)!= "177"
+ind.gam<-rownames(p)!=  "95"&rownames(p)!= "139"&rownames(p)!= "214"&rownames(p)!= "478"&rownames(p)!= "369" &rownames(p)!="357" &rownames(p)!="301" &rownames(p)!="378" &rownames(p)!= "355"&rownames(p)!= "169"&rownames(p)!= "299"&rownames(p)!= "341"&rownames(p)!=  "269" &rownames(p)!= "397"&rownames(p)!= "374"
+ind.lm<-ind.lm&ind&ind.gam               #some time before - I have taken different set of points for LM and GAM, but now I take the same set.
+ind.gam<-ind.gam&ind&ind.lm           #ind.gam and ind.lm are identical
+
+#boreality models WHITHOUT TRANSFORMATION
+bor.lmxy<-lm(boreal~ x+y,p[ind,])
+bor.lmdata<-lm(boreal~T61+Wet, p[ind,])
+bor.lm<-lm(boreal~T61+Wet+x+y, p[ind,])
+bor.gamxy<-gam(boreal~s(x, bs="cr")+s(y, bs="cr"), p[ind,], family=gaussian(link="identity"))
+bor.gamdata<-gam(boreal~s(T61, bs="cr")+s(Wet, bs="cr"), data=p[ind,],  family=gaussian(link="identity"))
+bor.gam<-gam(boreal~s(T61, bs="cr")+s(Wet, bs="cr")+s(x, bs="cr")+s(y, bs="cr"), data=p[ind,],  family=gaussian(link="identity"))
+
+plot(predict(bor.gam),residuals(bor.gam),xlab="predicted", ylab="residuals")
+
+################
+#boreality models WHITH TRANSFORMATION
+################
+
+#LM for assessing predictors' significance
+bboreal.lm<-sqrt(1000*(p$nBor[ind.lm]+1)/(p$nTot[ind.lm]))
+bor.lmxy<-lm(bboreal.lm~x+y,p[ind.lm,],weights=nTot)
+bor.lmdata<-lm(bboreal.lm~T61+Wet, p[ind.lm,],weights=nTot)
+bor.lm<-lm(bboreal.lm~T61+Wet+x+y, p[ind.lm,],weights=nTot)
+
+plot(predict(bor.lm),residuals(bor.lm), xlab="predicted", ylab="residuals")
+
+summary(bor.lmxy)
+summary(bor.lmdata)
+summary(bor.lm)
+
+#GAM for assessing predictors' significance
+bboreal.gam<-sqrt(1000*(p$nBor[ind.gam]+1)/(p$nTot[ind.gam]))
+w<-p$nTot[ind.gam]
+bor.gamxy<-gam(bboreal.gam~s(x, fx=F, k=5, bs="cr")+s(y, fx=F, k=5, bs="cr"), p[ind.gam,], family=gaussian(link="identity"),weights=w)
+bor.gamdata<-gam(bboreal.gam~s(T61, fx=F, k=5, bs="cr")+s(Wet, fx=F, k=5, bs="cr"), data=p[ind.gam,],  family=gaussian(link="identity"),weights=w)
+bor.gam<-gam(bboreal.gam~s(T61, fx=F, k=5, bs="cr")+s(Wet, fx=F,  k=5, bs="cr")+s(x, fx=F,  k=5, bs="cr")+s(y, fx=F,  k=5, bs="cr"), data=p[ind.gam,],  family=gaussian(link="identity"), weights=w)
+
+plot(predict(bor.gam),residuals(bor.gam, type="response"), xlab="predicted", ylab="residuals")
+
+summary(bor.gamxy)
+summary(bor.gamdata)
+summary(bor.gam)
+
+##############
+#after removing X coordinate
+#############
+
+#LM
+bboreal.lm<-sqrt(1000*(p$nBor[ind.lm]+1)/(p$nTot[ind.lm]))
+bor.lmxy<-lm(bboreal.lm~y,p[ind.lm,],weights=nTot)
+bor.lmdata<-lm(bboreal.lm~T61+Wet, p[ind.lm,],weights=nTot)
+bor.lm<-lm(bboreal.lm~T61+Wet+y, p[ind.lm,],weights=nTot)
+
+plot(predict(bor.lm),residuals(bor.lm), xlab="predicted", ylab="residuals")
+
+summary(bor.lmxy)
+summary(bor.lmdata)
+summary(bor.lm)
+
+#GAM, sgnificance
+bboreal.gam<-sqrt(1000*(p$nBor[ind.gam]+1)/(p$nTot[ind.gam]))
+w<-p$nTot[ind.gam]
+bor.gamxy<-gam(bboreal.gam~s(y, fx=F, k=5, bs="cr"), p[ind.gam,], family=gaussian(link="identity"),weights=w)
+bor.gamdata<-gam(bboreal.gam~s(T61, fx=F, k=5, bs="cr")+s(Wet, fx=F, k=5, bs="cr"), data=p[ind.gam,],  family=gaussian(link="identity"),weights=w)
+bor.gam<-gam(bboreal.gam~s(T61, fx=F, k=5, bs="cr")+s(Wet, fx=F,  k=5, bs="cr")+s(y, fx=F,  k=5, bs="cr"), data=p[ind.gam,],  family=gaussian(link="identity"), weights=w)
+
+plot(predict(bor.gam),residuals(bor.gam, type="response"),xlab="predicted", ylab="residuals")
+
+summary(bor.gamxy)
+summary(bor.gamdata)
+summary(bor.gam)
+

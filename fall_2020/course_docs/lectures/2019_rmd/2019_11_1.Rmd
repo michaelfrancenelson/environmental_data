@@ -1,0 +1,435 @@
+---
+title: "2019 Lecture 11 1" 
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+```
+
+
+
+
+## Today’s Agenda
+
+- Recap of dual - model thinking and Frequentist inference.
+- Methods snapshot group activity/quiz
+- Constellation of methods: Group 1 – linear models
+- Group 1 coefficient interpretation
+- Question set 3 time
+
+
+
+## Landscape of Statistical Methods
+
+```{r landscape_picture, echo = FALSE}
+
+knitr::include_graphics(find_file("2019_landscape_of_methods_mcGarigal.png"))
+```
+
+
+
+
+## Model thinking: dual models
+
+- Predictors, responses Expected values, model of the means 
+- Errors: 4 sources
+
+
+
+
+## Constellation of methods
+
+- Group 1: Linear methods 
+- Group 2: Extended linear methods 
+- Group 3: Multivariate methods
+
+
+
+
+## Group 1
+
+```{r group_1_bubbles, echo=FALSE}
+knitr::include_graphics(find_file("2019_group_1_bubbles.png"))
+```
+
+
+
+
+## Univariate methods snapshot
+
+
+
+
+## Univariate Methods
+
+- We’ll be focusing on about regression-type methods:  Predictors used to explain patterns in a response
+- Our models will only consider a single response, but may accommodate multiple predictors
+
+
+
+
+## Group 1 : Linear Models
+- Key assumptions: 1. Single response variable: Univariate 2. Independent observations 3. Linear* predictor/response relationships 4. Normally-distributed errors 5. Constant variance: no Heteroscedasticity
+- *Linear in the parameters
+
+
+
+
+## Group 1: terms and coefficients
+
+- Response: Y 
+- Predictor(s): X
+- Intercept(s): alpha Slope(s): beta
+
+
+
+
+
+## Group 1
+- T-Test Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Group 1: general equation format
+
+- Element-by-element form:
+$y_i = \alpha + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta _n x_{ni} + \epsilon_i$
+
+Vector form:
+
+$\textbf{Y} = \alpha + \beta_1 \textbf X_1 + \beta_2 \textbf X_2 + ... + \beta _n \textbf X_n + \epsilon$
+
+
+
+
+## Linearity in the parameters
+
+
+
+
+## Thunder Basin antelope
+
+- Response: spring fawn count Predictors:
+
+1. Adult population (previous year) 
+2. Annual precipitation 
+3. Winter severity index (1 – 5)
+
+
+
+
+## Thunder Basin antelope: what are the data types?
+
+- Response: spring fawn count Predictors: 
+
+1. Adult population (previous year) 
+2. Annual precipitation 
+3. Winter severity index (1 – 5)
+
+
+
+
+## Group 1
+
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## t-test
+
+- One categorical predictor with 1 or 2 levels
+- One continuous response
+
+
+
+
+## t-test
+
+- Analyzes the following questions:
+
+1. Is the mean of one group different from a fixed value? 
+2. Are the means of two groups different from each other ?
+
+- t-test elaboration
+
+1. 1-way ANOVA extends t-test to 3 or more groups.
+
+
+
+
+## What antelope questions could we address with t-tests?
+
+- Hint: What are the categorical predictors?
+
+
+
+
+## Group 1
+
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Simple Linear Regression
+
+- One continuous response
+- One continuous predictor
+- What questions could we address in the antelope data?
+
+
+
+
+## Simple Linear Regression elaborations
+1. Multiple linear regression: More than one continuous predictors 2. ANOVA: One categorical predictor (instead of continuous) 3. ANCOVA: Mixture of categorical and continuous predictors
+
+
+
+
+## Group 1
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Multiple Linear Regression
+- One continuous response
+- Two or more continuous predictors
+
+
+
+
+## Multiple Linear Regression
+- Attempts to quantify the pairwise relationships between each predictor and the response .
+- Can consider interactions :
+-  combined effect of 2 or more predictors on the response
+- Multiple regression can fail with highly correlated predictors .
+
+
+
+
+## Multiple Linear Regression elaboration
+- Mixture of categorical and continuous predictors: Analysis of Covariance (ANCOVA)
+
+
+
+
+## Multiple Linear Regression: what questions could we address in the antelope data?
+
+
+
+
+## Group 1
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Analysis of Variance - ANOVA
+- Categorical predictor, 3 or more levels
+- Continuous response
+- Analyzes the following questions:
+1. Are the group means different from one another?
+- Note: ANOVA does not specify which pairs of groups are different from one another.
+
+
+
+
+## ANOVA: What could we ask with the antelope data?
+
+
+
+
+## ANOVA elaborations
+- Two or more categorical predictors: multi - way ANOVA
+- Categorical and continuous predictors: Analysis of Covariance (ANCOVA)
+- Post - ANOVA analysis: which groups are different from one another?
+-  For example: Multiple testing corrections, Tukey Honest Significant Difference (HSD) test, Bonferroni correction, etc
+- 
+
+
+
+## Group 1
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Multi - way ANOVA
+- Categorical analogue of multiple regression Main effects, interactions Is multi - way ANOVA applicable to the antelope data? Elaboration: Mix of categorical and continuous variables – Analysis of Covariance (ANCOVA)
+
+
+
+
+## Group 1
+- t-test
+- Simple Linear Regression
+- 1-Way ANOVA
+- Multiple Linear Regression
+- n-Way ANOVA
+- ANCOVA
+
+
+
+
+## Analysis of Covariance ANCOVA
+- Categorical and continuous predictors Continuous response What about the antelope data?
+
+
+
+
+## Group 1 model summary presentations
+1. Table of model coefficients – model summary, strength of effects of predictors, overall model significance test 2. ANOVA table – model variability attributed to each factor, factor - specific significance tests
+
+
+
+
+## Group 1 model summary interpretation: coefficients
+1. Intercept: What is the value of the response when the predictor has value zero? 2. Slope: What is the change in the response with each unit change in the predictor? 3. Standard Errors: shape of sampling distribution 4. F - test: overall model significance test
+
+
+
+
+## Simple Linear Regression: Iris petal width predicted by petal length
+
+
+
+
+## Multiple regression: petal width predicted by petal length, sepal length
+
+
+
+
+## ANOVA: Species and petal width
+
+
+
+
+## ANCOVA: species and petal length
+
+
+
+
+## Group 1 ANOVA table interpretation
+1. Degrees of freedom: Reflects the number of samples, number of factor levels, number of individuals per factor level etc. 2. Sum of squares: Reflects the total squared deviation from the mean explained by a source. 3. Mean squares: Mean SS due to a source (per DF) 4. F - tests: Test for ratio of variability explained by a source
+
+
+
+
+## 1-way ANOVA
+
+
+
+
+## ANOVA table for an ANCOVA
+
+
+
+
+## ANOVA table vs. model coefficient table
+- Model coefficient table tells you:
+1. Intercept and slope coefficients 2. Overall model significance test, correlation test
+- ANOVA table tells you:
+1. Variability explained by each factor in the model 2. Significance tests for each factor separately
+
+
+
+
+## When do group 1 methods start to fail?
+
+
+
+
+## Recall some of the key group 1 assumptions.
+- Independent observations Linear relationships Normal errors Constant variance
+
+
+
+
+## Nonlinear relationships
+- Try adding terms: polynomial, power, interaction Try a data transformation Other options: 1. Additive models 2. Nonlinear least squares
+
+
+
+
+## Non-normal errors
+- Data transformation Generalized linear models
+
+
+
+
+## Non constant variance
+- Data transformation GLS
+
+
+
+
+## Non independent observations
+- Autocorrelation Spatial dependence Repeated measurements Correlated error structures
+
+
+
+
+## Complicated experimental scenarios
+- Pseudoreplication Too many zeroes Blocking, random effects, nesting, hierarchical models Categorical responses
+
+
+
+
+## For next time:
+- Select group paper for critical paper review
+- Group 2: extended linear techniques.
+
+
+
+
+## 

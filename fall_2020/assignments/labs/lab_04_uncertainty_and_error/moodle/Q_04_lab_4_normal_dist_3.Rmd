@@ -1,0 +1,121 @@
+---
+title: "Random Normal Data 4"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message = FALSE} 
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Remember the code I used to create a plot of the density function of a *standard normal* distribution:
+
+
+```{r}
+# Generate a vector of x-values
+x = seq(-3, 3, length.out = 1000)
+y = dnorm(x)
+
+plot(x, y, main = "Standard Normal PDF", type = "l")
+abline(h = 0)
+```
+
+
+Instructions
+
+1. Use the code above as a template to plot a density curve for a normal distribution with:
+- mean = 10.4
+- standard deviation = 2.4
+2. Include an informative title that states the mean and standard deviation values you used.
+3. Save your figure to a file called `norm_1.png`.
+
+
+<div class="hintborder">
+- Hint: check out the help entry for `dnorm()` for a description of the arguments.
+</div>
+
+<div class="questionborder">
+### Questions
+
+- Q1 (1 pt).  What are the parameters and their values for the *standard Normal* distribution?
+- Q2 (2 pts).  Paste the R code you used to create and save your figure into the text-entry window.
+- Q1 (1 pts).  Paste the image file of your figure into the file entry box. 
+</div>
+
+
+Solution
+========
+
+- The standard normal has mean = 0 and sd = 1.
+
+```{r echo=TRUE, results='wait'}
+
+# Mean and sd for normal density curve:
+mean_1 = 10.4
+sd_1 = 2.4
+
+# Generate a vector of x-values
+x_lim = c(mean_1 - 3 * sd_1, mean_1 + 3 * sd_1)
+
+x = seq(x_lim[1], x_lim[2], length.out = 1000)
+y = dnorm(x, mean = mean_1, sd = sd_1)
+
+if (FALSE)
+  png(
+    file.path(
+      find_file(
+        filename = "lab_04_uncertainty_and_error", 
+        directory = TRUE),
+      "norm_1.png"), 
+    width = 1200, height = 1400, res = 220)
+
+plot(
+  x, y, 
+  main = paste0("Normal PDF: mean = ", mean_1, " sd = ", sd_1),
+  type = "l")
+abline(h = 0)
+
+if (FALSE)
+  dev.off()
+
+```
+
+```{r, echo=FALSE, eval=FALSE}
+
+mean_1 = 10.4
+sd_1 = 2.4
+
+norm_17 = rnorm(n = 17, mean = mean_1, sd = sd_1)
+norm_30 = rnorm(n = 30, mean = mean_1, sd = sd_1)
+norm_300 = rnorm(n = 300, mean = mean_1, sd = sd_1)
+```
+
+
+Meta-information
+================
+extitle: Random Normal Data 4
+extype: string
+exsolution: nil
+exname: lab 4
+exsection: lab 4
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4

@@ -1,0 +1,130 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 01: Model Thinking"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+source(here::here("rmd_tools", "find_file.R"))
+source(here::here("rmd_tools", "build_moodle_web_questions.R"))
+
+```
+
+
+
+# Learning Objectives
+
+- Reinforce model thinking concepts
+- Consider
+- Introduction to peers in small groups
+- Introduction to breakout sessions in Zoom
+
+
+
+
+# Introduction
+
+Model thinking and model building is an inherently iterative process.
+
+In this group activity, you will choose a scenario and work through several iterations of a model-building process together.
+
+
+
+
+# Instructions
+
+
+1. As a group, decide on one of the three scenarios (listed below).
+2. Navigate to the in-class group activity for week 1 in Moodle and look through the questions.
+3. Discuss your scenario and work through a model building process.
+4. Respond to the Moodle questions.  One group member will submit the answers at the end of class.
+
+<p class="warn">
+NOTE: These scenarios are intentionally broad.  I want to see where your group ends up given sparse starting materials.
+</p>
+
+
+## Suggestions to consider first:
+
+- What do I already know about this system?
+- What are some of the important parts of a system?
+- What are some of the important interactions?
+- What questions are important?
+
+## Questions to ask as you refine your model
+
+- Why do I want to build a model and what will I use it for?
+- What components are vital, and which could I ignore?
+- Knowledge gaps.
+  - What data could I use to design, calibrate, or validate my model?
+- Can I identify biases in my model?
+  - Cultural
+  - Species
+  - My personal background and training
+- What if my model is wrong?
+
+
+
+
+# Scenarios {.tabset}
+
+
+## Invasive Cattails
+
+Cattails, *Typha spp.*, are emergent wetland plants, familiarly known as cattails because of their distinctively shaped infructescence.  There are several species of cattail common in North America including *T. latifolia*, *T. domingensis*, and *T. angustifolia*.  There are many species of cattails, and some species can produce vigorous, potentially invasive hybrids. *T. latifolia* and *T. domingensis* are thought to be native to North America, while *T. angustifolia* may be native to Eurasia, although determining the native range each species has not been straightforward.
+
+Cattail abundance has recently been increasing, especially in disturbed eutrophic sites.  In the Chesapeake Bay region cattails have outcompeted other species in some wetlands, displacing native plants and potentially interfering with animals that use wetland habitats.  In other wetlands, cattails are present in smaller stable populations.  It is thought that the different patterns may be influenced by human activity and hybridization.
+
+
+
+
+## Snowpack in the Oregon Cascades
+
+Snowpack accumulates throughout the winter at mid to high elevations in the central Cascades of Oregon.  The amount of precipitation varies widely from year to year.  On many slopes, snow accumulates under the dense canopy of the native conifer forests, composed mostly of hemlocks (*Tsuga spp.*), true firs (*Abies spp.*), and pines (*Pinus spp.*).  The snowpack melts rapidly on exposed slopes, but in areas with tree cover the snow melts more slowly over an extended period. The timing, duration, and rate of the snowmelt affect soil moisture conditions, streams, erosion, and flooding in the region.  
+
+Most of the area is sparsely populated, but some areas are popular for outdoor recreation.  Timber harvests have been carried out in many of the more accessible forest stands throughout the 20th century.  
+
+
+
+
+## White pine blister rust
+
+The upper Midwest region of the US is home to large forests dominated by red and eastern white pines (*Pinus resinosa*, and *P. strobus*).  The forests are highly valued for their aesthetic, recreational, and timber values.  Numerous species of gooseberry (*Ribes spp.*) occur throughout the region in the understory, and at forest edges.  
+
+A fungal pathogen, the white pine blister rust, was accidentally introduced to the area sometime around 1900.  Some of the native forest plants are resistant to the rust.  Many others, including all of the Ribes spp, are hosts but do not seem to be negatively affected by the rust.  Eastern white pine is highly susceptible and often killed by the rust.
+ 
+
+
+# Questions
+
+```{r results = 'hide', echo = FALSE, include=FALSE}
+tmp = build_moodle_web_questions(
+  assignment_filename = "group_model_thinking.Rmd",
+  search_path = here::here("assignments", "in_class"),
+  include_header = FALSE,
+  write_html = FALSE,
+  cat_results = FALSE,
+  write_tmp = TRUE)
+```
+
+```{r child=tmp, echo=FALSE}
+```
+
+```{r echo=FALSE, results = 'hide'}
+file.remove(tmp)
+```
+
+

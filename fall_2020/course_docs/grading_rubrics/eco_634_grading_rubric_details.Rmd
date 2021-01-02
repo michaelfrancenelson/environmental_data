@@ -1,0 +1,66 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Grading"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+# Grading
+
+Your grade for the course is made up of the grades on the:
+
+- Individual lab exercises
+- Group lab exercises
+- Learning Objectives Assessment
+- Learning Outcomes Assessment
+
+Please see the detailed course grading rubric for more details about each of the grading categories.
+
+## Grade Category Weights
+
+| Item | Weight |
+|-|-|
+| Individual Exercises | 55 % |
+| Group Exercises | 30 % |
+| Learning Objectives Assessment | 5 % |
+| Learning Outcomes Assessment | 10 %|
+
+
+
+## Grade Category Details {.tabset}
+
+### Individual lab exercises
+
+
+### Group lab exercises
+
+
+### Learning Objectives Assessment
+
+This assessment consists of short-answer and multiple-choice questions.
+
+It is meant to guage:
+
+- Your knowledge of general computing
+- Your knowledge of programming in general
+- Your knowledge of R
+- What you hope to gain from the course
+
+<div class="info"> 
+
+NOTE: The grade for this assessment is based on participation, not your specific answers!.  
+
+It is meant as a reference point in time to help both you and I gain a snapshot of your knowledge and experience 
+
+
+### Learning Outcomes Assessment

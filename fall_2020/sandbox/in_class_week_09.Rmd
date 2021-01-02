@@ -1,0 +1,63 @@
+---
+title: "Untitled"
+author: "Mike Nelson"
+date: "10/20/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+## Reading a csv file
+
+
+
+I'm going to read some data from a csv (comma-separated-values) file.
+
+
+
+I can use read.csv() along with the path to the file to read the data into a data.frame.
+
+
+
+Here's an example:
+
+
+
+```{r read_birds_data}
+
+require(here)
+
+dat_birds = read.csv(here("data", "hab.sta.csv"))
+
+```
+
+
+
+
+
+## Previewing the contents of a data.frame
+
+
+
+I can use the head() function to print the first few lines of a data.frame.
+
+
+
+Here's an example with the birds data
+
+
+
+```{r}
+
+
+
+```
+

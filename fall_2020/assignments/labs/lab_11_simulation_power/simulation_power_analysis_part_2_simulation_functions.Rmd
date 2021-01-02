@@ -1,0 +1,190 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+
+```
+
+
+
+<!-- ```{r load_functions, child = find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_data, child = find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_models, child = find_file("model_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_simulations, child = find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_plots, child = find_file("plot_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+
+
+
+
+
+
+
+# Simulator Function
+
+We can simulate the system using our model and see what kind of range of data we might observe.
+
+This can give us great insight into the level of certainty we have in our model.
+
+This is in fact the theoretical basis for the Frequentist approach to statistical inference, in which we evaluate the likelihood of our data given the model, which implicitly means how likely would we observe our original data if we were to repeatedly sample the system.
+
+This is exactly what simulation allows us to do: repeatedly sample the environmental system under the assumption that the model is the truth.
+
+
+
+## Components of the model
+
+To generate data based on a Group 1 Simple Linear Regression, what model parts do we need to know?
+
+- Parameters for the deterministic model:
+  - y-intercept
+  - slope coefficient
+- Parameter for the stochastic model: $\sigma$
+
+
+## Deterministic Model: Linear Function
+
+Let's build an R function to calculate the value of a linear function given a value of x, a slope parameter, and an intercept parameter.
+
+Recall the equation for a line: $y = \alpha + \beta x$
+
+- Create an R function, `linear()`, that accepts three named arguments:
+  1. `x`
+  2. `y_int`
+  3. `slope`
+
+- Your function needs to return a single numeric value.
+- Your function must be able to handle values of `x` that are single numbers, or numeric vectors.
+
+To test your implementation, you can compare your function's outputs to these reference outputs:
+
+```{r ref.label = "linear_function", echo = FALSE, eval = TRUE}
+```
+
+```{r test_linear_function, results='hold'}
+linear(x = 1, y_int = 1, slope = 1)
+linear(x = 3:5, y_int = 1, slope = 1)
+linear(x = 3:5, y_int = -1, slope = 1)
+linear(x = 3:5, y_int = -1, slope = 0.01)
+```
+
+
+
+
+## Stochastic Model: Normal Distribution
+
+This part is easy, it's just `rnorm()` with appropriate arguments for mean and standard deviation!
+
+
+
+
+# Simulation Function
+
+Now you can assemble your deterministic and stochastic functions into a single data simulator.
+
+- Create a function, `linear_simulator()`, that will generate random data based on a linear deterministic function with normally-distributed errors.
+- Your function needs to accept the following four named arguments:
+  1. `x`
+  2. `y_int`
+  3. `slope`
+  4. `st_dev`
+
+There are many approaches your implementation could use.  A simple plan might be:
+
+1. Generate the y-values on the line.
+2. Add normally-distributed errors and return.
+
+You are free to implement `linear_simulator()` any way you like...as long as it works correctly.
+
+- I've provided a self-test below.
+
+
+
+
+## Test Your Simulator Function
+
+Since `linear_simulator()` will return different values each time, it's harder to check your implementation than a strictly deterministic function.  
+
+For now, you can use a graphical validation approach.
+
+Run the code below and compare your plots to the reference plots:
+
+```{r linear_simulator_function, ref.label = "linear_simulator_function", echo = FALSE}
+```
+
+These plots use the following parameter values:
+
+- y intercept of 1.0
+- slope of 4.5
+- standard deviation of 0.1
+
+```{r graphical_check_1, fig.asp=1}
+n = 200
+
+par(mfrow = c(2, 2))
+for (i in 1:4)
+{
+  x = runif(n = n)
+  plot(
+    x, 
+    linear_simulator(x, y_int = 1, slope = 4.5, st_dev = 0.1),
+    main = "", xlab = "x", ylab = "y",
+    pch = 16, col = rgb(0, 0.2, 0, 0.2))
+}
+```
+
+
+Now compare your implementation to the reference using different slope, intercept, and standard deviation parameters:
+
+- y intercept of 10
+- slope of -6.5
+- standard deviation of 1.1
+
+```{r graphical_check_2, fig.asp=1}
+n = 400
+
+par(mfrow = c(2, 2))
+for (i in 1:4)
+{
+  x = runif(n = n)
+  plot(
+    x, linear_simulator(x, y_int = 10, slope = -6.5, st_dev = 1.1),
+    main = "", xlab = "x", ylab = "y",
+    pch = 16, col = rgb(0, 0.2, 0, 0.2))
+}
+```
+
+
+Your generated data won't be exactly the same as mine, but your plots should look similar to the reference plots.
+
+<div class="notes">
+- Highly detailed or multi-plot figures often display poorly in RStudio's plots pane.  Try the following to get a better view of your figures:
+  - Press the *zoom* button on the top bar of the plot panel. You can resize or maximize your figure.
+  - Save your figure to an image file and view in an image application.
+</div>
+
+
+

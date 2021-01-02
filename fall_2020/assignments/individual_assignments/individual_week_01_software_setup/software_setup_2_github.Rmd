@@ -1,0 +1,97 @@
+---
+title: "ECo 602/634 - Analysis of Environmental Data"
+subtitle: "Setting up GitHub and GitHub Desktop"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+source(here::here("rmd_tools", "find_file.R"))
+```
+
+![](`r find_file("GitHub-Mark-120px-plus", duplicated_files_error = FALSE)`)
+
+
+
+# Objectives
+
+- Create a GitHub account.
+- Install GitHub Desktop on your computer.
+- Link your GitHub account to GitHub desktop.
+
+
+# Introduction
+
+Have you ever accidentally deleted important files, forgot to save, or lost data due to a computer failure?
+
+Have you ever wished you could go back to find material that you had in a previous version of a document?
+
+An important way to avoid these issues is to store important work files in a *repository* that can hold all of your work as well as keep a record of your progress at previous time points.
+
+You'll be using a *versioning* program called **git** to save all of your work for this course into a repository.
+
+You'll be using a companion website, **github.com** as a remote host to hold your in case your computer fails or you access to your work from another computer.
+
+
+
+# What is a git repository?
+
+A repository is just a locaiton where a collection of related files needed for a project are maintained and organized.  Repositories may be *local* (on your own computer, only available to you) or *remote* (stored on a server accessible by may computers).  Repositories can store the complete state of your project at any given time.  This allows you to recover material you might have accidentally deleted or overwritten.
+
+Git itself is just a program that manages repositories (collections of files needed for a particular project).  At heart it is a *command line* program, but we'll be using a *graphical interface* built into RStudio for this course. 
+
+The idea of **versioning** is especially helpful for both saving timestamps of your work and collaborating with other team members working on the same project.  There are many different types of versioning frameworks and platforms.  Git is currently the most widely used.
+
+
+
+#Instructions {.tabset}
+
+## Part 1: Create a GitHub account.
+
+This part is easy: just navigate to github.com and create a free account!
+
+<div class="note">If you already use github, you can skip this part.</div>
+<br>
+
+My advice is to choose a professional-sounding username that you won't be embarrassed to include in a CV or resume.
+
+
+
+
+## Part 2: install GitHub Desktop
+
+This part is slightly more complicated.
+
+Once you have your github account set up, make you way to https://desktop.github.com/ and download the appropriate installer for your system.
+
+After you have GitHub Desktop set up on your machine, you need to link your GitHub account.  You can find the login option in the **File** menu.  
+
+
+The login option should look like:
+
+<div class="blackborder">![](`r find_file("github_desktop_sign_in.PNG",duplicated_files_error = FALSE)`)</div>
+
+<br>
+
+GitHub desktop running and linked to my account looks like this:
+
+<div class="blackborder">![](`r find_file("github_desktop_signed_in.PNG",duplicated_files_error = FALSE)`)</div>
+
+<!-- ![](`r find_img("github_desktop_signed_in.PNG")`){width=70% align="center" border="4"} -->
+
+
+<br><br><br>
+
+<div class="info">Note that if you haven't used GitHub before, you won't have a repository list.</div>
+

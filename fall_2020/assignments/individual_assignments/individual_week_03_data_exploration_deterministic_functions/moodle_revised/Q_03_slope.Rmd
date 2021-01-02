@@ -1,0 +1,72 @@
+---
+title: "Histograms of sampling site terrain"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+Consider the distribution of slopes at the bird census sample sites.
+
+
+
+<div class="questionborder">
+
+### Q1 1 pt 
+
+- What are the units of slope in this dataset?
+
+
+### Q3 2 pts 
+
+- Interpret the histogram in non-technical language that a non-scientist audience would understand.  Some points to consider:
+  - Are most sample sites flat?
+  - Is there an even mixture of steep and shallow slopes?
+
+</div>
+
+
+
+Solution
+========
+
+Slope is in units of "percent slope" as per the metadata file.
+
+
+
+
+
+Meta-information
+================
+extitle: Sampling site elevation
+
+extype: string
+
+exsolution: nil
+
+exname: data exploration det. funs
+
+exsection: data exploration det. funs
+
+expoints: 3
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: simple
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 15

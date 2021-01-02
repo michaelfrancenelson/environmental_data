@@ -1,0 +1,153 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Final Project Template"
+author: "Your Name Here"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    toc: TRUE
+    toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(knitr.duplicate.label = TRUE)
+```
+
+Everything above this line is the header.
+
+
+<!-- The following text won't be displayed in your document.  It tells R how to make nicer looking buttons for your tabbed content. -->
+
+<style type="text/css" rel="stylesheet">
+
+.btn {
+    border-width: 0 0 0 0;
+    font-weight: normal;
+    text-transform: none;
+}
+
+.btn-default {
+    color: #2ecc71;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+</style>
+
+
+Use this document as a template to build your final project.
+
+If you've already created the file index.Rmd in your docs folder, you can paste everything below the header into that document.
+
+If you don't yet have an index.Rmd file, save this document as index.Rmd in the docs folder of your main class folder.
+
+Edit this template to fill in your own content.
+
+
+# Introduction
+
+Type a brief introduction here.
+
+
+# Functions 1: Data Structure Functions {.tabset .tabset-pills}
+
+Look at the source code for the final project template, you'll notice the text:
+
+{.tabset .tabset-pills}
+
+This creates tabbed content for all the following sections that are one-level below.
+
+- If you include them on a primary header (one #), all of the subsequent secondary headers will in tabs.
+
+
+
+
+## `c()`
+
+The following is the markdown text needed to reproduce my code example for `c()`:
+
+
+The function `c()` *combines* or *concatenates* its arguments into a vector (a 1-dimensional data structure consisting of 1 or more elements).
+
+- All of the elements must be of the same *type*.
+  - I can't combine character and numeric types in the same call to `c()`
+
+Here's two examples using numeric and character data types:
+
+```{r}
+# Create a vector of numbers:
+num_vec  = c(1, 4, 8, 9, 13)
+
+# Create a vector of characters:
+char_vec = c("a", "fish", "data is cool")
+```
+
+I can show the contents of a vector by typing the name of the vector, or using the `print()` function.
+
+```{r}
+# Typing the name of the vector into the console prints the contents
+num_vec
+
+# The print() function accomplishes the same task:
+print(char_vec)
+```
+
+
+## `data.frame()`
+
+Type your data frame example here.
+
+## `matrix()`
+
+Type your matrix example here.
+
+
+## `length()`
+
+
+## `nrow()`
+
+
+## `ncol()`
+
+
+## `dim()`
+
+
+# Functions 2: Numerical Data Exploration  {.tabset .tabset-pills}
+
+## `summary()`
+
+## `mean()`
+
+## `sd()`
+ 
+
+
+# Functions 3: Graphical Data Exploration {.tabset .tabset-pills}
+
+See the final project description for a list of the required functions.
+
+
+
+# Functions 4: Distribution Functions {.tabset .tabset-pills}
+
+See the final project description for a list of the required functions.
+
+
+
+# Functions 5: Other Functions {.tabset .tabset-pills}
+
+See the final project description for a list of the required functions.
+
+
+
+
+# Part 2: Data Anaylsis
+
+Your data analysis materials will go here.

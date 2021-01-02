@@ -1,0 +1,300 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Functions and formulae: components and intuition"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+## Key concepts
+
+- Notation
+- Common formula parts
+
+
+
+## Notation conventions
+
+- Summation notation
+  - Product notation (we'll use this later with likelihood)
+- Set notation
+- Bar notation
+- Capital and lower-case letters
+
+
+
+
+## Interpreting formulae
+
+### Strategies
+- Identify constants and variables
+- Learn to recognize common 'chunks'
+- Try to identify long-term behavior
+- Try to identify the class of the function
+
+### This lecture focuses on the chunks
+  
+
+  
+  
+## Common chunks
+
+- Sums of squares
+  - often used to quantify some sort of 'error'
+  - use in variance and covariance formulas
+- Normalizing constants
+- Sample size, sample size correction
+
+
+
+
+
+## Starting simple: the mean
+
+### The mean is a simple concept, right?
+- It's just the average value...
+- It's what we get if we add up all the numbers and divide by the count.
+
+### What do we need to know?
+- Our data:
+  - A vector of numbers (in R-speak)
+- Our quantities:
+  - The number of observations
+  - The sum of all the observations
+
+
+
+
+
+## Starting simple: the mean
+
+### We can practice our notation skills:
+- Set notation
+- Capital/lowercase notation
+- Summation notation
+- Normalizing and Sample size notation 
+
+
+
+## Starting simple: the mean
+
+### Our values in set notation:
+$X = \{x_1, x_2, x_3, ..., x_n\}$
+- note the capital X for the set, and the lowercase x for the elements
+
+### The sum of values in sigmat notation:
+$\sum_{i = 1}^n x_i$
+
+### The sample size
+$n$
+
+
+## Starting simple: the mean
+
+### The overall formula
+
+$\bar{x} = \frac{\sum_{i = 1}^n x_i}{n}$
+
+### The mean is also known as the Expected Value
+- This gets slightly more complicated when the expected value is not a constant.
+
+
+
+
+## Sum of squared errors
+
+### This is a common 'chunk'
+
+- *Error* is the difference between an observation and the expected value.
+- In words: "The sum of the squared differences between each value and the mean"
+- In words: "The sum of the squared errors"
+
+
+
+
+## Sum of squared errors
+
+### Why do we want to know this anyway?
+
+- Squaring has some desirable properties
+  - Converts negative values to positive.
+  - Penalizes high values, i.e. large *errors* are very influential because the squaring function is nonlinear.
+  - What happens if you take the sum of the non-squared errors?
+
+
+
+
+## Sum of squared errors
+
+### We already know the mean: $\bar{x}$
+
+### The SSE chunk:
+
+$SSE = \sum_{i = 1}^n (x_i - \bar{x})^2$
+
+### The sigma decorations are often dropped:
+$SSE = \sum (x_i - \bar{x})^2$
+
+### It can be expanded to:
+$SSE = \sum (x_i - \bar{x})(x_i - \bar{x})$
+
+### Not so bad.  We can learn to see this as a chunk, rather than individual terms!
+
+
+
+
+
+## Variance
+
+### Variance is a measure of *dispersion* or *spread*
+- In words: the average of the squared differences
+- It's just the SSE normalized by the [adjusted] sample or population size.
+  - For a population we use N, a sample uses n - 1
+
+### Formulae: Populations
+- for populations
+
+$Var(x) = \frac{1}{N}\sum (x_i - \bar{x})^2 = \frac{\sum (x_i - \bar{x})(x_i - \bar{x})}{N}$
+
+- for samples:
+
+$Var(x) =  \frac{1}{N- 1 }\sum (x_i - \bar{x})(x_i - \bar{x}) = \frac{\sum (x_i - \bar{x})^2}{N - 1}$
+
+
+
+
+
+## Variance and covariance
+
+### What does variance tell us?
+
+- Recall this form for the SSE:
+$SSE = \sum (x_i - \bar{x})(x_i - \bar{x})$
+- It includes the $(x_i - \bar{x})$ twice.
+
+### It is a *univariate* statistic!
+- It's like saying how much spread is there in a variable, with reference to *itself*.
+  - That's why we have the $(x_i - \bar{x})$ two times.
+  
+### What if we want to know if two variables change in a *coordinated* way?
+
+
+
+
+
+## Covariance
+
+### Covariance measures the *dispersion* of one variable, x, in the context of the *dispersion* of a second variable, y:
+
+$Cov(x, y) = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{N}$
+
+### It turns out that *variance* is a special case of *covariance*.
+
+$Cov(x, x) = Var(x)$
+
+- Covariance tells us the amount by which the changes in one variable are coordinated with changes in another.
+- $(x_i - \bar{x})(y_i - \bar{y})$ is like a *crossed* version of the squared errors...
+   - But the term *cross product* is already taken.
+
+
+
+## Variance and Covariance
+
+### Case 1: positive covariance.
+- If the values of $x$ and $y$ were somehow coordinated, we might expect that high values of $x$ would tend to co-occur with high values of $y$.
+
+- We use $(x_i - \bar{x})$ to symbolize the deviation of a sampling unit's x-value from the mean of x.
+- Similarly $(y_i - \bar{y})$ is the deviation of a sampling unit's y-value from the average value of y.
+
+- The (non-squared) sum of all the deviations of x is zero (by the definition of the mean).
+
+
+
+
+## Variance and Covariance
+
+### Case 1: positive covariance.
+
+- When $(x_i - \bar{x})$ is positive, the SU's x value is above average.
+  - Likewise with the y-value
+
+- When both $(x_i - \bar{x})$ and $(y_i - \bar{y})$ are positive, their product is also positive.
+  - Likewise if they are both negative.
+
+### Most of the products have a positive sign
+- So the sum of the terms is also positive
+
+
+
+
+
+## Variance and Covariance
+
+### Case 2: negative covariance.
+
+- When $(x_i - \bar{x})$ is positive, the SU's x value is above average.
+  - Likewise with the y-value
+
+- When $(x_i - \bar{x})$ and $(y_i - \bar{y})$ are of different signs, it means high x-values tend to co-occur with low y-values.
+- Their product are negative
+
+### Most of the products have a negative sign
+- So the sum of the terms is also negative
+
+
+
+
+## Variance and Covariance
+
+### Case 3: no covariance.
+
+- Above-average values of x are just as likely to occur with above- or below-average values of y.
+  - There will be a mix of positive and negative terms: $(x_i - \bar{x})(y_i - \bar{y})$
+- The negative and positive terms cancel out: the overall sum should be near zero.
+
+
+
+
+## Recap
+
+### Common chunks
+- Means: $\bar{x} = \frac{\sum x}{n}$
+- Sums of errors: $\sum (x_i - \bar{x})$
+  - Remember this sum is zero!
+- Sums of squared errors: $\sum (x_i - \bar{x})^2$
+- Sums of squared errors: $\sum (x_i - \bar{x})(x_i - \bar{x})$
+- Sums of crossed errors: $\sum (x_i - \bar{x})(y_i - \bar{y})$
+- Normalizing by population size:
+  - $\frac{1}{N}$ and $\frac{1}{N - 1}$
+
+
+
+## Next time...
+
+### Pearson correlation walkthrough
+
+### Normal PDF
+
+
+
+
+

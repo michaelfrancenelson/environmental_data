@@ -1,0 +1,92 @@
+---
+title: "Simulated Data 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+
+
+1. Review the section of the lab instructions in which I created a `data.frame` of random data.
+```{r, echo = TRUE, eval=FALSE}
+n_pts = 10
+x_min = 1
+x_max = 10
+x = runif(n = n_pts, min = x_min, max = x_max)
+dat = data.frame(x = x, y_observed = rnorm(n_pts))
+```
+2. Experiment with creating and plotting random data:
+  - Try different numbers of points.
+  - Try different plotting characters.
+  - Try using `set.seed()` with different seed values.
+3. Create scatterplots of four of your favorite random data sets.
+  - Arrange your scatterplots in a single figure: it should be a 2 by 2 grid of scatterplot panels.
+4. Save your figure to a file called `sim_data_scatterplots.png`
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (3 pts.) Paste the R code you used to create one of the random datasets in your figure into the text entry box.
+- Q2 (3 pts.) Paste the R code you used to create your figure into the text entry box.
+- Q3 (1 pt.) Paste your figure file into the file entry box.
+
+</div>
+
+
+
+
+Solution
+========
+
+```{r}
+set.seed(12345)
+n_pts = 100
+x_min = 1
+x_max = 10
+x = runif(n = n_pts, min = x_min, max = x_max)
+dat = data.frame(x = x, y_observed = rnorm(n_pts))
+
+par(mfrow = c(2, 2))
+plot(dat$x, dat$y_observed, pch = 23, col = 1, bg = 22)
+plot(dat$x, dat$y_observed, pch = 21, col = 1, bg = "red")
+plot(dat$x, dat$y_observed, pch = 21, col = 1, bg = "red", lwd = 3)
+plot(dat$x, dat$y_observed, pch = 24, col = 1, bg = "red")
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Simulated Data 1
+extype: string
+exsolution: nil
+exname: lab 4
+exsection: lab 4
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 7

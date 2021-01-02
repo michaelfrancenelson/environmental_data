@@ -1,0 +1,54 @@
+---
+title: "Image Sources"
+author: "Michael France Nelson"
+date: "2020"
+output: html_document
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+| Filename | Source or Author | Attribution |URL | License | Other Info |
+|----------|------------------|-------------|----|---------|------------|
+| brown_bullhead.jpg | Raver, Duane | https://digitalmedia.fws.gov/digital/collection/natdiglib/id/25300/rec/7 | public domain | NA |
+| horst_type_1_errors.png | Allison Horst | Artwork by @allison_horst | allisonhorst.com | CC-BY | https://github.com/allisonhorst/stats-illustrations |
+| horst_type_2_errors.png | Allison Horst | Artwork by @allison_horst | allisonhorst.com | CC-BY | https://github.com/allisonhorst/stats-illustrations |
+| new_folder_3.jpg | unknown | NA  | NA | NA |
+| Octocat.png      | github  | github.com  | https://github.com/logos | NA |
+| GitHub-Mark-120px-plus.png  | github  | github.com  | https://github.com/logos | NA |
+| GitHub-Mark-Light-120px-plus.png  | github  | github.com  | https://github.com/logos | NA |
+| Data camp logos | datacamp | datacamp.com | datacamp.com | need to check | NA |
+| you_keep_using_that_word.jpg | bigmedium.com | ? | https://pbs.twimg.com/media/DkAA_u6X0AEO-d9?format=jpg&name=large | Probably CR infringing | NA |
+| that_word_does_not_mean_what_you_think_it_means.jpg | bigmedium.com | ? | https://bigmedium.com/ideas/mvp-does-not-mean-what-you-think-it-means.html | Probably CR infringing | NA |
+| Measuring_Bony_Fishes_tfs.png | https://www.koaw.org/measuring-fishes | https://www.koaw.org/measuring-fishes  | https://www.koaw.org/measuring-fishes | Feel free to use Koaw's illustrations... | NA | 
+
+
+
+
+
+
+
+
+Filename,Source or Author,Attribution ,URL,License,Other Info ,
+brown_bullhead.jpg,Raver, Duane,https://digitalmedia.fws.gov/digital/collection/natdiglib/id/25300/rec/7,public domain,NA ,
+horst_type_1_errors.png,Allison Horst,Artwork by @allison_horst,allisonhorst.com,CC-BY,https://github.com/allisonhorst/stats-illustrations ,
+horst_type_2_errors.png,Allison Horst,Artwork by @allison_horst,allisonhorst.com,CC-BY,https://github.com/allisonhorst/stats-illustrations ,
+new_folder_3.jpg,unknown,NA ,NA,NA ,
+Octocat.png     ,github ,github.com ,https://github.com/logos,NA ,
+GitHub-Mark-120px-plus.png ,github ,github.com https://github.com/logos,NA ,
+GitHub-Mark-Light-120px-plus.png ,github ,github.com https://github.com/logos,NA ,
+Data camp logos,datacamp,datacamp.com,datacamp.com,need to check,NA ,
+you_keep_using_that_word.jpg,bigmedium.com,?,https://pbs.twimg.com/media/DkAA_u6X0AEO-d9?format=jpg&name=large,Probably CR infringing,NA ,
+that_word_does_not_mean_what_you_think_it_means.jpg,bigmedium.com,?,https://bigmedium.com/ideas/mvp-does-not-mean-what-you-think-it-means.html,Probably CR infringing,NA ,
+Measuring_Bony_Fishes_tfs.png,https://www.koaw.org/measuring-fishes,https://www.koaw.org/measuring-fishes ,https://www.koaw.org/measuring-fishes,Feel free to use Koaw's illustrations...,NA,
+
+
+
+
+
+
+
+

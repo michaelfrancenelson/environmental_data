@@ -1,0 +1,473 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Functions: types and graphical intuition"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+source(find_file("week_03_lecture_graphics_prep.R"))
+require(cowplot)
+```
+
+
+
+
+
+## Key concepts
+
+- General function concepts
+- Classes of functions
+- Visual intuition
+
+
+
+## Function basics: important function terms
+
+- **monotonic**, **asymptotic**, and **divergent**
+- **variables** and **constants**
+- **powers** and **exponents**
+- **local linearity**
+- **domains: bounded and unbounded**
+- **sums** and integrals
+- continuity, slope, and step functions
+- saturating, diminishing returns
+- inverses
+
+
+
+
+## variables and constants
+
+- Constants may also be referred to as parameters
+
+### How many variables are there in this equation?
+
+> $P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{ - \left( {x - \mu } \right)^2 }/{2\sigma ^2 }}$
+
+- A good strategy to simplify the form of a function is to set all constants to zero or one.  That way you can eliminate them from the formula, leaving only the variables.
+
+
+
+
+## Variables and constants, i.e. parameters
+
+### How many variables are there in this equation?
+
+- Only 1: $x$
+- Use the strategy above to eliminate the constants:
+
+> $P(x) = e^{ - x ^2 }$
+
+### That is considerably simpler to understand than 
+
+> $P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{ - \left( {x - \mu } \right)^2 }/{2\sigma ^2 }}$
+
+
+
+## Variables and constants, i.e. parameters
+
+### We can plot this: it looks like the Normal curve!
+
+```{r, echo=FALSE, out.height='6cm', fig.asp=0.5, fig.align='center'}
+ttt = tt + theme(title = element_text(size = 18))
+ggplot(
+  data.frame(
+    x <- seq(-3.5, 3.5, len = 1000),
+    y = exp(-x ^ 2)),
+  aes(x, y)) +
+  geom_line(lwd = 1.2) +
+  ggtitle(TeX('$\\f(x)= e^{-x^2}')) +
+  ttt
+# theme(plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+```
+
+
+
+
+
+## Class of functions
+
+
+### Common functions we use as determinstic models:
+
+- linear
+- polynomial, rational, and power
+- exponential (and logarithmic)
+- periodic
+- combination functions
+
+
+
+## Linear functions
+
+
+### Linear functions have variables raised to a power of 1.
+- Can be one or more variable variable: 
+  - $y = mx + b$
+  - $y = m_1x_{1} + m_2x_2 + ... + m_nx_n + b$
+- Statistical literature likes to use alphas, and betas
+  - $y_i = \beta_0 + \beta_1x_{1i} + \beta_2x_{2i} + ...+\beta_nx_{ni} + \epsilon$
+- Key features: 
+  - The *variables*, i.e. the $x_i$, are first-degree.
+  - Each *variable* is multiplied by a *parameter*, the $\beta_i$
+
+### A linear model is always a great place to start.
+
+
+
+
+## Linear models: interpretation
+
+
+### A linear model describes a *constant rate of change*
+
+- Reed canary grass plant biomass increases by 0.71 grams for each additional gram of added soil nitrogen per cubic meter.
+  - The rate of increase is constant everywhere:
+   - If soil with 1g nitrogen results in biomass of 1 g.
+     - Soil with 2g nitrogen: expected biomass: 1.71 g.
+   - If soil with 3000g nitrogen results in biomass of 100 g.
+     - Soil with 3001g nitrogen: expected biomass: 100.71 g.
+
+### Is the constant rate of change reasonable?
+
+
+
+
+
+
+## Local linearity
+
+
+### Could you model this curve with a linear function?
+
+```{r, echo = FALSE}
+ggplot(
+  data.frame(
+    x <- seq(0, 4 * pi, length.out = 1000),
+    y = sin(x)),
+  aes(x, y)) + geom_line()
+
+```
+
+
+
+
+
+## Local linearity
+
+### Could you model this curve with a linear function?
+
+```{r, echo = FALSE}
+plot_grid(
+  ggplot(
+    data.frame(
+      x <- seq(0, 4 * pi, length.out = 1000),
+      y = sin(x)),
+    aes(x, y)) + geom_line() + xlab("x"),
+  ggplot(
+    data.frame(
+      x1 <- seq(2, 2 + 0.87 * pi, length.out = 1000),
+      y = sin(x1)),
+    aes(x1, y)) + geom_line() + xlab("x")
+)
+```
+
+
+
+
+
+## Local linearity
+
+### Could you model this curve with a linear function?
+
+```{r, echo = FALSE}
+plot_grid(
+  ggplot(
+    data.frame(
+      x2 <- seq(2, 2 + 0.87 * pi, length.out = 1000),
+      y = sin(x2)),
+    aes(x2, y)) + geom_line() + xlab("x"),
+  ggplot(
+    data.frame(
+      x3 <- seq(2+ 0.67 * pi, 2 + 0.68 * pi, length.out = 1000),
+      y = sin(x3)),
+    aes(x3, y)) + geom_line() + xlab("x")
+)
+```
+
+
+
+## Local linearity
+
+### We are often justified in using a linear model, even when we know a relationship isn't linear:
+- If we are only interested in a small subset of the range of predictor values.
+- All (most) continuous functions look very linear if you zoom in.
+- Linear functions are much simpler than the rest of the functions we'll consider.
+
+
+
+
+## Bases and exponents
+
+### What are they?
+
+### Notation convention:
+
+$a^b$
+
+> "Multiply `a` by itself `b` times."
+
+
+
+## Polynomial functions
+
+### Polynomial functions have non-negative integer powers:
+
+> $f(x) = x$
+> $f(x) = x^3 - 2 \times x^2$
+
+```{r echo=FALSE, out.height='6cm', fig.align='center'}
+g_fun_degree_3 + tt
+```
+- Linear functions are a **subset** of polynomial functions.
+
+
+
+
+## Polynomial models
+
+### Polynomial terms are sometimes added to models to improve the **model fit**.
+
+- Polynomial models are typically *phenomenological*.
+- There's usually not a clear biological or ecological interpretation.
+- You can think of them as *tuning* parameters to increase model fit, or to help with normality of the residuals.
+
+> $y_i = \alpha + \beta_1 x_1 + \beta_2 x_1^2 + \beta_3 x_2$ 
+
+- Notice this polynomial model is *linear* in the *parameters*!
+
+
+
+
+## Rational functions
+
+### Rational functions can be expressed as a ratio of *polynomial* functions.
+- Polynomial functions are a subset of rational functions.
+- The square root function is *not* a rational function.
+- Rational functions can be *discontinuous*: division by zero.
+
+```{r echo = FALSE, out.height='4.5cm', fig.asp=0.6, fig.align='center'}
+g_rational + tt
+```
+
+
+
+## Rational functions
+
+### Rational functions are typically used in phenomenological models.
+- Tuning, improving normality of residuals, etc.
+- Not used as often as polynomial or power law/fractional exponent functions
+
+```{r echo = FALSE, out.height='4.5cm', fig.asp=0.6, fig.align='center'}
+g_rational_2 + tt
+```
+
+
+
+
+## Fractional (rational) exponents
+
+- McGarigal calls these *power law functions*.
+
+### Functions in which the exponents can be expressed as fractions (rational numbers).
+- The square root function **is** a fractional exponent:
+
+> $\sqrt{x} = x ^ {\frac{1}{2}}$
+
+### Rational functions are typically used in phenomenological models.
+- Often a result of *tuning* procedures like the Box-Cox transformation.
+
+
+
+
+
+## Power vs. exponetial functions
+
+### Which of these functions grows fastest?
+
+\begin{center}
+
+$f1(x) = x^{2.4} - x^{0.5}$
+
+$f2(x) = x^{2.9} + x^{1.5}$
+
+$g(x) = 1.4^x - 0.1^x$
+
+\end{center}
+```{r, echo = FALSE, fig.height=4.5}
+len = 1000
+x = seq(0, 30, length.out = len)
+
+dat = data.frame(
+  x = c(x, x, x),
+  y = c(
+    x ^ {2.4} - x ^ {0.5}, 
+    x ^ {2.9} + x ^ {1.5}, 
+    1.4 ^ x - 0.1 ^ x),
+  fun = c(rep("f1(x)", len),rep("f2(x)", len), rep("g(x)", len)))
+  # x = c(x, x),
+  # y = c(x ^ 2.4 - x ^ 0.5, 2.4 ^ x - 0.5 ^ x),
+  # fun = c(rep("f(x)", len), rep("g(x)", len)))
+
+ggplot(dat, aes(x, y, colour = fun)) + geom_line(lwd = 1.2) + 
+  tt + theme(legend.title = element_blank())
+  # theme(legend.title = element_blank())
+# theme(legend.title = element_blank(), legend.position = "bottom", legend.text = element_text(size = 30))
+
+```
+
+
+
+
+
+## Power vs. exponetial functions
+
+### Powers: the variable is the base, the power is a constant.
+
+> $f(x) = x^{2.4} - x^{0.5}$
+
+### Expontials: the variable is the exponent, the base is a constant.
+
+> $g(x) = 2.4^x - 0.5^x$
+
+
+### In the **long term** exponentials always grow faster than any power function.
+- A rational function may grow faster initially, but an exponential term always wins as x approaches infinity.
+- An exponential beats any power.  But the *gamma* function wins against an exponential...
+
+
+
+
+
+## Exponential functions
+
+### Exponential functions have the **variable as the exponent**.
+- When $x>0$ the function is *monotonic increasing*.
+- When $x<0$ the function is *monotonic decreasing* and *asymptotic*.
+- Any constant raised to the power of zero equals 1: $x^0 = 1$
+
+```{r echo=FALSE, fig.align='center', out.height='40%', fig.asp = 1/3}
+ttt = tt + theme(title = element_text(size = 18))
+plot_grid(
+  g_exp + ttt,
+  g_exp_2 + ttt
+)
+```
+
+
+
+## Logarithmic functions
+
+### Logarithmic functions are the **inverse** of exponential functions.
+- Applying a logarithmic function *undoes* an exponential function.
+- Logarithmic functions are slow-growing, but *not asymptotic*.
+
+```{r echo = FALSE, fig.align='center', out.height='4cm', fig.asp=1/3}
+g_log + tt
+```
+
+
+
+## Exponential and Logarithmic functions
+
+- Exp: *feedback* processes, exponential growth, divergent
+- Log: *diminishing returns*, useful for dealing with very large number, *linearizing*, variance stabilizing
+
+```{r echo=FALSE, fig.align='center', out.height='8cm', fig.asp = 1/2.1}
+ttt = tt + theme(title = element_text(size = 18))
+plot_grid(
+  g_exp + ttt,
+  g_log + ttt
+)
+```
+
+
+## Hybrid functions
+
+### Just like the name says, they are mixtures of different function types.
+- Often have a theoretical basis: they can be *mechanistic*.
+
+### The Ricker function
+
+```{r echo=FALSE, out.height='5cm', fig.asp = 1/1.6, fig.align='center'}
+g_ricker + tt
+```
+
+
+
+
+## Graphical intuition
+
+- Asymptotic: tends toward a value
+- Divergent: tends toward infinity or negative infinity
+- Monotonic: always increasing or always decreasing
+
+```{r echo = FALSE, out.height='5cm', fig.asp=0.5, fig.align='center'}
+ttt = tt + theme(title = element_text(size = 12), axis.title = element_text(size = 11))
+plot_grid(
+  g_asympt_1 + ttt,
+  g_fun_degree_3 + ttt,
+  g_log + ttt,
+  g_logit + ttt
+)
+```
+
+
+
+
+
+## Graphical intuition
+
+- Continuous: no breaks or jumps
+- Local linearity: *most* functions resemble linear functions if you zoom in close enough.
+  - This is closely related to **differentiability** in calculus.
+
+```{r echo = FALSE, out.height='5cm', fig.asp=0.5, fig.align='center'}
+ttt = tt + theme(title = element_text(size = 12), axis.title = element_text(size = 11))
+plot_grid(
+  g_logit + ttt + ggtitle(TeX('$\\f(x)=logit(x)')),
+  g_step + ttt,
+  ggplot(
+    data.frame(
+      x1 <- seq(2, 2 + 0.87 * pi, length.out = 1000),
+      y = sin(x1)),
+    aes(x1, y)) + geom_line() + xlab("x") + ttt +
+    ggtitle(TeX('$\\f(x)=sin(x)')),
+  ggplot(
+    data.frame(
+      x3 <- seq(2+ 0.67 * pi, 2 + 0.68 * pi, length.out = 1000),
+      y = sin(x3)),
+    aes(x3, y)) + geom_line() + xlab("x") + ttt +
+    ggtitle(TeX('$\\f(x)=sin(x)'))
+)
+```
+
+
+
+
+

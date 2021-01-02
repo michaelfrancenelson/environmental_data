@@ -1,0 +1,117 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Conditional Probabiltiy: Basics"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+```
+
+
+
+## Conditional Probabiltiy: Probabiltiy Space
+
+Entire sample space: S
+Event A
+Event B
+Exclusive Events
+Overlapping Events
+
+
+
+## Pr (B | A)
+A
+A and B
+•
+A has already happened
+•
+Imagine S collapsing to A
+•
+Pr (B | A) < Pr (
+•
+Pr (B | A) = Pr (A and B)/ Pr (
+•
+Pr (B | A) Pr (A) = Pr (A and
+
+
+
+## Pr
+(A |
+B
+A and B
+•
+B has already happened
+•
+Imagine S collapsing to B
+•
+Pr (A | B) < Pr (
+•
+Pr (A | B) = Pr (A and B)/ Pr (
+•
+Pr (A | B) Pr (B) = Pr (A and B)
+
+
+
+## Common element in both conditionals:
+Pr (A and
+Pr
+(A | B) Pr (B) = Pr (A and
+Pr
+(B | A) Pr (A) = Pr (A and
+This means:
+Pr
+(A | B) Pr (B) = Pr (B | A) Pr (A)
+
+
+
+
+## Common element in both conditionals:
+Pr (A and
+Pr
+(A | B) Pr (B) = Pr (B | A) Pr (A)
+We can rearrange as 2 ratios:
+Pr
+(A) / Pr (B) = Pr (A | B) / Pr (B |
+Ratio of unconditioned probabilities is equal to
+ratio of the conditionals!
+But what happens if there is no overlap?
+
+
+
+
+## What if = Pr (A and B) is zero
+
+Conditionals become 0 and we have
+Pr
+(A | B) / Pr (B | A) = 0 / 0
+We can’t do division by 0!
+Bayes’ rule to the rescue:
+P(A | B) = P(B | A) P(A) / P(B)
+
+
+
+
+
+
+
+## Intro to Bayesian: Bayes’ rule

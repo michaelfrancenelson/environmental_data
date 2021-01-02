@@ -1,0 +1,176 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Model Thinking: A Frequentist Perspective"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+
+source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+source(find_file("ggplot_confints.R"))
+
+require(ggplot2)
+require(cowplot)
+
+```
+
+```{r figure_setup, include = FALSE}
+n = 45
+set.seed(12346)
+
+dat = data.frame(
+  x <- sort(rnorm(n)),
+  y0 = rnorm(n, sd = 2),
+  y1 = rnorm(n, mean = x, sd = 1))
+
+h0 = ggplot(data = dat, aes(x = x, y = y0)) + 
+  geom_point() + (t1 <<-theme(axis.text = element_blank(), axis.title = element_blank()))+
+  geom_smooth(method = "lm")
+h1 = ggplot(data = dat, aes(x = x, y = y1)) + 
+  geom_point() + t1 +
+  geom_smooth(method = "lm")
+
+set.seed(22)
+ggp_95 = ggplot(
+  ggplot_confints(200, 100, 0.05),
+  aes(x = x, y = ci, colour = contains_mean, group = sample)) +
+  geom_line(lwd = 1) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  theme_nothing()
+
+```
+
+
+## Concepts and Learning Objectives
+
+- Brief introduction to Frequentism
+- Frequentist interpretation of populations and samples
+- Null and alternative hypotheses
+- Intuition challenges of Frequentism
+
+
+<!-- \titlegraphic{\includegraphics[width=0.5\textwidth]{`r list.files(path = here::here(), pattern = "that_word_does_not_mean_what_you_think_it_means.jpg", recursive = TRUE, full.names = TRUE)`}} -->
+
+
+## What is Frequentism?
+
+### Inferential framework
+- Most widely used framework: has many pros and cons
+- Requires assumptions
+  They are often reasonable, but sometimes not
+- Many tools are robust to violations of assumptions
+- Powerful theoretical basis and sophisticated analytical tools
+- Frequentism focuses on the modeling *process*, not the outcomes of a particular experiment
+
+### Other frameworks exist...
+
+
+
+
+## Frequentism essentials
+
+### Key Frequentist assumptions include
+- Population exists, is infinite.
+- Population parameters are true, but unknowable quantities.
+- When we specify a model, there exist **true** model parameters (but they are unknowable).
+
+
+### Frequentism is based upon hypothetical infinite resampling
+- Frequentist assumptions are often **asymptotically** true.
+- Source of misconceptions about terminology
+
+### Hypothesis testing: $H_0$ and $H_a$
+
+
+
+
+## Null and Alternative models
+
+### Hypothesis testing: allows for quantification of *confidence* and *significance*.
+
+```{r, echo=FALSE, out.width="75%", fig.cap="bigmedium.com/ideas/mvp-does-not-mean-what-you-think-it-means.html"}
+knitr::include_graphics(find_file("that_word_does_not_mean_what_you_think_it_means.jpg"))
+```
+
+
+
+## Note on terminology
+
+### *Confidence* or *significance*: Frequentist definition
+
+- Constructing a 95% confidence interval does **not** mean you are 95% sure your interval contains the true value!
+  - It either does or does not, but you can't know.
+- "If I were to repeat the experiment many times, approximately 95% of the CIs I construct would contain the true population parameter"
+
+```{r echo=FALSE, out.width="100%", out.height="28%", fig.cap="A set of 200 95\\% Confidence Intervals" }
+print(ggp_95)
+```
+
+
+
+
+## Null Models: $H_0$
+
+- McGarigal calls it the *status quo*.  I think of it as what to expect if variables **are not related**.
+
+```{r echo=FALSE, out.width="75%", fig.cap="A null model", fig.asp = 0.7}
+plot_grid(h0)
+
+```
+
+
+
+## Alternative Models: $H_a$
+
+- What we expect to observe when quantities are **coordinated** in their variation.
+
+```{r echo=FALSE, out.width="75%", fig.cap="An alternative model", fig.asp = 0.7}
+plot_grid(h1)
+```
+
+
+
+
+## Modeling in a Frequentist world
+
+### Frequentist modeling implements the **Dual Model Paradigm**
+
+### Focus is on modeling process
+- A particular parameterization of a model is just one of infinitely many possible realization of a **stochastic process** process.
+- Model realizations are our best guess about the **true** but **unknowable** model parameters.
+
+
+
+
+## Frequentist conceptual difficulties
+
+### Frequentist confidence is based on **hypothetical infinite repeated sampling**.
+- Frequentist *confidence* and *significance* refer to repeating the process many times.
+
+### A particular sampling/modeling process may or may not be a good approximation of the real population.
+- A particular CI either *does* or *does not* contain the true value.  In the Frequentist world we can never know.
+
+<<<<<<< HEAD
+### This is heady stuff
+- It *is* possible to gain intuition - it requires , but it usually takes a lot of thinking and multiple exposures.
+=======
+### These concepts are difficult.
+- One of the best ways to gain intuition is to explain to non-scientists.
+>>>>>>> b64b2d7bb2cba01709c7c6370657376ff4b5fb00

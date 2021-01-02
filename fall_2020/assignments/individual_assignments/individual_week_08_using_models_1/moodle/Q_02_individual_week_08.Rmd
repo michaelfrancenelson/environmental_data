@@ -1,0 +1,75 @@
+---
+title: "catastrophic normality test"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+require(here)
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructionsborder">
+
+### Instructions
+
+Conduct a Shapiro-Wilk test of normality of the salamander catastrophic rates.
+
+
+</div>
+
+
+<div class="questionborder">
+
+### Q 1 pt (R code)
+
+- Paste the code you used to conduct the test in the text box.
+
+</div>
+
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r answer_key, fig.width=4, fig.height=3}
+catrate = read.csv(here::here("data", "catrate.csv"))
+hist(
+  catrate$cat.rate, 
+  xlab = "Catastrophe Rate", 
+  main = "Histogram of Catastrophe Rates")
+```
+
+
+
+Meta-information
+================
+
+extitle: catastrophic normality test
+
+extype: string
+
+exsolution: nil
+
+expoints: 1
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+

@@ -1,0 +1,74 @@
+---
+title: "Install R and RStudio"
+---
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "rmd_functions.R"))
+
+exams::include_supplement(
+  c("install_rstudio_question.PNG",
+  "github_desktop_signed_in.PNG"),
+  dir = here::here(),
+  recursive = TRUE)
+```
+
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "eco_602_2020.css")))
+```
+
+<div class="warn">Before attempting this exercise, follow the instructions for installing R and RStudio in the assignment  description.</div>
+
+
+# Instructions:
+
+- Start an RStudio session.
+- Locate the console window.
+- Type the following (replacing the text in quotes with your name) into your console window and press enter:
+
+> "Your Name Here"
+
+- Type the following into the console and press enter:
+
+> getwd()
+
+- Take a screenshot of your RStudio session and upload it in the file upload field.
+
+<div class="blackborder">
+
+Your screenshot should look something like this:
+
+```{r echo = FALSE, results = 'asis'}
+expandable_html_image("install_rstudio_question.PNG", moodle_quiz = TRUE, bg_alpha = 0.1)
+# expandable_html_image("install_rstudio_question.PNG", moodle_quiz = TRUE, img_width = 70, bg_alpha = 0.1)
+```
+</div>
+
+
+
+- Upload your screenshot in the file upload field below:
+
+Solution
+========
+
+
+
+
+Meta-information
+================
+extitle: Install R and RStudio
+extype: string
+exsolution: nil
+exname: setup_software
+exsection: setup_software
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE

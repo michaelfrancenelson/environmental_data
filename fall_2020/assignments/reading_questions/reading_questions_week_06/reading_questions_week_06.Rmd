@@ -1,0 +1,36 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 06 Reading Questions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+
+```
+
+
+# Readings
+
+The reading questions this week are drawn from material in the readings and lectures:
+
+- McGarigal 5d
+
+
+
+# Questions
+

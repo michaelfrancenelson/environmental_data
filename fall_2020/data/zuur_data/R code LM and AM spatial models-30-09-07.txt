@@ -1,0 +1,302 @@
+###################
+# R code for exploring spatial structure of LM and GAM
+###################
+
+library(mgcv)
+library(stats)
+library(nlme)
+library(geoR)
+library(car)
+##########################
+#  read model and test data files  #
+##########################
+
+p<-read.table("original_data.txt", header=TRUE)
+#border of territory
+border <- matrix(c(2328.98000000045, 1247.36999999918, 1381.59999999963, 388.949999999255, 559.070000000298, -60.5500000007451, 541.900000000373, 1529.86999999918, 1564.19999999925, 1155.27999999933, 1525.1799999997, 1362.8599999994, 2421.84999999963, 2198.65000000037, 1766.33000000007, 1935.66999999993, 1672.6799999997, 1392.52999999933, 1314.48000000045, 1217.71000000089, 1351.94999999925, 1510.3599999994, 2653.61999999918, 2328.98000000045, 93.5, -48.6900000004098, 1154.65000000037, 1298.24000000022, 2649.84999999963, 3065.01999999955, 7143.25999999978, 7085.50499999978, 7011.38999999966, 6629.76999999955, 6487.75, 4984.74000000022, 4908.25, 3208.58999999985, 3267.88999999966, 3561.30999999959, 3812.58999999985, 3844.58999999985, 3327.99000000022, 3136.00999999978, 2876.91999999993, 2745.8200000003, 2601.45000000019, 93.5), ncol=2)
+#grid data
+coord<-read.table("grid.dat", header=TRUE, sep=",")
+
+#remove atypical points
+num<-length(p[,1])
+ind<-rep(TRUE,num) 
+ind<-rownames(p)!="50"&rownames(p)!="358"&rownames(p)!="49"&rownames(p)!="51"&rownames(p)!="376"&rownames(p)!="39" &rownames(p)!="185" &rownames(p)!="338"&rownames(p)!="206" 
+
+ind.lm<-rownames(p)!=  "378"&rownames(p)!= "355"&rownames(p)!= "369"&rownames(p)!= "357"&rownames(p)!= "478"&rownames(p)!= "139"&rownames(p)!= "464"&rownames(p)!= "338"&rownames(p)!= "206"&rownames(p)!= "357"&rownames(p)!= "355"&rownames(p)!= "169"&rownames(p)!= "269"&rownames(p)!= "243"&rownames(p)!= "369"&rownames(p)!= "378"&rownames(p)!= "248"&rownames(p)!= "397"&rownames(p)!= "249"&rownames(p)!= "177"
+
+ind.gam<-rownames(p)!=  "95"&rownames(p)!= "139"&rownames(p)!= "214"&rownames(p)!= "478"&rownames(p)!= "369" &rownames(p)!="357" &rownames(p)!="301" &rownames(p)!="378" &rownames(p)!= "355"&rownames(p)!= "169"&rownames(p)!= "299"&rownames(p)!= "341"&rownames(p)!=  "269" &rownames(p)!= "397"&rownames(p)!= "374"
+
+ind.lm<-ind.lm&ind&ind.gam               #some time before - I have taken different set of points for LM and GAM, but now I take the same set.
+ind.gam<-ind.gam&ind&ind.lm           #ind.gam and ind.lm are identical now
+
+
+#######################
+# Detecting of spatial autcorrelation for LM residuals
+#######################
+
+permatrix.lm<-matrix(ncol=9,nrow=length(p[ind.lm,1]), dimnames=list(p$point[ind.lm],c("point", "x","y","bboreal", "nBor","nTot","T61","Wet", "resid")))
+permatrix.lm[,1]<-p$point[ind.lm]
+permatrix.lm[,2]<-p$x[ind.lm]
+permatrix.lm[,3]<-p$y[ind.lm]
+permatrix.lm[,4]<-sqrt(1000*(p$nBor[ind.lm]+1)/(p$nTot[ind.lm]))
+permatrix.lm[,5]<-p$nBor[ind.lm]
+permatrix.lm[,6]<-p$nTot[ind.lm]
+permatrix.lm[,7]<-p$T61[ind.lm]
+permatrix.lm[,8]<-p$Wet[ind.lm]
+
+bor.lm<-lm(bboreal~T61+Wet+y, as.data.frame(permatrix.lm),weights=nTot)
+permatrix.lm[,9]<-resid(bor.lm)
+#create geodta object from residuals
+bor.geo.lm<-as.geodata(permatrix.lm, coords.col = 2:3, data.col = 9)    
+
+# check normality
+# H-scatterplot. not to run first, before variofit and eyefit!!! because variofit and eyefit and all plots somewhat don't work after this function!
+#otherwise look at this pictures, re-run R and repeat from beginning and skip H scatterplot.
+library(sgeostat)
+res.lm<-matrix(ncol=3, nrow=length(p$boreal[ind.lm]), dimnames=list(p$point[ind.lm], c('x', 'y', 'res')))
+res.lm[,1]<-permatrix.lm[,2]
+res.lm[,2]<-permatrix.lm[,3]
+res.lm[,3]<-permatrix.lm[,9]
+po.lm<-point(as.data.frame(res.lm), x='x', y='y')
+pa.lm<-pair(po.lm, num.lag=10, maxdist=2000)
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+lagplot(po.lm, pa.lm, 'res', lag=1)
+box()
+lagplot(po.lm, pa.lm, 'res', lag=4)
+box()
+
+# compute sample variogram
+bor.var.lm.omni<-variog(bor.geo.lm, max.dist=1500, pairs.min = 2, bin.cloud = FALSE, direction ="omnidirectional") 
+plot(bor.var.lm.omni, xlab="Distance", cex=1.8, pch=20 )
+
+#fitting theoretical variogram "by hands"
+var.lm.omni<-eyefit(bor.var.lm.omni)  #to specify spherical model of data correlation structure 
+var.lm.omni
+
+#  cov.model sigmasq     phi tausq kappa kappa2
+#1 spherical    2.05 1201.92  7.11  <NA>      1
+
+#refining theoretical variogram automatically
+var.lm.omni.fin <- variofit(bor.var.lm.omni, cov.model="spherical", ini.cov.pars=c(2.05,1201.92), fix.nugget=FALSE, max.dist=1500, nugget = 7.11, weights = "cressie")
+var.lm.omni.fin
+
+#covariance model is: spherical
+#parameter estimates:
+#    tausq   sigmasq       phi 
+#   7.1843    2.0289 1351.8118 
+#  variofit: minimised weighted sum of squares = 12.9894
+
+#plot of variogram with initial fitted spherical model
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4)
+plot(bor.var.lm.omni, xlab="Distance", cex=1.8, pch=20 )
+lines(var.lm.omni.fin)
+lines(x=c(1352,1352), y=c(0,9.20), lty=2)
+text(x=1060,y=0.3,labels="range 1352 m", cex=1.4)
+lines(x=c(0,1500),y=c(7.18, 7.18),lty=2)
+text(x=180,y= 6.68,labels="nugget 7.18", cex=1.4)
+lines(x=c(0,1500),y=c(9.21,9.21),lty=2)
+text(x=120,y=8.71,labels="sill 9.21", cex=1.4)
+text(x=980,y=6.68,labels="nugget effect", cex=1.4)
+text(x=1030,y=6.0, labels="0.78=nugget/sill", cex=1.4)
+
+var.lm.omni2<-eyefit(bor.var.lm.omni)  #to specify exponential model of data correlation structure 
+ var.lm.omni2
+ 
+#    cov.model sigmasq    phi tausq kappa kappa2
+#1 exponential    2.11 520.83  7.11  <NA>      1
+
+
+var.lm.omni.fin2 <- variofit(bor.var.lm.omni, cov.model="exponential", ini.cov.pars=c(2.11,520.83), fix.nugget=FALSE, max.dist=1500, nugget = 7.11, weights = "cressie")
+var.lm.omni.fin2
+
+#variofit: model parameters estimated by WLS (weighted least squares):
+#covariance model is: exponential
+#parameter estimates:
+#   tausq  sigmasq      phi 
+# 6.9511   2.6781 707.4293 
+#variofit: minimised weighted sum of squares = 13.4812
+
+#plot of variogram with initial fitted exponential model
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4)
+plot(bor.var.lm.omni, xlab="distance", cex=1.8, pch=20 )
+lines(var.lm.omni.fin2)
+lines(x=c(707,707), y=c(0,8.6), lty=2)
+text(x=990,y=0.3,labels="range 707  m", cex=1.4)
+lines(x=c(0,1500),y=c(6.95, 6.95),lty=2)
+text(x=180,y= 6.45,labels="nugget 6.95", cex=1.4)
+lines(x=c(0,1500),y=c(9.75,9.75),lty=2)
+text(x=120,y=9.21,labels="sill 9.75", cex=1.4)
+text(x=980,y=6.45,labels="nugget effect", cex=1.4)
+text(x=1030,y=5.85, labels="0.71=nugget/sill", cex=1.4)
+
+#correcting GLS model and autocorrelation paramteres by the Baily scheme
+forgls<-var.lm.omni.fin
+
+for(j in 1:5) {
+  buf<-forgls$nugget/(forgls$nugget+forgls$cov.pars[1])
+  sph.val=c(forgls$cov.pars[2],buf)
+  trend.gls<-gls(bboreal~T61+Wet+y, data=as.data.frame(permatrix.lm), correlation=corSpher(value=sph.val,form=~x+y,nugget=TRUE,fixed=TRUE), weights=permatrix.lm$nTot, method="REML",verbose=FALSE )
+ permatrix.lm[,9]<-(permatrix.lm[,4]-predict(trend.gls))
+  var1<-variog(coords=permatrix.lm[,2:3], data=permatrix.lm[,9],option="bin",max.dist=1500,messages=FALSE)
+  forgls<-variofit(var1,ini.cov.pars=forgls$cov.pars,cov.model="spherical", fix.nugget=FALSE,nugget=forgls$nugget,weights="cressie",messages=FALSE)
+}
+
+plot(var1, pch=19, cex=1.2,max.dist=1500)
+lines(forgls)
+sph.val
+#[1]  1548.7473513    0.6579275 # correaltion structure of LM(ce) trend model
+
+forgls 
+#covariance model is: spherical
+#parameter estimates:
+#    tausq   sigmasq       phi 
+#   6.6633    3.4666 1548.7475  #parameters of auto-correlation for LM(ce) residuals
+
+
+###############
+# Detecting of anisotropy for LM(ce) residuals
+###############
+#create geodta object from residuals
+bor.geo.lm<-as.geodata(permatrix.lm, coords.col = 2:3, data.col = 9)    
+
+#to detect anisotropy. plotting 4 empirical directional variograms
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1,cex.lab=1)
+bor.var.lm<-variog4(bor.geo.lm, max.dist=1700, breaks=seq(0,1700,l=10), pairs.min = 6, tolerancec=pi/6, bin.cloud = FALSE, direction =c(0,pi/4,pi/2,3*pi/4))
+plot(bor.var.lm, pch=c(19,19,19,19),lty=c(1,1,1,1),col="black", type="b", legend=FALSE, same=FALSE)
+
+#create separate directional sample variograms
+bor.var0<-variog(bor.geo.lm, max.dist=1700, breaks=seq(0,1700,l=10), pairs.min = 2, tolerancec=pi/6, bin.cloud = FALSE, direction =0) 
+plot(bor.var0, xlab=NULL, cex=1.8, pch=20 )
+bor.var90<-variog(bor.geo.lm, max.dist=1700, breaks=seq(0,1700,l=10), pairs.min = 2, tolerancec=pi/6, bin.cloud = FALSE, direction =pi/2) 
+plot(bor.var90, xlab=NULL, cex=1.8, pch=20 )
+
+#fitting spherical model variogram for 0grad directional empirical variogram
+var.lm0<-eyefit(bor.var0)
+var.lm0
+#  cov.model sigmasq     phi      tausq    kappa kappa2
+# 1 spherical    4.25      1516.36    6.38       <NA>      1
+
+plot(bor.var0, cex=1.8, pch=20,  ylim=c(0,11))
+lines(var.lm0)
+
+#automatically refining of 0grad model
+var.lm0.fin <- variofit(bor.var0, cov.model="spherical", ini.cov.pars=c(4.25,1516.36), fix.nugget=TRUE, max.dist=1700, nugget = 6.38, weights = "cressie")
+var.lm0.fin
+
+#covariance model is: spherical
+#fixed value for tausq =  6.38 
+#parameter estimates:
+#  sigmasq       phi 
+#   4.2196 1410.8811 
+#variofit: minimised weighted sum of squares = 11.5656
+
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4)
+plot(bor.var0, cex=1.8, pch=20,  ylim=c(0,11))
+lines(var.lm0.fin)
+
+#fitting theoretical variogram for 90grad directional empirical variogram
+var.lm90<-eyefit(bor.var90)
+var.lm90
+
+#  cov.model sigmasq     phi tausq kappa kappa2
+#1 spherical  4.2196 2185.34  6.38  <NA>      1
+
+plot(bor.var90, cex=1.8, pch=20,  ylim=c(0,11))
+lines(var.lm90)
+
+#result: aniso.angle=pi/2, aniso.ratio=2185.34/1410.8811=1.55
+
+
+#######################
+# Detecting of spatial autcorrelation for AM residuals
+#######################
+
+permatrix.gam<-matrix(ncol=9,nrow=length(p[ind.gam,1]), dimnames=list(p$point[ind.gam],c("point", "x","y","bboreal", "nBor","nTot","T61","Wet", "resid")))
+permatrix.gam[,1]<-p$point[ind.gam]
+permatrix.gam[,2]<-p$x[ind.gam]
+permatrix.gam[,3]<-p$y[ind.gam]
+permatrix.gam[,4]<-sqrt(1000*(p$nBor[ind.gam]+1)/(p$nTot[ind.gam]))
+permatrix.gam[,5]<-p$nBor[ind.gam]
+permatrix.gam[,6]<-p$nTot[ind.gam]
+permatrix.gam[,7]<-p$T61[ind.gam]
+permatrix.gam[,8]<-p$Wet[ind.gam]
+
+#spcifiing correlation structure of trend models and autocorrelation parameters of residuals by numerical optimisation of Pinheiro and Bates
+ww<-p$nTot[ind.gam]
+#model without
+bor.gamm<-gamm(permatrix.gam[,4]~s(T61, fx=T, k=5, bs="cr")+s(Wet, fx=F,  k=5, bs="cr")+s(y, fx=T,  k=5, bs="cr"), data=p[ind.gam,],  family=gaussian(link="identity"),correlation=NULL, weights=varFixed(~ww), random=NULL)
+
+permatrix.gam[,9]<-(permatrix.gam[,4]-predict(bor.gamm$gam))
+
+#H-scatterplot. Note - after this H-plots other plots - variogram plots and eyefit -function don't work properly
+# to check normality of AM residuals
+library(sgeostat)
+res.gam<-matrix(ncol=3, nrow=length(p$boreal[ind.gam]), dimnames=list(p$point[ind.gam], c('x', 'y', 'res')))
+res.gam[,1]<-permatrix.gam[,2]
+res.gam[,2]<-permatrix.gam[,3]
+res.gam[,3]<-permatrix.gam[,9]
+po.gam<-point(as.data.frame(res.gam), x='x', y='y')
+pa.gam<-pair(po.gam, num.lag=10, maxdist=2000)
+oldpar<-par()
+par(mar=c(4.5,4.5,1,1))
+par(cex.axis=1.4,cex.lab=1.4, col.sub="white", col.main="white")
+lagplot(po.gam, pa.gam, 'res', lag=1)
+box()
+lagplot(po.gam, pa.gam, 'res', lag=4)
+box()
+
+bor.gamm.auto2<-gamm(bboreal~s(T61, fx=T, k=5, bs="cr")+s(Wet, fx=F,  k=5, bs="cr")+s(y, fx=T,  k=5, bs="cr"), data=as.data.frame(permatrix.gam),  family=gaussian(link="identity"), correlation=corSpher(form=~x+y,nugget=TRUE,fixed=FALSE), random=NULL)
+bor.gamm.auto2 #to see AIC of model with spherical correlation structure 
+
+#corSpher
+# range         nugget 
+# 821.896787   0.669392 
+
+bor.gamm.auto5<-gamm(bboreal~s(T61, fx=T, k=5, bs="cr")+s(Wet, fx=F,  k=5, bs="cr")+s(y, fx=T,  k=5, bs="cr"), data=as.data.frame(permatrix.gam),  family=gaussian(link="identity"), correlation=corExp(form=~x+y,nugget=TRUE,fixed=FALSE), random=NULL)
+bor.gamm.auto5 #to see AIC of model with exponential correlation structure
+
+#explore spatial auto-correlation of residuals
+permatrix.gam[,9]<-(permatrix.gam[,4]-predict(bor.gamm.auto2$gam))
+#make geodata object using GAM residuals
+bor.geo.gam<-as.geodata(permatrix.gam, coords.col = 2:3, data.col = 9)    
+
+#to detect anisotropy we plot 4 directional variograms
+par(mar=c(4.5,4.5,1,1))
+bor.var.gam<-variog4(bor.geo.gam, max.dist=1500, pairs.min = 6, uvec=10, bin.cloud = FALSE, , tolerance=pi/6,direction =c(0,pi/4,pi/2,3*pi/4)) #breaks=seq(0,1500,l=10), 
+plot(bor.var.gam, pch=c(19,19,19,19),lty=c(1,1,1,1),col="black", type="b", same=FALSE, legend=FALSE)
+
+#coreate separate directional sample variograms
+bor.var.gam0<-variog(bor.geo.gam, max.dist=1500, uvec=10, pairs.min = 6, bin.cloud = FALSE, direction =0, tolerance=pi/6) 
+plot(bor.var.gam0, cex=1.8, pch=20, ylim=c(0,10) )
+bor.var.gam90<-variog(bor.geo.gam, max.dist=1500, uvec=10, pairs.min = 6, bin.cloud = FALSE, direction =pi/2, tolerance=pi/6) 
+plot(bor.var.gam90, cex=1.8, pch=20,ylim=c(0,10) )
+
+#fitting theoretical variogram for 0grad. directional variogram
+var.gam0<-eyefit(bor.var.gam0)
+var.gam0
+#  cov.model sigmasq    phi tausq kappa kappa2
+#1 spherical    2.75 752.08   6.3  <NA>      1
+
+
+#plotting empirical and modelvariograms
+plot(bor.var.gam0, cex=1.8, pch=20,  ylim=c(0,11))
+lines(var.gam0)
+
+#fitting model variogram for 90grad. directional variogram
+var.gam90<-eyefit(bor.var.gam90)
+var.gam90
+#  cov.model sigmasq     phi tausq kappa kappa2
+#1 spherical    2.75 1226.97   6.3  <NA>      1
+
+
+#plotting empirical and model variograms
+plot(bor.var.gam90, cex=1.8, pch=20,  ylim=c(0,11))
+lines(var.gam90)
+
+#result aniso.angle=pi/2, aniso_ratio=1227/752=1.63
+

@@ -1,0 +1,74 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Hypothesis Testing 1: A Parametric Frequentist Approach"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+require(ggplot2)
+require(mfn.teaching.utils)
+
+```
+
+## Key Concepts and Terms
+
+- Null Hypotheses
+- Alternative Hypotheses
+- Decision Criterion
+- 1- and 2-tailed hypotheses
+- T-test: applying the decision criterion
+
+
+
+
+## A Classical Approach
+
+### Hypothesis testing is central to Frequentist statistics.
+
+- Frequentist hypothesis testing often uses *parametric* distributions, and their 
+accompanying assumptions to do inference.
+
+
+- This lecture uses a t-test example.  T-tests are easy to understand in 
+a Frequentist parametric paradigm!
+
+\vfill
+\vfill
+
+### Other approaches to hypothesis testing
+
+Note: there are other possible approaches that use Frequentist concepts, such
+as simulation and resampling techniques.
+
+
+
+
+```{r child = find_file("hypothesis_testing_frequentist_t_test.Rmd")} 
+```
+
+
+
+## Key Concepts and Terms
+
+- Null Hypotheses
+- Alternative Hypotheses
+- Decision Criterion
+- 1- and 2-tailed hypotheses
+- T-test: applying the decision criterion
+

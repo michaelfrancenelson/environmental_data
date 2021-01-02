@@ -1,0 +1,142 @@
+---
+title: "Resampling penguin data: significance"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+   
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+
+  return (sample_sd / sqrt(n))
+}
+  
+
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructionsborder">
+
+#### Instructions
+
+Use your `two_group_resample()` function along with a loop to generate 2000 resampled differences of means for flipper length between the two penguin species.
+
+- Hint: see the **Resampling simulations** section in the lab walkthrough for an example of how to do this.
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1: 6 pts
+
+How many of your resampled differences of means were greater than 5.8?
+
+- Assume that we are doing a 2-sided test: we don't care which species has longer flippers, we only want to know if they are different.
+
+Paste the R code you used to check into the text entry box.
+
+</div>
+
+
+<div class="hintborder"> 
+
+HINT: Since this is a 2-sided test, you'll have to consider the sign of the differences of means.
+
+  - The `abs()` function may be your friend here.
+
+</div>
+
+
+Solution
+========
+
+
+
+### Grading Guide
+
+- Most likely the students won't have seen any values with magnitude greater than 0.58.
+- Their code should use `abs()` to catch both tails.
+
+
+
+
+```{r}
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  dat_1 = sample(x, n_1, replace = TRUE)
+  dat_2 = sample(x, n_2, replace = TRUE)
+  
+  diff_simulated = 
+    mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+  
+  return(diff_simulated)
+}
+
+
+n = 2000
+mean_differences = c()
+for (i in 1:n)
+{
+  mean_differences = c(
+    mean_differences,
+    two_group_resample(dat_pen$flipper_length_mm, 68, 152)
+  )
+}
+hist(mean_differences)
+sum(abs(mean_differences) > 5.8)
+```
+
+
+
+Meta-information
+================
+
+extitle: Resampling penguin data: significance
+
+extype: string
+
+exsolution: nil
+
+exname: lab_06
+
+exsection: lab_06
+
+expoints: 6
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 0
+
+exextra[essay_attachmentsrequired,logical]: FALSE
+
+

@@ -1,0 +1,366 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Frequentist Confidence Intervals"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+require(data.table)
+
+
+require(palmerpenguins)
+dat = data.table(droplevels(subset(penguins, species == "Chinstrap")))
+
+```
+
+
+
+
+
+## Calculating the intervals... is much less important than understanding what they mean
+
+### Software will almost always do this for us.
+
+When we focus on constructing the intervals themselves, we lose focus of the 
+*much* more important *sampling distribution* context.
+
+### Remember the standard normal:
+
+```{r, echo=FALSE, out.width="60%", fig.align='center', fig.cap="The standard normal is our friend when we calculate CIs"}
+knitr::include_graphics(find_file("standard_normal_standard_deviation_interpretation.png"))
+```
+
+
+
+
+## Calculating the intervals
+
+```{r, echo=FALSE, out.width="60%", fig.align='center', fig.cap="standardized sampling distribution"}
+knitr::include_graphics(find_file("standard_normal_standard_deviation_interpretation.png"))
+```
+- Per the Central Limit Theorem, we can pretend the sampling distribution is normal
+- We can use the nice properties of the standard normal to calculate CIs.
+- If needed, review details in the previous lecture/slides on standard errors and sampling distributions.
+
+
+
+## The standard normal distribution
+
+### What does standardized mean?
+
+Recall that the *standard normal* has $\mu = 0$ and $\sigma = 1$.
+
+### Z-standardization: 
+
+- We can convert any value from any normal distribution into the *standard normal* by:
+
+1. Subtracting the mean
+2. Dividing by the standard deviation.
+
+- We call a value standardized this way a *z-value*.
+- It's very similar to how we calculate a *t-value*, more on that when we talk about t-tests and the t-distribution...
+
+
+
+
+## Z-standardization: 
+
+- We can convert any value from any normal distribution into the *standard normal* by:
+
+1. Subtracting the mean
+2. Dividing by the standard deviation.
+
+```{r, echo = FALSE}
+knitr::include_graphics(find_file("z_standardization.png"))
+```
+
+
+
+## Standardizing example: Chinstrap penguins
+
+Z-standardizing the flipper lengths:
+
+1. Calculate sample mean and standard deviation of original measurements.
+1. Center the measurements: subtract the sample mean.
+1. Standardize the measurements: divide the centered measurements by the sample standard deviation.
+
+
+![](`r find_file("chinstrap_penguins_flipper_lengths_center_standardize.png")`)
+
+
+
+
+
+## Calculation steps
+
+The general procedure is:
+
+1. Calculate critical z-values for the standardized sampling distribution: use $alpha$ and the `qnorm()` R function
+1. Calculate sample mean and standard deviation
+1. Calculate the sample standard error
+1. Multiply the sample standard error by the critical z-value: This is the CI radius
+1. CI is the sample mean $\pm$ the CI radius
+
+We'll use the penguin flipper data to illustrate the procedure.
+
+
+
+
+## 95% Critical z-values
+
+We can use the quantile function to determine the critical z-values for a 95% confidence interval:
+```{r results='hold'}
+alpha = 0.05
+z_crit = z_lower = qnorm(alpha/2, mean = 0, sd = 1)
+z_upper = qnorm(1 - (alpha/2), mean = 0, sd = 1)
+
+print(c(`Critical Z: lower tail` = z_lower,
+        `Critical Z: upper tail` = z_upper), digits = 3)
+```
+
+
+
+
+## 95% Critical z-values
+
+Verify that  95% of the normal density is within the upper and lower critical
+values using the cumulative probability function `pnorm()`
+
+```{r, results='hold'}
+pnorm(z_upper)
+pnorm(z_lower)
+pnorm(z_upper) - pnorm(z_lower)
+```
+
+
+
+
+## 95% Critical z-values
+
+### Graphically:
+
+
+```{r, echo=FALSE, out.width="95%", fig.align='center'}
+knitr::include_graphics(find_file("standard_norm_z_95_pct_interval.png"))
+```
+
+
+
+
+
+
+## Let's take stock
+
+### What we know so far:
+
+- $alpha = 0.05$
+- Critical Z values: $\pm 1.96$
+
+### What we need:
+
+- The sample mean
+- The sample standard deviation
+- The sample standard error
+
+
+
+## Calculation steps
+
+The general procedure is:
+
+
+1. `r colorize("Calculate critical z-values for the standardized sampling distribution: use $alpha$ and the qnorm() R function", "red")` 
+1. Calculate sample mean and standard deviation
+1. Calculate the sample standard error
+1. Multiply the sample standard error by the critical z-value: This is the CI radius
+1. CI is the sample mean $\pm$ the CI radius
+
+
+
+
+## Sample mean, standard deviation, standard error
+
+Mean and sample SD are easy:
+
+```{r}
+flipper_sample_mean = mean(dat$flipper_length_mm)
+ssd = sd(dat$flipper_length_mm)
+print(
+  c(`Mean Flipper Length` = 
+      flipper_sample_mean,
+    `Flipper Length Sample SD` = 
+      ssd),
+  digits = 2)
+```
+
+
+
+
+## Sample mean, standard deviation, standard error
+
+R does not have a built-in function for the standard error of the mean,
+but we know it's just $SSD/\sqrt{n}$
+
+```{r}
+flipper_sample_se = 
+  ssd / sqrt(length(dat$flipper_length_mm))
+print(
+  c(`Sample Standard Error` = flipper_sample_se),
+  digits = 2)
+```
+
+\tiny
+- Astute students enrolled in the lab may notice that our calculate of SSE does not take into account missing values!
+
+
+## Putting it together:
+
+The last piece of the puzzle is to calculate the width of the interval.
+
+### We know:
+
+- $SSE = 0.86$
+- Critical Z values: $\pm 1.96$
+
+We can take advantage of the fact that the sampling distribution is normal, per the *central limit theorem*.
+
+
+
+## Calculation steps
+
+The general procedure is:
+
+1. `r colorize("Calculate critical z-values for the standardized sampling distribution: use $alpha$ and the qnorm() R function", "red")` 
+1. `r colorize("Calculate sample mean and standard deviation", "red")`
+1. `r colorize("Calculate the sample standard error", "red")` 
+1. Multiply the sample standard error by the critical z-value: This is the CI radius
+1. CI is the sample mean $\pm$ the CI radius
+
+
+
+
+
+## Putting it together:
+
+We can use some of the nice features of the normal distribution to finish the calculation:
+
+- It is symmetrical: we can use the same critical z-value for the upper and lower ends of the CI
+- We can back-transform from a standard normal to a normal with our sample parameters:
+  1. Multiplying by the sample standard deviation.
+  1. Add the sample mean.
+
+```{r, echo = FALSE}
+knitr::include_graphics(find_file("z_standardization_reverse.png"))
+```
+
+
+
+## Confidence interval formula:
+
+$CI = \bar{x} \pm SSE \times Z_{crit}$
+
+- Back-transform from the standardized sampling distribution to the sample sampling distribution:
+
+```{r}
+ci_radius = abs(flipper_sample_se * z_crit)
+```
+- Add the sample mean
+
+```{r, results='hold'}
+flipper_sample_mean - ci_radius
+flipper_sample_mean + ci_radius
+```
+
+
+## Calculation steps
+
+The general procedure is:
+
+1. `r colorize("Calculate critical z-values for the standardized sampling distribution: use $alpha$ and the qnorm() R function", "red")` 
+1. `r colorize("Calculate sample mean and standard deviation", "red")` 
+1. `r colorize("Calculate the sample standard error", "red")` 
+1. `r colorize("Multiply the sample standard error by the critical z-value: This is the CI radius", "red")` 
+1. `r colorize("CI is the sample mean $\\pm$ the CI radius", "red")` 
+
+
+
+
+
+
+## What if we had a larger sample?
+
+What was the sample size for the penguin flipper data set?
+
+```{r}
+length(dat$flipper_length_mm)
+```
+
+We know that sampling distributions are narrower if we have larger samples.  
+
+Let's pretend we had a sample size of 150
+
+
+
+
+## What if we had a larger sample?
+
+Recall our CI:
+
+```{r, echo = FALSE}
+print(c(flipper_sample_mean - ci_radius, flipper_sample_mean + ci_radius), digits = 5)
+```
+
+```{r, results='hold'}
+n = 150
+sse_150 = ssd / sqrt(150)
+ci_radius_150 = abs(sse_150 * z_crit)
+print(c(ci_radius, ci_radius_150), digits = 5)
+print(c(flipper_sample_mean - ci_radius, 
+        flipper_sample_mean + ci_radius), digits = 5)
+print(c(flipper_sample_mean - ci_radius_150, 
+        flipper_sample_mean + ci_radius_150), digits = 5)
+
+```
+
+
+
+
+
+<!-- ## Calculating the standard error of the mean -->
+
+<!-- Recall the sample standard deviation and standard error formulas: -->
+
+<!-- $s_x = \sqrt{\frac{\sum \left( x_i - \bar{x} \right)}{n - 1}}$ -->
+
+<!-- $SEM=\frac{s_x}{n}$ -->
+
+<!-- For the penguins: -->
+
+<!-- ```{r comment = ""} -->
+<!-- ssd = sd(dat$flipper_length_mm) -->
+<!-- sse = ssd / sqrt(length(dat$flipper_length_mm)) -->
+
+<!-- print(c(`Sample Standard Deviation` = ssd,  -->
+<!--         `Sample Standard Error` = sse), digits = 2) -->
+<!-- ``` -->
+

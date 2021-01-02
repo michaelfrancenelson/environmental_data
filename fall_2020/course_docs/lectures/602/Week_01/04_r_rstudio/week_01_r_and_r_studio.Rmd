@@ -1,0 +1,256 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "R and RStudio"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(cowplot)
+
+g_tit = ggtitle("Motor Trend Car Road Tests")
+wt_lab = "Weight (lbs * 1000)"
+mpg_lab = "Miles Per Gallon"
+hp_lab = "Gross Horsepower"
+cyl_lab = "Number of Cylinders"
+gear_lab = "Number of Front Gears"
+
+t_bot = theme(legend.position = "bottom")
+
+
+gg_mod = ggplot(mtcars, aes(mpg, disp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE) +
+  ylab("Displacement (cu. in)") +
+  xlab(mpg_lab)
+```
+
+
+## Key concepts
+
+- What is R?
+- Why should I learn it?
+- What is RSTudio?
+
+
+
+
+
+
+## What is R
+
+R is a statistical *programming language*.
+R has many desireable qualities, for example:
+
+- It is open-source and extensible
+- There are thousands of *packages* for just about any kind of analysis you might need to do.
+- R is *somewhat easy* to learn compared to many other languages.
+  - It is a *high level* language: many technicalities occur behind the scenes so code is compact.
+  - It is [mostly] *vectorized*
+  - It is an *interpreted* language, so more forgiving of errors than a *compiled* language.
+
+
+
+
+## Why should I learn R
+
+Some good reasons:
+
+- Reproducibility, Collaboration, and Communication
+- I'm enrolled in this course
+- Graphics capabilities
+- Tons of learning materials
+- Increasingly a standard tool for research, government, and industry
+- Dominant platform in many fields
+  - Huge user knowledge base
+
+
+
+
+
+## Why should I learn R
+
+Did I mention that it's free and open source?
+
+
+
+
+
+## Why shouldn't I learn R?
+
+Point-and-click programs can be easier to learn:
+
+- Excel and other spreadsheets can handle some calculations and analyses
+- It's too hard to learn
+  - It's *hard* to learn, but *too hard*.... I'm not convinced.
+  - Any programming language has a steep learning curve
+- It’s not established in my field
+- [Somewhat] idiomatic syntax
+
+
+
+
+
+
+## What is RStudio
+
+RStudio is an Integreated Development Environment (IDE)
+
+- Provides a user-friendlier interface to R
+- Provides lots of tools to organize projects
+- RSTudio and kinttr + RMarkdown
+  - Markdown/markup language for creating webpages, pdfs, presentations and other documents
+  - Embed R code and graphics
+
+
+
+
+## Where to get R and RSTudio
+
+R is maintained by the Comprehensive R Archive Network:
+
+- https://cran.r-project.org/
+
+
+RSTudio is at https://rstudio.com/
+
+- The basic RStudio desktop is free and open-source!
+
+
+
+
+
+
+
+## R examples: Basic plotting 1
+
+```{r, echo = FALSE}
+data("mtcars")
+
+plot(
+  mtcars$wt, mtcars$mpg,
+  main = "Motor Trend Car Road Tests",
+  xlab = "Weight (* 1000)",
+  ylab = "Miles Per Gallon")
+
+```
+
+## R examples: Basic plotting2
+
+```{r, echo = FALSE}
+data("mtcars")
+par(mfrow = c(2, 2))
+plot(
+  mtcars$wt, mtcars$mpg,
+  main = "Motor Trend Car Road Tests",
+  xlab = "Weight (* 1000)",
+  ylab = "Miles Per Gallon")
+plot(
+  mtcars$hp, mtcars$wt,
+  main = "Motor Trend Car Road Tests",
+  ylab = "Weight (* 1000)",
+  xlab = "Gross Horsepower")
+boxplot(
+  wt ~ cyl, data = mtcars,
+  main = "Motor Trend Car Road Tests",
+  ylab = "Weight (* 1000)",
+  xlab = "Number of Cylinders")
+boxplot(
+  wt ~ gear, data = mtcars,
+  main = "Motor Trend Car Road Tests",
+  ylab = "Weight (* 1000)",
+  xlab = "Number of Forward Gears")
+
+```
+
+
+
+
+
+
+
+
+## R examples: Fancier plotting (ggplot2 package)
+
+
+```{r fancy_plot_ggplot, echo = FALSE}
+
+
+mtcars$cyl = factor(mtcars$cyl)
+mtcars$`No. carbeurators` = factor(mtcars$carb)
+mtcars$`Engine` = factor(mtcars$vs, labels = c("v-shape", "straight"))
+mtcars$`Gears` = factor(mtcars$gear)
+# , labels = c("v-shape", "straight"))
+
+plot_grid(
+ggplot(mtcars) + 
+  geom_point(aes(wt, mpg, colour = cyl), data = mtcars) +
+  ylab(mpg_lab) + xlab(wt_lab) + g_tit + t_bot,
+
+ggplot(mtcars) + 
+  geom_point(aes(hp, wt, colour = `Engine`)) +
+  ylab(wt_lab) + xlab(hp_lab) + g_tit + t_bot,
+
+ggplot(mtcars) + 
+  geom_boxplot(aes(
+    x = cyl, 
+    y = wt, 
+    fill = cyl), show.legend = FALSE) +
+  ylab(wt_lab) + xlab(cyl_lab) + g_tit,
+ggplot(mtcars) + 
+  geom_boxplot(aes(
+    x = `Gears`, 
+    y = wt, 
+    fill = `Gears`), show.legend = FALSE) +
+  ylab(wt_lab) + xlab(gear_lab) + g_tit,
+nrow = 2
+)
+
+
+
+```
+
+
+
+
+## R examples: Linear Regression
+
+```{r}
+fit_1 = lm(disp ~ mpg, data = mtcars)
+```
+
+
+\begin{center}
+```{r, echo=FALSE, comment = "", results='asis'}
+table.string <- texreg::texreg(fit_1, return.string = TRUE, caption = "Miles per gallon and displacement")
+cat(table.string)
+
+# summary(fit_1)
+```
+\end{center}
+
+
+
+## R examples: Linear Regression
+```{r, echo=FALSE, message=FALSE}
+gg_mod
+```
+

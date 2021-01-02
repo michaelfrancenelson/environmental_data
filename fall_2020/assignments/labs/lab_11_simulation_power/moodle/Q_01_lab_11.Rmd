@@ -1,0 +1,117 @@
+---
+title: "dispersion power plot"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    includes:
+      after_body: !expr here::here("formatting", "js", "rmd.js")
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r solution_code, echo=FALSE}
+birds = read.csv(here::here("data", "bird.sub.csv"), header = TRUE)
+hab = read.csv(here::here("data", "hab.sub.csv"), header = TRUE)
+birdhab = merge(hab, birds, by = c('basin', 'sub'))
+
+fit_1 = lm(BRCR~ls, data = birdhab)
+fit_1_summary = summary(fit_1)
+sd_obs = fit_1_summary$sigma
+
+dat_dispersion_sim = 
+  read.csv(
+    here::here(
+      "data", "lab_11",
+      "sim_output_dispersion_1000_200.csv"))
+```
+```{r solution_plot, eval=FALSE, echo = FALSE}
+plot(
+  power ~ sd, data = dat_dispersion_sim, 
+  type = "l", 
+  xlab = "Population SD",
+  ylab = "Statistical Power")
+abline(v = sd_obs, col = "red", lty = 3)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+### Instructions
+
+Create a line plot of dispersion (x-axis) and statistical power (y-axis) with a dotted vertical red line at the observed population standard deviation value.
+
+</div>
+
+
+<div class="questions">
+
+### Q 1 pt (image upload)
+
+- Upload your plot as an image file.
+
+</div>
+
+
+
+Solution
+========
+
+```{r answer_plot, ref.label = "solution_plot", fig.asp=1/1.8, echo = FALSE}
+```
+
+<div class="toggle"><button>Click to show/hide code</button>
+<br>
+
+```{r answer_code, ref.label = "solution_code", results='hide'}
+```
+```{r answer_plot, ref.label = "solution_plot", eval = FALSE}
+```
+
+</div>
+
+
+
+
+Meta-information
+================
+extitle: dispersion power plot
+
+extype: string
+
+exsolution: nil
+
+exname: lab_11
+exsection: lab_11
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 1
+
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 1
+
+
+
+
+<!-- <script> -->
+<!--   $(".toggle").click(function() { -->
+<!--     $(this).toggleClass("open"); -->
+<!--   }); -->
+<!-- </script> -->
+

@@ -1,0 +1,34 @@
+---
+title: "Essay without upload"
+---
+
+
+
+
+Question
+========
+
+This template creates an essay question with:
+- required essay answer
+- no upload field
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Question title: essay without upload
+extype: string
+exsolution: nil
+exname: exam name
+exsection: section name
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

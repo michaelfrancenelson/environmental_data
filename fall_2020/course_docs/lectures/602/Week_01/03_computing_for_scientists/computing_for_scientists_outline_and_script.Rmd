@@ -1,0 +1,59 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "***** document title here ****"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Data Concepts
+
+- Recording data in row format:	
+- Connections to relational database tables
+- Each row is a single observation each column is an attribute.
+- advantages: standardized structure, compatible wish most computer programs
+- Disadvantages: may require more storage space column maybe unintuitive for your experiment
+- data and metadata
+- Data management
+- Publishing: data availability, data repositories
+- UMass libraries, data basin, genbank, etc.
+
+Computing Concepts: Files
+
+- File types: binary and text
+- Text type are usually human-readable
+- Binary are usually application-specific
+- File extensions
+- File associations
+- Archive files, zip files
+
+Computing concepts: reproducibility
+
+- Graphical user interface.
+- Point-and-click versus scripting.
+- Publishing code.
+- R and Excel
+
+Science
+
+
+Reading questions
+- Question about data in row format.
+- Question question about file extensions, and common file extensions associated with text files
+- Question about absolute and relative paths
+- Question about reproducibility in point and click applications vs. Scripting applications
+- 
+

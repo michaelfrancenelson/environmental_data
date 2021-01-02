@@ -1,0 +1,308 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Discrete Distributions"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r graphics setup, include=FALSE}
+require(ape)
+
+trial_1 = read.tree(text="((H),T);")
+trial_1a = read.tree(text="(('Pr(H) = 0.5', 'Pr(T) = 0.5'));")
+trial_2 = read.tree(text="((HH,HT),(TH,TT));")
+trial_2a = read.tree(text="((
+                     'P(HH) = P(H) * P(H) = 0.5 * 0.5 = 0.25',
+                     'P(HT) = P(H) * P(T) = 0.5 * 0.5 = 0.25'),
+                     ('P(TH) = P(T) * P(H) = 0.5 * 0.5 = 0.25',
+                     'P(TT)= P(T) * P(T) = 0.5 * 0.5 = 0.25'));")
+cex_tree = 1.5
+mar_tree = c(3, 0, 2, 4)
+oma_tree = c(6, 0, 0, 0)
+# trial_2 = read.tree(text="((HH,HT)),(TH,TT);")
+
+
+
+```
+
+
+
+
+## Key concepts
+
+- What is discrete?
+- Discrete sample spaces
+- Combinations and permutations
+- Bernoulli, Binomial, and Poisson distributions
+
+
+
+## Discrete Distributions
+
+### In the world of theoretical distributions, discrete refers to a measurement scale that is:
+- Numeric, i.e. not categorical
+  - Not ordinal because the interval between adjacent points is constant: $4 - 3 = 5 - 4$ but $medium - low \neq high - medium$
+- Cannot take on fractional values
+  - They are integers
+
+### Counts, or censuses, are [usually] considered discrete data type
+
+
+
+
+## Sample Spaces
+
+> Events in a discrete distribution can only be integer values.
+
+- That means a discrete distribution has a *finite sample space*, right?
+
+
+
+
+## Sample Spaces
+
+> Events in a discrete distribution can only be integer values.
+
+- That means a discrete distribution has a *finite sample space*, right?
+
+\begin{large}
+\begin{center}
+
+No! Non! Nej! Não! ¡No!
+
+\end{center}
+\end{large}
+
+It may seem unintuitive, but many discrete [theoretical] distributions have infinite sample spaces.
+
+
+
+## The Simplest Distribution?
+
+### One of the easiest distributions to understand is the *Bernoulli Distribution*.
+
+- It's sample space has only two elements.
+- Realizations of a *Bernoulli process* produces *binary* outcome.
+- It has one parameter: the probability of *success*.
+
+### It's a special case of the *binomial distribution*
+
+- A realization of the *Bernoulli process* is called a **trial**
+
+
+
+
+## The Binomial distributions
+
+### A binomial process is a collection of $n$ independent Bernoulli trials.
+
+- Each Bernoulli trial must have the same probability of success
+- Binomial has two *parameters*: $n$ and $p$
+- $n$ is the number of trials
+- $p$ is the probability of *success* in an individual trial (just like the Bernoulli dist.)
+
+- The *sample space* of a binomial distribution has $n + 1$ elements:
+- It's the possible counts of successes, i.e. the set $\{0, 1, 3, ..., n\}$
+
+
+
+## Classic Example: Coin Tosses
+
+### A series of independent coin tosses is a lot like a binomial process...
+
+> Wait a minute, I think I remember something about *independent events* and *joint probabilities*....
+
+- A single coin flip is not very interesting, but consider the sample space for two flips ($n = 2$):
+
+\begin{center}
+$\{(T, T), (T, H), (H, T), (H, H)\}$
+\end{center}
+
+- The *sample space* of a binomial distribution has $n + 1$ elements, which should be 3, but there are 4 elements in the set!
+  - Something seems wrong.
+
+
+
+## Combinations and Permutations
+
+### Combinatorics studies the possible ways we can *arrange* sets of objects.
+- Is order important?
+- do we consider $(T, H)$ and $(H, T)$ to be the same or different events.
+- How many *categories* of objects are there?
+- Sampling - to replace or not to replace?  
+
+### Combinatorics is the key to understanding probability in discrete distributions.
+
+
+## Combinations and Permutations
+
+### Does order matter?
+- If we care about order we consider $(T, H)$ and $(H, T)$ to be *distinct* events.
+- If we do not care about order $(T, H)$ and $(H, T)$ are *equivalent* events.
+
+### When order is important, we work with *permutations*.
+### When order is unimportant, we have *combinations*.
+- There are usually more permutations than combinations.
+
+
+
+## An Interesting Question
+
+### Does the spelling of words concern *combinations* or *permutations*? 
+
+- We'll read a creative exploration of this concept soon.
+
+
+
+
+## Combinations and Permutations
+
+### When we consider a binomial process, we care about *combinations*... 
+- but we also need to know about *permutations* to characterize the sample space.
+- Recall the possible outcomes for 2 coin flips: $\{(T, T), (T, H), (H, T), (H, H)\}$
+  - Let's assume that $Pr(H) = Pr(T) = 0.5$.
+
+### If the flips are independent, what is $Pr(H, H)$?
+
+- The joint probability of independent events is the produ.....
+- That seems relevant, but the wording doesn't feel intuitive.
+
+
+
+## Combinations and Permutations
+
+- Think of each flip as a junction in a tree.
+- The first flip has two branches:
+
+```{r first_trial, echo = FALSE}
+plot(trial_1, cex = cex_tree)
+```
+
+## Combinations and Permutations
+
+- If the probabilities are equal:
+
+```{r first_trial_prob, echo = FALSE}
+plot(trial_1a, cex = cex_tree)
+```
+
+
+
+## Combinations and Permutations
+
+- Each of those branches has two branches:
+
+```{r second_trial , echo=FALSE, fig.height=7}
+{
+  par(mar = mar_tree, oma = oma_tree, xpd = TRUE)
+  plot(trial_2, cex = cex_tree)
+  nodelabels(text = c("H", "T"), node = c(6, 7), bg = "white", cex = cex_tree)
+}
+```
+
+
+## Combinations and Permutations
+
+- Probabilities of independent events are multiplied:
+
+```{r second_trial_prob , echo=FALSE, fig.height=7}
+{
+  par(mar = mar_tree, oma = oma_tree, xpd = TRUE)
+  plot(trial_2a, cex = cex_tree)
+  nodelabels(text = c("H", "T"), node = c(6, 7), bg = "white", cex = cex_tree)
+}
+```
+
+
+
+
+## Binomial processes and order
+
+### Consider the sample space for two flips ($n = 2$):
+
+$\{(T, T), (T, H), (H, T), (H, H)\}$
+
+### There are *four* elements... But what if we think of them as the number of heads?
+
+$\{0, 1, 1, 2\}$
+
+- Now the size of the sample space makes more sense.
+- The *sample space* is really only *three* elements because $(H, T)$ and $(T, H)$ are equivalent in the binomial world.
+
+### The *sample space* of a binomial is the range of possible count of successes, i.e. the set $\{0, 1, 3, ..., n\}$
+
+
+
+
+## The Poisson Distribution
+
+### Another important discrete distribution is the Poisson.
+
+It has a single parameter: $\lambda$
+
+- The Poisson distribution describes counts:
+  - A Poisson event is a count, or census.
+  - The sample space is $\{0, 1, 2, ..., \infty\}$
+  - It has an *infinite sample space*!
+
+### How can a discrete distribution have an infinite sample space?
+- Recall that it's a *theoretical* distribution
+- Compare the sample to a binomial sample space.
+
+
+
+
+
+## Poisson Processes
+
+### Poisson distribution is often appropriate for things that occur *randomly* but at a certain *constant rate*.
+
+- If you could repeat a census many times (either in the same location, or simultaneously in many similar locations) you data can be modeled with a Poisson distribution.
+
+
+- We'll talk more about modeling counts with the Poisson, binomial, Bernoulli, and other discrete distributions when we talk about extending the simple linear model later in the course.
+
+
+
+
+## The Poisson Distribution
+
+The Poisson distribution is very important *null model* in spatial statistics
+
+
+```{r csr, echo=FALSE, fig.asp=0.6}
+n_pts = 453
+
+par(mar = c(0, 0, 0, 0), oma = c(0, 0, 0, 0), usr = c(0, 1, 0, 1))
+plot(runif(n_pts), runif(n_pts), ylab = "", xlab = "", axes = FALSE, pch = 16, xlim = c(0, 1), ylim = c(0, 1))
+box(lwd = 1.5)
+grid(4, 4, lwd = 1.5, col = 1)
+```
+
+
+
+
+
+## Recap
+
+- What is discrete?
+- Discrete sample spaces
+- Combinations and permutations
+- Bernoulli, Binomial, and Poisson distributions
+

@@ -1,0 +1,107 @@
+---
+title: "Resampling penguin data: histogram"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+Use your `two_group_resample()` function along with a loop to generate 2000 resampled
+differences of means for flipper length between the two penguin species.
+
+- Hint: see the **Resampling simulations** section in the lab
+walkthrough for an example of how to do this.
+
+</div>
+
+<div class="questionborder">
+
+### Q1 2 pts
+
+Upload a histogram of the resampled differences of means. 
+
+</div>
+
+
+
+Solution
+========
+
+
+```{r}
+require(palmerpenguins)
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  dat_1 = sample(x, n_1, replace = TRUE)
+  dat_2 = sample(x, n_2, replace = TRUE)
+  
+  diff_simulated = 
+    mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+  
+  return(diff_simulated)
+}
+
+
+n = 2000
+mean_differences = c()
+for (i in 1:n)
+{
+  mean_differences = c(
+    mean_differences,
+    two_group_resample(dat_pen$flipper_length_mm, 68, 152)
+  )
+}
+hist(mean_differences)
+sum(abs(mean_differences) > 5.8)
+```
+
+
+
+Meta-information
+================
+extitle: Resampling penguin data: histogram
+
+extype: string
+
+exsolution: nil
+
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: FALSE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 2
+
+

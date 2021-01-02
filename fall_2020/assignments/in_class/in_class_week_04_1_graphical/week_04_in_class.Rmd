@@ -1,0 +1,79 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 04: in class graphical exploration 2"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+source(here::here("rmd_tools", "find_file.R"))
+source(here::here("rmd_tools", "build_moodle_web_questions.R"))
+
+```
+
+
+
+# Learning Objectives
+
+Understand the sample space of a binomial distribution.
+
+
+# Introduction
+
+We'll continue working with acorns for this question.
+
+
+# Instructions
+
+Suppose you are collecting acorns.  There are acorns of two species: Red Oak and Burr Oak.  There are approximately equal amounts of each.
+
+
+You decide to practice your stat skills by modeling acorn with a binomial distribution.  You decide to start with a sample size of 3, i.e. n = 3.
+
+You remember that the binomial is defined by *two* parameters, n and p.
+
+
+# Questions
+
+NOTE: you don't have to get through all of the questions!  I'm more interested in your discussion as a group.
+
+
+## Question 1
+
+- What is the value of p for the binomial distribution you want to use for your collection?
+
+
+## Question 2
+
+- Enumerate all of the ways there are to collect **three** acorns.
+  - Things to consider:
+    - does the order in which you collect them matter?
+    - How many ways are there to collect only 1 Burr oak acorn.
+    
+    
+## Question 3
+
+- Calculate the probabilities for each event in the sample space.
+
+
+
+## Question 4 (optional, challenging)
+
+- Repeat the process with the probability of collecting a Burr oak as 80%.
+
+
+# Deliverables
+
+1. Upload a document with your answers in the file submission box for the assignment.

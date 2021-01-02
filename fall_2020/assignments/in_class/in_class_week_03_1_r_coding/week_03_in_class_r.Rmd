@@ -1,0 +1,190 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 03: In-class R coding 1"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+source(here::here("rmd_tools", "find_file.R"))
+source(here::here("rmd_tools", "build_moodle_web_questions.R"))
+
+
+options(knitr.duplicate.label = "allow")
+
+source(list.files(path = here::here("formatting"), pattern = "rmd_functions.R", recursive = TRUE, full.names = TRUE))
+
+bird_file = "https://michaelfrancenelson.github.io/eco_602_634_2020/data/bird.sta.csv"
+habitat_file = "https://michaelfrancenelson.github.io/eco_602_634_2020/data/hab.sta.csv"
+metadata_file = "https://michaelfrancenelson.github.io/eco_602_634_2020/data/birdhab_metadata.pdf"
+
+dat_bird = read.csv(bird_file)
+dat_habitat = read.csv(habitat_file)
+
+```
+
+# Objectives
+
+- Practice R coding
+- More numerical and graphical data exploration
+- Pair plots and histograms
+
+
+# Overview
+
+This time, you're going to load an external dataset into R.
+
+You'll perform numerical and graphical analyses, and try to visually fit some models to data.
+
+As a group, work through the following sections.
+
+Everyone in your group should run the code on their own computer.  Please work with your group members to work through any difficulties!
+
+Make sure you keep track of any R code that works well for you.  It'll be helpful to have an arsenal of code examples you can use for other analyses!
+
+
+
+# Oregon Birds Data
+
+You'll be working with bird census data collected in Oregon.  You can find information about the data <a href="`r metadata_file`">here</a>.
+<!-- You'll be working with bird census data collected in Oregon.  You can find information about the data <a href="`https://michaelfrancenelson.github.io/eco_602_634_2020/data/birds_metadata.pdf`r metadata_file`">here</a>. -->
+
+The data files you'll work with are:
+<br>
+<a href="https://michaelfrancenelson.github.io/eco_602_634_2020/data/bird.sta.csv">bird.sta.csv</a>.
+<br>
+<a href="https://michaelfrancenelson.github.io/eco_602_634_2020/data/hab.sta.csv">hab.sta.csv</a>.
+
+
+
+
+# Reading the data
+
+You'll use the `read.csv()` function to read the data files into `data.frame` objects.
+
+The full web addresses of the two files are:
+
+- `r bird_file`
+<!-- https://michaelfrancenelson.github.io/eco_602_634_2020/data/bird.sta.csv -->
+- `r habitat_file`
+<!-- https://michaelfrancenelson.github.io/eco_602_634_2020/data/hab.sta.csv -->
+
+Use the addresses above and the `read.csv()` function to read the data into `data.frame`s named:
+
+- `dat_birds`
+- `dat_habitat`
+
+Look at the table names for the habitat dataset, and consult the metadata file to see what they mean.
+
+# Pair plot demo
+
+Here's a quick detour to show you how to create simple pair plots on the iris dataset:
+
+```{r}
+pairs(iris)
+```
+
+That created a pair plot of all the columns in `iris`.
+
+I can use the syntax here to include only petal width, and sepal characteristics:
+
+```{r}
+pairs(iris[, c("Petal.Width", "Sepal.Width", "Sepal.Length")])
+```
+
+
+## You should be able to answer the following:
+
+- How did I know what the column names were?
+- What kind of subsetting did I use?
+
+
+
+
+# Bird habitat data exploration
+
+Your group should explore the habitat data using pair plots of subsets of the columns in `dat_habitat`.
+
+```{r echo = FALSE}
+
+
+
+
+```
+
+
+
+
+# Bird count data
+
+Use the `hist()` function to explore the distributions of counts of birds at the various study sites.  
+
+I used data the column `AMCR` to create the following:
+
+```{r echo=FALSE}
+hist(dat_bird$CBCH, main = "Histogram of Chestnut Beaked Chickadee Abundance")
+```
+
+- That looks odd because there are gaps between some of the bars, and the x-axis label is cryptic.
+
+I used the arguments `xlab = "Number of birds counted"` and `breaks = 0:7 - 0.5` with `hist()` to produce the following:
+
+```{r, echo = FALSE}
+hist(dat_bird$CBCH, main = "Histogram of Chestnut Beaked Chickadee Abundance", breaks = 0:7 - 0.5, xlab = "Number of birds counted")
+```
+
+
+
+# Bird Count Histograms
+
+Create some histograms of bird counts.  Experiment with the `breaks` argument.
+
+You may want to try to re-create my histogram above as a first step.
+
+- If your `breaks` argument does not span the range of count values you will get an error.  You may need to try a higher upper limit.
+- You could also use the `max()` function to determine the highest number of counts of your bird species column.
+
+
+
+# Instructions
+
+- As a group you should work through the following:
+
+1. Import the datasets, and take a look at the metadata.
+1. Explore the habitat data using pair plots.
+1. Explore the distributions of counts of bird species using histograms.
+
+
+# Deliverable
+
+
+Proceed as far as you can during the class session and include a report on your group's progress in the Moodle assignment page.  Only one group member needs to submit an answer.
+
+Respond to the following questions:
+
+- (4 pts) Upload a final draft of the R script of the code your group used to import the data and create your plots.  Your R script should include comments to explain what your code does.  Each group member should experiment with producing the various plots, but your final draft should not contain preliminary experimental code.
+- (3 pts) Upload a pair plot of selected columns in the habitat data.
+  - Describe what kinds of patterns you see in the pair plot panels.
+  - Do any of the variables seem to be related?
+- (3 pts) Upload a histogram of counts for one of the bird species.
+  - What does the histogram show?
+    - Are there lots of sites in which many birds were observed?
+    - Are there more sites in which zero birds were observed?
+
+
+
+
+
+

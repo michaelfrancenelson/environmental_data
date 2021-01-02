@@ -1,0 +1,127 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Distributions: Main Concepts"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(cowplot)
+require(animation)
+require(mfn.teaching.utils)
+require(rmd.utils)
+# source(here::here("rmd_tools", "find_file.R"))
+# source(find_file("norm_density_plot.R"))
+
+```
+
+
+
+
+## Distribution Functions: Graphical Intuition
+
+- Probability Density and Mass Functions
+- Cumulative Density/Mass Functions
+- Quantile Functions
+
+
+
+## Probability Density/Mass Functions
+
+Probability density is the y-value of the probability density curve for a given value of x.
+
+- You can think of it as the height of a curve
+- For *continuous* distributions, it is *not* equal to the probability of observing a particular value of x.
+
+
+
+
+
+
+
+Demonstration of PDF and CDF using the Normal distribution.
+
+Remember:
+
+- *Density* = height of the curve at x.
+- *Cumulative Density* = area under the curve, to the left of x
+
+
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(-1.96)
+```
+
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(-1)
+```
+
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(-0.5)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(0)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(1)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(1.96)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(2.5)
+```
+
+
+
+- Later, we'll work on graphical intuition of probability functions.
+
+
+
+
+## Recap of essentials:
+
+### Distributions
+
+1. They assign a *probability* to every *event* in a *sample space*.
+1. We can use them as the *stochastic model* in the dual model paradigm.
+
+### Probability essentials
+
+1. Probabilities are non-negative
+1. Probabilities of all events in sample space sum to 1.0
+1. Independent events: joint probability is product of individual probabilities

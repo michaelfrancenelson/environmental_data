@@ -1,0 +1,71 @@
+---
+title: "four assumptions"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+<div class="questionborder">
+
+Zuur lists 4 key assumptions for general linear models.
+
+### Q1: 1 pt. (short answer)
+
+- What are the four assumptions?
+
+
+</div>
+
+
+
+
+Solution
+========
+
+The four assumptions are:
+
+- Independent observations
+- Normally-distributed residuals
+- Fixed - x
+- Constant variance: homogeneity, no heteroskedasticity
+
+Meta-information
+================
+
+extitle: four assumptions
+
+extype: string
+
+exsolution: nil
+
+exname: week_08_reading_questions
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 1
+

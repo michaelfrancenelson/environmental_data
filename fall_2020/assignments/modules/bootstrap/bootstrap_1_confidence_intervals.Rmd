@@ -1,0 +1,381 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Bootstrapping 1: Bootstrap Confidence INtervals"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+require(boot)
+require(ggplot2)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+
+
+moths_data_url = 
+  "https://michaelfrancenelson.github.io/eco_602_634_2020/data/moths.csv"
+
+```
+
+
+<!-- The material on bootstrapping techniques in this section was adapted from -->
+<!-- laboratory materials and data for ECo 634, Analysis of Environmental Data Lab, -->
+<!-- written by Kevin McGarigal at the University -->
+<!-- of Massachusetts Amherst Department of Environmental Conservation. -->
+
+<!-- ## Bootstrap Data Files -->
+
+<!-- The following bootstrapping materials require the following data files: -->
+
+<!-- - <a href="`r moths_data_url`">moths.csv</a> -->
+
+
+<!-- The code examples below assume that you have the 'moths.csv' file saved in -->
+<!-- a subdirectory called `data` of your main RProject directory. -->
+
+<!-- If you plan to access the data file from another location, you'll need to adjust -->
+<!-- your code accordingly. -->
+
+
+
+# The Bootstrap
+
+In a statistical context, *bootstrap* refers to a **resampling technique** by 
+with which we use sampling with replacement on a single sample of observations
+to simulate the process of taking many samples from a population.
+
+The term **bootstrap** comes from the old saying about ‘pulling yourself up by
+your own bootlaces’.
+
+The phrase means getting ‘something for nothing’. 
+
+<div class = "blueborder">
+
+
+
+## The Scenario
+
+You want to know something about a larger population, so you have taken a single 
+sample of n measurements.
+
+- You would like to be able to take many more samples, but you **don't have** 
+the resources for repeated sampling efforts
+- Although you have only a single sample, you could *resample* data from 
+the sample in many ways if you use *sampling with replacement*.
+- Sampling with replacement allows some values to appear more than once,
+and other samples to be left out.
+
+Resampling with replacement:
+
+- You can draw observations at random from the original sample, 
+replacing each observation after it is selected so that it has the same 
+chance of being drawn on the next draw.
+- By doing this repeatedly, you can create a new data set 
+by resampling the original data set.
+- It's not quite as good as being able to resample the population, but it is
+a powerful technique nonetheless.
+
+</div>
+
+One of the most important uses of the bootstrap is calculating non-parametric
+confidence intervals for parameter estimates. 
+
+In this context, the bootstrap simulates the frequentist ideal of obtaining
+estimates from repeated similar experiments. 
+
+
+
+# Moth Abundance: CIs
+
+To demonstrate bootstrap confidence intervals, we'll work with a dataset
+containing standardized abundance estimates of 10 rare moth species across 24
+sample plots in the pine barrens of southeast Massachusetts.
+
+For now, let’s focus on just one species, the spiny oakworm, *Anisota stigma*, abbreviated ‘anst’, and examine its distribution with a histogram:
+
+
+```{r}
+moths = read.csv(here("data", "moths.csv"))
+hist(moths$anst)
+```
+
+The standardized abundances appear highly non-normal.
+
+
+Let’s say we want to obtain a 95% confidence interval for the mean
+standardized abundance.
+
+
+## A Parametric Confindence Interval
+
+Recognizing that the central limit theorem states that the sampling distribution
+of a sample mean will be normally distributed, under certain assumptions
+(which may not be met here), we could use a standard normal or Student's t
+distribution to calculate a confidence interval on the mean.
+
+To illustrate, we'll perform the calculating using a t-distribution, which is
+essentially a normal distribution when the population variance is unknown
+and thus must be estimated from the sample.
+
+The exact shape of the t-distribution depends on the sample size, but in general
+it has heavier tails than the normal. For sample sizes of 30 and higher,
+the t distribution very closely approaches a normal.
+
+Because of the heavy tails, you can think of the t-distribution as being more 
+conservative than the normal
+
+We'll first calculate the critical t-value, then multiply it by the sample
+standard error of the mean to get the radius of the CI:
+
+
+```{r Anisota_confidence_interval, results='hold'}
+alpha = 0.05
+anst = moths$anst
+n = sum(!is.na(anst))
+t_crit = abs(qt(alpha / 2, df = n - 1))
+
+sse = sd(anst) / sqrt(n)
+
+sample_mean = mean(anst)
+ci_parametric = sse * t_crit
+
+confidence_intervals = 
+  data.frame(
+    technique = c("parametric: t-dist"),
+    mean = sample_mean,
+    ci_radius = sse * t_crit,
+    lower = sample_mean - ci_parametric,
+    upper = sample_mean + ci_parametric
+  )
+
+```
+```{r echo=FALSE}
+knitr::kable(confidence_intervals, digits = 4)
+```
+
+
+
+This is the standard way to construct a confidence interval for the mean
+and test the hypothesis that the mean differs from 0.
+
+If the confidence interval does not contain 0, then we can say that the
+mean is unlikely to have come from a distribution with a mean of 0.
+
+
+
+## A Simple Bootstrap Confidence Interval
+
+An alternative to the parametric approach above is to use bootstrapping
+to obtain a confidence interval for the mean.
+
+The bootstrap CI would likely be a more robust estimate since we have a small
+sample size (n = 24) and we do not know whether the underlying population is
+normally-distributed.
+
+We can perform a simple bootstrap simulation by calculating the mean abundance
+on many randomly resampled (with replacement) data sets.
+
+Let's try a set of 10000:
+
+The procedure will be:
+
+1. Create an empty vector to hold the bootstrap sample means
+1. Create the resampled data sets and calculate the means
+1. Calculate the CI from the quantiles of the resulting bootstrap means
+
+
+
+### Create the results vector
+
+```{r}
+m = 10000
+
+# numeric() creates an vector of length m with all values initialized to zero
+result = numeric(m)
+head(result)
+```
+
+### Perform the bootstrap
+
+```{r}
+for(i in 1:m)
+{
+  result[i] = mean(sample(anst, replace=TRUE))
+}
+```
+
+
+### Calculate the quantiles
+
+The vector result now contains 10,000 bootstrap sample means. We can calculate the mean of the bootstrap means and, more importantly, the 2.5% and 97.5% quantiles of the bootstrap distribution, as follows:
+
+
+```{r}
+mean(result)
+quantile(result,c(0.025,0.975))
+```
+
+How does this compare with parametric confidence interval? 
+
+```{r, echo=FALSE}
+confidence_intervals = 
+  rbind(
+    confidence_intervals,
+    data.frame(
+      technique = "simple boot",
+      mean = mean(result),
+      ci_radius = NA,
+      lower = quantile(result,c(0.025)),
+      upper = quantile(result,c(0.975))))
+row.names(confidence_intervals) = NULL
+knitr::kable(confidence_intervals, digits = 4)
+```
+
+
+Close, but not identical. 
+
+Our bootstrap confidence intervals are skewed because the data are skewed, whereas the parametric confidence interval is symmetric.
+
+
+
+## Bootstrap Interval Using `boot()`
+
+The `boot` packages includes functions to perform bootstrap resampling.  
+You can install the package using:
+
+```{r eval = FALSE}
+install.packages("boot")
+```
+
+
+The basic syntax of boot is very simple:
+
+```{r eval = FALSE}
+require(boot)
+boot(data, statistic, R)
+```
+
+A couple of things to note:
+
+- R is the number of resamplings you want to perform
+- `data` is the data object you want to resample.  It can be a vector, matrix, or data.frame.
+- `statistic` is a **function** that returns the statistic of interest.
+- There are restrictions on the order and types of arguments that this function must take. 
+- We'll usually need to write a custom function to meet the restrictions.
+- Be sure to check out the help entry.  It's a difficult read, so hopefully an example will illustrate the process:
+
+We want to calculate to mean, so we have to create a modified version of the
+`mean()` function:
+
+
+```{r}
+boot_mean = function(x, i)
+{
+  return(mean(x[i], na.rm = TRUE))
+}
+```
+
+The modified function is needed because:
+
+1. Per the help entry, the first argument to our statistic function has to be the input data.
+- In this case, our data are a vector of numbers.  I've called the argument `x` in the custom function.
+2. The second argument is an index (a vector of subscripts) that is used within `boot()` to select random assortments of `x`. 
+
+The key point is that we have to use our `boot_mean()` function, rather than `mean()` within our call to `boot()`.
+
+Now we can find the bootstrap for 10000 iterations:
+
+
+```{r}
+myboot = 
+  boot(
+    data = anst,
+    statistic = boot_mean,
+    R = 10000)
+print(myboot)
+```
+
+The output is interpreted as follows:
+
+- `original` is the original mean of the whole sample: `mean(anst)`.
+- `bias` is the difference between the original mean and the mean of the bootstrapped samples.
+- `std.error` is the standard deviation of the simulated values.
+
+You can check which other attributes are available for retrieval using the dollar sign with `str()`
+
+```{r}
+str(myboot)
+```
+
+```{r, results='hold'}
+mean(anst)
+myboot$t0
+mean(myboot$t) - myboot$t0
+sd(myboot$t)
+```
+
+
+Lastly, we can extract our bootstrap confidence interval as follows:
+
+```{r}
+quantile(
+  myboot$t,
+  c(0.025, 0.975))
+```
+
+
+
+# Boot CI Comparison
+
+
+How do our intervals compare to each other?
+
+
+```{r, echo=FALSE}
+
+confidence_intervals = 
+  rbind(
+    confidence_intervals,
+    data.frame(
+      technique = "boot package",
+      mean = mean(myboot$t), 
+      ci_radius = NA,
+      lower = quantile(myboot$t,c(0.025)),
+      upper = quantile(myboot$t,c(0.975))))
+row.names(confidence_intervals) = NULL
+knitr::kable(confidence_intervals, digits = 4)
+```
+
+Graphically:
+
+```{r echo=FALSE, fig.asp=1/3}
+size = 2
+size2 = 2.5
+
+ggplot(cbind(confidence_intervals, x = 1:3)) +
+  geom_segment(aes(y = x, yend = x, x = lower, xend = upper, colour = technique), lwd = size) +
+  geom_point(aes(y = x, x = mean), size = size2) +
+  geom_point(aes(y = x, x = lower, colour = technique), show.legend = FALSE , size = size2) +
+  geom_point(aes(y = x, x = upper, colour = technique), show.legend = FALSE, size = size2) +
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  xlab("Standardized abumdance")
+
+```

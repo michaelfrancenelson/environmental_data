@@ -1,0 +1,88 @@
+---
+title: "flipper normality tests"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="instructionsborder">
+
+### Instructions
+
+Conduct Shapiro-Wilk tests of normality for the flipper lengths of Chinstrap and Adelie penguins.
+
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 1 pt (R code)
+
+- Paste the code you used to conduct the test in the text box.
+
+### Q2 1 pt (short answer)
+
+- Were the flipper lengths normally-distributed for each species?
+
+
+</div>
+
+
+
+
+Solution
+========
+
+Q1: 
+
+- `shapiro.test(dat_adelie$flipper_length_mm)`
+- `shapiro.test(dat_chinstrap$flipper_length_mm)`
+
+<div class="toggle"><button>Click to show/hide data import code</button>
+<br>
+
+```{r ans_key, eval = FALSE}
+require(palmerpenguins)
+dat_adelie    = subset(penguin_dat, species == "Adelie")
+dat_chinstrap = subset(penguin_dat, species == "Chinstrap")
+shapiro.test(dat_adelie$flipper_length_mm)
+shapiro.test(dat_chinstrap$flipper_length_mm)
+```
+</div>
+
+Q2: yes, both p-values were high.
+
+Meta-information
+================
+extitle: flipper normality tests
+
+extype: string
+
+exsolution: nil
+
+expoints: 2
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+

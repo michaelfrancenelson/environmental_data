@@ -1,0 +1,734 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 09: Using Models 2"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = TRUE)
+require(palmerpenguins)
+
+```
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+
+source(find_file("build_lab.R"))
+build_lab(9, answer_key = FALSE, moodle_xml = TRUE)
+
+```
+
+
+
+# Catastrophic Rate
+
+> Recall the salamnder catastrope data we worked with in the lecture assignment.
+
+```{r catastrophic_rate_data}
+catrate = read.csv(here("data", "catrate.csv"))
+head(catrate)
+```
+
+## Catrate Data Columns
+
+To review, the data columns represent
+
+- `pond`: the ID of the pond
+- `success`: The number of years in which successful reproduction occurred at the pond
+- `years`: The total number of years that the pond was observed.
+- `cat.rate`: the ratio of successes to total observation years.
+
+
+
+## Comparing to the late fill rate
+
+We used the t and Wilcox tests to test whether the catastrophic rate was equal to the late fill rate.
+
+In those tests example, we treated the data as continuous, but in fact the data are discrete, taking on integer values ranging from 0 to 7.
+
+
+
+# Binomial Test for Proportions
+
+An alternative test for ratios is the binomial test, which is suitable for data consisting of a single trial in which each observation can take on one of two values; e.g., success or fail, present or absent, live or die
+
+An alternative test is the binomial test, which is suitable for data consisting of a single trial in which each observation can take on one of two values; e.g., success or fail, present or absent, live or die
+
+We might ask the question:
+
+- What is the evidence that reproductive success is more likely than reproductive failure? 
+The answer comes from a two-sided binomial test
+
+Considering all years of data in the 14 ponds, we observed a total of 33 years with reproductive success out of 61 total observation years.
+
+How likely is a response of 33/61 if the reproductive success and failure are equally likely, i.e., $Pr(success)=0.5$?
+
+- We can use a binomial test for this, specifying the number of successes (33) and the total sample size (61), as follows:
+
+```{r catrate_success_binom_test}
+success = sum(catrate$success)
+years = sum(catrate$years)
+binom.test(success,years)
+```
+
+
+<div class="hints">
+Note, we had to first compute the number of successes and the total number of years pooled across all 14 ponds
+</div>
+
+Recall that we know that ponds experience late filling in approximately 2 out of every 7 years:
+
+- Late pond-filling can cause the desiccation and/or freezing of the eggs prior to inundation.
+
+
+Instead of testing the null hypothesis of equal probability of success and failure (i.e., p=0.5), we might instead ask the question:
+
+- What is the evidence that reproductive success is more or less frequent than the late-filling rate?
+- In this scenario, we expect successful reproduction in approximately 5 of every 7 tears.
+
+Conducting this test is as simple as specifying the expected probability of success, as follows: 
+
+```{r catrate_success_binom_2}
+binom.test(success, years, p = 5/7) 
+```
+
+Note, we could have just as easily constructed this test for failures instead of successes
+
+- In addition, note again that the default test is a two-sided alternative
+
+We might instead prefer the one-sided alternative hypothesis that the observed success rate is less than the pond late-fill rate.  We can perform the test as follows:
+
+```{r catrate_success_binom_3}
+binom.test(success, years, p = 5/7, alternative='less')
+```
+
+Note, instead of treating each pond-year as a separate observation with a binary outcome (i.e a Bernoulli trial), we might instead treat each pond an observation and the dependent variable is the frequency of successful years out of the total number of years
+
+This results in proportion data in which the trial size is the total number of years and each year has binary outcome.
+
+
+<div class="hints">
+If we had some independent variable (or predictor) that we wanted to use to explain or predict the frequency of success, then we could use a logistic regression!
+</div>
+
+
+
+## Comparison with one-sample tests.
+
+What do these binomial tests say about the success (or catastrophe) rate?
+
+- Do these results agree with the Student’s t test and/or Wilcoxon’s signed rank test?
+- Which test do think is most appropriate?
+
+
+
+# Two samples
+
+The classical tests for two samples include:
+
+- comparing two variances
+- comparing two sample means or medians
+- tests for paired samples
+- correlating two variables
+- comparing two distributions
+- comparing two (or more) proportions
+- testing for independence of two variables in a contingency table 
+
+
+
+# Comparing two variances
+
+Before we can carry out a test to compare two means (see below), we need to test whether the sample variances are significantly different
+
+The simplest test is called Fisher’s F test, based on the F-statistic.
+
+- The F-statistic represents the ratio between *two variances*.
+
+- It is based on the idea that if the variances of the two samples are the same, then the ratio of the variances will be 1.
+
+In order to be significantly different, the ratio will need to be significantly smaller or larger than 1, depending on whether the smaller variance is in the numerator or denominator.
+
+## F-distribution Example: Vegetation Data
+
+We've worked with this dataset before: the data come from a field experiment designed to assess tree seedling response to understory vegetation treatments.
+
+Specifically, four treatments (including a control) were randomly assigned to 32 plots in a randomized block design
+
+<div class="hints"> The data are contained in the file `vegdata.csv`, which you can find on the course GitHub Pages site. </div>
+
+
+```{r veg_data}
+veg = read.csv(here("data", "vegdata.csv"), header=TRUE)
+head(veg)
+```
+
+- For the moment, we'll only consider the pine seedling count (column `pine`) and we'll ignore the block experimental design.
+
+
+Let’s visualize the data using box plots, as follows:
+
+```{r veg_boxplots}
+boxplot(pine ~ treatment, data = veg)
+```
+
+It is apparent from the adjacent box plots that the means (and medians) differ among the treatments, but also that the variances differ as well.
+
+### Variance test
+
+Let’s test whether the variance in pine seedling count differs between two treatments:
+
+- control (do nothing)
+- clipped (continuous clipping of fern fronds)
+
+```{r veg_var_test}
+var.test(
+  pine ~ treatment,
+  data = veg,
+  subset = treatment %in% c('control','clipped'))
+```
+
+What does Fisher’s F test say about equal variances for these two samples?
+
+
+### F-tests Assumes Normality
+
+- Note that Fisher’s F test for unequal variances assumes that the data are normally distributed.
+
+Visual inspection of the box plots indicates that this may be the case, but we might want to test for normality using one of the tests described previously, for example:
+
+```{r veg_shapiro_tests}
+shapiro.test(veg$pine[veg$treatment=="control"])
+shapiro.test(veg$pine[veg$treatment=="clipped"])
+```
+
+Note, because the Shapiro-Wilk test is a one-sample test, we had to select the records for each treatment and conduct separate tests.
+
+
+## Non-parametric Variance Test
+
+If the results indicate that the data are non-normal, then we should use a non-parametric test of homogeneity of variances, such as the Fligner-Killeen test, as follows:
+
+```{r veg_flinger}
+fligner.test(
+  pine ~ treatment,
+  data = veg,
+  subset = treatment %in% c('control','clipped'))
+```
+
+- What does the Fligner-Killen test say about homogeneity of variances for these two samples?
+
+Thus far, we have been concerned with comparing the variances of two samples.
+
+However, there are roughly equivalent tests for k-sample problems; i.e., when there are more than two groups.
+
+The ksample parametric test is called Bartlett’s test, which we can use to test for homogeneity of variances among all four treatment levels as follows:
+
+```{r veg_bartlet}
+bartlett.test(pine ~ treatment, data=veg)
+```
+
+What does Bartlett’s test say about homogeneity of variances among treatments?
+
+- Note that Bartlett’s test, like Fisher’s F test is highly sensitive to non-normality and the presence of outliers.
+
+The non-parametric alternative test which is largely preferred by many statisticians is called the Fligner-Killeen test.  We used it to test two variances above, but it can test n variances as well:
+
+```{r veg_flinger_nonparm_2}
+fligner.test(pine ~ treatment, data = veg)
+```
+- Do the results agree with Bartlett’s test?
+
+
+# Comparing two sample means
+
+Given what we know about the variation from replicate to replicate within each sample (the within-sample variance), how likely is it that our sample means were drawn from populations with the same mean?
+
+If it is highly likely, then we shall say that our two sample means are not significantly different
+
+If it is rather unlikely, then we shall say that our sample means are significantly different.
+
+But perhaps a better way to proceed is to work out the probability that the two samples were indeed drawn from populations with the same mean.
+
+If this probability is very low (say, less than 5% or less than 1%), then we can be reasonably certain (95% or 99% in these two examples) that the means really are different from one another
+
+We've already met two simple tests for comparing two sample means (or medians): the Student’s t test and Wilcoxon’s rank-sum test.
+
+### T-test
+
+The Student’s t test is appropriate when the samples are independent, the variances constant, and the errors normally distributed.  We implemented it as follows for the pine seedling data in the control and clipped treatment plots:
+
+```{r pine_treat_t_test_1}
+t.test(pine~treatment,data=veg,subset=treatment %in% c('control','clipped'), conf.int=TRUE)
+```
+
+Because we asked for a confidence interval (conf.int=TRUE), the output includes a 95% (by default) confidence interval on the difference between sample means
+
+A confidence interval that includes 0 indicates that the sample means are not significantly different
+
+What does the two-sample t test say about the differences in pine seedling counts between the control and clipped treatments?
+
+Despite the rather large differences in the sample means (17.9 vs 1.9), can we say with confidence that the sample means are different?
+
+### T-test assumptions
+
+Of course, the validity of Student’s t test depends on whether the assumptions have been met.
+
+In this case, we know that variances are significantly different between treatments (see above).
+
+In addition, we know that the “clipped” sample is somewhat non-normally distributed.
+
+Hence, there is good reason to be suspect of the test result.
+
+## Wilcox test
+
+We've used the Wilcox test in lecture and lab before.
+
+The Wilcoxon’s rank-sum test is appropriate when the samples are independent but the errors are not normally distributed, and is implemented as follows:
+
+```{r pine_treat_wilcox_1}
+wilcox.test(pine~treatment,data=veg,subset=treatment %in% c('control','clipped'), conf.int=TRUE)
+```
+
+Do the results agree with the Student’s t test? Which test result to you have more confidence in?
+
+
+## Tests for paired samples
+
+Sometimes, two-sample data come from paired observations
+
+In this case, we might expect a correlation between the two measurements, either because they were made on the same individual, or were taken from the same location
+
+A positive covariance between the two samples reduces the variance of the difference between means, which makes it easier to detect significant differences between the means
+
+Pairing is not always effective, because the correlation between samples may be weak
+
+In general, however, if you can do a paired t test, then you should always do the paired test
+
+It can never do any harm, and sometimes it can do a huge amount of good
+
+Let’s take the pine seedling data
+
+In the two-sample t test above, the 8 replicates in the control and 8 replicates in the clipped treatments were assumed to be independent samples, but in fact the treatments were implemented in a randomized block design
+
+Specifically, the experimental units were grouped together into blocks representing different forest stands
+
+It is reasonable to suspect that the stands differed somewhat in ecological conditions, perhaps in ways that we were not able to observe directly, but in ways that indirectly affect pine seedling response to the understory treatments
+
+If this is the case, then the samples will exhibit a positive covariance and it will be to our advantage to account for this covariance by using a paired t test
+
+First, we need to create separate vectors for the “control” observations and “clipped” observations because the t.test() doesn’t accept formula’s (as above) for the paired option, as follows:
+
+
+```{r veg_data_fmt_1}
+control = veg$pine[veg$treatment=='control']
+clipped = veg$pine[veg$treatment=='clipped']
+```
+
+Note, since the experiment consists of 4 blocks, not 8, the individual samples are not really paired (i.e., one control and one clipped per block), but we will ignore this minor detail for our purposes here.
+
+Now we can use the t.test() function as before, but with the added argument paired=TRUE, as follows:
+
+
+```{r veg_t_control_clipped}
+t.test(control, clipped, paired=TRUE)
+```
+
+Do the results differ from the unpaired t test?
+
+Recall that we decided against the Student’s t test for these data set because of failure to meet the underlying assumptions of constant variance and normally distributed data.
+
+As before, we can use the Wilcoxon’s rank-sum test when the samples are independent but the errors are not normally distributed, as follows:
+
+```{r veg_wilcox_control_clipped}
+wilcox.test(control, clipped, paired=TRUE)
+```
+
+Do the results agree with the unpaired Wilcoxon’s rank-sum test? Which test result to you have more confidence in?
+
+
+# Correlation
+
+In the paired two-sample problem above, we suggested that a strong correlation between the two measurement variables will affect the test for significant differences between means or medians
+
+More generally, with any two continuous variables, x and y, the question naturally arises as to whether their values are correlated with each other
+
+## Marbled Salamander
+
+Let’s take the marbled salamander dispersal data introduced in a previous lab
+
+Recall that the data represent the dispersal of first-time breeders (ftb) from their natal ponds, representing juvenile dispersal, and the dispersal of experienced breeders (eb) from their established breeding ponds, Classical Tests 9 representing adult dispersal
+
+The data set includes three variables:
+
+- `dist.class` = distance class, based on 100 m intervals;
+- `disp.rate.ftb` = standardized dispersal rate for first-time breeders, which can be interpreted as a relative dispersal probability.
+- `disp.rate.eb` = standardized dispersal rate for experienced breeders, which can be interpreted as a relative dispersal probability
+
+The question arises as to whether the dispersal rates for first-time breeders and experienced breeders are correlated
+
+First, we need to read in the data and check it, as follows:
+
+
+```{r load_salamander_data}
+disp = read.csv(here("data", "dispersal.csv"), header=TRUE)
+disp
+plot(disp$disp.rate.ftb, disp$disp.rate.eb)
+```
+
+
+Next, we can test the significance of the correlation using the cor.test() function, as follows:
+
+```{r disp_cor_test}
+cor.test(
+  disp$disp.rate.ftb,
+  disp$disp.rate.eb,
+  use='complete.obs')
+```
+
+Note, we needed to specify the use=’complete.obs’ argument to address the missing values for the 700 m distance class (for which there are no ponds in this particular distance interval).
+
+What does the correlation test say about the significance of the correlation between juvenile and adult dispersal-distance functions?
+
+- The default correlation test statistic is based on Pearson's product-moment correlation coefficient (r) cor(x,y) which follows a t distribution with length(x)-2 degrees of freedom if the samples follow independent normal distributions
+
+If the data are non-normal, then a non-parametric rank-based measure of association is more appropriate.
+
+If method is "kendall" or "spearman", Kendall's tau or Spearman's rho statistic is used to estimate a rank-based measure of association
+
+These tests may be used if the data do not necessarily come from a bivariate normal distribution.
+
+Let’s try a test of the Spearman’s rank correlation:
+
+```{r disp_cor_spear}
+cor.test(
+  disp$disp.rate.ftb,
+  disp$disp.rate.eb,
+  use='complete.obs',
+  method='spearman')
+```
+
+What does this test say about the correlation between dispersal-distance functions? Does it agree with the parametric test? Which do you trust more with this data set?
+
+
+## Comparing two distributions
+
+Another way to compare two samples, whether they be paired or not, is to compare the empirical cumulative distributions of the samples
+
+This test is known for its wonderful name, the Kolmogorov-Smirnov test, which is an extremely simple test for asking one of two different questions:
+
+- Are two sample distributions the same, or are they significantly different from one another in one or more (unspecified) ways?
+- Does a particular sample distribution arise from a particular hypothesized theoretical distribution?
+
+The two-sample problem is the one most often used and the one we will concern ourselves with here
+
+The apparently simple question is actually very broad
+
+It is obvious that two distributions could be different because their means were different.
+
+– This was the subject of the Student’s t test and Wilcoxon’s rank sum test above
+
+But two distributions with exactly the same mean could be significantly different if they differed in variance, or in skew or kurtosis, or both.
+
+The Kolmogorov-Smirnov test works on empirical cumulative distribution functions (ecdf).
+
+- Recall that these give the probability that a randomly selected value of X is less than or equal to x.
+
+Let’s see what the ecdf for the sample of juvenile dispersal rate looks like:
+
+```{r disp_rate_ecdf}
+plot(
+  ecdf(disp$disp.rate.ftb),
+  verticals=TRUE)
+```
+
+Now let’s add the ecdf for the adult dispersal rate, but change the line type (lty) so that we can distinguish it from the ecdf for the juvenile dispersal rate
+
+```{r disp_rate_ecdf_2}
+plot(
+  ecdf(disp$disp.rate.ftb),
+  verticals=TRUE)
+plot(
+  ecdf(disp$disp.rate.eb),
+  verticals=TRUE,
+  lty=3,
+  add=TRUE)
+```
+
+Are these two distributions different? We can use the Kolmogorov-Smirnov test (ks.test) to determine if they differ significantly in any aspect
+
+The test statistic is the maximum difference in value of the cumulative distribution functions; i.e., maximum vertical difference in the curves for a given value of X
+
+```{r disp_ks}
+ks.test(disp$disp.rate.ftb,disp$disp.rate.eb)
+```
+
+Is there enough evidence to suggest that the dispersal-distance relationship differs between first-time breeders and experienced breeders?
+
+
+# Comparing two or more proportions
+
+## Sex-linked killing
+
+Suppose that only 4 female salamanders were killed crossing the road, compared to 16 males.
+
+- Is this an example of strong sex-linked risk of road mortality?
+
+Before we can judge, of course, we need to know about the number of male and female candidates.
+
+It turns out that 16 males were killed out of 250 male individuals crossing the road, compared to 4 deaths out of only 40 crossings for females.
+
+Now, if anything, it looks like the females did worse than males in successfully crossing the road (10% mortality for females versus 6% for males).
+
+The question arises as to whether the apparent positively biased mortality rate for females is statistically significant, or whether this sort of difference could arise through chance alone.
+
+- This is a simple binomial proportions test, which we can easily do in R by specifying two vectors:
+- the first containing the number of mortalities for females and males c(4,16)
+- the total number of female and male candidates: c(40,250)
+
+```{r }
+prop.test(c(4,16),c(40,250))
+```
+
+A significant p-value indicates that the proportions are different between samples; i.e., that the proportions observed were unlikely to have been drawn from the same underlying population
+
+Conversely, an insignificant p-value means that there is insufficient evidence to reject the null hypothesis and we would conclude that the proportions are not *statistically* different.
+
+What does the binomial test indicate?
+
+- Do females suffer a higher mortality rate crossing the road or is the observed difference merely a sampling artifact?
+- How would the result change (p-value) if the sample size was doubled but the proportions killed remained the same (i.e., 8 out of 80 females and 32 out of 500 males)?
+
+
+# Dependence of variables in a contingency table
+
+A great deal of data in ecology and conservation comes in the form of counts (whole numbers or integers), for example:
+
+- the number of animals that died
+- the number of branches on a tree
+- the number of days of below-freezing days, etc.
+
+With count data, the number 0 is often the value of the response variable; in other words, there are often observations that receive a count of 0
+
+With contingency tables, counts are cross-classified according to one or more categorical contingent variables, where the contingencies are all the events of interest that could possibly happen
+
+A contingency table shows the counts of how many times each of the contingencies actually happened in a particular sample
+
+In a contingency table, each observation is cross-classified according to each of the categorical contingent variables; i.e., each observation is placed into one bin representing a unique categorical level of each contingent variable
+
+Consider a sample of 40 forest stands where a survey determined that barred owls were either ‘present’ or ‘absent’ and where each stand was classified as either ‘young’ (<80 years) or ‘old’ (>80 years).
+
+Thus, each of the 40 observations could be cross-classified into one of the four contingencies: present-old, present-young, absent-old, and absent-young
+
+We have the following 2x2 contingency table (with expected values shown in parentheses):
+
+```{r owls_data}
+owls = matrix(c(16, 9, 4, 11), nrow=2)
+rownames(owls) = c("present", "absent")
+colnames(owls) = c("old", "young")
+owls
+```
+
+present
+absent old 16 (12.5) 4 (7.5) young 9 (12.5) 11 (7.5)
+
+## Contingency: Chi-square test
+
+We would like to know whether the observed counts differ from what we would expect if presence/absence was independent of stand age
+
+Do you remember how to calculate the expected values in a contingency table? If not, look this up
+
+It is clear that the observed frequencies and the expected frequencies are different.
+
+But in sampling, everything always varies, so this is no surprise
+
+The important question is whether the expected frequencies are significantly different from the observed frequencies.
+
+We can assess the significance of the differences between observed and expected frequencies in a variety of ways.
+
+The usual way is with Pearson’s chi-squared test (generalized linear models are an alternative).
+
+Do you remember how to calculate the chi-square test statistic? If not, look it up.
+
+In R we can compute the chi-squared test as follows:
+
+```{r owl_chisq_test}
+chisq.test(owls)
+```
+
+
+What does the result indicate?
+
+- Are barred owls present more frequently than expected in old forest stands?
+- You might recall that Pearson’s chi-squared test expects the expected cell values to be large, generally greater than 4 or 5.
+
+As you can seen in the table above, we have meet this rule of thumb with the barred owl data, so the Pearson’s chi-squared test is appropriate
+
+However, when one or more of the expected frequencies is less than 4 (or 5), then it is wrong to use Pearson’s chi-squared test for your contingency table
+
+This is because small expected values inflate the value of the test statistic, and it can no longer be assumed to follow the chi-square distribution
+
+In this case, an alternative test called Fisher’s exact test is more appropriate
+
+We use the function in the same way as before:
+
+```{r}
+fisher.test(owls)
+```
+
+Does the conclusion change? Note, the procedures described in this section can all be used with contingency tables much bigger than 2x2
+
+
+<!-- # Exercises -->
+
+<!-- The purpose of the following exercise is to give you additional experience working with classical statistical tests -->
+
+
+
+<!-- ## Understory treatments -->
+
+<!-- The first data set represents tree seedling counts of two species, black birch (Betula nigra) and eastern white pine (Pinus strobus) following several understory treatments in western Massachusetts -->
+
+<!-- For the purpose of this exercise, we are interested in knowing whether there is a difference in the mean or median between tree species following the “clipping” treatment in which all fern fronds were clipped to ground level on a regular basis to remove competition for light. -->
+
+<!-- Read in the raw data and create a subset containing only the records corresponding to the ‘clipped’ treatment, as follows:  -->
+
+<!-- ```{r} -->
+<!-- veg = read.csv(here("data", "vegdata.csv"), header=TRUE)  -->
+<!-- clipped = veg[veg$treatment=='clipped',] -->
+<!-- clipped -->
+<!-- ``` -->
+
+<!-- We used t- and Wilcox tests to assess the evidence for significant differences between the mean or median seedling counts for the two tree species under the clipping treatment. -->
+
+<!-- The t-test involves the assumption of not only normally distributed values (or residuals) in each group, but also homogeneity of variances between groups. -->
+
+<!-- To use the appropriate tests for homogeneity of variances (see previous lab work), the data set needs to be in the “long” format rather than the “wide” format. -->
+
+<!-- Specifically, the groups (species) cannot be in separate columns as in the “clipped” dataframe, but instead need to be in a single column. -->
+
+<!-- Use the following reshape() function to convert from the “wide” to “long” format (be sure to look at the result to see what happened). -->
+
+<!-- ```{r reshape_veg} -->
+<!-- clipped.long =  -->
+<!--   reshape( -->
+<!--     clipped, -->
+<!--     varying = list(5:6), -->
+<!--     v.names='count',  -->
+<!--     timevar='species', -->
+<!--     times=c('birch','pine'), -->
+<!--     direction='long') -->
+<!-- clipped.long$species = as.factor(clipped.long$species)  -->
+<!-- clipped.long -->
+<!-- ``` -->
+
+
+<!-- ```{r include=FALSE, eval = FALSE} -->
+<!-- clipped.long -->
+<!-- var.test(pine ~ treatment, data = veg, subset = treatment %in% c('control','clipped')) -->
+<!-- ``` -->
+
+
+<!-- ## Earthworms -->
+
+<!-- The second data set represents counts of invasive earthworms and counts of middens of the largest species, Lumbricus terrestris (the common large nightcrawler) found in 98 sample plots randomly distributed across the Deerfield watershed in western Massachusetts in mature upland forested stands -->
+
+<!-- Counting earthworms can be quite labor intensive, but counting surface middens of *L. terrestris* is relatively quick and easy, so it would be useful to know whether the counts of middens can be used as an index of the number of earthworms -->
+
+<!-- Examine the data set (worms.csv) -->
+
+<!-- Plot the relationship between midden counts (middens.count) and earthworm counts (worms.count) -->
+
+<!-- Hint, start with a histogram of each variable and then follow this with a sunflower plot (see ?sunflower for interpretation):  -->
+
+
+<!-- ```{r} -->
+<!-- worms = read.csv(here("data", "worms.csv")) -->
+<!-- hist(worms$middens.count) -->
+<!-- hist(worms$worms.count)  -->
+<!-- sunflowerplot( -->
+<!--   worms$middens.count, -->
+<!--   worms$worms.count) -->
+<!-- ``` -->
+
+
+<!-- What is the probability that the two variables come from a normal distribution? -->
+
+<!-- What is the correlation between middens.count and worms.count? Is it significant? What method did you use and why?  -->
+
+<!-- ```{r} -->
+<!-- cor.test(worms$worms.count, worms$middens.count) -->
+<!-- ``` -->
+
+
+# Bird habitat data
+
+The final data set represents standardized breeding bird counts (bird) and a variety of habitat variables (hab) across 1046 sample plots in the Oregon Coast Range
+
+See birdhab.meta.pdf for a complete description of the data sets
+
+Here, we are interested in knowing whether the presence/absence of brown creepers varies between the interior and edge of forest stands
+
+Read in the raw data and create a 2x2 contingency table consisting of counts of brown creeper presence (1) versus (0) absence and forest edge (E) versus interior (I):
+
+
+```{r}
+birds   = read.csv(here("data", "bird.sta.csv"), header=TRUE)
+hab     = read.csv(here("data", "hab.sta.csv"), header=TRUE)
+birdhab = merge(birds, hab, by=c("basin", "sub", "sta"))
+
+# Create a contingency table for edge/interior and brown creeper presence/absence
+table(birdhab$s.edge, birdhab$BRCR > 0)
+
+# set the presence to be in the first column
+br_creeper_table = table(birdhab$s.edge, birdhab$BRCR > 0)[, 2:1]
+```
+
+Make sure you understand the script above:
+
+- First, we read in the bird and habitat data and merged them into a single file based on the common fields.
+
+- Then we used the table() function to compute the cross-classified counts.
+- What code converted the Brown Creeper counts to presence/absence?
+
+- The next step simply switched the order of the columns so that the present counts were in the first column and the absent counts were in the second column, as this is the expected order in some functions (e.g, prop.test())
+
+Are brown creepers present more or less frequently than expected in forest interiors versus forest edges and is the difference significant?
+
+
+
+
+<!-- - An alternative way of asking this is: Are brown creepers present in a greater proportion in forest interiors or forest edges?  -->
+
+<!-- - Note, there are different ways to frame this problem and test this hypothesis, but the results will probably be the same. -->
+
+
+```{r eval=FALSE, echo=FALSE}
+br_creeper_table
+apply(br_creeper_table, 1, sum)
+apply(br_creeper_table, 2, sum)
+
+prop.test(br_creeper_table[1, ], br_creeper_table[2, ])
+prop.test(br_creeper_table[, ], br_creeper_table[, 2])
+
+X = chisq.test(br_creeper_table)
+X$expected
+X
+
+```
+
+
+# Questions

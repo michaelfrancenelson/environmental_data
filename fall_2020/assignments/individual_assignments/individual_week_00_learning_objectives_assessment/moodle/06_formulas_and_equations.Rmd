@@ -1,0 +1,50 @@
+---
+title: "Formulas and equations 1"
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+source(here::here("formatting", "functions", "moodle_template_funs.R"))
+```
+
+
+
+Question
+========
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+writeLines(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Describe your first impressions and reactions to the formulas:
+
+<div class="blackborder">
+
+> $cov_{x,y}=\frac{\sum_{i=1}^{N}(x_{i}-\bar{x})(y_{i}-\bar{y})}{N-1}$
+
+> $P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{ - \left( {x - \mu } \right)^2 }/{2\sigma ^2 }}$
+
+</div>
+
+
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Formulas and equations 1
+extype: string
+exsolution: nil
+exname: learning objectives assessment
+exsection: learning_objectives_assessment
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 8

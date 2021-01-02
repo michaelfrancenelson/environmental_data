@@ -1,0 +1,160 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Final Project"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    # theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    includes:
+      after_body: !expr here::here("formatting", "js", "rmd.js")
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, eval=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+<style>
+
+
+https://css-tricks.com/quick-reminder-that-details-summary-is-the-easiest-way-ever-to-make-an-accordion/
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+
+</style>
+
+
+
+
+# Data {.tabset .tabset-pills}
+
+## Load Data
+
+
+```{r read_data, eval = TRUE, echo = TRUE}
+dat_delomys = read.csv(here::here("data", "delomys.csv"))
+dat_delomys$sex = factor(dat_delomys$sex)
+dat_delomys$species = factor(dat_delomys$binomial, labels = c("dorsalis", "sublineatus"))
+```
+
+## Data Exploration {.tabset .tabset-pills}
+
+
+```{r data_exploration, eval = TRUE, echo = TRUE}
+head(dat_delomys)
+
+box_labels = with(
+  dat_delomys,
+  {
+    paste(
+      rep(levels(species), each = 2),
+    levels(sex), sep = "\n")
+  }
+)
+
+```
+
+<details><summary>show/hide plot</summary>
+```{r mass_length_scatterplot, eval=TRUE, echo=TRUE}
+plot(body_length ~ body_mass, data = dat_delomys)
+```
+</details>
+
+```{r histograms, eval = TRUE, echo = TRUE}
+par(mfrow = c(1, 2), mar = c(5, 4.1, 0, 2), oma = c(0, 0, 2, 0))
+hist(dat_delomys$body_mass, xlab = "body mass (g)", main = NULL)
+hist(dat_delomys$body_length, xlab = "body length (mm)", main = NULL)
+title("Deolmys spp.", outer = T)
+```
+
+```{r boxplots, eval = TRUE, echo = TRUE}
+layout(mat = matrix(c(1, 2, 3, 3), nrow = 2, byrow = TRUE))
+boxplot(body_mass ~ species, data = dat_delomys)
+boxplot(body_mass ~ sex, data = dat_delomys)
+boxplot(body_mass ~ sex * species, data = dat_delomys, names = box_labels)
+```
+</details>
+
+```{r numerical_exploration_1, eval=FALSE, echo=FALSE}
+summary(dat_delomys)
+shapiro.test(dat_delomys$body_length)
+shapiro.test(dat_delomys$body_mass)
+```
+
+```{r build_models, eval=FALSE, echo=FALSE}
+fit1 = lm(body_length ~ body_mass, data = dat_delomys)
+fit2 = lm(body_mass ~ sex, data = dat_delomys)
+fit3 = lm(body_mass ~ binomial, data = dat_delomys)
+fit4 = lm(body_mass ~ sex + binomial, data = dat_delomys)
+fit5 = lm(body_mass ~ sex * binomial, data = dat_delomys)
+```
+
+```{r residual_histograms, eval=FALSE, echo=FALSE}
+hist(residuals(fit1), main = "model 1")
+hist(residuals(fit2), main = "model 2")
+hist(residuals(fit3), main = "model 3")
+hist(residuals(fit4), main = "model 4")
+hist(residuals(fit5), main = "model 5")
+```
+
+```{r residual_shapiro_tests, eval=FALSE, echo=FALSE}
+shapiro.test(residuals(fit1))
+shapiro.test(residuals(fit2))
+shapiro.test(residuals(fit3))
+shapiro.test(residuals(fit4))
+shapiro.test(residuals(fit5))
+```
+
+```{r coeffs_mass_length_model, eval=FALSE, echo=FALSE}
+summary(fit1)
+knitr::kable(coef(summary(fit1)), digits = c(2, 3, 2, 6))
+```
+
+```{r mass_anova_kables, eval=FALSE, echo=FALSE}
+knitr::kable(anova(fit2), digits = c(0, 1, 1, 2, 3))
+knitr::kable(anova(fit3), digits = c(0, 1, 1, 2, 3))
+knitr::kable(anova(fit4), digits = c(0, 1, 1, 2, 3))
+knitr::kable(anova(fit5), digits = c(0, 1, 1, 2, 3))
+```
+
+```{r mass_coef_kables, eval=FALSE, echo=FALSE}
+knitr::kable(coef(summary(fit2)), digits = 3)
+knitr::kable(coef(summary(fit3)), digits = 3)
+knitr::kable(coef(summary(fit4)), digits = 3)
+knitr::kable(coef(summary(fit5)), digits = 3)
+```
+
+```{r mass_aic, eval=FALSE, echo=FALSE}
+AIC(fit2, fit3, fit4, fit5)
+```

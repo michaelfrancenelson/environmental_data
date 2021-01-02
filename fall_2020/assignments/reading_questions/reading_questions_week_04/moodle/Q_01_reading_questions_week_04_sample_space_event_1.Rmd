@@ -1,0 +1,75 @@
+---
+title: "Sample Space and Events 1"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> A sample space is the ....
+
+Suppose it is a beautiful fall day and you are sitting underneath three oak trees: Bur oak (*Quercus. macrocarpa*), Northern Red Oak (*Q. rubra*), and white oak (*Q. alba*).
+
+You reach down and pick up two acorns in your hand.
+
+Describe the sample space of your collection:
+
+<div class="questionborder">
+### Q1 1 pt
+
+- What is the size of the sample space?
+
+### Q2 2 pts
+
+- How many ways are there to collect two acorns of the *same* species?
+
+
+### Q3 2 pts 
+
+- How many ways to collect two acorns of *different* species?
+
+</div>
+
+
+Solution
+========
+
+A = alba
+
+M = macrocarpa
+
+R = rubra
+
+- The student should notice that there is no mention of *probability*.
+- The student should realize that order is not important.
+
+- Q1: there are 6 elements since we don't care about the order: {(A,A), (M,M), (R,R), (A,M), (A,R), (M,R)}
+- Q2: There are 3 ways to get a single species: {(A,A), (M,M), (R,R)}
+- Q3: There are 3 ways to get two species: {(A,M), (M,R), (M,R)}
+
+
+
+Meta-information
+================
+extitle: Sample space and events 2
+extype: string
+exsolution: nil
+exname: week 4 reading questions
+exsection: week 4 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 5

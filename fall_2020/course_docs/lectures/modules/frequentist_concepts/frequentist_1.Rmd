@@ -1,0 +1,220 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Hypothesis Testing"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+
+require(magick)
+require(cowplot)
+require(ggplot2)
+
+img_bluegill = image_read(find_file("bluegill.jpg"))
+img_bluegill_2 = image_read(find_file("bluegill_dead.jpg"))
+g_bluegill = 
+  print(ggdraw() + draw_image(img_bluegill))
+```
+
+
+
+## Key Concepts and Terms
+
+- What is the Frequentist paradigm?
+- Assumptions
+- Frequentist pros and cons
+- Confidence and significance
+
+
+
+## Nota Bene
+
+### Frequentism is not your enemy!
+
+Much of the following slides will sound critical of Frequentist statistics.
+
+- Frequentism is a massively useful framework!
+- There is lots of insight to be gained via Frequentist inference.
+
+The Frequentist framework contains some subtle assumptions and concepts.
+
+- Understanding the subtlety will allow you to make the most of Frequentist inference.
+
+### It's often fashionable to disparage Frequentist statistics
+
+
+
+## Frequentism
+
+### An inference *paradigm*
+
+It's a framework that contains a set of tools and assumptions that we can use to do inference.
+
+### Frequentist statistics is the dominant paradigm
+
+It's the kind of inference you [usually] learn in a first course on statistics.
+
+- It's not the *only paradigm*!
+
+
+
+## Frequentism
+
+### Some key features
+
+- Makes no assumptions about prior knowledge of a system.
+- It's based on the idea of *hypothetical repeated sampling* of a population that is *unknowable*.
+- The focus is on the *process of sampling and modeling* not on the parameters derived from a *specific data set*.
+- Some describe the frequentist paradigm as less 'subjective' than Bayesian
+- More widely known than Bayesian.
+- Usually more mathematically and computationally tractable than Bayesian.
+
+
+## Frequentism: Commonly Used Tools
+
+Most of the tools you have probably used in previous courses or research have been frequentist versions of:
+
+- Linear regression
+- ANOVA
+- T-tests
+- Generalized Linear Models
+
+
+
+
+
+
+## Frequentism Assumptions
+
+### Some of the conceptual weirdness in Frequentism comes from the assumptions.
+
+Key assumptions:
+
+- The population is large and *unknowable*
+- There is a set of *true parameter values* for a model of the population.
+- We can never know the *true parameter values*.
+- Our ability to do inference is based on *hypothetical repeated sampling*
+
+
+
+
+## Frequentist Populations and Models
+
+### Populations are large
+
+- In general, we can't observe every *sampling unit* in a population.
+- The population exists and is has true properties.
+- We have to use *samples* to make educated guesses about the properties of the population.
+
+### When we propose a model, we assume that there exist true parameter values to characterize the population.
+
+
+
+## Repeated Sampling
+
+### This concept is the source of much confusion
+
+- The theoretical underpinnings of Frequentist inference rely on the concept of *repeated sampling*.
+
+- Each sampling effort is a realization of a **stochastic process**.
+- If we could repeat the sampling process an *infinite* number of times, our estimates would converge upon the true population parameter values.
+
+### We can simulate repeated sampling in R
+
+
+
+## Frequentist Pros and Cons
+
+### Benefits of the Frequentist framework
+
+- Widely known, lots of established methods, backed by a lot of theoretical work.
+- Many software tools
+- Assumptions are often reasonable and/or robust to violations
+- Frequentism is a very powerful inferential framework
+
+### Drawbacks of the Frequentist framework
+
+- Repeated sampling assumption: non-intuitive interpretation of *confidence* and *significance*.
+- Focus on the process rather than the results of a single experiment.
+- Focus on hypothesis-testing: 'straw man null hypotheses'  (Bolker)
+
+
+
+
+## Frequentist Confidence and Significance: Collision with Everyday Usage
+
+- The meaning of these terms is in relation to hypothetical *repeated sampling*.
+- Interpreting a 95% confidence interval:
+  - "If I were to repeat the experiment many times, approximately 95% of the confidence intervals I calculate would contain the true value."
+  
+
+![](`r find_file(that_word_does_not_mean_what_you_think_it_means.jpg")`)  
+
+```{r, echo = FALSE, fig.height = 3, fig.align='center'}
+# ggdraw(clip = "on") + draw_image(image_read(find_file("that_word_does_not_mean_what_you_think_it_means.jpg")))
+```
+
+
+
+## Frequentist Confidence and Significance
+
+```{r bluegill_banner, echo=FALSE, warn= FALSE,fig.height=1}
+g = g_bluegill
+plot_grid(g, g, g, g, g, g, g, nrow = 1)
+```
+
+### What we want a confidence interval to mean:
+
+- Based on the results of my research, I am 95% sure that the true mean length of bluegill in Massachusetts is between 9 and 10cm.
+
+### What a confidence interval actually means:
+
+- If I could repeat my research procedure many times, I expect that the true mean length of bluegill would fall within my 95% confidence intervals approximately 95% of the time.
+
+```{r bluegill_banner_2, echo=FALSE, warn= FALSE,fig.height=1.5}
+i = magick::image_flip(img_bluegill_2)
+g = ggdraw() + draw_image(i)
+plot_grid(g, g, g, g, g, nrow = 1)
+```
+
+
+
+## Frequentist Confidence and Significance
+
+### Frequentist statements of confidence and significance do not refer the outcome of a *specific* experiment!
+
+- This isn't exactly what we want from our analysis.
+- It's difficult to explain the "if I repeated..." idea to a nonscientific audience.
+
+
+It's not that a Frequentist analysis doesn't let us make conclusions from an experiment, it's just that we have to be careful to acknowledge the subtly of focusing on the process in the context of repeated sampling, rather than a single outcome.
+
+### Watch for how popular media describes statistical results!
+
+
+
+
+## Recap of Key Concepts and Terms
+
+- What is the Frequentist paradigm?
+- Assumptions
+- Frequentist pros and cons
+- Confidence and significance
+

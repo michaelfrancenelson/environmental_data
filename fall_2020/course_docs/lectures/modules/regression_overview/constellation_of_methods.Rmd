@@ -1,0 +1,250 @@
+---
+title: "Regression Overview I"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+## Name Collisions
+
+As with the unfortunate similarity in the names of sample standard error, sample standard deviation, population standard deviation, etc. the regression world has many names and acronyms of that are confusingly similar.
+
+- I have attempted to group methods in a logical way, and use terminology that helps highlight the differences, but there is no way to avoid having to learn the differences between terms and acronyms like general linear models, generalized linear models, GLM, GLMM, GLS, GAM, etc.
+
+
+
+## The Constellation
+
+```{r constellation_of_methods, echo = FALSE, fig.cap="Bolker: Ecological Models and Data in R, Figure 9.2"}
+knitr::include_graphics(rmd.utils::find_file("Bolker_figure_09_2_constellation.PNG"))
+```
+
+
+
+## Constellation of Methods: Groups
+
+I propose a grouping of model types:
+
+- Group 1: Linear methods
+- Group 2: Extended linear methods
+- Group 3: Multivariate methods
+
+
+
+## Groups 1 - 3
+
+How are the groups different?
+
+Some differences among models in the groups:
+
+- Assumptions
+- Response data types
+- Linearity of parameters
+- Constant variance
+- Number of response variables
+- Stochastic model
+
+
+
+## Four key assumptions
+
+Group I imposes four key assumptions:
+
+- Independent observations
+- Constant variance a.k.a homoskedasticity, a.k.a. homogeneity
+- Fixed x: no measurement error in our predictor variables
+- Normality: normality refers to the model residuals
+
+In addition, Group I requires that our models be *linear in the parameters* and have a response on a continuous scale.
+
+The different Group 2 models can deal with different violations of these assumptions and requirements.
+
+
+
+
+## Group 1: General Linear Methods
+
+- Single continuous response variable
+- One or more predictor variables
+  - They may be continuous or categorical
+- Deterministic model must be *linear in the parameters*.
+- Stochastic model is the Normal distribution.
+
+
+
+
+## Group 1: terms and coefficients
+
+- response: Y
+  - Also called the dependent variable
+- predictor(s): X
+  - Also called the independent variable(s)
+- intercept(s): $\alpha$.  Sometimes symbolized as $\beta_0$
+  - This is the expected value of the response when all of the predictors are equal to zero.
+- slope(s): $\beta_i$: The regression slope is the rate of change in the response variable for each one-unit increase in the predictor variable.
+
+
+
+
+
+## Group 2: Violations of Assumptions
+
+Recall the key assumptions:
+
+- Independent observations
+- Normality: normality refers to the model residuals
+- Constant variance a.k.a homoskedasticity, a.k.a. homogeneity
+- Fixed x: no measurement error in our predictor variables
+
+Violations of some of these assumptions are more difficult to deal with than others!
+
+Group 1 methods also required *linearity in the parameters*.
+
+
+
+## Group 2: Nonlinear Least Squares
+
+NLS requires all of the 4 assumptions, but does not require *linearity in parameters*.
+
+- Useful with nonlinear functions such as Ricker, logistic, any other nonlinear mechanistic function we can propose.
+- Uses the least squares optimization criterion
+- Find model parameter values that minimize the sum of squared residuals
+
+
+
+## Nonlinear Least Squares: challenges
+
+Needs numerical methods to estimate parameters
+
+1. Relies on initial guesses for parameter values
+1. Poor guesses can converge to local maxima
+1. Uses squared errors (like Group 1 methods)
+  - Very sensitive to outliers
+
+
+
+
+## Group 2: *Generalized* Linear Models
+
+The name of this class of models is confusingly similar to *General Linear models*.
+
+- Can sometimes handle heterogeneity in the errors
+- Extremely useful for binary and count data: logistic and Poisson regression
+- Useful with certain kinds of non-linearity and non-normal errors
+
+
+## Group 2: *Generalized* Linear Models
+
+GLMs *generalize* general linear models by using a *linearizing link function* that can accommodate certain common types of non-normal errors.
+
+- GLMs work with stochastic models that can be specified by a *exponential family* distribution.
+  - Many common distributions belong to this family.
+  
+GLMs are good with discrete data.
+
+
+
+
+
+## Group 2: Mixed Models
+
+What if your experiment has a hierarchical structure?
+
+- For example: You observe 5 locations on each of 3 beaches
+  - Sites on the same beach have similar environments
+  - You may not care about the effects of the e *specific beaches*
+  - The beaches are a *random* collection of all the possible beaches you could have observed.
+
+Mixed models work with fixed and random effects.
+
+
+
+
+## Fixed and Random Effects
+
+### Fixed effects can be categorical or numerical.
+
+- We usually want to do inference on fixed effects.
+
+### Random effects are always categorical/grouping variables.
+
+- They are usually not the focus of the experiment:
+  - In a greenhouse experiment I care about *specific* water and fertilizer treatments.
+  - I probably don't care about the effect of table #3 in greenhouse room #12
+
+
+
+
+
+
+## Group 2: Generalized Linear Mixed Models GLMM
+
+These models extend the generalized linear models to work with random effects.
+
+- Censuses nested within beaches
+- Presence/absence at sites on mountain ranges
+
+
+
+
+
+## Group 2: [General] Additive [Mixed] Models
+
+### Additive models do not attempt to fit a *global* function.
+
+- Local regressions
+- Smoother functions
+- Additive models are often considered descriptive or phenomenological.
+
+
+
+
+## Group 3: Multivariate Models
+
+Multivariate models consider *more than one response* variable.
+
+Common uses:
+
+- Classification, assigning individuals to groups, cluster analysis
+- Dimensionality reduction: combining many variables into just a few axes.
+
+Multivariate statistics is a rich and complex field.  We won't cover any details in this course.
+
+
+
+
+
+
+## A Fourth Group? 
+
+Machine learning techniques: 'training' an algorithm or data structure on data.
+
+There are two main types of ML: Classification and Regression
+
+Machine learning methods include:
+
+- Decision tree methods
+- Support Vector Machines (SVM)
+- Neural networks
+

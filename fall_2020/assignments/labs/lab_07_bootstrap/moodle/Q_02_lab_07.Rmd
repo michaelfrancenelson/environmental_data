@@ -1,0 +1,156 @@
+---
+title: "bootstrap CI: Gentoo penguins"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+   
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+
+  return (sample_sd / sqrt(n))
+}
+
+```
+
+
+<div class="instructionsborder">
+
+#### Instructions
+
+Review the bootstrap confidence interval materials in the lab walkthrough.
+
+- Calculate a *bootstrap* 95% CI for mean bill length (in mm) for the Gentoo penguins in
+`penguins` dataset from package `palmerpenguins`.
+- Use the `boot()` function from package `boot()`
+
+</div>
+
+
+<div class="questionborder">
+
+### Q1 1 pt
+  
+- Paste the r code you used to perform the following:
+  - call the `boot()` function
+  - calculate the upper and lower 2.5% quantiles.
+
+</div>
+
+
+
+Solution
+========
+
+The approximate interval should be:
+
+
+| 2.5% | 97.5% |
+| ---- | ----  |
+| 46.98535 | 48.06179 |
+
+
+My implementation using `boot()`:
+
+```{r reuslts='hold'}
+require(palmerpenguins)
+require(boot)
+
+boot_mean = function(x, i)
+{
+  return(mean(x[i], na.rm = TRUE))
+}
+
+alpha = 0.05
+dat_gentoo = subset(penguins, species == "Gentoo")
+
+myboot = 
+  boot(
+    data = dat_gentoo$bill_length_mm,
+    statistic = boot_mean,
+    R = 10000)
+print(myboot)
+
+quantile(myboot$t, c(alpha / 2, 1 - alpha / 2))
+
+
+```
+
+
+### Grading Guide
+
+
+If they were observant, they would realize that they could re-use use the walkthrough code with the Gentoo bill length instead of the moth data.
+
+Full credit if:
+
+- Reasonable match to my example above: (46.99, 48.06)
+- Correct definition for `boot_mean()`, remembering the `na.rm = TRUE`
+- They used `boot()`
+  - Subtract 0.5 points if they used another method.
+- Correct use of `quantile()`
+
+#### A for-loop solution
+```{r}
+
+m_i = 1000
+results_i = numeric(m_i)
+
+for (i in 1:m_i)
+{
+  results_i[i] = mean(sample(dat_gentoo$bill_length_mm, replace = TRUE), na.rm = TRUE)
+}
+
+hist(results_i)
+
+quantile(results_i, c(alpha / 2, 1 - alpha / 2))
+
+
+
+```
+
+
+
+Meta-information
+================
+extitle: bootstrap CI: Gentoo penguins
+
+extype: string
+
+exsolution: nil
+
+exname: lab_07
+
+exsection: lab_07
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 1
+
+
+

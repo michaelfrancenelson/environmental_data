@@ -1,0 +1,97 @@
+---
+title: "normality"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="questionborder">
+
+> "The normality assumption means that if we repeat the sampling many times
+under the same environmental conditions, the observations will be normally distributed
+**for each value of X**." - Zuur (2007)
+
+A common misconception about this assumption is that the values of the response variable must be normally distributed.
+
+
+Consider this histogram of penguin bill lengths:
+
+```{r, echo=FALSE, warning = FALSE, message=FALSE}
+require(palmerpenguins)
+require(ggplot2)
+
+hist(penguins$bill_length_mm, main = "Histogram of Penguin Bill Length", xlab = "bill length (mm)")
+```
+
+- Bill lengths appear very non-normal.
+- A the very low p-value in the Shapiro test of normality provides strong evidence against the null hypothesis that bill lengths are normally-distributed.
+
+```{r}
+shapiro.test(penguins$bill_length_mm)
+```
+
+Nevertheless, a general linear model of bill lengths as that includes species and body mass as predictors passes a test of the normality assumption:
+
+```{r}
+fit_1 = lm(bill_length_mm ~ body_mass_g + species, data = penguins)
+shapiro.test(residuals(fit_1))
+```
+
+
+
+### Q1: 3 pt. (short answer/essay)
+
+- Explain how the normality assumption can be met in a general linear model, even if the response variable is not normally-distributed.
+
+</div>
+
+
+
+
+Solution
+========
+
+
+The key is that normality applies to the residuals.  
+
+The response should be normally distributed around the predicted value for each combination of predictor variable values.
+
+
+Meta-information
+================
+
+extitle: normality
+
+extype: string
+
+exsolution: nil
+
+exname: week_08_reading_questions
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+
+expoints: 3
+

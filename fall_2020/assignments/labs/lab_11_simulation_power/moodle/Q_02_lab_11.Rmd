@@ -1,0 +1,97 @@
+---
+title: "dispersion n contour plot"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    includes:
+      after_body: !expr here::here("formatting", "js", "rmd3.js")
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r solution_code, echo=FALSE}
+load(
+  file = here::here(
+    "data", "lab_11",
+    "sim_output_dispersion_n_1000.RData"))
+```
+```{r solution_plot, eval=FALSE, echo = FALSE}
+contour(
+  x = sim_3_dat$pop_sd,
+  y = sim_3_dat$sample_size, 
+  z = sim_3_dat$power,
+  xlab = "population s.d.",
+  ylab = "sample size",
+  main = "Contour Plot of Statistical Power")
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+### Instructions
+
+Create a contour plot of the ***sample size and population dispersion*** power simulation.
+
+</div>
+
+
+<div class="questions">
+
+### Q 2 pt (image upload)
+
+- Upload your plot as an image file.
+
+</div>
+
+
+
+Solution
+========
+
+```{r answer_plot, ref.label = "solution_plot", fig.asp=1/1.8, echo = FALSE}
+```
+
+<button onclick="toggle()">Click to show/hide code</button>
+
+<div id="toggle">
+
+```{r answer_code, ref.label = "solution_code", results='hide'}
+```
+```{r answer_plot, ref.label = "solution_plot", eval = FALSE}
+```
+</div>
+
+
+Meta-information
+================
+extitle: dispersion n contour plot
+
+extype: string
+
+exsolution: nil
+
+exname: lab_11
+exsection: lab_11
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 1
+
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 2

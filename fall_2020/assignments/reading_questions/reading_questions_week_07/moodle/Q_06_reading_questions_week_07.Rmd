@@ -1,0 +1,84 @@
+---
+title: "Model comparison"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+Question
+========
+
+
+<div class="instructions">
+
+McGarigal writes:
+
+> "We expect a model with more parameters to fit better in the sense that the negative log-likelihood should be smaller if we add more terms to the model. But we also expect that adding more parameters to a model leads to increasing difficulty of interpretation."
+
+</div>
+
+
+<div class="questions">
+
+### Q1: 4 pts.
+
+- Consider the trade off between model complexity and interpretability.  
+
+- Describe the inherent conflict between using a complicated model that minimizes the unexplained variation and using a simple model that is easy to communicate.
+
+- Since your answer is targeted to a non-scientist audience, I suggest you use a narrative style using a concrete example.
+
+</div>
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+
+
+Solution
+========
+
+
+
+Meta-information
+================
+
+extitle: Model comparison
+
+extype: string
+
+exsolution: nil
+
+exname: week_07_reading_questions
+
+exsection: week_07_reading_questions
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 4
+

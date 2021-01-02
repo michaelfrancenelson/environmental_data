@@ -1,0 +1,87 @@
+---
+title: "Using distribution functions"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r, echo = FALSE, fig.cap="Binomial Probabiltiy Mass Function"}
+x = 0:5
+
+fill_1 = rgb(0, 0.3, 0.8, 0.25)
+fill_0 = rgb(0, 0.0, 0.0, 0.0)
+
+barplot(
+  dbinom(x, size = 5, prob = 0.75), 
+  col = c(fill_0, fill_0, fill_0, fill_0, fill_1, fill_1), 
+  space = 0, names.arg = 0:5,
+  xlab = "success count")
+```
+
+
+
+<div class="questionborder">
+### Q1: 3 pts
+
+- What is the probability of observing *more than* 3 successes in a binomial distribution with parameters n = **5** and p = 0.75?
+- Paste the R code that you used to find your answer.
+
+</div>
+
+
+Solution
+========
+
+0.632
+
+This is the correct code:
+```{r}
+1 - pbinom(q = 3, size = 5, p = 0.75)
+```
+
+This also works, but it's not generalizable:
+```{r}
+dbinom(x = 4, size = 5, p = 0.75) +
+dbinom(x = 5, size = 5, p = 0.75)
+```
+
+
+
+
+
+
+Meta-information
+================
+extitle: Using distribution functions
+
+extype: string
+
+exsolution: nil
+
+exname: Frequentist concepts
+
+exsection: Frequentist concepts
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 3
+

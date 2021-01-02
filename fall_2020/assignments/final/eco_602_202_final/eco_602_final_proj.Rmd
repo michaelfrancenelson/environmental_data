@@ -1,0 +1,421 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Final Project"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(knitr.duplicate.label = "allow")
+require(rmd.utils)
+```
+
+
+
+
+```{r build_assignment_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+
+assn_base_name = "eco_602_final_proj"
+assn_source_file = find_file("eco_602_final_proj.Rmd", extension = ".Rmd")
+assn_source_dir = dirname(assn_source_file)
+
+assn_dir_out    = here::here("docs", "assignments", "eco_602", "individual")
+assn_file_out = file.path(assn_dir_out, assn_base_name)
+
+file.exists(assn_source_file)
+file.exists(assn_source_dir)
+file.exists(assn_dir_out)
+file.exists(assn_file_out)
+
+rmarkdown::render(
+  input = assn_source_file, 
+  output_dir = assn_dir_out)
+
+# build_assignment_doc(
+#   assn_source_file,
+#   question_source_files,
+#   # assignment_render_file = NULL,
+#   assignment_render_file = assn_file_out,
+#   key_render_file = NULL)
+#   # key_render_file = key_file_out)
+
+# exams::exams2moodle(
+#   file = question_source_files,
+#   verbose = TRUE,
+#   # dir = lab_dir,
+#   dir = here::here("docs", "moodle_quiz_questions"),
+#   name = sprintf("reading_questions_$s", assn_base_name)
+# )
+
+```
+
+
+```{r final_proj_intro, child = find_file("eco_602_final_1_intro.Rmd", exact_match = TRUE)}
+```
+
+```{r final_proj_r_guide, child = find_file("eco_602_final_2_r_guide.Rmd", exact_match = TRUE)}
+```
+
+```{r final_proj_data_analysis, child = find_file("eco_602_final_3_data_analysis.Rmd", exact_match = TRUE)}
+```
+
+
+
+<!-- <div class="redborder"> -->
+<!-- This page is under construction, the content below is in draft form. -->
+<!-- </div> -->
+
+<!-- # Learning Objectives -->
+
+<!-- - Create a set of R examples for your personal reference beyond this course. -->
+<!-- - Use the concepts you have learned in the course to perform a complete data analysis. -->
+
+
+
+
+<!-- # Introduction: R Reference -->
+
+<!-- It's very easy to forget R programming concepts if you don't use the often. -->
+
+<!-- A great way to retain the skills that will be important for you going forward is to create a set of examples using the functions you want to remember. -->
+
+<!-- You'll create an R Markdown document containing examples of how to use the basic R components that you need to know. -->
+
+
+
+
+<!-- # Introduction: Data Analysis -->
+
+<!-- For this portion of the final project, you'll perform a data analysis on data collected or two species of small mammals in the Atlantic Forest of Brazil. -->
+
+<!-- You'll find the data file, delomys.csv, in the data tab of the course GitHub page. -->
+
+<!-- It includes data extracted from a larger data set: -->
+
+<!-- - <a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecy.1893" target="_blank">Atlantic small‐mammal: a dataset of communities of rodents and marsupials of the Atlantic forests of South America</a> -->
+
+
+
+<!-- # GitHub Pages -->
+
+<!-- ## Set up your repository for GitHub Pages: -->
+
+
+<!-- ### In RStudio: -->
+
+<!-- 1. Open RStudio and make sure that your course RProject is open. -->
+<!-- 1. Create a 'docs' folder in your base project. -->
+<!-- 1. Create a new RMarkdown document, save it as `index.Rmd` in your `docs` folder. -->
+<!-- 1. Add your name and a title to the header section of the document. -->
+<!-- 1. Click the Knit button. -->
+<!-- 1. Commit your changes and push to GitHub. -->
+
+
+<!-- ### On GitHub: -->
+
+<!-- 1. Navigate to your repository on GitHub. -->
+<!-- 1. Go to 'Settings' -->
+<!-- 1. Scroll down to the *GitHub Pages* section. -->
+<!-- 1. You'll see a blurb called **Source** with a dropdown menu. -->
+<!-- 1. The **None** option will be initially selected. -->
+<!-- 1. Click the dropdown menu and choose *main*. -->
+<!-- 1. Another dropdown will appear: select the **/docs** option. -->
+<!-- 1. Click *save*. -->
+
+
+<!-- # index.Rmd and index.html -->
+
+<!-- In order to be published on GitHub Pages, your project needs to have a file called `index.html` in your `docs` folder. -->
+
+<!-- - `index.Rmd` will be the R Markdown document in which you'll create your final project's content. -->
+
+
+<!-- # Final Project Template -->
+
+<!-- Download the file `index_template.Rmd` from the course GitHub page. -->
+
+
+<!-- # R Markdown Documents -->
+
+<!-- You can create a new markdown document via the File menu in RStudio. -->
+
+<!-- - RMarkdown documents have an '.Rmd' extension. -->
+
+<!-- RMarkdown documents consist of a few basic elements, including: -->
+
+<!-- - Document text. -->
+<!--   - This is the text that will appear in your rendered document (usually html or pdf). -->
+<!--   - Document text may contain links, images, and formatting information. -->
+
+<!-- - Code chunks. -->
+<!--   - These are where you can write your R code. -->
+<!--   - The code will be executed, and the results displayed in the document. -->
+<!--     - You can specify options in the code chunk header.  `echo` and `eval` are two useful options. -->
+
+
+<!-- # Creating a successful code example -->
+
+<!-- ## Self-Contained, concise, reproducible examples -->
+
+<!-- A successful code example should communicate what the function or operator does. -->
+
+<!-- The best examples are: -->
+
+<!-- - Self-contained: -->
+<!--   - The example dos not rely on external data sets. -->
+<!--   - To the greatest extent possible, the example does not rely on external packages. -->
+<!-- - Concise: -->
+<!--   - The example is as simple and brief as possible. -->
+<!--   - The example focuses on the function or operator in question, avoiding other functions as much as possible. -->
+<!--   - Avoid jargon and technical terminology as much as possible. -->
+<!-- - Reproducible: -->
+<!--   - The example must run on anyone's computer! -->
+
+<!-- Your code examples need to be written in your own words, in such a way that you will be able to decipher them later! -->
+
+
+<!-- ## Code Comments -->
+
+<!-- You should use comments in your code as needed to highlight important points. -->
+
+
+
+
+<!-- # Sample Code Example -->
+
+<!-- The following is a code example for the `c()` function. -->
+
+<!-- <div class="instructions"> -->
+
+<!-- The function `c()` *combines* or *concatenates* its arguments into a vector (a 1-dimensional data structure consisting of 1 or more elements). -->
+
+<!-- - All of the elements must be of the same *type*. -->
+<!--   - I can't combine character and numeric types in the same call to `c()` -->
+
+<!-- Here's two examples using numeric and character data types: -->
+
+<!-- ```{r} -->
+<!-- # Create a vector of numbers: -->
+<!-- num_vec  = c(1, 4, 8, 9, 13) -->
+
+<!-- # Create a vector of characters: -->
+<!-- char_vec = c("a", "fish", "data is cool") -->
+<!-- ``` -->
+
+<!-- I can show the contents of a vector by typing the name of the vector, or using the `print()` function. -->
+
+<!-- ```{r} -->
+<!-- # Typing the name of the vector into the console prints the contents -->
+<!-- num_vec -->
+
+<!-- # The print() function accomplishes the same task: -->
+<!-- print(char_vec) -->
+<!-- ``` -->
+<!-- </div> -->
+
+
+
+
+
+<!-- # Data Types and Subsetting -->
+
+<!-- ## Data Structures -->
+
+<!-- - vectors -->
+<!--   - recall that these are often created using `c()`. -->
+<!-- - `data.frame()` -->
+<!-- - `matrix()` -->
+
+<!-- ## Subsetting Operators and Functions -->
+
+<!-- - `[]` -->
+<!-- - `$` -->
+<!-- - `subset()` -->
+
+
+
+<!-- # Required Functions and Arguments -->
+
+<!-- All functions are denoted with parentheses. -->
+
+<!-- The required function arguments are contained in indented bullet points below the corresponding function. -->
+
+
+<!-- ## Functions 1: Data Structure Functions -->
+
+<!-- - `c()` -->
+<!-- - `matrix()` -->
+<!-- - `data.frame()` -->
+<!-- - `length()` -->
+<!-- - `nrow()` -->
+<!-- - `ncol()` -->
+<!-- - `dim()` -->
+
+
+
+<!-- ## Functions 2: Numerical Data Exploration -->
+
+<!-- - `summary()` -->
+<!-- - `mean()` -->
+<!-- - `sd()` -->
+
+
+
+<!-- ## Functions 3: Graphical Data Exploration -->
+
+<!-- - `par()` required arguments: -->
+<!--   - `mrow =` -->
+
+<!-- - `plot()` required arguments: -->
+<!--   - `col =` -->
+<!--   - `pch =` -->
+<!--   - `cex =` -->
+<!--   - `main =` -->
+<!--   - `xlab =` -->
+<!--   - `ylab =` -->
+<!--   - `xlim =` -->
+<!--   - `ylim =` -->
+
+<!-- - `hist()` required arguments: -->
+<!--   - `breaks =` -->
+
+<!-- - `boxplot()` -->
+<!--   - Your must include two examples: a simple boxplot (i.e. one box) and a conditional boxplot (i.e. a single plot that has multiple boxes, conditioned on a categorical variable). -->
+
+
+<!-- ## Functions 4: Distribution Functions -->
+
+<!-- - `dnorm()` -->
+<!-- - `pnorm()` -->
+<!-- - `qnorm()` -->
+
+<!-- - `dbinom()` -->
+<!-- - `pbinom()` -->
+<!-- - `qbinom()` -->
+
+
+<!-- ## Functions 5: Other Functions -->
+
+<!-- - `subset()` -->
+<!-- - `libary()` and `require()` -->
+<!-- - `read.csv()` -->
+
+
+<!-- # Part 2: Data Analysis -->
+
+<!-- <div class="warnings"> -->
+<!-- - NOTE: this section is still under construction -->
+<!-- </div> -->
+
+
+<!-- ```{r data_analysis, echo=FALSE, eval=FALSE} -->
+
+<!-- dat_delomys = read.csv(here::here("data", "delomys.csv")) -->
+<!-- head(dat_delomys) -->
+
+
+<!-- plot(body_length ~ body_mass, data = dat_delomys) -->
+
+
+<!-- hist(dat_delomys$body_mass) -->
+<!-- hist(dat_delomys$body_length) -->
+
+
+<!-- boxplot(body_mass ~ binomial, data = dat_delomys) -->
+<!-- boxplot(body_mass ~ sex, data = dat_delomys) -->
+<!-- boxplot(body_mass ~ sex * binomial, data = dat_delomys) -->
+
+
+
+<!-- ``` -->
+
+
+
+
+<!-- You'll perform a complete data analysis on the Delomys species data. -->
+
+<!-- ## Numerical Exploration -->
+
+<!-- - Use `summary()` on the body mass and body length data columns in the Delomys data set to display summary statistics. -->
+
+
+
+<!-- - Perform a test of normality on the body mass and length columns.  You can use `Shapiro.test()` -->
+
+
+
+
+<!-- ## Graphical Exploration -->
+
+<!-- <div class="notes"> You can adjust the size of the plots on your rendered document using the following code chunk arguments: -->
+
+<!-- `fig.height=` -->
+<!-- `fig.width=` -->
+
+<!-- You can adjust the aspect ratio using -->
+<!-- `fig.aspect=` -->
+
+<!-- The code chunk format with an option looks like: -->
+
+<!-- ```{r echo = FALSE, comment = ""} -->
+<!-- cat( -->
+<!-- '```{r fig.width=10}', "\n", -->
+<!-- 'require(palmerpenguins)',"\n", -->
+<!-- 'plot(bill_length_mm ~ body_mass_g, data = penguins)',"\n", -->
+<!-- '```', sep = "\n") -->
+<!-- ``` -->
+
+<!-- Producing the following output: -->
+
+<!-- ```{r fig.width=10, fig.asp = 1} -->
+<!-- require(palmerpenguins) -->
+<!-- plot(bill_length_mm ~ body_mass_g, data = penguins) -->
+<!-- ``` -->
+
+<!-- - Try different values for the chunk options to get a feel for how they affect the plots. -->
+
+<!-- </div> -->
+
+<!-- You will need to experiment with different width, height, and/or aspect values for each of your figures. -->
+
+<!-- Create the following plots: -->
+
+
+
+
+<!-- - A scatterplot of body mass and body length -->
+
+<!-- These two histograms must be on the same plot.  You can use `par(mfrow = c(2, 1))` -->
+<!-- - A histogram of body mass -->
+<!-- - A histogram of body length -->
+
+<!-- - A conditional boxplot of body mass, conditioned on species (column `binomial`) -->
+<!-- - A conditional boxplot of body mass, conditioned on sex (column `binomial`) -->
+<!-- - A conditional boxplot of body mass, conditioned on both species and sex -->
+
+<!-- Respond to the following questions in the graphical exploration section: -->
+
+<!-- 1. Qualitatively describe the relationship between body mass and length. -->
+<!--   - Does the relationship seem linear, curved, nonexistent? -->
+<!-- 2. Qualitatively describe the shapes of the histograms. -->
+<!--   - Do the data appear normally-distributed in the histograms? Explain why or why not. -->
+<!-- 3. Using both the histograms and normality tests, are the body mass and body length data likely to be normally-distributed? -->
+<!--   - Compare your visual assessment of normality to the results of the normality tests you completed above. -->
+
+
+

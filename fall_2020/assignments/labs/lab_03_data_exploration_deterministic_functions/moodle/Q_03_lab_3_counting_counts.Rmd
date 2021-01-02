@@ -1,0 +1,61 @@
+---
+title: "Counting total jays"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Using the `dat_all` data frame, calculate the **total number of Gray Jays** observed in all of the sampling sites.
+
+<div class="questionborder">
+
+
+### Q1 1pt
+
+- Paste the R code you used for the calculation into the text entry window.
+
+</div>
+
+Solution
+========
+
+There are 181 total gray gays.
+
+The following code will produce the correct answer:
+
+```{r, eval=TRUE}
+require(here)
+dat_bird = read.csv(here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+sum(dat_all$GRJA)
+```
+
+
+Meta-information
+================
+extitle: Count of total observations
+extype: string
+exsolution: nil
+exname: lab_03
+exsection: lab_03
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: simple
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 10
+expoints: 1

@@ -1,0 +1,310 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Lab 05: Modeling Errors"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+require(rmd.utils)
+knitr::opts_chunk$set(echo = TRUE)
+
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+lab = 5
+sprintf("lab_%0.2d_", lab)
+
+lab_source_dir = find_file(sprintf("lab_%0.2d_", lab), directory = TRUE)
+lab_out_dir    = here::here("docs", "assignments", "eco_634")
+lab_source_file = find_file(sprintf("lab_%0.2d", lab), search_path = lab_source_dir, extension = ".Rmd")
+
+question_source_files = find_file(
+  "", search_path = file.path(lab_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+lab_file_out = file.path(lab_out_dir, sprintf("lab_%0.2d", lab))
+
+build_assignment_doc(
+  lab_source_file,
+  question_source_files,assignment_render_file = lab_file_out, key_render_file = here::here("docs", "answer_keys", sprintf("lab_%0.2d_answer_key", lab))
+)
+
+exams::exams2moodle(
+  file = question_source_files,
+  verbose = TRUE,
+  # dir = lab_dir,
+  dir = here::here("docs", "moodle_quiz_questions"),
+  name = sprintf("lab_%0.2d_moodle_questions", lab)
+)
+
+```
+
+
+
+# Learning objectives, technical skills and concepts:
+
+- Random number generation
+- Distribution Functions
+- Building custom functions
+- Fitting deterministic models
+- Calculating residuals
+- Defining and quantifying error
+
+
+
+
+
+
+# The Ricker Function
+
+The Ricker function is a modification of the exponential function.  The formula is:
+
+$f(x) = a \times x \times e^{-b \times x}$
+
+You can see the general form of the curve (with some hints as to how to visually parameterize it) in McGarigal's figure:
+
+![](`r find_file("mcGarigal_ricker_fun.PNG")`)
+
+- Notice that the x-coordinate of the peak depends on the parameter `b`, the initial slope depends on the parameter `a`, while the height of the maximum depends on both parameters.
+
+
+### We can create a Ricker function in R:
+
+```{r}
+ricker_fun = function(x, a, b) 
+{
+  return(a * x * exp(-b * x))
+}
+```
+
+
+Here's a plot of the shape using the simplest possible parameters: a = 1 and b = 1:
+
+```{r}
+curve(
+  ricker_fun(x, 1, 1), 
+  from = 0, to = 5, add = FALSE, 
+  main = "Ricker function: a = 1, b = 1",
+  ylab = "f(x)", xlab = "x")
+```
+
+- Note the use of the `curve()` function:
+- The `from` and `to` arguments tells `curve()` what range of x-values it should include in the plot.
+- The `add = FALSE` argument value creates a new plot.
+
+
+# The exponential function
+
+> The exponential function is the building block of the Ricker.
+
+Here's McGarigal's infographic:
+
+
+
+
+![](`r find_file("mcGarigal_exponential_fun.PNG")`)
+
+
+### We can create an exponential function in R:
+
+I'll let you build it!  You can use the Ricker function code I wrote above as a template.
+
+`exp_fun = function(x ...`
+
+
+<div class="warn">  
+NOTE: McGarigal defines the Ricker function with a negative sign before the parameter `b` but no negative sign before `b` in the exponential. 
+
+For consistency, you need to include the negative sign with parameter `b` in your exponential function definition.
+</div>
+
+### Plot of the exponential function
+
+
+
+
+```{r, echo = FALSE}
+curve(
+exp_fun(x, 0.1, 0.5), 
+from = 0, to = 10, add = FALSE, 
+main = "Exponential function",
+ylab = "f(x)", xlab = "x")
+```
+
+- What code could you use to create a similar plot?
+
+
+
+
+
+# Simulating data with different stochastic distributions
+
+We've used `curve()` to plot deterministic models using linear, logistic, Ricker, and exponential functions using parameter values we selected.
+
+We can also create simulated data that use these functions a deterministic model and R's random deviates functions to generate the noise or 'errors'.
+
+## Simulated data on a line.
+
+First, let's choose 50 *uniformly-distributed* random x-values within the interval 2 to 10:
+
+```{r}
+
+# Seed the RNG so we can reproduce our results
+set.seed(1234567)
+
+# Specify the x-range and number of points:
+n_pts = 50
+x_min = 2
+x_max = 10
+
+# Generate the x-values
+x_sim = runif(n_pts, min = x_min, max = x_max)
+
+```
+
+
+Next, we can choose an intercept and slope for our deterministic model and generate the 'predicted' y values:
+
+```{r}
+param_intercept = 2.3
+param_slope = 0.67
+y_pred = param_intercept + x_sim * param_slope
+plot(x_sim, y_pred)
+```
+
+
+## Normal errors 1
+
+Now we can add some normally-distributed noise to generate our 'observed' y-values:
+
+```{r}
+error_mean = 0
+error_sd = 0.25
+
+y_observed = 
+y_pred + 
+rnorm(
+n = n_pts, 
+mean = error_mean, 
+sd = error_sd)
+plot(x_sim, y_observed)
+```
+
+
+
+## Normal errors 2
+
+We could also use a more sophisticated stochastic model.  For example, we could make the variability larger with increasing values of x:
+
+```{r}
+error_mean = 0
+error_sd = 0.1
+
+y_observed_2 = 
+y_pred + 
+rnorm(
+n = n_pts, 
+mean = error_mean, 
+sd = error_sd * x_sim)
+plot(x_sim, y_observed)
+plot(x_sim, y_observed_2)
+```
+
+- What did I do differently to make the points more variable as x increased?
+
+
+## Exponentially-distributed errors.
+
+To produce this plot, I generated exponentially-distributed errors using `rexp()`.  I used a rate parameter of 1.2.  I'll let you think about how you might create such a plot yourselves.
+
+```{r, echo=FALSE}
+y_observed_3 = 
+y_pred +
+rexp(n_pts, rate = 1.2) - 1 / 1.2
+plot(x_sim, y_observed)
+plot(x_sim, y_observed_3)
+```
+
+## Choosing a model
+
+
+Consider the three plots
+
+```{r, fig.asp=2.6}
+par(mfrow = c(3, 1))
+plot(x_sim, y_observed)
+plot(x_sim, y_observed_2)
+plot(x_sim, y_observed_3)
+```
+
+If you didn't know the process that generated these data, how would you choose deterministic and stochastic models?
+
+- The deterministic functions look linear, so we'll focus on the stochastic models.
+- A first step is to examine histograms of the residuals:
+
+```{r fig.asp=1/0.6}
+par(mfrow = c(3, 1))
+hist(y_observed - y_pred, main = "sim data 1", xlab = "observed y=values")
+hist(y_observed_2 - y_pred, main = "sim data 2", xlab = "observed y=values")
+hist(y_observed_3 - y_pred, main = "sim data 3", xlab = "observed y=values")
+```
+
+We'll apply these concepts to a real data set below.
+
+
+# Marbled salamander dispersal data
+
+## Background
+
+The data for this exercise represent the dispersal of juvenile marbled salamanders from their natal ponds to neighboring ponds. 
+
+The data were derived from a long-term study of marbled salamanders in western Massachusetts in which a cluster of 14 vernal pools were monitored continuously between 1999-2004. All juveniles were marked upon leaving their natal ponds.  Subsequent recaptures at non-natal ponds were used to determine dispersal rates between ponds for first-time breeders (ftb). 
+
+In the data set provided, the dispersal rates have been standardized to account for several factors, including the propensity for dispersal from each pond and the available distances between ponds owing to the unique configuration of ponds. The data set includes three variables: 
+
+1. `dist.class` = distance class, based on 100 m intervals;
+2. `disp.rate.ftb` = standardized dispersal rate for first-time breeders, which can be interpreted as a relative dispersal probability.
+3. `disp.rate.eb` = standardized dispersal rate for experienced breeders, which can be interpreted as a relative dispersal probability.
+
+Obtain the data file here:
+
+https://michaelfrancenelson.github.io/eco_602_634_2020/data/salamander_dispersal.csv
+
+
+You'll try fitting three deterministic functions to the data: 
+
+1. linear
+2. exponential
+3. Ricker
+
+# Instructions
+
+Your assignment is to examine the data set provided (dispersal.csv) and find at least three alternative mathematical functions to describe the apparent relationship between juvenile dispersal and distance. The overall goals are for you to
+
+1. Examine the data set. Plot the relationship between juvenile dispersal (disp.rate.ftb) and distance (dist.class).
+
+2. Visually parameterize linear, exponential, and Ricker functions via trial-and-error to fit the data.
+- Note: Be patient, we'll eventually use R's power to automatically fit model parameters.  For now, the goal is graphical intuition.
+3. Calculate the residuals and propose a distribution to model the errors.
+
+
+
+
+
+# Lab Questions
+

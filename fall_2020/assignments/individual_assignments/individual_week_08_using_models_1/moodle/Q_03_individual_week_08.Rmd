@@ -1,0 +1,84 @@
+---
+title: "catastrophic normality results"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(here)
+
+```
+
+
+
+
+
+<div class="instructions">
+
+### Instructions
+
+Conduct a Shapiro-Wilk test of normality of the salamander catastrophic rates and interpret the output.
+
+
+</div>
+
+
+<div class="questions">
+
+### Q1 1 pt (short answer)
+
+- What is the null hypothesis for the Shapiro test?
+
+### Q2 1 pt (short answer)
+
+- Based on the Shapiro test results, is there strong evidence that the sample came from a non-normally-distributed population?
+
+</div>
+
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r reuslts='hold'}
+catrate = read.csv(here("data", "catrate.csv"))
+hist(
+  catrate$cat.rate, 
+  xlab = "Catastrophe Rate", 
+  main = "Histogram of Catastrophe Rates")
+```
+
+
+
+Meta-information
+================
+extitle: catastrophic normality results
+
+extype: string
+
+exsolution: nil
+
+expoints: 2
+
+exname: individual_week_08
+exsection: individual_week_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+

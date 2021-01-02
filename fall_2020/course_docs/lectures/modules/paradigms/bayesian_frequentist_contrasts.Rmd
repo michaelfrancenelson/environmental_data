@@ -1,0 +1,129 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Conditional Probabiltiy: Basics"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+    beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    # theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rmd.utils)
+require(mfn.teaching.utils)
+require(ggplot2)
+```
+
+
+## Intro to Bayesian: Bayes’ rule
+
+
+
+
+## Frequentist and Bayesian contrasts
+
+
+## Relationship between model and data
+Frequentist:
+◦
+Data are one realization of a stochastic sampling
+process
+◦
+The One True Model exists and is unknowable
+Bayesian:
+◦
+We know that our data exist, they are not random
+◦
+The model is a random variable that we will
+estimate from our fixed data
+
+
+
+
+## Uncertainty about the model
+Frequentist:
+◦
+True model parameters are unknowable but fixed
+◦
+Model parameters have no distributions, they
+simply exist!
+Bayesian:
+◦
+Model parameters are random, they have
+probability distributions that we estimate from
+our fixed data
+
+
+
+## Confidence and Credibility
+Frequentist 95%
+confidence interval:
+◦
+We are confident that our process would produce
+intervals containing the true value 95% of the time.
+◦
+Certainty about whether a particular interval
+contains the true value is tricky.
+Bayesian 95%
+credible interval:
+◦
+Given our data, we are 95% certain that our
+particular interval contains the real parameter
+value
+
+
+
+
+## Inference: Frequentist
+1.
+Estimate parameters that make our data
+most likely, under the assumption that they
+are one of infinite possible samples.
+2.
+Express our parameter estimates in terms
+of a confidence intervals and p values.
+◦
+The CI either contains the param value or not. We
+can’t know for a particular CI.
+
+
+
+
+
+## Inference: Bayesian
+1.
+Estimate probability distributions of the
+parameters that are most likely given our
+data, and previous data/knowledge.
+◦
+Conditional probability is key
+2.
+Express our estimates in terms of credible
+intervals. P values aren’t as important.
+
+
+## 
+## Bayesian symbols and notation
+Follows the format of conditional probability:
+Pr
+(A | B): What is the probability of A given that we know
+B occurred?
+Pr
+(H | D): What is the probability of our hypothesis (H)
+given that we have observed the data (D)
+
+
+

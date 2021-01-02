@@ -1,0 +1,14 @@
+---
+title: "ECo 602 Course Themes"
+output: html
+editor_options: 
+  chunk_output_type: inline
+---
+
+# My Teaching Philosophy
+
+<div class="info">
+
+
+
+</div>

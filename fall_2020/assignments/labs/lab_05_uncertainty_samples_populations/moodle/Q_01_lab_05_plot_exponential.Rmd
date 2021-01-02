@@ -1,0 +1,102 @@
+---
+title: "Exponential plots"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+# source(here::here("formatting", "functions", "rmd_functions.R"))
+# source(here::here("rmd_tools", "find_file.R"))
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. Complete the template R code to build your exponential function.  Make sure you read the note about parameter `b` in the lab instructions.
+2. To gain visual intuition, try using `curve()` to plot your function.
+- Try out different values of the two parameters as well as plotting over different ranges of x-values.
+- Try plotting two or more curves with slightly different parameter values on the same plot
+- You may need to try out different ranges of x-values in your plot windows to make sure you are focusing on the interesting parts of the curves.
+- Try different line colors, widths, and textures.
+
+An example exploratory plotting exercise:
+
+![](`r find_file("lab_05_q1.png")`)
+
+
+<div class="questionborder">
+### Q1 2 pts.
+
+- Paste the R code you used to create `exp_fun()`
+
+### Q2 3 pts.
+
+- Create a single plot containing 4 curves with these parameter values:
+  - curve 1: a = 1.9, b = 0.1, line color = black, line texture = solid
+  - curve 2: a = 1.9, b = 0.3, line color = black, line texture = dotted
+  - curve 3: a = 1.2, b = 0.2, line color = red, line texture = solid
+  - curve 4: a = 1.2, b = 0.4, line color = red, line texture = dotted
+
+</div>
+
+
+
+
+Solution
+========
+
+
+### Key {.tabset}
+
+#### plot
+```{r echo = FALSE}
+{
+  curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 30, ylab = "f(x)", ylim = c(0, 2))
+  curve(exp_fun(x, 1.9, 0.3), add = TRUE, from = 0, to = 30, col = 1, lty = 2)
+  curve(exp_fun(x, 1.2, 0.2), add = TRUE, from = 0, to = 30, col = 2, lty = 1)
+  curve(exp_fun(x, 1.2, 0.4), add = TRUE, from = 0, to = 30, col = 2, lty = 2)
+}
+```
+
+#### function
+```{r echo = TRUE}
+exp_fun = function(x, a, b) 
+{ 
+  return(a * exp(-b * x))
+}
+```
+
+
+
+
+Meta-information
+================
+extitle: Exponential plots
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 5

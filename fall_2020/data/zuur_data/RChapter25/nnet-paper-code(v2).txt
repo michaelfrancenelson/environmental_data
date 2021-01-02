@@ -1,0 +1,279 @@
+library(nnet)
+
+# Loads the neural network library
+
+
+HOMSIR<-read.table("C://HOMSIR/alt01.txt", header=T)
+
+# reads data file with sample area, biological information
+# and parasite abundance for each fish
+
+
+attach(HOMSIR)
+
+plot(Anisakis~Length)
+
+# plots the relationship between no. of Anisakis sp.
+# infecting each fish vs. length
+
+
+lg.an<-log(Anisakis+1)
+
+# performs a ln(n+1) transformation on the Anisakis abundance
+# value to produce a linear relationship
+
+
+plot(lg.an~Length)
+
+# plots Log(Anisakis+1) against length
+
+
+tmp<-lm(lg.an~Length)
+
+abline(tmp)
+
+rs.lg.an<-residuals(tmp)
+
+# extracts residuals of Log(anisakis+1)~length for later use
+
+par(mfrow=c(2,2), mar=c(4.2,4.2,1,0.5)+.1,mex=0.8,cex.axis=0.5, cex.main=0.8)
+plot(Length~Stock, ylab="Length (mm)")
+mtext("A", side=3, adj=0.02, cex=0.8, padj=1.5)
+plot(Anisakis~Length, xlab="Length(mm)", ylab="Number of Anisakis")
+mtext("B", side=3, adj=0.02, padj=1.5, cex=0.8)
+plot(lg.an~Length, xlab="Length (mm)", ylab="Log(Anisakis +1)")
+mtext("C", side=3, adj=0.02, padj=1.5, cex=0.8)
+abline(tmp)
+plot(rs.lg.an~Stock, ylab="Residual")
+mtext("D", side=3, adj=0.02, padj=1.5, cex=0.8)
+
+
+parasites<-data.frame(as.factor(A.serenum),as.factor(Goussia),rs.lg.an,Hystero.L,Hystero.A,
+Tergestia,Derogenes,Ectenurus,Pseudaxine,Gastrocotyle,Heteraxinoides)
+
+# assembles data frame of parasite data
+
+
+samp <-(c(sample(1:34,25), sample(35:131,25), sample(132:181,25),sample(182:281,25),sample(282:333,25),sample(334:433,25),sample(434:483,25)))
+
+# creates vector of numbers relating to half of the fish from each area sampled
+
+
+area<-class.ind(HOMSIR$Stock)
+
+# creates a class.ind object containing the stock to which each fish belongs
+
+
+para1 <- nnet(parasites[samp,], area[samp,], size = 8, rang = 0.1,
+                 decay =5e-4, maxit = 1000)
+
+# creates a neural networh with 8 hidden layer objects, trained on the fish
+# specified in the samp vector
+
+
+     test.cl <- function(true, pred){
+             Sample <- max.col(true)
+             Assigned <- max.col(pred)
+             table(Sample, Assigned)
+     }
+     test.cl(area[samp,], predict(para1, parasites[samp,]))
+
+# a function which uses the trained neural network to classify the remaining
+# of fish to the relevant stock
+
+detach(HOMSIR)
+
+# we don't need this any longer
+
+horse.mack<-function(repetitions, layers){
+
+# creates a carries out a neural network analysis over as many
+# repetitions as specified
+
+one.as.one<-vector(length=repetitions)
+one.as.two<-vector(length=repetitions)
+one.as.three<-vector(length=repetitions)
+one.as.four<-vector(length=repetitions)
+two.as.one<-vector(length=repetitions)
+two.as.two<-vector(length=repetitions)
+two.as.three<-vector(length=repetitions)
+two.as.four<-vector(length=repetitions)
+three.as.one<-vector(length=repetitions)
+three.as.two<-vector(length=repetitions)
+three.as.three<-vector(length=repetitions)
+three.as.four<-vector(length=repetitions)
+four.as.one<-vector(length=repetitions)
+four.as.two<-vector(length=repetitions)
+four.as.three<-vector(length=repetitions)
+four.as.four<-vector(length=repetitions)
+
+# creates vectors into which percentage classifications are stored
+
+
+for (i in (1:repetitions)){
+
+# loops the operation for the specified number of repeats
+
+     samp <-(c(sample(1:131,66), sample(132:181,25), sample(182:433,125),sample(434:483,25)))
+     area<-class.ind(HOMSIR$Stock)
+     para1 <- nnet(parasites[samp,], area[samp,], size = layers, rang = 0.1,
+                 decay = 5e-4, maxit = 2000)
+     test.cl <- function(true, pred){
+             Sample <- max.col(true)
+             Assigned <- max.col(pred)
+             table(Sample, Assigned)
+     }
+     temp.table<-test.cl(area[-samp,], predict(para1, parasites[-samp,]))
+
+# carries out neural network classifications on random half of horse mackerel data
+# using the specified number of layers
+
+
+        temp.matrix<-matrix(ncol=4, nrow=4, 0)
+        ncols<-as.numeric(colnames(temp.table))
+        nrows<-as.numeric(rownames(temp.table))
+
+        for (j in 1:length(nrows)){
+
+            for (k in 1:length(ncols)){
+                temp.matrix[ncols[j],nrows[k]]<-temp.table[j,k]
+                }
+        }
+
+# Sometimes the classification fails to return four categories. This works out
+# when that occurs and deals with the problem...
+
+     one.as.one[i]<-temp.matrix[1,1]
+     one.as.two[i]<-temp.matrix[1,2]
+     one.as.three[i]<-temp.matrix[1,3]
+     one.as.four[i]<-temp.matrix[1,4]
+     two.as.one[i]<-temp.matrix[2,1]
+     two.as.two[i]<-temp.matrix[2,2]
+     two.as.three[i]<-temp.matrix[2,3]
+     two.as.four[i]<-temp.matrix[2,4]
+     three.as.one[i]<-temp.matrix[3,1]
+     three.as.two[i]<-temp.matrix[3,2]
+     three.as.three[i]<-temp.matrix[3,3]
+     three.as.four[i]<-temp.matrix[3,4]
+     four.as.one[i]<-temp.matrix[4,1]
+     four.as.two[i]<-temp.matrix[4,2]
+     four.as.three[i]<-temp.matrix[4,3]
+     four.as.four[i]<-temp.matrix[4,4]
+}
+
+sort.1.1<-sort(one.as.one)
+sort.1.2<-sort(one.as.two)
+sort.1.3<-sort(one.as.three)
+sort.1.4<-sort(one.as.four)
+sort.2.1<-sort(two.as.one)
+sort.2.2<-sort(two.as.two)
+sort.2.3<-sort(two.as.three)
+sort.2.4<-sort(two.as.four)
+sort.3.1<-sort(three.as.one)
+sort.3.2<-sort(three.as.two)
+sort.3.3<-sort(three.as.three)
+sort.3.4<-sort(three.as.four)
+sort.4.1<-sort(four.as.one)
+sort.4.2<-sort(four.as.two)
+sort.4.3<-sort(four.as.three)
+sort.4.4<-sort(four.as.four)
+
+# sorts the classifications scores
+
+perc.1.1<-((sort.1.1/25)*100)
+perc.1.2<-((sort.1.2/25)*100)
+perc.1.3<-((sort.1.3/25)*100)
+perc.1.4<-((sort.1.4/25)*100)
+perc.2.1<-((sort.2.1/25)*100)
+perc.2.2<-((sort.2.2/25)*100)
+perc.2.3<-((sort.2.3/25)*100)
+perc.2.4<-((sort.2.4/25)*100)
+perc.3.1<-((sort.3.1/127)*100)
+perc.3.2<-((sort.3.2/127)*100)
+perc.3.3<-((sort.3.3/127)*100)
+perc.3.4<-((sort.3.4/127)*100)
+perc.4.1<-((sort.4.1/65)*100)
+perc.4.2<-((sort.4.2/65)*100)
+perc.4.3<-((sort.4.3/65)*100)
+perc.4.4<-((sort.4.4/65)*100)
+
+# transforms the classification score into a percentage
+
+cols<-c("African", "North Sea", "Southern", "Western")
+rnames<-c("5%", "50%", "95%")
+
+nsea<-matrix(nrow=3, ncol=4)
+colnames(nsea)<-cols
+rownames(nsea)<-rnames
+
+west<-matrix(nrow=3, ncol=4)
+colnames(west)<-cols
+rownames(west)<-rnames
+
+south<-matrix(nrow=3, ncol=4)
+colnames(south)<-cols
+rownames(south)<-rnames
+
+masah<-matrix(nrow=3, ncol=4)
+colnames(masah)<-cols
+rownames(masah)<-rnames
+
+
+masah[,1]<-c(perc.1.1[round(0.05*repetitions)], perc.1.1[round(0.5*repetitions)], perc.1.1[round(0.95*repetitions)])
+masah[,2]<-c(perc.2.1[round(0.05*repetitions)], perc.2.1[round(0.5*repetitions)], perc.2.1[round(0.95*repetitions)])
+masah[,3]<-c(perc.3.1[round(0.05*repetitions)], perc.3.1[round(0.5*repetitions)], perc.3.1[round(0.95*repetitions)])
+masah[,4]<-c(perc.4.1[round(0.05*repetitions)], perc.4.1[round(0.5*repetitions)], perc.4.1[round(0.95*repetitions)])
+
+nsea[,1]<-c(perc.1.2[round(0.05*repetitions)], perc.1.2[round(0.5*repetitions)], perc.1.2[round(0.95*repetitions)])
+nsea[,2]<-c(perc.2.2[round(0.05*repetitions)], perc.2.2[round(0.5*repetitions)], perc.2.2[round(0.95*repetitions)])
+nsea[,3]<-c(perc.3.2[round(0.05*repetitions)], perc.3.2[round(0.5*repetitions)], perc.3.2[round(0.95*repetitions)])
+nsea[,4]<-c(perc.4.2[round(0.05*repetitions)], perc.4.2[round(0.5*repetitions)], perc.4.2[round(0.95*repetitions)])
+
+south[,1]<-c(perc.1.3[round(0.05*repetitions)], perc.1.3[round(0.5*repetitions)], perc.1.3[round(0.95*repetitions)])
+south[,2]<-c(perc.2.3[round(0.05*repetitions)], perc.2.3[round(0.5*repetitions)], perc.2.3[round(0.95*repetitions)])
+south[,3]<-c(perc.3.3[round(0.05*repetitions)], perc.3.3[round(0.5*repetitions)], perc.3.3[round(0.95*repetitions)])
+south[,4]<-c(perc.4.3[round(0.05*repetitions)], perc.4.3[round(0.5*repetitions)], perc.4.3[round(0.95*repetitions)])
+
+west[,1]<-c(perc.1.4[round(0.05*repetitions)], perc.1.4[round(0.5*repetitions)], perc.1.4[round(0.95*repetitions)])
+west[,2]<-c(perc.2.4[round(0.05*repetitions)], perc.2.4[round(0.5*repetitions)], perc.2.4[round(0.95*repetitions)])
+west[,3]<-c(perc.3.4[round(0.05*repetitions)], perc.3.4[round(0.5*repetitions)], perc.3.4[round(0.95*repetitions)])
+west[,4]<-c(perc.4.4[round(0.05*repetitions)], perc.4.4[round(0.5*repetitions)], perc.4.4[round(0.95*repetitions)])
+
+# sticks the percentages into a matrix
+
+labs<-c("African","North Sea","Southern","Western")
+
+par(mfrow=c(2,2), mar=c(4.2,4.2,1,0.5)+.1,mex=0.8,cex.axis=0.5, cex.main=0.8)
+boxplot(nsea[,1],nsea[,2],nsea[,3],nsea[,4], range=0, boxlty=0, medpch=0,
+whisklty=1,medlty="blank", names=labs, ylab="%", staplewex=0.1, ylim=c(0,100))
+mtext("A", side=3, adj=0.02, cex=0.8, padj=1.5)
+
+boxplot(masah[,1],masah[,2],masah[,3],masah[,4], range=0, boxlty=0,
+medpch=0,whisklty=1,medlty="blank", names=labs, ylab="%",staplewex=0.1,
+ylim=c(0,100))
+mtext("B", side=3, adj=0.02, padj=1.5, cex=0.8)
+
+boxplot(south[,1],south[,2],south[,3],south[,4], range=0, boxlty=0,
+medpch=0,whisklty=1,medlty="blank", names=labs, ylab="%",staplewex=0.1,
+ylim=c(0,100))
+mtext("C", side=3, adj=0.02, padj=1.5, cex=0.8)
+
+boxplot(west[,1],west[,2],west[,3],west[,4], range=0, boxlty=0,
+medpch=0,whisklty=1,medlty="blank", names=labs, ylab="%",staplewex=0.1,
+ylim=c(0,100))
+mtext("D", side=3, adj=0.02, padj=1.5, cex=0.8)
+
+# plots the results
+
+
+product<-list("North_Sea"=nsea, "Southern"=south, "Western"=west, "African"=masah)
+
+return(product)
+
+
+}
+
+
+temp<-horse.mack(1000,8)
+
+temp

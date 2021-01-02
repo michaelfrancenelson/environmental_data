@@ -1,0 +1,198 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Bootstrapping 1: Bootstrap Confidence INtervals"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+require(here)
+require(boot)
+require(ggplot2)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+
+
+figure_output_path = file.path(dirname(find_file("bootstrap_2_raref")), "figures")
+
+
+moths_data_url = 
+  "https://michaelfrancenelson.github.io/eco_602_634_2020/data/moths.csv"
+
+```
+
+
+```{r rarefaction_sample, echo=FALSE, eval = FALSE}
+
+# This clears the current R session's environment
+rm(list = ls())
+
+# Re-read my data:
+moths = read.csv(here("data", "moths.csv"))
+moth_dat = moths[,-1]
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # the inner loop: runs once for each row of the input data.  index variable is j
+    for(j in 1:n_input_rows)
+    {
+      # sample the input data row indices, with replacement
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+      
+      t1 = moth_dat[rows_j, ]
+      t2 = apply(t1, 2, sum)
+      
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+rarefact = rarefaction_sampler(moth_dat, 10000)
+dim(rarefact)
+head(rarefact)
+head(data.frame(rarefact))
+
+# write.table(data.frame(rarefact), here("assignments", "modules", "bootstrap", "rarefact.csv"), col.names = FALSE)
+write.table(rarefact, here("assignments", "modules", "bootstrap", "rarefact.csv"), col.names = FALSE, row.names = FALSE, sep = ",")
+
+```
+
+
+
+```{r, eval=FALSE}
+rarefact = rarefaction_sampler(moth_dat, 10000)
+rare_mean = apply(rarefact, 2, mean)
+rare_quant = apply(rarefact, 2, quantile, probs=c(0.025, 0.975))
+rare = t(rbind(rare_mean, rare_quant))
+```
+
+
+
+```{r plot_rarefaction_curves}
+require(ggplot2)
+
+figure_output_path = file.path(dirname(find_file("bootstrap_2_raref")), "figures")
+
+rarefact = read.csv(here("assignments", "modules", "bootstrap", "rarefact.csv"))
+rare_mean = apply(rarefact, 2, mean)
+rare_quant = apply(rarefact, 2, quantile, probs=c(0.025, 0.975))
+rare = t(rbind(rare_mean, rare_quant))
+
+dat = data.frame(
+n_sites = 1:length(rare_mean),
+mean = rare_mean,
+lower = apply(rarefact, 2, quantile, probs=c(0.025)),
+upper = apply(rarefact, 2, quantile, probs=c(0.975)))
+
+dat_2 = data.frame(
+n_sites = 1:length(rare_mean),
+species_richness = c(rare_mean, apply(rarefact, 2, quantile, probs=c(0.025)), apply(rarefact, 2, quantile, probs=c(0.975))),
+curve = rep(c("mean", "lower CI", "upper CI"), each = length(rare_mean)))
+
+
+
+gg_rare = ggplot(dat) + 
+  geom_line(aes(x = n_sites, y = mean)) +
+  xlab("Number of sampling sites") +
+  ylab("Mean species richness") +
+  ggtitle("Bootstrap rarefaction curve of 10 rare Massachusetts moth species")
+  
+gg_rare_ci = ggplot(dat_2, aes(x = n_sites, y = species_richness, colour = curve)) + 
+  geom_line() +
+  xlab("Number of sampling sites") +
+  ylab("Mean species richness") +
+  ggtitle(
+    label = "Bootstrap rarefaction curve of 10 rare Massachusetts moth species",
+    subtitle = "95% bootstrap confidence interval")
+
+
+
+{
+  
+# Plot with quantiles
+png(filename = file.path(figure_output_path, "bootstrap_rarefaction_curve_quantiles.png"), width = 1800, height = 1000, res = 220)
+
+matplot(
+  rare,
+  type='l',
+  xlab='Number of sampling plots',
+  ylab='Species richness', 
+  main='Rarefaction Curve')
+
+legend(
+  'bottomright',
+  legend=c('mean','2.5%','97.5%'),
+  lty=c(1,2,3),col=c(1,2,3), inset=c(.1,.1))
+dev.off()
+}
+
+
+
+
+# Plot without quantiles
+png(filename = file.path(figure_output_path, "bootstrap_rarefaction_curve.png"), width = 1800, height = 1000, res = 220)
+print(gg_rare)
+dev.off()
+
+
+{
+  # Plot with quantiles
+png(filename = file.path(figure_output_path, "bootstrap_rarefaction_curve_quantiles_gg.png"), width = 1800, height = 1000, res = 220)
+print(gg_rare_ci)
+
+dev.off()
+}
+
+```
+
+
+
+
+We can plot the rarefaction curve and the 95% confidence interval using the matplot() function, which is useful for simultaneous plotting of several columns of a data frame or matrix.
+
+We can also add a legend to make the plot complete, as follows:
+
+```{r}
+matplot(
+  rare,
+  type='l',
+  xlab='Number of sampling plots',
+  ylab='Species richness', 
+  main='Rarefaction Curve')
+
+legend(
+  'bottomright',
+  legend=c('mean','2.5%','97.5%'),
+  lty=c(1,2,3),col=c(1,2,3), inset=c(.1,.1))
+
+```
+
+
+

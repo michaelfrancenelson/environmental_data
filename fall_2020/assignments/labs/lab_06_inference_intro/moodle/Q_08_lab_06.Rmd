@@ -1,0 +1,206 @@
+---
+title: "Resampling"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(palmerpenguins)
+```
+
+```{r, echo = FALSE, results = "hide"}
+
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+  
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+  
+  return (sample_sd / sqrt(n))
+}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructionsborder">
+
+#### Instructions
+
+
+<div class="deemphasize">
+- Choose another variable of penguin data from `dat_pen`.
+- Create a boxplot of the data from your chosen column in `dat_pen`, grouped by species. 
+- See the walkthrough for info.
+</div>
+
+<div class="deemphasize">
+- Use `aggregate()` to calculate the group means and the difference in means.
+- Write the difference in means into a variable called `diff_crit`
+- Conduct a t-test and observe the p-value.
+</div>
+
+<div class="emphasis">
+- Conduct a resampling test with 1000 repetitions using your `two_group_resample()` function.
+</div>
+
+
+</div>
+
+<div class="questionborder">
+
+### Q1: 2 pts
+
+- How many differences in means were greater than `diff_crit`?
+- Remember to treat this as a 2-tailed test.
+
+### Q1: 2 pts
+
+- Upload a histogram of your simulation results.  Make sure it has appropriate title and labels.
+
+</div>
+
+
+
+Solution
+========
+
+
+```{r }
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+
+two_group_resample = function(x, n_1, n_2) 
+{
+  dat_1 = sample(x, n_1, replace = TRUE)
+  dat_2 = sample(x, n_2, replace = TRUE)
+  
+  diff_simulated = 
+    mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+  
+  return(diff_simulated)
+}
+
+n = 2000
+
+diff_b_len = c()
+for (i in 1:n)
+{
+  diff_b_len = c(
+    diff_b_len,
+    two_group_resample(dat_pen$bill_length_mm, 68, 152)
+  )
+}
+
+diff_b_dep = c()
+for (i in 1:n)
+{
+  diff_b_dep = c(
+    diff_b_dep,
+    two_group_resample(dat_pen$bill_depth_mm, 68, 152)
+  )
+}
+
+diff_b_mass = c()
+for (i in 1:n)
+{
+  diff_b_mass = c(
+    diff_b_mass,
+    two_group_resample(dat_pen$body_mass_g, 68, 152)
+  )
+}
+
+diff_f_len = c()
+for (i in 1:n)
+{
+  diff_f_len = c(
+    diff_f_len,
+    two_group_resample(dat_pen$flipper_length_mm, 68, 152)
+  )
+}
+
+par(mfrow = c(3, 1))
+hist(diff_b_len, main = "bill length")
+hist(diff_b_dep, main = "bill depth")
+hist(diff_b_mass, main = "body mass")
+
+```
+
+```{r crit_vals}
+
+means = data.frame(
+  species = aggregate(flipper_length_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 1],
+  flipper_len = aggregate(flipper_length_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2],
+  bill_len = aggregate(bill_length_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2],
+  bill_depth = aggregate(bill_depth_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2],
+  body_mass = aggregate(body_mass_g ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2])
+
+means = rbind(
+  means,
+  data.frame(species = "diff_crit", t(apply(means[, -1], 2, diff))))
+
+means_2 = 
+rbind(
+  means,
+  data.frame(
+    species = "count_crit",
+    t(c(
+      flipper_len = sum(diff_f_len > abs(means$flipper_len[3])),
+      bill_len = sum(diff_b_len > abs(means$bill_len[3])),
+      bill_depth = sum(diff_b_dep > abs(means$bill_depth[3])),
+      body_mass = sum(diff_b_mass > abs(means$body_mass[3])))), check.names = FALSE)
+)
+
+knitr::kable(means_2, digits = 2)
+
+```
+
+
+
+
+Meta-information
+================
+
+extitle: resampling
+
+extype: string
+
+expoints: 4
+
+exsolution: nil
+
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 15
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+
+
+

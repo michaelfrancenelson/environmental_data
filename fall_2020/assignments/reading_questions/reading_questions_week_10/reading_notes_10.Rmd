@@ -1,0 +1,103 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Week 07 Mike's Reading Notes and Question Ideas"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+```
+
+
+# Readings
+
+
+The reading questions this week are drawn from material in the readings:
+
+- Bolker 9.3, 9.4, 9.5
+- Zuur 6, 7.1 - 7.4
+
+
+# Bolker 9.3 - Nonlinearity: NLS
+
+
+## NLS
+
+- Relaxes requirement of linearity in the parameters
+- Retains independent observations and normal errors
+
+- Power law and Ricker examples
+
+## Linearizing Transformations
+
+- No need to do data transformation to make relationship linear
+- Transformations change both deterministic and stochastic models
+  - if non-transformed data are Normal, transformed data will not be
+  
+## `nls()`
+
+- There usually aren't closed-form solutions
+- can mix categorical and contiuous predictors: ANCOVA analogue
+
+- Finds parameter values by optimization
+- Specify model and provide starting values
+
+
+# Bolker 9.4: Nonnormal Errors: GLMs
+
+Particular kinds of nonlinearity and particular types nonnormal errors
+
+## Linearizing transformation
+
+- Linearizing function is the *outside* function
+- Linearizing function is the *inverse function* of the inside function.
+- Linearizing function is the *link function*.
+
+## Stochastic model: exponential family of distributions
+- Inside function is the actual relationship between predictor[s] and response
+
+
+# Bolker 9.4.1: Overdispersion
+
+## Quasi-likelihood
+
+## Negative binomial models
+
+
+# Bolker 9.5
+
+
+
+
+
+# Zuur 6
+
+
+
+# Zuur 7.1
+
+
+
+# Zuur 7.2
+
+
+
+# Zuur 7.3
+
+
+
+
+
+# Zuur 7.4
+
+
+
+

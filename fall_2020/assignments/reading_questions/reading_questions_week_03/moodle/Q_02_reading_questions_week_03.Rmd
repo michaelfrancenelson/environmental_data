@@ -1,0 +1,79 @@
+---
+title: "Brown Creeper Models"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<div class="instructions">
+McGarigal presented two studies of Brown creepers:
+
+1. A model of Brown creeper **abundance** explained by late-successional forest percent.
+2. A model of Brown creeper **presence/absence** explained total basal area (a measure of tree cover).
+
+</div>
+
+<div class="hints">
+
+Consider what types of data were collected in each study:
+  - Are they continuous, discrete, categorical?
+  - What is the data scale?
+
+Consider what kind of deterministic function is used in each study.
+
+</div>
+
+<div class="questions">
+
+### Q1 1 pt (short answer)
+
+- What are the response variables in each model?
+
+### Q2 1 pt (short answer)
+
+- How did the data type or scale influence or constrain the choice of model in each of the two studies?
+
+</div>
+
+
+
+Solution
+========
+
+Some possible answers:
+
+Q1: 
+
+- Students should note that abundance is a continuous measure while presence/absence is binary.
+- If they are observant they might notice that it's really a modified version of count data.
+
+
+Q2: 
+
+- They should recognize that binary data is poorly described by a linear function and that a logit function would not fit the abundance data well.
+
+
+Meta-information
+================
+extitle: Brown Creeper Models
+extype: string
+exsolution: nil
+exname: Week 3 reading questions
+exsection: Week 3 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 2

@@ -1,0 +1,76 @@
+---
+title: "Two-Way ANOVA: Build the Model"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+<div class="instructions">
+
+### Instructions
+
+When you fit a model with two categorical predictors, the *base case* is now a combination of the base level of predictor one and the base level of predictor two.
+
+- Use `summary(fit_both)` to examine the model coefficient table.
+
+</div>
+
+
+<div class="questions">
+
+### Q 1 pt (Short answer)
+
+- What is the base case for the two-way model that includes sex and species?
+
+</div>
+
+
+
+
+Solution
+========
+
+The base case is female Adelie penguins.
+
+```{r}
+aggregate(body_mass_g ~ sex * species, data = palmerpenguins::penguins, FUN = mean, na.rm = TRUE)
+
+fit_both = lm(body_mass_g ~ sex * species, data = palmerpenguins::penguins)
+summary(fit_both)
+
+```
+
+
+
+
+Meta-information
+================
+
+extitle: Two-Way ANOVA: Build the Model
+extype: string
+exsolution: nil
+
+expoints: 1
+
+exname: individual_week_10
+exsection: individual_week_10
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5

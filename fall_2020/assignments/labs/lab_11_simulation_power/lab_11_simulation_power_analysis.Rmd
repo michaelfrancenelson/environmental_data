@@ -1,0 +1,67 @@
+---
+title: "[ECo 634 - Analysis of Environmental Data Lab](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adapted from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    includes:
+      after_body: !expr here::here("formatting", "js", "rmd.js")
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+```
+
+```{r build_lab_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+source(find_file("build_lab.R"))
+options(knitr.duplicate.label = "allow")
+build_lab(11, moodle_xml = FALSE, answer_key = FALSE)
+# build_lab(11, moodle_xml = FALSE, answer_key = TRUE)
+# build_lab(11, moodle_xml = TRUE, answer_key = TRUE)
+```
+
+
+```{r load_functions, child = find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE}
+```
+
+```{r load_data, child = find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE}
+```
+```{r load_models, child = find_file("model_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE}
+```
+```{r load_simulations, child = find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE}
+```
+```{r load_plots, child = find_file("plot_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE}
+```
+
+
+
+
+```{r , child = find_file("simulation_power_analysis_part_1_intro.Rmd", exact_match = TRUE)}
+```
+
+
+```{r , child = find_file("simulation_power_analysis_part_2_simulation_functions.Rmd", exact_match = TRUE)}
+```
+
+```{r , child = find_file("simulation_power_analysis_part_3_simulate_model_data.Rmd", exact_match = TRUE)}
+```
+```{r , child = find_file("simulation_power_analysis_part_4_power_analyses.Rmd", exact_match = TRUE)}
+```
+```{r , child = find_file("simulation_power_analysis_part_5_plotting_3D_data.Rmd", exact_match = TRUE)}
+```
+```{r , child = find_file("simulation_power_analysis_part_6_saving_R_data.Rmd", exact_match = TRUE)}
+```
+```{r , child = find_file("simulation_power_analysis_part_7_exercises.Rmd", exact_match = TRUE)}
+```

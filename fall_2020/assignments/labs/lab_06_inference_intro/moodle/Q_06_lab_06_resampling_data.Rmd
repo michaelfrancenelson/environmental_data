@@ -1,0 +1,125 @@
+---
+title: "Resampling"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(palmerpenguins)
+
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+
+```
+
+
+<div class="instructionsborder">
+
+#### Instructions
+
+<div class="emphasis">
+- Choose another variable of penguin data from `dat_pen`.
+- Create a boxplot of the data from your chosen column in `dat_pen`, grouped by species. 
+- See the walkthrough for info.
+</div>
+
+<div class="deemphasize">
+- Use `aggregate()` to calculate the group means and the difference in means.
+- Write the difference in means into a variable called `diff_crit`
+- Conduct a t-test and observe the p-value.
+</div>
+
+<div class="deemphasize">
+- Conduct a resampling test with 1000 repetitions using your `two_group_resample()` function.
+</div>
+
+</div>
+
+<div class="questionborder">
+
+### Q1: 1 pt
+
+- Upload an image file of the boxplot of your chosen variable.
+
+### Q2: 3 pts
+
+- What were the group means and difference between the means? 
+- Paste your answer and the R code you used into the text entry box.
+
+</div>
+
+
+
+Solution
+========
+
+
+```{r load_dat_boxplots}
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+
+par(mfrow = c(2, 2))
+boxplot(bill_length_mm ~ species, data = dat_pen, main = "Bill Length")
+boxplot(bill_depth_mm ~ species, data = dat_pen, main = "Bill Depth")
+boxplot(body_mass_g ~ species, data = dat_pen, main = "Body Mass")
+boxplot(flipper_length_mm ~ species, data = dat_pen, main = "Flipper Length")
+```
+
+
+```{r means_crit_diff}
+means = data.frame(
+  species = aggregate(flipper_length_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 1],
+  flipper_len = aggregate(flipper_length_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2],
+  bill_len = aggregate(bill_length_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2],
+  bill_depth = aggregate(bill_depth_mm ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2],
+  body_mass = aggregate(body_mass_g ~ species, data = dat_pen, FUN = mean, na.rm = TRUE)[, 2])
+
+knitr::kable(rbind(
+  means,
+  data.frame(species = "diff_crit", t(apply(means[, -1], 2, diff)))),
+  digits = 2)
+
+```
+
+
+
+Meta-information
+================
+extitle: resampling
+
+extype: string
+
+exsolution: nil
+
+expoints: 4
+
+exname: lab_06
+
+exsection: lab_06
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 15
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+

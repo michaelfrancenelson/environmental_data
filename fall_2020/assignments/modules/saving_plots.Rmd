@@ -1,0 +1,166 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitie: "Saving Plots"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<a href="#syntax">Jump to the instructions and examples!</a>
+
+
+
+# Exporting a plot to a file
+
+
+
+
+There are two main techniques for saving a plot in R/RStudio:
+
+<div class="redborder">
+
+1: Using the RStudio export function in the **Plot** pane.
+
+- I'm not going to cover this because it is self-explanatory and it is **not** the preferred way to save a figure.
+</div>
+
+<div class="blackborder">
+
+2: Saving a plot *programmatically*, the preferred method.
+
+- You have fine control over all options.
+- It is reproducible
+  - It does not depend on RStudio
+  - It is not point-and-click: you don't have to remember all the options you selected in the menus.
+</div>
+
+
+## Graphics export functions
+
+There are lots functions to save figures as raster-based graphics files such as png, tiff, jpeg, gif and vector-based files such as pdf, svg, and eps.
+
+Two of the most helpful are the `pdf()` and `png()`
+
+
+
+## Saving a file: examples {.tabset}
+
+I'll illustrate the process with one of R's built-in datasets: `mtcars`.
+
+```{r}
+data("mtcars")
+head(mtcars)
+boxplot(
+  qsec ~ cyl, 
+  data = mtcars,
+  xlab = "Number of cylinders",
+  ylab = "Time from stopped to 1/4 mile",
+  main = "Cylinders and Acceleration!")
+```
+
+
+
+
+<a name="syntax"></a>
+
+### Syntax 
+
+To save a figure programmatically:
+
+1. Run the function to create the file: `pdf()`, `png()`, etc.  This tells R to create a file and to stage all of the plot output for saving.
+1. Run the code to build the figure.  This can be a simple one-line plot call, or more complex muti-function code.
+1. Run `dev.off()`.  This tells R to write all of the plot data to the file and save it.
+
+
+### Saving to a png file (basic)
+
+
+
+```{r basic_png}
+png(filename = "mtcars_boxplot.png")
+boxplot(
+  qsec ~ cyl, 
+  data = mtcars,
+  xlab = "Number of cylinders",
+  ylab = "Time from stopped to 1/4 mile",
+  main = "Cylinders and Acceleration!")
+dev.off()
+```
+
+Now there will be a file called `mtcars_boxplot.png` in your *working directory*.
+
+
+
+### Saving to a png file (fancy)
+
+The graphics functions have lots of options to customize your output files.  You can investigate the various arguments on your own.
+
+```{r fancy_png, message=FALSE}
+require(here)
+png(
+  filename = here("mtcars_boxplot_hi_res.png"),
+  width = 1200, height = 900, 
+  res = 120, units = "px")
+
+boxplot(
+  qsec ~ cyl, 
+  data = mtcars,
+  xlab = "Number of cylinders",
+  ylab = "Time from stopped to 1/4 mile",
+  main = "Cylinders and Acceleration!")
+dev.off()
+```
+
+
+
+### Saving to PDF
+
+Vector formats are better for publications.  PDF is a popular format.  
+
+The syntax for `pdf()` is very similar to `png()`
+
+```{r}
+pdf(
+  file = here("mtcars_boxplot_hi_res.pdf"),
+  width = 7, height = 10, bg = rgb(0.9, 1, 1))
+boxplot(
+  qsec ~ cyl, 
+  data = mtcars,
+  xlab = "Number of cylinders",
+  ylab = "Time from stopped to 1/4 mile",
+  main = "Cylinders and Acceleration!")
+dev.off()
+```
+
+
+
+## Things to notice
+
+1. After you call the figure export function, R will not display your plots on screen.  All graphics output is directed to the file.
+1. Argument names are not always the same in the various graphics functions.  Consult the help entries.
+1. You have to call `dev.off()` to save the file.  If you don't, R will keep directing all graphics to the file.  You won't be able to display any plots on screen until you use `dev.off()` to save the file.
+1. You may see a message line `png` or `pdf` followed by a number after you call `dev.off()`.  This is good!
+1. If you get stuck in plotting, or file saving limbo, you can run `dev.off()` several times to reset R's plotting system.  You should run `dev.off()` as many times as needed until you get a message like this:
+```{r echo = FALSE, error=TRUE, results='hide', message=FALSE}
+# dev.off()
+# dev.off()
+# dev.off()
+# dev.list()
+
+while(!is.null(dev.list())) dev.off()
+dev.off()
+
+```
+

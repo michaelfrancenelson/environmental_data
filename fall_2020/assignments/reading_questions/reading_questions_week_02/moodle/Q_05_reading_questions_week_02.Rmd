@@ -1,0 +1,70 @@
+---
+title: "Week 02 reading Q5"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+<p class="blackborder">
+This question is related McGarigal chapter 2 slides, and the in-class group model thinking activity.
+</p>
+
+
+Consider the scenario your group chose to use in the model thinking in-class activity:
+
+- Cascades snowpack
+- White pine blister rust
+- Cattails
+
+
+1. Choose 2 of the of the following data types and scales. 
+
+2. Propose an entity and/or variable in your scenario that you could measure using the data type/scale.
+
+3. Explain why the data type or scale is appropriate for the entity/variable you chose.
+
+For example, in the cattails scenario, I might choose to measure the pH of the water in the cattail habitat:
+
+- pH measurements are **continuous** because it pH can take on any value within the allowed range (0 to 14).
+- pH is on a ratio scale because the 0 is meaningful.  You cannot have a negative pH.
+
+The data types/scales are
+
+- A continuous variable on an ratio scale
+- A categorical, nominal variable
+- A discrete variable
+- A variable on an interval scale
+
+Remember, you only need to chose 2 of the 4!
+
+
+Solution
+========
+
+
+
+
+
+Meta-information
+================
+extitle: Week 02 reading Q5
+extype: string
+exsolution: nil
+exname: Week 2 reading questions
+exsection: Week 2 reading questions
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 10

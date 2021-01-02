@@ -1,0 +1,84 @@
+---
+title: "Exponential parameters"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+# source(here::here("formatting", "functions", "rmd_functions.R"))
+# source(here::here("rmd_tools", "find_file.R"))
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> Consider the plot you made with the 4 exponential curves.
+
+Observe how the curves vary as you change the two parameters' values.
+
+<div class="questionborder">
+
+### Q1 2 pts.
+
+- Qualitatively describe what happens to the curve as you vary parameter `a`
+
+### Q2 2 pts.
+
+- Qualitatively describe what happens to the curve as you vary parameter `b`
+
+</div>
+
+
+
+
+Solution
+========
+
+- Parameter `a` sets the y-intercept.
+- Parameter `b` sets the [initial] steepness of the decay.
+- Students may notice that a also affects the steepness of the decay.
+
+```{r}
+
+exp_fun = function(x, a, b) 
+{ 
+  return(a * exp(-b * x))
+}
+
+curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 30,  col = 1, ylab = "f(x)")
+curve(exp_fun(x, 1.9, 0.3), add = TRUE,  from = 0, to = 100, col = 1, lty = 2)
+curve(exp_fun(x, 1.2, 0.2), add = TRUE,  from = 0, to = 100, col = 2, lty = 1)
+curve(exp_fun(x, 1.2, 0.4), add = TRUE,  from = 0, to = 100, col = 2, lty = 2)
+curve(exp_fun(x, 0.9, 0.4), add = TRUE,  from = 0, to = 100, col = 3, lty = 2)
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Exponential parameters
+extype: string
+exsolution: nil
+exname: lab_05
+exsection: lab_05
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+expoints: 4

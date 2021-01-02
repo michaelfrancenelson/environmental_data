@@ -1,0 +1,262 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Distributions: Main Concepts"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ggplot2)
+require(cowplot)
+require(animation)
+source(here::here("rmd_tools", "find_file.R"))
+source(find_file("norm_density_plot.R"))
+
+```
+
+
+
+
+## Key terms and concepts
+
+- Inference with the dual model paradigm
+- What is a distribution?
+- Event, domain, sample space
+- Key probability theory results
+  -law of total probability
+  - independent events
+
+
+
+
+## Stepping back: What do we need to do inference?
+
+\vfill
+
+### We need a model: a *dual* model!
+
+\vfill
+
+- Why do we want to do inference?
+
+We want to learn something about a larger population from a sample!
+
+
+
+
+## Stepping back: What do we need to do inference?
+
+We need the Dual Model Paradigm to do inferential statistics.
+
+- We need the *deterministic* model of the means to about the *average* or *expected* behavior.
+- We need the *stochastic* model to know about the variation.
+- We need the *stochastic* model to know if an observation is *unusual*
+
+
+
+
+## Stepping back: What is inference?
+
+For our purposes: inference is a way to learn something about a larger *population* from the properties of a *sample*.
+
+More formally:
+
+\begin{blackborder}
+\begin{center}
+
+Inference is estimating population \textit{parameters} from sample \textit{statistics}.
+
+\end{center}
+\end{blackborder}
+
+- We use the *deterministic* model to calculate model parameter estimates.
+- We use the *stochastic* model to quantify *confidence* and *significance*.
+
+
+
+
+## Inference: why do we need distributions?
+
+### Couldn't we just use our deterministic model to make predictions?
+
+- Sure, but without a stochastic model we can't quantify the uncertainty in our guesses.
+
+\begin{blueborder}{0.9\textwidth}{Stochastic Models}
+  
+Stochastic models, often built from parametric distributions, allow us to quantify statistical \textit{significance} and \textit{confidence}.
+
+\end{blueborder}
+
+
+
+
+## What is a distribution?
+
+\begin{blueborder}{0.9\textwidth}{A distribution is...}
+  
+A distribution is like a \textbf{map} between an \textbf{event} and some notion of \textbf{likelihood}.
+
+\end{blueborder}
+
+### Remember that words often have specific meanings in statistics:
+
+- What do I mean by *likelihood*?
+- What do I mean by *event*?
+
+
+
+
+## What is a distribution?
+
+### A slightly more technical definition:
+
+\begin{blackborder}
+A distribution associates an \textit{event} in the \textit{sample space} with a \textit{probability density} (continuous distributions) or a \textit{probability mass} (discrete distributions)
+\end{blackborder}
+
+- Why would we want such a map?
+- What do I mean by likelihood?
+  - We'll take a detour to talk about probability theory
+
+
+
+
+## Parametric and Empirical Distributions
+
+### Parametric distributions are defined by mathematical *functions*
+
+- The functions have one or more *parameters* that define how probabilities are allocated to events.
+- We often want to estimate the parameters from samples.
+
+### Empirical distributions are computed from *observations*.
+
+- There is no analytical function, but we can compare empirical distributions to parametric distributions.
+
+
+
+
+## Probability Distribution Functions
+
+### The map of events to probabilities are defined by
+
+- **Probability Density Functions** for continuous distributions
+- **Probability Mass Functions** for discrete distributions.
+
+- The values of PDFs and PMFs are always non-negative, by the definition of probability.
+
+### Two other types of functions are used to describe distributions: cumulative functions and quantile functions.
+
+
+
+## Density or Mass Function: PDFs & PMFs
+
+Probability density is the y-value of the probability density curve for a given value of x.
+
+- You can think of it as the height of a curve
+- For *continuous* distributions, it is *not* equal to the probability of observing a particular value of x.
+
+
+
+## Cumulative Probability Functions: CDFs & CMFs
+
+Cumulative density is the **accumulated area under the density curve** to the left of x.
+
+- It's an integral!
+- It is the probability of observing a value equal to or less than x.
+
+
+
+
+## Probability Distribution Functions: Graphical Intuition
+
+Demonstration of PDF and CDF using the Normal distribution.
+
+Remember:
+
+- *Density* = height of the curve at x.
+- *Cumulative Density* = area under the curve, to the left of x
+
+
+
+
+
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(-1.96)
+```
+
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(-1)
+```
+
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(-0.5)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(0)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(1)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(1.96)
+```
+
+## PDF/CDF example
+
+```{r}
+norm_density_plot(2.5)
+```
+
+
+
+
+
+
+- Later, we'll work on graphical intuition of probability functions.
+
+
+
+
+## Recap of essentials:
+
+### Distributions
+
+1. They assign a *probability* to every *event* in a *sample space*.
+1. We can use them as the *stochastic model* in the dual model paradigm.
+
+### Probability essentials
+
+1. Probabilities are non-negative
+1. Probabilities of all events in sample space sum to 1.0
+1. Independent events: joint probability is product of individual probabilities

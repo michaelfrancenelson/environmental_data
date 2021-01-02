@@ -1,0 +1,138 @@
+---
+title: "Rarefaction function"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+   
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+
+  return (sample_sd / sqrt(n))
+}
+```
+
+
+<div class="instructionsborder">
+
+#### Instructions
+
+You'll be using your `rarefaction_sampler()` function together with the rare moth abundance data.
+
+Review the rarefaction curve materials in the lab walkthrough and complete the
+corrections to the `rarefaction_sampler()` function code.
+
+Be sure to test out your completed function using the debugging template to make
+sure it works correctly.
+
+</div>
+
+<div class="questionborder">
+
+### Q1: 3 pts.
+
+- Paste your completed `rarefaction_sampler()` function into the text entry window.
+  
+
+</div>
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r}
+
+moths = read.csv(here("data", "moths.csv"))
+moth_dat = moths[,-1]
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  # The outer loop: runs once for each bootstrap iteration.  index variable is i
+  for(i in 1:n_iterations)
+  {
+    # The inner loop: simulates increasing sampling intensity
+    # Sampling intensity ranges from 1 site to the complete count of 
+    # sites in the input data (n_input_rows)
+    for(j in 1:n_input_rows)
+    {
+      
+      # sample the input data row indices, with replacement
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+
+      # Creates a new data matrix
+      t1 = input_dat[rows_j, ]
+      
+      # Calculates the column sums
+      t2 = apply(t1, 2, sum)
+      
+      # Counts the number of columns in which any moths were observed
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+```
+
+### Grading guide
+
+Full credit if:
+
+- Code runs in fresh R session.  It's ok of you have to add a `require(here)` to the beginning.
+  - It's ok of the function doesn't return quite the right value.  I only asked that their function run.  The correctness test is in the following question.
+
+
+
+
+Meta-information
+================
+extitle: Rarefaction function
+
+extype: string
+
+exsolution: nil
+
+exname: lab_07
+
+exsection: lab_07
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 3
+
+
+

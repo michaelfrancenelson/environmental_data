@@ -1,0 +1,98 @@
+---
+title: "homogeneity: penguin body mass and species"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+```
+
+<div class="instructions">
+
+#### Instructions
+
+We know that the Group 1 methods require homogeneity (constant variance).
+
+- Review the walkthrough to review how to test for homogeneity of variances.
+
+We conducted Analyses of Variance on the penguin data in the individual assignments in lecture.
+
+- We should verify that the the variances are homogeneous in the groups we specified in our ANOVAs.
+
+
+
+Use `bartlett.test()` to check for homogeneity of the variances in our model of penguin body mass as predicted by **penguin species**.
+
+
+```{r, eval = FALSE, echo = FALSE}
+require(palmerpenguins)
+boxplot(flipper_length_mm ~ species, data = penguins)
+bartlett.test(flipper_length_mm ~ species, data = penguins)
+bartlett.test(bill_depth_mm ~ species, data = penguins)
+bartlett.test(bill_length_mm ~ species, data = penguins)
+bartlett.test(body_mass_g ~ species, data = penguins)
+
+```
+
+
+</div>
+
+<div class="hints">
+
+- Hint: you will probably want to work through the corresponding material in the lecture assignment before working on this question.
+
+</div>
+
+<div class="questions">
+
+### Q1 1 pt (numeric entry)
+
+- What was the p-value from the Bartlett test of homogeneity for observations grouped by *species*?
+  - You can round your answer to 4 decimal digits.
+
+</div>
+
+
+
+Solution
+========
+
+My implementation:
+
+```{r lab_09_q_1}
+require(palmerpenguins)
+bartlett.test(body_mass_g ~ species, data = penguins)
+```
+
+
+
+Meta-information
+================
+extitle: homogeneity: penguin body mass and species
+
+exname: lab_09
+exsection: lab_09
+
+
+extype: num
+exsolution: 0.05005
+extol: 0.01
+
+expoints: 1
+
+
+
+

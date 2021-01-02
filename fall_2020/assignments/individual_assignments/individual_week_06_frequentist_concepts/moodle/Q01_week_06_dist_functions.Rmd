@@ -1,0 +1,91 @@
+---
+title: "Using distribution functions"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+```{r, echo = FALSE, fig.cap="Binomial Probabiltiy Mass Function"}
+x = 0:4
+
+fill_1 = rgb(0, 0.3, 0.8, 0.25)
+fill_0 = rgb(0, 0.0, 0.0, 0.0)
+
+barplot(
+  dbinom(x, size = 4, prob = 0.75), 
+  col = c(fill_0, fill_0, fill_0, fill_1, fill_0), 
+  space = 0, names.arg = 0:4,
+  xlab = "success count")
+```
+
+<div class="questionborder">
+### Q1: 2 pts
+
+- What is the probability of observing a count of *exactly* 3 successes in a binomial distribution with parameters n = 4 and p = 0.75?
+- Paste the R code that you used to find your answer.
+
+</div>
+
+
+
+
+
+Solution
+========
+
+0.42
+
+This is the code they should have used:
+
+```{r}
+dbinom(x = 3, size = 4, p = 0.75)
+```
+
+They may have tried some of the following:
+```{r}
+dbinom(x = 1, size = 4, p = 0.75)
+dbinom(x = 2, size = 4, p = 0.75)
+dbinom(x = 3, size = 4, p = 0.75)
+dbinom(x = 4, size = 4, p = 0.75)
+```
+
+
+
+
+
+Meta-information
+================
+
+extitle: Using distribution functions
+
+extype: string
+
+exsolution: nil
+
+exname: Frequentist concepts
+
+exsection: Frequentist concepts
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 2
+

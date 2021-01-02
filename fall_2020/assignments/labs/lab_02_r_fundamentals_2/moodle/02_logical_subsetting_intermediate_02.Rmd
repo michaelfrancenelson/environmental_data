@@ -1,0 +1,106 @@
+---
+title: "Logical subsetting - intermediate q2"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Run the following code to create a large vector containing randomly generated integers between 1 and 12:
+
+<br>
+```{r eval=FALSE}
+n = 12345
+vec_1 = sample(12, n, replace = TRUE)
+head(vec_1)
+```
+<br><br>
+
+
+Use the function `length()` to determine how many elements are in `vec_1`.
+ 
+<br>
+
+Now, run the following line to check how many entries have the value `3`:
+
+```{r eval=FALSE}
+sum(vec_1 == 3)
+```
+
+<br><br>
+
+Finally, run the following code several times taking note of how many `3` entries appear each time you run it.
+
+<br><br>
+
+```{r, eval=FALSE}
+n = 10
+vec_1 = sample(12, n, replace = TRUE)
+paste0("Sum of elements with value 3: ", sum(vec_1 == 3))
+```
+<!-- print(vec_1) -->
+
+<br><br>
+
+Did you get different counts of `3` entries each time?
+
+
+<div class="questionborder">
+
+### Q1 3 pts
+
+- Considering the different vectors generated each time, explain why using a logical test is a safe way to select entries with a value of `3`. 
+
+### Q2 5 pts
+
+-Explain why manually choosing the indices by visual inspection, is problematic.  You may want consider re-usability of code, working with different sized data sets, and sharing code with collaborators.
+
+</div>
+
+
+
+
+
+Solution
+========
+
+Q1: The values of 3 won't be in the same position, using a logical test will always return the correct position indices.
+
+Q2: Many possible answers:
+
+- Vectors may be too long to visually inspect
+- Visual inspection is error-prone
+- Hard-coding indices is generally bad practice
+- lots of other possibilities
+
+
+
+
+Meta-information
+================
+extitle: logical subsetting intermediate 1
+extype: string
+exsolution: nil
+exname: lab 02
+exsection: lab 02
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 5
+expoints: 8
+

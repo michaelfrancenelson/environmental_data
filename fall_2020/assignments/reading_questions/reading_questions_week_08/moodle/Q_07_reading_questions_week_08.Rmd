@@ -1,0 +1,73 @@
+---
+title: "Model Selection"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+
+
+<div class="questionborder">
+
+> "The first part of the AIC definition is a measure of goodness of fit. The second
+part is a penalty for the number of parameters in the model." - Zuur (2007)
+
+
+### Q1: 3 pt. (short answer/essay)
+
+- Why should a model selection criterion penalize the number of parameters in a model?
+
+</div>
+
+
+
+
+Solution
+========
+
+Many possible answers.
+
+Ideally they realize that more complicated models are more difficult to interpret and explain.
+
+
+
+Meta-information
+================
+
+extitle: model selection
+
+extype: string
+
+exsolution: nil
+
+exname: week_08_reading_questions
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 3
+

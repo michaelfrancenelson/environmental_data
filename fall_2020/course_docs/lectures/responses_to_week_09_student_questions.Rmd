@@ -1,0 +1,127 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Students' Questions from Week 09"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+require(mfn.teaching.utils)
+require(rmd.utils)
+```
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+```{r render_doc, include=FALSE, eval=FALSE}
+
+source_file = rmd.utils::find_file("responses_to_week_09_stude", extension = "Rmd")
+
+
+rmarkdown::render(
+  input = source_file, 
+  output_file = basename(tools::file_path_sans_ext(source_file)),
+  output_dir = here::here("docs", "lecture_notes"))
+
+```
+
+
+
+
+
+# R Code
+
+## Homogeneity assumption
+
+```{r homogeneity_plots, fig.width=12, fig.height=13}
+
+# for reproduceability
+set.seed(123)
+
+n_pts = 100
+
+# Some random x-coordinates
+x = runif(n = n_pts, min = 0, max = 20)
+
+slope = 0.5
+
+# Random data
+
+# Linear relationship, constant variance
+y1 = rnorm(n = n_pts, mean = slope * x, sd = 1)
+
+# Linear relationship, increasing variance
+y2 = rnorm(n = n_pts, mean = slope * x, sd = 0.2 * x)
+
+fit_1 = lm(y1 ~ x)
+fit_2 = lm(y2 ~ x)
+
+par(mfrow = c(2, 2), oma = c(0, 0, 0, 0), mar = c(2, 4, 2, 0))
+{
+  plot(x, y1, main = "homogeneous errors")
+  abline(fit_1)
+  plot(x, y2, main = "heterogeneous errors")
+  abline(fit_2)
+  plot(x, residuals(fit_1), ylim = c(-4, 4), ylab = "residuals")
+  plot(x, residuals(fit_2), ylim = c(-9, 9), ylab = "residuals")
+}
+
+```
+
+
+# Non-normal errors: log transformation
+
+```{r}
+
+# fore reproduceability
+set.seed(123)
+
+n_pts = 100
+
+# Some random x-coordinates
+x = sort(runif(n = n_pts, min = 0, max = 20))
+slope = 0.5
+
+# Some slightly non-linear data
+y3 = 1 + rnorm(n = n_pts, mean = 0.1 * slope * (1.1 ^ x), sd = 0.02 + 0.02 * x)
+y4 = log(y3)
+
+
+fit_3 = lm(y3 ~ x)
+fit_4 = lm(y4 ~ x)
+
+
+
+plot(x, y3, main = "Original")
+points(x, predict(fit_3), type = "l")
+plot(x, y4, main = "Log-transformed response")
+points(x, predict(fit_4), type = "l")
+
+
+summary(fit_4)
+
+plot(x, y3, main = "Original")
+
+
+points(x, coefficients(fit_4)[1] + exp(x * coefficients(fit_4)[2]))
+points(x, coefficients(fit_4)[1] + log(x) * coefficients(fit_4)[2])
+plot(x, coefficients(fit_4)[1] + exp(x) * coefficients(fit_4)[2])
+
+hist(residuals(fit_3))
+hist(residuals(fit_4))
+shapiro.test(residuals(fit_3))
+shapiro.test(residuals(fit_4))
+
+```

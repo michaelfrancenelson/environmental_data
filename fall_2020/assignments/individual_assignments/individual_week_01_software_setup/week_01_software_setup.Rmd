@@ -1,0 +1,238 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Setting up R and RStudio"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("formatting", "functions", "rmd_functions.R"))
+```
+
+
+
+
+
+# Course Software Setup
+
+
+## R and RSTudio
+
+If you're already a whiz at installing software, feel free to install R and RStudio on your own and jump to the assignment questions.
+
+R is here: https://cran.r-project.org/
+RStudio is here: https://rstudio.com/
+
+
+### Objectives
+
+- Successfully install R on your computer.
+- Successfully install RStudio on your computer.
+- Create a GitHub account.
+
+
+
+### Instructions: R and RStudio
+
+To complete this assignment you'll need to install both R and RStudio on your computer.
+
+Rather than reinventing a wheel that's been invented successfully by many others I'll direct you to some resources with more in-depth instructions for setting up the software:
+
+### Installation Resources {.tabset}
+
+#### Text-based tutorials
+
+
+<div class="blueborder">
+
+##### rstudio-education
+
+RStudio Education has some straightforward instructions here:
+
+https://rstudio-education.github.io/hopr/starting.html
+</div>
+
+<hline>
+
+
+<div class="blueborder">
+##### YaRrr! The Pirate's Guide to R
+
+YaRrr is a great free and open-source R learning resource.  Check out the instructions for installing R and RStudio here
+
+- https://bookdown.org/ndphillips/YaRrr/started.html
+</div>
+
+
+#### YouTube tutorials
+<br>
+If you like video tutorials check out these resources:
+<br>
+<br>
+
+
+
+<div class="blueborder">
+##### Xperimental Learning
+
+This is a detailed and gently-paced tutorial
+
+- https://www.youtube.com/watch?reload=9&v=9-RrkJQQYqY
+
+</div>
+
+
+### Self-Assessment
+
+Once you've successfully set up the software, you should be able to open the RStudio program and see something like this:
+
+
+
+
+```{r echo=FALSE, warning=FALSE, results='asis'}
+build_popup_figure("rstudio_running.PNG", thumb_width = "75%", recursive = TRUE)
+```
+
+<div class="info">NOTE: Your RStudio session may have slightly different fonts, styling, colors, etc. depending on your operating system and operating system themes.</div>
+
+
+
+
+## Git and GitHub 
+
+### Objectives
+
+- Create a GitHub account.
+- Install GitHub Desktop on your computer.
+- Link your GitHub account to GitHub desktop.
+
+
+### Introduction
+
+Have you ever accidentally deleted important files, forgot to save, or lost data due to a computer failure?
+
+Have you ever wished you could go back to find material that you had in a previous version of a document?
+
+An important way to avoid these issues is to store important work files in a *repository* that can hold all of your work as well as keep a record of your progress at previous time points.
+
+You'll be using a *versioning* program called **git** to save all of your work for this course into a repository.
+
+You'll be using a companion website, **github.com** as a remote host to hold your in case your computer fails or you access to your work from another computer.
+
+
+
+### What is a git repository?
+
+A repository is just a locaiton where a collection of related files needed for a project are maintained and organized.  Repositories may be *local* (on your own computer, only available to you) or *remote* (stored on a server accessible by may computers).  Repositories can store the complete state of your project at any given time.  This allows you to recover material you might have accidentally deleted or overwritten.
+
+Git itself is just a program that manages repositories (collections of files needed for a particular project).  At heart it is a *command line* program, but we'll be using a *graphical interface* built into RStudio for this course. 
+
+The idea of **versioning** is especially helpful for both saving timestamps of your work and collaborating with other team members working on the same project.  There are many different types of versioning frameworks and platforms.  Git is currently the most widely used.
+
+
+
+### Instructions: GitHub and GitHub Desktop {.tabset}
+
+
+#### Part 1: Create a GitHub account.
+
+This part is easy: just navigate to github.com and create a free account!
+
+<div class="note">If you already use github, you can skip this part.</div>
+<br>
+
+My advice is to choose a professional-sounding username that you won't be embarrassed to include in a CV or resume.
+
+
+
+
+#### Part 2: install GitHub Desktop
+
+This part is slightly more complicated.
+
+Once you have your github account set up, make you way to https://desktop.github.com/ and download the appropriate installer for your system.
+
+After you have GitHub Desktop set up on your machine, you need to link your GitHub account.  You can find the login option in the **File** menu.  
+
+
+The login option should look like:
+
+<div class="blackborder">![](`r find_file("github_desktop_sign_in.PNG")`)</div>
+
+<br>
+
+GitHub desktop running and linked to my account looks like this:
+
+<div class="blackborder">![](`r find_file("github_desktop_signed_in.PNG")`)</div>
+
+
+<br><br><br>
+
+<div class="info">Note that if you haven't used GitHub before, you won't have a repository list.</div>
+
+
+
+## DataCamp
+
+![](`r find_file("DataCamp-Horizontal-RGB.png")`)
+
+
+### Objectives
+
+- Create a DataCamp account.
+- Join the ECO602/634 DataCamp course.
+
+
+### Introduction
+
+One of the resources we'll use to learn R is <a href="https://datacamp.com">DataCamp</a>.
+
+DataCamp has lots of good resources for learning about R.  We'll complement original course material with their R training.
+
+
+### Instructions
+
+This assignment is pretty simple!
+
+1. Navigate to <a href="https://DataCamp.com">DataCamp</a>.
+2. Create a free account.
+3. Follow the DataCamp course invite link (in the course Moodle).
+
+
+### About DataCamp
+
+This class is supported by DataCamp, the most intuitive learning platform for data science and analytics. Learn any time, anywhere and become an expert in R, Python, SQL, and more. DataCamp’s learn-by-doing methodology combines short expert videos and hands-on-the-keyboard exercises to help learners retain knowledge. DataCamp offers 325+ courses by expert instructors on topics such as importing data, data visualization, and machine learning. They’re constantly expanding their curriculum to keep up with the latest technology trends and to provide the best learning experience for all skill levels. Join over 5 million learners around the world and close your skills gap.
+
+
+
+<!-- # Assignment Questions -->
+
+
+<!-- ```{r results = 'hide', echo = FALSE} -->
+<!-- source(here::here("rmd_tools", "build_moodle_web_questions.R")) -->
+<!-- tmp = build_moodle_web_questions( -->
+<!--   assignment_filename = "software_setup.Rmd", -->
+<!--   search_path = here::here("assignments", "eco_602"), -->
+<!--   include_header = FALSE, -->
+<!--   write_html = FALSE, -->
+<!--   cat_results = FALSE, -->
+<!--   write_tmp = TRUE) -->
+<!-- ``` -->
+
+<!-- ```{r child=tmp, echo=FALSE, include=FALSE} -->
+<!-- ``` -->
+
+<!-- ```{r echo=FALSE, include=FALSE} -->
+<!-- file.remove(tmp) -->
+<!-- ``` -->
+

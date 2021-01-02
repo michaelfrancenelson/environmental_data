@@ -1,0 +1,77 @@
+---
+title: "Heterogeneity"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructions">
+
+Consider the various types of models and data transformations from the readings and lecture notes.
+
+</div>
+
+
+<div class="questions">
+
+### Q 2 pts (short answer)
+
+- Name two possible solutions to deal with heterogeneity, i.e. non-constant variance, in your data.
+
+</div>
+
+
+
+Solution
+========
+
+## Grading Guide
+
+Answers include:
+
+- data transformation
+- Using a Group 2 technique, for example:
+  - Using a GLM
+  - Using an additive model
+  - Weighted least squares
+
+
+Meta-information
+================
+
+extitle: Heterogeneity
+
+extype: string
+exsolution: nil
+
+exname: week_10_reading_questions
+exsection: week_10_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 10
+
+expoints: 2

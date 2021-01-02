@@ -1,0 +1,104 @@
+---
+title: "Model Coefficients"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="instructions">
+
+Consider this table of model coefficients from a plant growth experiment with the following *continuous* predictor variables.
+
+Note: The amount of water, N, and P given to each plant was randomized at the beginning of the experiment.
+
+- Water: 3 - 30 mL per week
+- Nitrogen: 1.1 - 42 mg per week
+- Phosphorus: 1.1 - 42 mg per week
+
+
+The response variable was plant biomass accumulation after 17 weeks (in grams).
+
+|                 | Estimate| Std. Error| t value| Pr(>&#124;t&#124;)|
+|:----------------|--------:|----------:|-------:|------------------:|
+|(Intercept)      | -1.7    |       0.23|  98.371|              0.061|
+|water            |  0.043  |      0.001|   0.480|              0.021|
+|nitro            |  0.192  |      0.034|   1.495|              0.007|
+|phosph           | -0.027  |      0.014|   0.091|              0.721|
+
+</div>
+
+
+<div class="questions">
+
+### Q 1 pt (numeric input)
+
+- Using the information in the model coefficient table above, calculate the expected biomass for a plant given:
+
+  - 0 mL water per week
+  - 0 mg nitrogen per week
+  - 0 mg phosphorus per week
+
+
+</div>
+
+
+
+Solution
+========
+
+### Grading Guide
+
+The answer is -1.7
+
+Students can read the intercept value directly form the coefficient table.
+
+Alternatively they could use dummy variable values with the model coefficients.
+
+```{r}
+
+coeffs = c(-1.7, 0.043, 0.192, -0.027)
+treats = c(1, 0, 0, 0)
+
+sum(coeffs * treats)
+
+```
+
+
+
+
+Meta-information
+================
+
+extitle: significant model coefficients
+
+exname: week_10_reading_questions
+exsection: week_10_reading_questions
+
+extype: num
+exsolution: `r fmt(sum(coeffs * treats), 3)`
+extol: 0.05
+
+
+expoints: 1

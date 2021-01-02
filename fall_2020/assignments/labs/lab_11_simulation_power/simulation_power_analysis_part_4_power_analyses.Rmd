@@ -1,0 +1,197 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  html_document:
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+options(knitr.duplicate.label = "allow")
+
+```
+
+
+
+<!-- ```{r load_functions, child = find_file("function_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_data, child = find_file("load_data_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_models, child = find_file("model_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_simulations, child = find_file("simulation_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+<!-- ```{r load_plots, child = find_file("plot_chunks_lab_11.Rmd", exact_match = TRUE), include = FALSE} -->
+<!-- ``` -->
+
+
+
+# Power analysis for the linear regression model
+
+Power analysis in the narrowest sense means figuring out the (frequentist) statistical power, the probably of correctly rejecting the null hypothesis when it is false.
+
+While we are generally less concerned with power analysis in the conventional sense of hypothesis testing, we are very interested in the role of power analysis in addressing a much broader question:
+
+- How do the quality and quantity of the data and the true properties (parameters) of the environmental system affect the quality and of the answers to our questions about environmental systems?
+
+For any real experiment or observation situation, we don't know what is really going on (the “true” model or parameters), so we don't have the information required to answer these questions from the data alone.
+
+Historically, questions about statistical power could only be answered by sophisticated analyses, and only for standard statistical models and experimental designs such as one-way ANOVA or linear regression.
+
+Increases in computing power have extended power analysis to many new areas, and R's capability to run repeated stochastic simulations is a great help.
+
+Here, we will illustrate the use of stochastic simulation for power analysis using the linear regression model above.
+
+
+
+
+## Single Simulation
+
+Let's start by finding out whether we can reject the null hypothesis in a single experiment.
+
+To do this we can use the following procedure:
+
+- Choose a critical p-value (alpha) to use as a rejection criterion.  This is often 0.05.
+- Simulate a dataset with given intercept, slope, and number of observations.
+- Create a simple linear regression model and extract the p-value.
+  - Recall that the p-value represents the probability of observing our data if the null hypothesis of no relationship were true.
+  - Null hypothesis: brown creeper abundance is independent of late-successional forest, i.e. there is no habitat preference.
+- Compare the p-value from the model of simulated data to the critical p-value you chose above.
+
+```{r simulated_y_1, ref.label = "simulated_y_1"}
+```
+
+> Extracting p-values from R analyses can be tricky.
+
+In this case, the coefficients of the summary() of the linear fit are a matrix including the standard error, t statistic, and p-value for each parameter.  We can use matrix indexing to pull out the specific value I wanted.
+
+
+
+
+## Repeated Simulations
+
+To estimate the probability of successfully rejecting the null hypothesis when it is false (the power), we have to repeat this procedure many times and calculate the proportion of the time that we reject the null hypothesis.
+
+First, we specify the number of simulations to run and set up a vector to hold the p-value for each simulation.
+
+Then, we repeat what we did above saving the p-values to the storage vector.
+
+- We will re-use the same values for the x-values, intercept, slope, and population standard deviation.
+
+We can calculate the statistical power as the number of times we ***correctly rejected*** the null hypothesis divided by the total number of simulations.
+
+- How could you use this idea to calculate the Type II (false positive) error rate?
+
+```{r p_val_sim, ref.label = "p_val_sim"}
+```
+
+Based on the simulation output:
+
+- How many simulations found a significant slope coefficient?
+- What is our statistical power?
+
+This is the rate at which our chosen statistical model, a simple linear regression, can detect a slope of roughly b = 0.006 with a sample size of N = 30.
+
+We're going to be building a lot of models, so let's write a quick function to save some time and make our simulation loops a little simpler:
+
+```{r linear_sim_fit_function, ref.label = "linear_sim_fit_function", eval = FALSE, echo = TRUE}
+```
+
+
+
+### Simulating Effect Sizes
+
+Since we don't know the true population values, we often we want to estimate the statistical power over a range of model parameter values (or even different models).
+
+We can repeat the simulation process multiple times while varying some parameters of the simulation such as the model slope or sample size.
+
+- Coding this in R usually involves nested for-loops.
+
+This example simulation estimates statistical power as a function of the slope (the effect size).
+
+<div class = "notes">
+- Note that this may take a minute or to run on your computer.
+- You can use a smaller value for `n_sims` to speed it up if needed.
+</div>
+
+```{r ref.label = "effect_size_simulation", echo = TRUE, eval = FALSE}
+```
+
+<div class="notes">
+Note that this code is just an elaboration of the code we used to perform the simulation above:
+
+- We created a sequence of effect sizes to try.
+- We nested the original code inside an outer loop that iterates over each of the effect sizes.
+- Instead of saving p-values directly, we saved a vector of statistical powers:
+  - The p-values were calculated in the inner loop for a specific effect size.
+  - The statistical powers were calculated in the outer loop and stored in `effect_size_powers`.
+- We saved the results as a `data.frame` with columns for effect size and statistical power.
+</div>
+
+We can plot the result and add a vertical line to show the slope of our original data set.
+
+
+```{r plot_effect_size_sim, ref.label = "plot_effect_size_sim"}
+```
+
+What is the power for a slope of say .002?
+
+
+
+
+### Simulating Sample Sizes
+
+We can do the same thing for a gradient in sample sizes, as follows
+
+```{r sample_size_simulation, ref.label = "sample_size_simulation", eval = FALSE, echo = TRUE}
+```
+
+```{r sample_size_sim_plot, ref.label = "sample_size_sim_plot", fig.asp = 1/1.3}
+```
+
+How much power is lost if we reduce the sample size from 30 to 20?
+
+
+
+
+# Bivariate Power Analysis
+
+
+
+
+We could repeat this process for other parameters such as the error component of the model, but you get the idea.
+
+While we can do these power analysis simulations for one parameter at a time, it might be more interesting to vary combinations of parameters, say of slope and sample size, using yet another loop, saving the results in a matrix, and using contour() or persp() to plot the results.
+
+
+
+
+## Effect Size and Sample Size
+
+Try the following:
+
+```{r sample_size_effect_size_simulation, ref.label = "sample_size_effect_size_simulation", echo = TRUE, eval = FALSE}
+```
+
+Note, the only difference in this code is that we added a third outer loop and created a matrix to store the results, since we have a power result for each combination of slope and sample size.
+
+Our output data are now stored in a matrix (instead of a vector), so we need a way to visualize 2-dimensional data.
+
+- `image()` is a quick way to plot a matrix as if it were raster data, that is to plot a grid in which the pixel color is determined by the value of the matrix element.
+
+```{r}
+image(sim_n_effect_size$power)
+```
+
+

@@ -1,0 +1,140 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitie: "Week 01 - Welcome to ECo 602"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Today's Meeting
+
+- Course Themes
+- In-class group activity
+- For next week
+
+
+
+
+## Announcements and Questions
+
+- DataCamp intro to R questions are now live on Moodle
+- Questions or thoughts?
+
+
+
+
+## Model Thinking
+
+What is it?
+
+
+
+
+
+
+## The Dual Model Paradigm
+
+### It's useful to think of a system with
+
+- An expected typical or average behavior.
+- A range of natural variation that we expect to see around the average behavior.
+
+\vfill
+\vfill
+
+The **Dual Model Paradigm** is a way to think about modeling natural systems in which we specify two models: a deterministic and a stochastic.
+
+
+
+
+## Determinsitic Models
+
+A **deterministic** model describes expected, or average behavior.
+
+- The deterministic model describes a relationship between a response and one or more predictors.
+- It is often known as a **model of the means**.
+- We commonly use a deterministic model to address our primary questions, such as:
+  - How does % forest cover correspond with salamander populations?
+  - How do predator populations and winter temperatures correlate with prey populations?
+
+
+
+
+## Stochastic Models
+
+A **stochastic** model describes variability.
+
+- Stochastic models can help understand the possible range of behaviors in our model.
+- We use the stochastic model to assess the **significance** of our **statistical inferences**. 
+- Probability theory
+- Probability distributions
+
+
+
+## Uncertainty
+
+Uncertainty comes in many forms.
+
+> there are known knowns; there are things we know we know. We also know there are known unknowns; that is to say we know there are some things we do not know. But there are also unknown unknowns—the ones we don't know we don't know. - Donald Rumsfeld
+
+
+
+
+## Uncertainty
+
+- Possible sources of 'error', a.k.a uncertainty
+  - process error
+  - measurement error
+  - model error
+  
+
+
+
+
+
+
+## Mathematical and Statistical Modeling
+
+### Fitting models to data (not the other way around) is an art... you have to:
+  - be familiar with the range of possible models
+  - know how to choose a deterministic model
+  - know how to choose a stochastic model
+  - be able to understand assumptions, formulae, and other technicalia
+  
+### This is perhaps the most technical and intimidating part of the course.
+  - We'll focus on intuition-building
+
+
+
+## In-class activity
+
+- Find the instructions on Moodle
+- I've pre-assigned groups on Moodle
+- Complete the activity today during class
+  - Submit your group's materials at the end
+
+
+
+## For Next Week
+
+- Read the Bolker selections by next Tuesday.
+- Reading questions (including info for all the other readings) will be due next Thursday.
+
+

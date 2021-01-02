@@ -1,0 +1,178 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Simulation and Power Analysis: Lab Code"
+author: "Michael France Nelson (adaped from Kevin McGarigal)"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+require(here)
+knitr::opts_chunk$set(echo = TRUE)
+
+require(here)
+require(rmd.utils)
+require(mfn.teaching.utils)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r simulated_data_plot_1, echo = FALSE, eval = FALSE}
+plot(
+  x = birdhab$ls, 
+  y = linear_simulator(
+    x = birdhab$ls,
+    y_int = int_obs,
+    slope = slope_obs,
+    st_dev = sd_obs
+  ),
+  main = "Simulated Data",
+  xlab = "late-successional forest",
+  ylab = "Brown Creeper Abundance")
+```
+
+```{r simulated_data_plot_2, echo = FALSE, eval = FALSE}
+plot(
+  birdhab$ls, birdhab$BRCR, 
+  xlab = "late-successional forest extent",
+  ylab = "Brown Creeper abundance",
+  pch = 19)
+
+points(
+  x = birdhab$ls, 
+  y = linear_simulator(
+    x = birdhab$ls,
+    y_int = int_obs,
+    slope = slope_obs,
+    st_dev = sd_obs
+  ),
+  col = adjustcolor("red", alpha = 0.3),
+  pch = 16)
+```
+
+
+```{r scatterplot_1, echo = FALSE, eval = FALSE}
+plot(
+  birdhab$ls, birdhab$BRCR, 
+  xlab = "late-successional forest extent",
+  ylab = "Brown Creeper abundance",
+  pch = 19)
+```
+```{r scatterplot_2, echo = FALSE, eval = FALSE}
+plot(
+  birdhab$ls, birdhab$BRCR, 
+  xlab = "late-successional forest extent",
+  ylab = "Brown Creeper abundance",
+  pch = 19)
+abline(fit_1)
+knitr::kable(coef(summary(fit_1)), digits = c(4, 4, 3, 4))
+```
+
+```{r plot_effect_size_sim}
+plot(
+  power ~ effect_size, data = sim_effect_size,
+  type = 'l', xlab = 'Effect size', ylab = 'Power')
+abline(v = coef(fit_1)[2], lty = 2, col = 'red')
+```
+
+
+```{r sample_size_sim_plot, eval = FALSE}
+plot(
+  power ~ sample_size, data = sim_sample_size,
+  type = 'l', xlab = 'Sample size', ylab = 'Power')
+abline(v = nrow(birdhab), lty = 2, col = 'red')
+```
+
+
+
+```{r contour_n_effect_size, echo=FALSE, fig.asp=1}
+
+contour(
+  x = sim_n_effect_size$effect_size,
+  y = sim_n_effect_size$sample_size,
+  z = sim_n_effect_size$power,
+  xlab = "effect size",
+  ylab = "sample size",
+  main = "Contour Plot of Statistical Power",
+  levels = seq(0, 1, length.out = 9),
+  drawlabels = TRUE,
+  # method = "simple")
+  method = "edge")
+```
+
+
+```{r persp_plot_static}
+persp(
+  x = sim_n_effect_size$effect_size,
+  y = sim_n_effect_size$sample_size,
+  z = sim_n_effect_size$power,
+  xlab = "beta", ylab = "n", zlab = "power",
+  col = 'lightblue',
+  theta = 30, phi = 30, expand = .75,
+  ticktype = 'detailed')
+```
+
+```{r persp_plot_interactive, echo = FALSE, eval = FALSE}
+rgl::persp3d(
+  x = sim_n_effect_size$effect_size,
+  y = sim_n_effect_size$sample_size,
+  z = sim_n_effect_size$power,
+  col = 'lightblue',
+  alpha = 0.7,
+  xlab = "beta",
+  ylab = "n",
+  zlab = "power")
+
+rgl::writeWebGL(
+  dir = here::here("docs", "webGL"), 
+  filename = here::here(
+    "docs", "webGL",
+    "n_effect_size_power_sim_plot.html"),
+  width = 1200, height = 1200
+)
+```
+
+
+
+```{r persp_plot_interactive_2, echo = FALSE, eval = FALSE}
+rgl::persp3d(
+  x = sim_3_dat$pop_sd,
+  y = sim_3_dat$sample_size, 
+  z = sim_3_dat$power,
+  xlab = "pop. sd",
+  ylab = "n",
+  zlab = "power",
+  col = 'lightblue',
+  alpha = 0.7,
+  theta = 30, phi = 30, expand = .75,
+  ticktype = 'detailed')
+
+rgl::writeWebGL(
+  dir = here::here("docs", "webGL"), 
+  filename = here::here(
+    "docs", "webGL",
+    "pop_sd_size_power_sim_plot.html"),
+  width = 1200, height = 1200
+)
+
+```
+
+```{r contour_plot_n_dispersion, echo=FALSE, eval = FALSE}
+contour(
+  x = pop_sds,
+  y = sample_sizes, 
+  z = sim_output_3,
+  xlab = "population s.d.",
+  ylab = "sample size",
+  main = "Contour Plot of Statistical Power")
+```

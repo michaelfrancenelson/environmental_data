@@ -1,0 +1,127 @@
+---
+title: "flipper bootstrap CI"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+
+cat(readLines(here::here("formatting", "css", "styles.css")))
+require(palmerpenguins, quietly = TRUE)
+sse_mean = function(x) 
+{
+  # You have to use na.rm = TRUE
+  sample_sd = sd(x, na.rm = TRUE)
+   
+  # There are many ways to calculate the number of non-missing
+  # elements in x.
+  n = sum(!is.na(x))
+
+  return (sample_sd / sqrt(n))
+}
+```
+
+<div class="instructionsborder">
+
+#### Instructions
+
+- Use the `two.boot()` function to calculate 10000 bootstrap replicates of the difference in mean flipper length of Chinstrap and Adelie penguins.
+  - Save the output of `two.boot()` to a variable called `pen_boot`.  This is so that I can replicate your code easily on my machine for grading and assistance.
+
+- Use `quantile()` with `pen_boot` to calculate a 95% Confidence interval on the difference in mean flipper lengths.
+
+
+</div>
+
+
+<div class="hintborder">
+
+- Hint: you'll need to investigate the structure of `pen_boot` to figure out what component contains the bootstrapped differences.
+
+</div>
+
+<div class="questionborder">
+
+### Q1 1 pt. - (R code)
+
+- Paste the code you used to calculate the CI.
+
+
+</div>
+
+
+
+Solution
+========
+
+### Grading Guide
+
+Students should use the following code to build the CI:
+
+`quantile(pen_boot$t, c(0.025, 0.975))`
+
+The students can use `boot.ci()` but the instructions ask them to use `quantile()`: -0.25 pts.
+
+The CI should be about:
+
+|   2.5% |  97.5% |
+| ------ | ------ |
+| -7.886 | -3.867 |
+
+
+
+
+Build the bootstrap:
+
+Sample implementation:
+```{r q_02_flipper_btstrp_ci, reuslts='hold', message = FALSE, warn = FALSE, results = 'hide', }
+require(palmerpenguins)
+require(simpleboot)
+require(boot)
+
+penguin_dat = droplevels(subset(penguins, species != "Gentoo"))
+
+R = 1000
+
+pen_boot = 
+  two.boot(
+    subset(penguin_dat, species == "Adelie")$flipper_length_mm,
+    subset(penguin_dat, species == "Chinstrap")$flipper_length_mm,
+    FUN = mean,
+    R = R,
+    na.rm = TRUE
+  )
+quantile(pen_boot$t, c(0.025, 0.975))
+boot::boot.ci(pen_boot)
+```
+
+
+
+Meta-information
+================
+extitle: flipper bootstrap CI
+
+extype: string
+
+exsolution: nil
+
+exname: lab_08
+exsection: lab_08
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 1

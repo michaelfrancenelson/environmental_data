@@ -1,0 +1,73 @@
+---
+title: "slope coefficient interpretation"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+```
+
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+<div class="questionborder">
+
+Consider the regression equation for a simple linear regression:
+
+$y_i = \alpha + \beta_1 x_i + \epsilon$
+
+
+### Q1: 3 pt. (short answer/essay)
+
+- Describe the meaning of the slope parameter $\beta_1$ in the context of the relationship between the predictor variable, x, and the response variable y.
+  - Your answer must be in plain non-technical language.
+  - Your explanation will be most effective if you use a narrative approach, using a concrete example to illustrate the concept.
+
+</div>
+
+
+
+
+Solution
+========
+
+"A one-unit increase in x will result in a $beta_1$ unit change in y."
+
+A narrative approach using a concrete example is best.
+
+
+
+Meta-information
+================
+
+extitle: slope coefficient interpretation
+
+extype: string
+
+exsolution: nil
+
+exname: week_08_reading_questions
+exsection: week_08_reading_questions
+
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: editor
+exextra[essay_required,logical]: TRUE
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 3
+

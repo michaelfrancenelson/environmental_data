@@ -1,0 +1,375 @@
+---
+title: "ECo 602 - Analysis of Environmental Data"
+subtitle: "Acorns, Events, Stochastic Processes, and Random Variables"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  beamer_presentation:
+    pandoc_args: !expr paste0(here::here("formatting", "beamer", "eco_602_2020_beamer.yaml"))
+    highlight: tango
+    theme: "default"
+    colortheme: "spruce"
+    fonttheme: "serif"
+    slide_level: 2
+    incremental: false
+classoption: t
+header-includes:
+  \input{`r here::here("formatting", "beamer", "eco_602_2020_headers_tikz.tex")`}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("rmd_tools", "find_file.R"))
+require(magick)
+require(cowplot)
+require(ggplot2)
+acorn_img = image_read(find_file("emojipng.com-8994842.png"))
+acorns_img = image_read(find_file("tooo_many_acorns.png"))
+
+
+g_acorn = print(ggdraw() + draw_image(acorn_img))
+plot_grid(
+  g_acorn,
+  g_acorn,
+  g_acorn,
+  g_acorn,
+  nrow = 1
+)
+
+```
+
+
+```{r two_acorn, echo = FALSE, fig.align='center', fig.width=3, fig.height=1.5, eval = FALSE}
+plot_grid(g_acorn, g_acorn, nrow = 1)
+```
+```{r two_acorn_labels, echo = FALSE, fig.align='center', fig.width=3, fig.height=1.5, eval = FALSE}
+plot_grid(g_acorn, g_acorn, labels = c("A1", "A2"), nrow = 1, hjust = -1)
+```
+```{r three_acorn, echo = FALSE, fig.align='center', fig.width=3, fig.height=1.5, eval = FALSE}
+plot_grid(g_acorn, g_acorn, g_acorn, nrow = 1)
+```
+```{r four_acorn, echo = FALSE, fig.align='center', fig.width=3, fig.height=1.5, eval = FALSE}
+plot_grid(g_acorn,g_acorn, g_acorn, g_acorn, nrow = 1)
+```
+```{r many_acorn, echo = FALSE, fig.align='center', fig.width=3, fig.height=1.5, eval = FALSE}
+ggdraw() + draw_image(acorns_img)
+```
+
+
+
+
+## Overview
+
+The problem of randomly collecting two acorns (or any other objects that can be of distinct type) seems simple, but it actually touches on many important topics:
+
+- Stochastic processes
+- Random variables
+- Combinations and permutations
+- Independent events
+- Probabilities and sample spaces
+
+
+
+## Acorns
+
+### I am sitting under two oak trees: a Bur Oak, *Quercus macrocarpa* and a Red Oak, *Q. rubra*. 
+
+
+```{r ref.label='two_acorn', echo = FALSE, fig.width=2, fig.height=1, fig.align='center'}
+```
+
+
+
+- Not paying any attention to which species, I collect one acorn: A1.
+- I randomly wander for a while under the trees and collect a second: A2.
+
+
+
+## Acorns
+
+### Model thinking
+
+- I start to think about collecting acorns, and I decide to do a Model Thinking exercise about an acorn collection process.
+- I want to start simple, so I imagine a scenario of collecting 2 acorns.
+
+### I'll use the abbreviations B and R in this example
+
+
+
+
+## Stochastic Process
+
+### I can consider my collection of the two acorns as one realization of a **stochastic process**.
+
+- If I were to repeat the collection process in a similarly random way, I would perform another realization.
+- There are many many acorns so I could potentially realize my stochastic collection process many times.
+  - This is a very *frequentist* point of view.
+  
+```{r ref.label='many_acorn', fig.width=9, fig.align='center', echo = FALSE}
+```
+
+
+## A Random Variable Perspective
+
+\vfill
+
+- I don't know ahead of time what the species ID of A1 and A2 are.
+- To me they are **random variables** until I collect and observe them.
+
+\vfill
+
+### Because I randomized my collection efforts, the following two scenarios are logically equivalent:
+
+
+
+## A Random Variable Perspective: Schrödinger's Acorns
+
+### An acorn's species ID is not fixed:
+
+- I randomly select two acorns, labeling them A1 and A2, but don't observe the species.
+  - A1 randomly randomly switches between R and B until I observe it, at which time it becomes *fixed*.
+  - A2 randomly randomly switches between R and B until I observe it, at which time it becomes *fixed*.
+
+
+
+
+## A Random Variable Perspective: Random labeling
+
+
+
+### An acorn's location is not fixed:
+
+- The labels A1 and A2 randomly jump among all of the acorns in the field.
+ - I randomly choose two acorns in the field, *fixing* the labels A1 and A2 and observe their species.
+
+
+
+
+## A Random Variable Perspective
+
+### A random variable has an unknown value until it is *observed*
+
+- Performing a realization of the stochastic process of observing a random variable, forces its value to become *fixed*.
+
+- A1 and A2 are random variables in both the *Schrödinger's acorns* and *random labeling* procedures on the last slide.
+
+
+
+
+## Combination and Permutation Perspectives.
+
+### **Permutations**: how many ways can I arrange a collection of objects?
+
+### **Combinations**: how many of each type of object are in the collection?
+
+
+
+```{r ref.label='four_acorn', echo = FALSE, fig.width=3.2, fig.height=1, fig.align='center'}
+```
+
+
+I need both perspectives to completely characterize the acorn sampling problem.
+
+
+
+
+## A permutation perspective:
+
+- In this case, we care about order so BR and RB are distinct events:
+  $BR \neq RB$
+- There are two ways to *arrange* two objects of 2 distinct types.
+  1. $BR$
+  2. $RB$
+- How many ways are there to arrange 3 objects of 3 distinct types?
+
+
+
+
+```{r ref.label='three_acorn', echo = FALSE, fig.width=2.7, fig.height=1, fig.align='center'}
+```
+
+
+
+## A combination perspective:
+
+- We care only about the number of R in the collection:
+  $BR = RB$
+- There is only one way to *combine* a collection of two distinct objects:
+ 1. $RB$ 
+
+
+
+
+## Combination and Permutation Perspectives.
+
+You can think of a *combination of objects* as the **counts** of each distinct type of objects in a **collection of objects**.
+
+You can think of the *permutations of objects* as the complete set of ways you can **order** the objects in a **collection**.
+
+### Permutations are arrangements, combinations are counts
+- You [usually] need both to calculate probabilities and sample spaces.
+
+
+
+
+
+## Sample spaces
+
+### I am interested only in the number of Bur Oak acorns in a 2-sample collection.  What's the sample space?
+
+- This sounds like a *combinations* question
+
+- I can collect 0, 1, or 2 R acorns:
+  - 0 R: $\{BB\}$
+  - 1 R: $\{RB, BR\}$
+  - 2 R: $\{RR\}$
+ 
+
+
+## Sample spaces
+
+### I care whether I collect a Red Oak first and a Bur Oak second.
+
+- This sounds like a *permutations* question
+
+- There are 4 permutations
+  - $\{BB\}$
+  - $\{BR\}$
+  - $\{RB\}$
+  - $\{RR\}$
+ 
+### Only one permutation out of 4 has a Red Oak follwed by a Bur Oak
+
+
+
+
+## Probabilities
+
+### What is the *probability* of collecting two Bur Oak acorns?
+
+- How many ways can I do this?
+  - exactly 1: $\{BB\}$
+
+### The combination and permutation perspectives are equivalent!
+
+- The probability is: $Pr(BB)$
+
+
+
+## Probabilities
+
+### What is the *probability* of collecting one Bur Oak acorn?
+
+- I can do this in two ways:
+  - $\{BR\}$
+  - $\{RB\}$
+
+- The probability is $Pr(BR) + Pr(RB)$
+
+### The combination and permutation perspectives are different
+
+- Two distinct events from the *permutation* perspective are identical in the *combination* perspective.
+
+
+
+## Independent Events
+
+### My collections of A1 and A2 were *independent events*.
+- I didn't set out to collect a particular species and I randomized my collection events such that collecting A1 didn't affect my collection of A2.
+
+### I know that approximately 1/2 of the acorns are R and 1/2 are B.
+- In this scenario I'm assuming that the trees produce equal numbers of acorns
+- I'm also assuming that they are randomly mixed on the field under the trees.
+
+
+
+## Independent Events
+
+### If events are *independent* the probability of a *specific joint event* is equal to the product of the individual event probabilities.
+- Collecting A1 was a single event.
+- Collecting A2 was a single event.
+- Collecting both A1 and A2 was a *joint event*.
+
+### Probabilities: I already know that:
+
+- $Pr(B) = \frac{1}{2}$
+- $Pr(R) = \frac{1}{2}$
+
+
+
+## Probabilities and Independent Events
+
+### Now I can enumerate the probabilties for all permutations:
+
+- $Pr(RR) = Pr(R) \times Pr(R) = \left(\frac{1}{2}\right) \times \left(\frac{1}{2}\right) = \left(\frac{1}{2}\right)^2 = \left(\frac{1}{4}\right)$
+- $Pr(RB) = Pr(R) \times Pr(B) = \left(\frac{1}{2}\right) \times \left(\frac{1}{2}\right) = \left(\frac{1}{2}\right)^2 = \left(\frac{1}{4}\right)$
+- $Pr(BR) = Pr(B) \times Pr(R) = \left(\frac{1}{2}\right) \times \left(\frac{1}{2}\right) = \left(\frac{1}{2}\right)^2 = \left(\frac{1}{4}\right)$
+- $Pr(BB) = Pr(B) \times Pr(B) = \left(\frac{1}{2}\right) \times \left(\frac{1}{2}\right) = \left(\frac{1}{2}\right)^2 = \left(\frac{1}{4}\right)$
+
+### What if $Pr(R)$ and $Pr(B)$ Weren't equal?
+### What if collecting R and B weren't *independent*?
+
+
+
+
+## Probabilities and Independent Events
+
+### Now I can enumerate the probabilties for all combinations:
+
+- $Pr(0 \times B) = Pr(BB) = \frac{1}{4}$
+- $Pr(1 \times B) = Pr(RB) + Pr(BR) = \frac{1}{4} + \frac{1}{4}\ = \frac{1}{2}$
+- $Pr(2 \times B) = Pr(RR) = \frac{1}{4}$
+
+### The combinations perspective has a smaller sample space
+
+
+
+## Questions: You reach down and pick up two acorns in your hand.
+
+1. What is the size of the sample space?
+  - Without specifying that order matters, this sample space question is a *combinations* question.
+  - the space has three elements: $\{BB, BR, RR\}$.
+
+2. How many ways are there to collect two acorns of the same species?
+  - Only two: $\{BB, RR\}$.
+
+3. How many ways to collect two acorns of different species?
+  - This is a *permutations* question because it asks how many ways B and R can be arranged.
+  - Two: $\{BR, RB\}$
+
+
+
+
+## Questions: You collect an acorn, walk a short distance and collect a second acorn.
+
+1. What is the probability that both acorns are *Q. rubra*?
+
+- There is only one way this can happen $\{RR\}$.
+  - We know that $Pr(RR) = \frac{1}{4}$
+  - By symmetry (since $Pr(B)$ and $Pr(R)$ are equal, we also know that $Pr(BB) = \frac{1}{4}$
+
+2. What is the probability that you first collect an acorn of R followed by an acorn of B?
+
+- There is only one way this can happen $\{RB\}$.
+  - As we calculated above: $Pr(RB) = \frac{1}{4}$
+
+
+
+## Recap
+
+```{r ref.label='four_acorn', echo = FALSE, fig.width=3.2, fig.height=0.45, fig.align='center'}
+```
+
+
+- We need to consider both the *combination* and *permutation* perspectives.
+  - The sample space is usually smaller for *combinations* problems.
+- These seemingly simple problems get complicated very quickly!
+- We'll rarely do these calculations by hand: R can do them for us.
+
+
+```{r ref.label='four_acorn', echo = FALSE, fig.width=3.2, fig.height=0.45, fig.align='center'}
+```
+
+
+
+

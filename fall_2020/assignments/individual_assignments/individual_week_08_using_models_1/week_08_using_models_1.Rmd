@@ -1,0 +1,344 @@
+---
+title: "[ECo 602 - Analysis of Environmental Data](/eco_602_634_2020/index.html){target='_blank'}"
+subtitle: "Using Models 1"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  # pdf_document:
+  #   toc: true
+  #   number_sections: TRUE
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval.expr = TRUE)
+
+require(mfn.teaching.utils)
+require(rmd.utils)
+```
+
+
+```{r build_assignment_page, eval=FALSE, include=FALSE}
+require(rmd.utils)
+require(here)
+
+assn_base_name = "week_08_using_models_1"
+assn_source_file = find_file("week_08_using_models_1.Rmd", extension = ".Rmd")
+assn_source_dir = dirname(assn_source_file)
+
+question_source_files = find_file(
+  "", search_path = file.path(assn_source_dir, "moodle"), 
+  return_all = TRUE, extension = ".Rmd")
+
+assn_dir_out    = here::here("docs", "assignments", "eco_602", "individual")
+assn_file_out = file.path(assn_dir_out, assn_base_name)
+
+file.exists(assn_source_file)
+file.exists(assn_source_dir)
+file.exists(assn_dir_out)
+file.exists(assn_file_out)
+
+key_file_out = here::here(
+  "docs", "answer_keys",
+  sprintf("individual_assignment_answer_key_%s", assn_base_name))
+
+build_assignment_doc(
+  assn_source_file,
+  question_source_files,
+  doc_target_file = assn_file_out,
+  key_target_file = NULL)
+
+exams::exams2moodle(
+  file = question_source_files,
+  # file = question_source_files[3:11],
+  verbose = TRUE,
+  # dir = lab_dir,
+  dir = here::here("docs", "moodle_quiz_questions"),
+  name = sprintf("individual_questions_%s", assn_base_name)
+)
+
+```
+
+
+```{r load_data, echo=FALSE}
+catrate = read.csv(here("data", "catrate.csv"))
+# veg = read.csv(here("data", "vegdata_2.csv"), header=TRUE)
+```
+
+
+# Learning Objectives
+
+- Conduct commonly used tests on categorical data
+
+
+# Key Concepts
+
+- Analysis of categorical data: 1- and 2-sample tests
+- Testing assumptions: normality
+- Interpreting test output
+
+
+# Introduction
+
+
+<div class="warn">NOTE: Make sure you fill in all of the missing code in the walkthrough.  You'll need it for the assignment questions. </div>
+
+# Catastrophe Rate Data
+
+The data represent the observed reproductive success of marbled salamanders in 13 vernal pools over a period of 7 years in western Massachusetts.
+
+Catastrophe rate (cat.rate) is the proportion of years with any breeding effort (i.e., >0 breeding females) in which the number of emerging juveniles per breeding female (i.e., fecundity) was less than 1, a level that we deemed to be a reproductive “catastrophe”
+
+- Find the data file `catrate.csv` on the 'Data, Walkthroughs, etc.' section of the <a href="/eco_602_634_2020/" target="_blank">ECo 602/634 course github page</a> and save it in the `data` subdirectory of your main course RProject folder.
+
+- Use `read.csv()` to load the data into a `data.frame` called `catrate`.  Examine the first few rows using `head()`:
+
+
+
+
+```{r head_catrate}
+head(catrate)
+```
+
+## Numerical and Graphical exploration
+
+
+- Use the `summary()` function to view numerical summaries of all the columns in `catrate`.
+
+```{r catrate_summary, echo = FALSE}
+summary(catrate)
+```
+
+- Plot a histogram of the catastrophic rates (column `cat.rate`).
+
+```{r catrate_hist, echo = FALSE}
+hist(catrate$cat.rate, xlab = "Catastrophe Rate", main = "Histogram of Catastrophe Rates")
+```
+
+
+
+## Check for Normality
+
+There are several methods to check whether your data are likely to have been drawn from a Normal distribution.
+
+### Shapiro Test
+
+One of the most common is the Shapiro-Wilk test, implemented in R as `shapiro.test()`.
+
+- Try running the `shapiro.test()` function on the `cat.rate` column of the `catrate` data.
+  - How can you extract just the `cat.rate` column?
+
+You'll need to figure out the `shapiro.text()` syntax.
+
+Once you get it right, your output should look like:
+
+```{r shapiro_catrate, echo=FALSE}
+shapiro.test(catrate$cat.rate)
+```
+
+The R help entry for `shapro.test()` doesn't provide much information about how to interpret the output.
+
+> The null hypothesis for the Shapiro-Wilk test is: "The data were sampled from a normally-distributed population".
+
+Recall that low p-values suggest that there is good evidence against the null hypothesis.
+
+- How would you interpret the output of the Shapiro test?  Is there strong evidence that the `cat.rate` is non-normal?
+
+
+
+
+### Other Normality Tests
+
+The package `nortest` contains many other functions for assessing normality including `ad.test()`, `lillie.test()`, and many others.
+
+
+
+# One-Sample Tests: Tests for Difference From Expectation
+
+One of the simplest one-sample tests is whether the observed mean (or median) is significantly different from a specified value
+
+The default null hypothesis is that the mean is equal to zero, but this is not a very meaningful null hypothesis in many cases.
+
+> In two of the seven years, vernal pools filled later than normal in the fall.
+
+- Late pond-filling can cause the desiccation and/or freezing of the eggs prior to inundation.
+- The observed late-filling rate is $\frac{2}{7} \approx 0.28$.
+- The observed mean catastrophic rate from the data is 0.54.  How could you calculate this?
+
+We might want to test the alternative hypothesis that the observed mean cat.rate (0.54) is significantly different from an expected value of 0.28.
+
+Under this causal model, 2 of the 7 (2/7=0.28) years of the study between 1999-2005 experienced late pond filling.
+
+Is the mean observed catastrophe rate significantly different from expected? 
+
+
+
+
+## Parametric One-Sample Test: The t-test
+
+If the data are normally distributed, we can use the Student’s t test.
+
+The function in R is `t.test()`.
+
+> Recall that for a one-sample test, the null hypothesis is: "The mean of population from which the data were collected is not different from x"
+
+The default null hypothesis has $x=0$, but we have a good reason to choose a different value for the null.
+
+You need to use `t.test()` to perform a 1-sample test on the catastrophic rate.
+
+The `t.test()` arguments you need to use for this test are `x` and `mu`.
+
+- `mu` is the null hypothesis you want to test against.  What value should you use for `mu` in your `t.test()` call?
+
+Once you have the correct R syntax, you should see t-test output that looks like:
+
+```{r catrate_t_test, echo = FALSE}
+t.test(catrate$cat.rate, mu = 2/7)
+```
+
+
+What does the Student’s t test say about the probability that the observed catastrophe rate comes from a population in which catastrophes are solely the result of late pond-filling in the fall? Note, the default t test is a two-sided alternative; i.e., the alternative hypothesis is that the observed mean is not equal to the expected mean, which can mean less than or greater than the expected mean
+
+
+## One-sided Alternative Hypothesis
+
+If we have a good reason to believe that the observed mean should be greater than the null hypothesis mean, you can use a one-tailed test.
+
+- NOTE: we saw that the observed catastrophic rate was greater than the late-filling rate.  Since we didn't state that we thought the observed rate would be greater than the late-filling rate *before* we looked at the data it is not valid to retroactively specify a 1-tailed alternative hypothesis.
+
+In the case that you propose a one-tailed hypothesis before looking at the data you can conduct a  one-sided test by including the argument `alternative = "greater"` in the call to `t.test()`
+
+For a 1-sided t-test on the catastrophic rate you should obtain results similar to:
+
+```{r catrate_t_test_greater, echo=FALSE}
+t.test(catrate$cat.rate, mu=2/7, alternative='greater') 
+```
+
+If we proposed a one-tailed hypothesis that the observed data would be *less than* the null hypothesis, we could use `alternative = "less"`
+
+What p-value do you observe when you conduct the t-test on the catastrophic rate using `alternative = "less"`?
+
+
+```{r catrate_t_test_less, echo=FALSE, eval = FALSE}
+wilcox.test(catrate$cat.rate, mu = 2/7)
+```
+
+
+
+
+## Non-Parametric One-Sample Test: The Wilcoxon Rank Sum Test
+
+In the case of small samples from a non-normal distribution, we can use the Wilcoxon’s signed rank test (also known as the Mann-Whitney test).  The syntax is almost exactly the same as the `t.test()` syntax.  You can use the same value for `mu`.
+
+```{r}
+wilcox.test(catrate$cat.rate, mu = 2 / 7)
+```
+The syntax for conducting a 1-tailed test is exacly the same as for the `t.test()`: use `alternative = "less"` or `alternative = "greater"`
+
+
+
+
+
+
+
+
+
+# Comparing two sample means
+
+In the one-sample tests, we compared a sample mean with a fixed value that we specified.
+
+If you need to compare the means of two groups of observations, you can use a two-sample test.
+
+> The null hypothesis in a two-sample test is: "There is no difference in mean values between the two groups."
+
+Alternatively:
+
+> The values in the two groups were drawn from the same population.
+
+
+We'll use the penguin data for our 2-sample tests.  We'll exclude the Gentoo penguins so that we only have two penguin species.
+
+You can copy this code directly into your assignment script:
+
+```{r penguin_data_prep}
+require(palmerpenguins)
+penguin_dat = droplevels(subset(penguins, species != "Gentoo"))
+```
+
+## Numerical/Graphical Exploration
+
+Use `summary()` to summarize the columns in the data:
+
+```{r}
+summary(penguin_dat)
+```
+
+For this example we'll consider the flipper length, in mm.
+
+Let’s visualize the data using a conditional box plot, as follows:
+
+```{r flipper_boxplots}
+boxplot(flipper_length_mm ~ species, data = penguin_dat)
+```
+
+Note that I used the *formula notation*: `flipper_length_mm ~ species` along with the `data` argument.
+
+
+
+## Testing for normality
+
+I'll let you use `shapiro.test()` on your own to determine whether the flipper lengths are normally-distributed, but I'll give you a couple of hints:
+
+- You'll need to compare the flipper lengths for each species separately.  You can use `subset()` to extract the flipper measurements for individual species as follows:
+
+```{r}
+# Extract the Adelie penguin data
+dat_adelie = subset(penguin_dat, species == "Adelie")
+```
+- Then you can use the normality test on the flipper length column of `dat_adelie`.  You can use a similar syntax to test the Chinstrap penguins.
+
+
+
+## Parametric and Nonparametric Tests
+
+Again, you can use the t-test!
+
+- This time the syntax is slightly different because you have two samples, or groups.
+
+You can use exactly the same *formula notation* syntax that I used for the boxplot above.
+
+When you have your `t.test()` function call set up correctly, you should see something like:
+
+```{r flipper_t, echo=FALSE}
+t.test(flipper_length_mm ~ species, data = penguin_dat)
+```
+
+The Wilcoxon rank test works with exactly the same syntax.  I'll leave it up to you to conduct the test using `wilcox.test()`
+
+```{r flipper_wilcox, echo=FALSE, eval=FALSE}
+wilcox.test(flipper_length_mm ~ species, data = penguin_dat)
+```
+
+You can test 1-tailed hypotheses in the two-sample tests as described above for the one-sample tests.
+
+- The trick is that you have to figure out which group R considers to be the the 'base level'.
+- We won't try it in this assignment, but you can use `levels()` to find out which is the base level:
+
+```{r}
+levels(penguin_dat$species)
+```
+
+It looks like Adelie is the base level!
+
+
+# Questions
+
+
+

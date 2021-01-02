@@ -1,0 +1,77 @@
+---
+title: "Monte Carlo Randomization"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    # toc: TRUE
+    # toc_float: TRUE
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, results = "hide"} 
+require(rmd.utils)
+require(mfn.teaching.utils)
+
+```
+
+
+Question
+========
+
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+In Chapter 6, McGarigal writes:
+
+
+> With the bootstrap, the original data structure is maintained; that is, the individual observation vectors are left intact.
+
+> With the Monte Carlo randomization procedure, the original data structure is destroyed by randomly shuffling some of the data
+
+
+
+
+<div class="questionborder">
+
+### Q1 2 pts
+
+- Regarding the Monte Carlo randomization, what does McGarigal mean by "... the original data structure is destroyed by randomly shuffling..."?
+
+</div>
+
+
+Solution
+========
+
+
+
+Meta-information
+================
+
+extitle: Monte Carlo Randomization
+
+extype: string
+
+exsolution: nil
+
+exname: week_07_reading_questions
+
+exsection: week_07_reading_questions
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 12
+
+expoints: 2
+
